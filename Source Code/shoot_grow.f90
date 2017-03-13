@@ -56,7 +56,8 @@ real :: bc0diammax,bc0growdepth,bc0ssa,bc0ssb,bcdpop,bcdstm,bcfleafstem,        
 character(80) :: bc0nam,cropname
 integer :: bchyfg,bnslay,dap,daysim,emrgflg,icli,pd,pm,py,seedsw,tempsw,yr,yy
 character(80) :: cliname
-real,dimension(*) :: bcmbgstemz,bcmrootfiberz,bcmrootstorez,bszlyd
+real,dimension(*) :: bcmbgstemz,bcmrootfiberz,bcmrootstorez
+real, dimension(bnslay) :: bszlyd
 integer,dimension(20) :: ddap
 real,dimension(20) :: dgdds
 real,dimension(6) :: egdd,ggdd

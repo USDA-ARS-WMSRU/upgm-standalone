@@ -90,15 +90,15 @@ if (icli==1) then    ! read from cligen data file
 !
 else   ! read in historical data
 !debe add reading in climate file name
-  read (7,*) cliname
+  read (upgmcli,*) cliname
 !
 ! read monthy average of daily maximum temperature
 !
-  read (7,*) (awtmxav(idx),idx=1,12)
+  read (upgmcli,*) (awtmxav(idx),idx=1,12)
 !
 ! read monthy average of daily minimum temperature
 !
-  read (7,*) (awtmnav(idx),idx=1,12)
+  read (upgmcli,*) (awtmnav(idx),idx=1,12)
 !
 ! find yearly average temperature
 !
@@ -116,7 +116,7 @@ else   ! read in historical data
 !debe i think the above comment should read: "read average monthly
 !       total precipitation"
 !
-  read (7,*) (awzmpt(idx),idx=1,12)
+  read (upgmcli,*) (awzmpt(idx),idx=1,12)
 !
 end if
 !

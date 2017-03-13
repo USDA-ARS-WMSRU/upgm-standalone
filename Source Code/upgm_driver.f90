@@ -96,7 +96,7 @@ do am0jd = start_jday,end_jday   ! currently must start on 1/1 and end on 12/31
 !  if ((id.ne.29).or.(im.ne.2)) then !check if leap year
     !
     ! read in daily water stress
-  read (4,*) chkid,chkim,chkiy,ahfwsf(1)     !upgm_stress.dat
+  read (upgmstress,*) chkid,chkim,chkiy,ahfwsf(1)     !upgm_stress.dat
   if ((chkid/=id).or.(chkim/=im).or.(chkiy/=iy)) then
      write (*,*) 'error in dates in water stress file - stop'
      call exit(1)
@@ -105,7 +105,7 @@ do am0jd = start_jday,end_jday   ! currently must start on 1/1 and end on 12/31
 !read in daily atmospheric co2 values.
   !co2dy = day; co2mn = month; co2yr = year
   !co2atmos = atmospheric co2 value for the day.
-  read (10,*) co2dy, co2mn, co2yr, co2atmos  !upgm_co2atmos.dat
+  read (upgmco2atmos,*) co2dy, co2mn, co2yr, co2atmos  !upgm_co2atmos.dat
   
 !  if ((id.ne.29).or.(im.ne.2)) then !check if leap year
     !

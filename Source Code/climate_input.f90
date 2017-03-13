@@ -92,7 +92,7 @@ data dayidx/0/
 if (icli==0) then    ! read in historical precip, tmax, tmin, and solar radiation
 !  if ((ccd.eq.29).and.(ccm.eq.2)) then
 !    dayidx = ccd
-!    read (7,*) wcd(dayidx),wcm(dayidx),wcy(dayidx),wwzdpt(dayidx),wwtdmx(dayidx), &
+!    read (upgmcli,*) wcd(dayidx),wcm(dayidx),wcy(dayidx),wwzdpt(dayidx),wwtdmx(dayidx), &
 !           & wwtdmn(dayidx),wgrad(dayidx)
 !
 !    ccd = 1
@@ -102,18 +102,18 @@ if (icli==0) then    ! read in historical precip, tmax, tmin, and solar radiatio
  
   dayidx = ccd
 !
-  read (7,*) wcd(dayidx),wcm(dayidx),wcy(dayidx),wwzdpt(dayidx),wwtdmx(dayidx), &
+  read (upgmcli,*) wcd(dayidx),wcm(dayidx),wcy(dayidx),wwzdpt(dayidx),wwtdmx(dayidx), &
            & wwtdmn(dayidx),wgrad(dayidx)
  
 !   print*, ' in if statement checking for leap year'
-  if ((wcd(dayidx)==29).and.(wcm(dayidx)==2)) read (7,*) wcd(dayidx),wcm(dayidx)&
+  if ((wcd(dayidx)==29).and.(wcm(dayidx)==2)) read (upgmcli,*) wcd(dayidx),wcm(dayidx)&
     & ,wcy(dayidx),wwzdpt(dayidx),wwtdmx(dayidx),wwtdmn(dayidx),wgrad(dayidx)
  
 ! if ((wcm(dayidx).lt.4).and.(wcy(dayidx).eq.2)) then
 ! print*, 'day= ', wcd(dayidx), 'month= ', wcm(dayidx), 'tmax= ', wwtdmx(dayidx)
 ! endif
 !
-! read (7,*) wcd(dayidx),wcm(dayidx),wcy(dayidx),                               &
+! read (upgmcli,*) wcd(dayidx),wcm(dayidx),wcy(dayidx),                               &
 !         &  wwzdpt(dayidx),wwdurpt(dayidx),wwpeaktpt(dayidx)                   &
 !         &  ,wwpeakipt(dayidx),wwtdmx(dayidx),wwtdmn(dayidx)                   &
 !         &  ,wgrad(dayidx),dummy,dummy,wwtdpt(dayidx)

@@ -52,6 +52,11 @@ real,dimension(10) :: co2x,co2y
 integer :: julday
 character(40) :: seedbed,swtype
 character(80),dimension(4) :: soilwat
+integer :: offsetforfiles = 0
+!Rmarquez 2.10.17 -> Added new variables for soil profile information
+double precision :: current_depth = 0
+integer :: max_depth = 1
+integer :: io = 0
 !
 ! local variables
 !
@@ -126,6 +131,9 @@ character(80),dimension(4) :: soilwat
 !
 !debe added three variables for CO2: co2x, co2y and c02atmos. co2eff was also added but
 !appears only in these subroutines: crop.f90,cinit.f90,growth.f90
+!
+!Rmarquez 2.10.17 -> added new file and file read code for new soil profile file.
+!   This file provides actual soil layer information for depth and thickness.
 !
 !locals
 !
@@ -614,14 +622,36 @@ data icli/0/
 !
 ! open required input files
 !
-call fopenk(1,'cropxml.dat','old')      ! open weps crop parameter file
-! call fopenk(luicli,'cligen.cli','old')  ! open cligen climate file
-call fopenk(3,'upgm_mgmt.dat','old')    ! open management file
-call fopenk(4,'upgm_stress.dat','old')  ! open water stress file
-call fopenk(7,'upgm_cli.dat','old')     ! open historical climate file
-call fopenk(8,'upgm_crop.dat','old')    ! open upgm crop file
-call fopenk(9,'upgm_co2.dat','old')     ! open upgm co2 file. DE added for co2 effects
-call fopenk(10,'upgm_co2atmos.dat','old') ! open upgm daily atmospheric co2 file.
+cropxml = 170000 + offsetforfiles
+upgmmgt = 10000 + offsetforfiles
+upgmstress = 20000 + offsetforfiles
+upgmcli = 30000 + offsetforfiles
+upgmcrop = 40000 + offsetforfiles
+upgmco2 = 50000 + offsetforfiles
+upgmco2atmos = 60000 + offsetforfiles
+luicli = 70000 + offsetforfiles
+luocrop = 80000 + offsetforfiles
+luoshoot = 90000 + offsetforfiles
+luoseason = 100000 + offsetforfiles
+luoinpt = 110000 + offsetforfiles
+luoemerge = 120000 + offsetforfiles
+luophenol = 130000 + offsetforfiles
+luocanopyht = 140000 + offsetforfiles
+luoallcrop = 150000 + offsetforfiles
+cdbugfile = 160000 + offsetforfiles
+!Rmarquez 2.10.17 -> added new offset value
+soilprofile = 180000 + offsetforfiles
+
+call fopenk(cropxml,'cropxml.dat','old')      ! open weps crop parameter file
+! call fopenk(luicli,'cligen.cli','old')  ! open cligen climate 
+call fopenk(upgmmgt,'upgm_mgmt.dat','old')    ! open management file
+call fopenk(upgmstress,'upgm_stress.dat','old')  ! open water stress file
+call fopenk(upgmcli,'upgm_cli.dat','old')     ! open historical climate file
+call fopenk(upgmcrop,'upgm_crop.dat','old')    ! open upgm crop file
+call fopenk(upgmco2,'upgm_co2.dat','old')     ! open upgm co2 file. DE added for co2 effects
+call fopenk(upgmco2atmos,'upgm_co2atmos.dat','old') ! open upgm daily atmospheric co2 file.
+!Rmarquez 2.10.17 -> added new profile file
+call fopenk(soilprofile, 'upgm_soil_profile.dat', 'old') ! open soil profile file to initialize profile
 !
 !debe added these variables to be initialized. added canopyflg for determining
 ! which method of calculating canopy height will be used. added dayhtinc to get
@@ -653,16 +683,43 @@ am0hrvfl = 0
             !debe turned it on
 acxrow(1) = 0.76       ! row spacing (m)
 ahfwsf(1) = 1.0        ! water stress factor
-!
-! number of soil layers
-!
-nslay(1) = 1
+
+!Rmarquez 2.10.17 -> Added read code for the new soil layer profile file.
+!       intent: provide actual profile layer data (depth, thickness) for the weps/upgm code    
 !
 !set thickness and depth of first layer (defaulting to a value deeper than
 ! roots will reach)
 !
-aszlyt(1,1) = 1000.0
-aszlyd(1,1) = 1000.0
+max_depth = 0
+do
+    ! start max depth at 1
+    max_depth = max_depth + 1
+    read (soilprofile, *, IOSTAT=io) aszlyt(max_depth,1)
+    if (io > 0) then
+        ! error, exit
+        exit
+    else if (io < 0) then
+        ! eof, exit
+        exit
+    else
+        ! thickness for layer max_depth read in,
+        ! accumulate into current_depth
+        current_depth = current_depth + aszlyt(max_depth, 1)
+        ! set depth for max_depth to be current_depth
+        aszlyd(max_depth, 1) = current_depth
+    end if
+enddo
+!
+!aszlyt(1,1) = 1000.0
+!aszlyd(1,1) = 1000.0
+!
+!Rmarquez 2.10.17 -> updated # layers to actual value read from new file.
+!
+! number of soil layers
+!
+nslay(1) = max_depth - 1 !Overshoot by 1 in read soil profile loop
+!nslay(1) = 1
+
 !
 ! assign values to some soil layer properties
 !
@@ -738,29 +795,29 @@ max_arg_exp = log(max_real)
 !
 ! read in plant parameters from cropxml.dat
 !
-read (1,' (a80) ') ac0nam(1)
-read (1,*) acdpop(1),acdmaxshoot(1),acbaflg(1),acytgt(1),acbaf(1),acyraf(1),    &
+read (cropxml,' (a80) ') ac0nam(1)
+read (cropxml,*) acdpop(1),acdmaxshoot(1),acbaflg(1),acytgt(1),acbaf(1),acyraf(1),    &
          & achyfg(1),acynmu(1)
-read (1,*) acywct(1),acycon(1),ac0idc(1),acgrf(1),ac0ck(1),acehu0(1),aczmxc(1), &
+read (cropxml,*) acywct(1),acycon(1),ac0idc(1),acgrf(1),ac0ck(1),acehu0(1),aczmxc(1), &
          & ac0growdepth(1)
-read (1,*) aczmrt(1),actmin(1),actopt(1),acthudf(1),actdtm(1),acthum(1),        &
+read (cropxml,*) aczmrt(1),actmin(1),actopt(1),acthudf(1),actdtm(1),acthum(1),        &
          & ac0fd1(1,1),ac0fd2(1,1)
-read (1,*) ac0fd1(2,1),ac0fd2(2,1),actverndel(1),ac0bceff(1),ac0alf(1),ac0blf(1)&
+read (cropxml,*) ac0fd1(2,1),ac0fd2(2,1),actverndel(1),ac0bceff(1),ac0alf(1),ac0blf(1)&
          & ,ac0clf(1),ac0dlf(1)
-read (1,*) ac0arp(1),ac0brp(1),ac0crp(1),ac0drp(1),ac0aht(1),ac0bht(1),ac0ssa(1)&
+read (cropxml,*) ac0arp(1),ac0brp(1),ac0crp(1),ac0drp(1),ac0aht(1),ac0bht(1),ac0ssa(1)&
          & ,ac0ssb(1)
-read (1,*) ac0sla(1),ac0hue(1),ac0transf(1),ac0diammax(1),ac0storeinit(1),      &
+read (cropxml,*) ac0sla(1),ac0hue(1),ac0transf(1),ac0diammax(1),ac0storeinit(1),      &
          & ac0shoot(1),acfleafstem(1),acfshoot(1)
-read (1,*) acfleaf2stor(1),acfstem2stor(1),acfstor2stor(1),acrbc(1),            &
+read (cropxml,*) acfleaf2stor(1),acfstem2stor(1),acfstor2stor(1),acrbc(1),            &
          & acdkrate(1,1),acdkrate(2,1),acdkrate(3,1),acdkrate(4,1)
-read (1,*) acdkrate(5,1),acxstm(1),acddsthrsh(1),accovfact(1),acresevapa(1),    &
+read (cropxml,*) acdkrate(5,1),acxstm(1),acddsthrsh(1),accovfact(1),acresevapa(1),    &
          & acresevapb(1),acyld_coef(1),acresid_int(1)
 !
 !read management information from upgm_mgmt.dat. currently it includes
 ! starting and ending day, month, and year for planting and harvest.
 !
-read (3,*) sd,sm,sy,ed,em,ey
-read (3,*) pd,pm,py,hd,hm,hy
+read (upgmmgt,*) sd,sm,sy,ed,em,ey
+read (upgmmgt,*) pd,pm,py,hd,hm,hy
  
 start_jday = julday(sd,sm,sy)
  
@@ -779,9 +836,9 @@ print *,'crop=',cropname
 !read in canopyflg and emergence data for the crop from upgm_crop.dat.
 !debe added reading in phenolflg from upgm_crop.dat
  
-read (8,*) canopyflg,emrgflg,phenolflg
+read (upgmcrop,*) canopyflg,emrgflg,phenolflg
   if ((canopyflg .EQ. 1) .OR. (emrgflg .EQ. 1) .OR. (phenolflg .EQ. 1)) then
-    read (8,*) seedbed
+    read (upgmcrop,*) seedbed
     if (seedbed=='Optimum') then
       seedsw = 1          !set seedsw = to a real number. changed back to integer 2/23/11
     else if (seedbed=='Medium') then
@@ -797,15 +854,15 @@ read (8,*) canopyflg,emrgflg,phenolflg
     !
     ! put these values into 5 one dimensional arrays.
     do i = 1,row
-      read (8,*) swtype          !swtype = soil moisture condition.
+      read (upgmcrop,*) swtype          !swtype = soil moisture condition.
       soilwat(i) = swtype
-      read (8,*) wlow            !wlow = lower range of soil moisture
+      read (upgmcrop,*) wlow            !wlow = lower range of soil moisture
       wfpslo(i) = wlow
-      read (8,*) wup             !wup = upper range of soil moisture
+      read (upgmcrop,*) wup             !wup = upper range of soil moisture
       wfpsup(i) = wup
-      read (8,*) germd           !germd = gdd's for germination at soil moisture
+      read (upgmcrop,*) germd           !germd = gdd's for germination at soil moisture
       germgdd(i) = germd
-      read (8,*) elrate          !elrate = elongation for emergence
+      read (upgmcrop,*) elrate          !elrate = elongation for emergence
       ergdd(i) = elrate
  
     end do
@@ -817,55 +874,64 @@ read (8,*) canopyflg,emrgflg,phenolflg
     !
     !the following is read in whether leaf number or gdd is used.
     ! read in phenology parameters and 4 temperature values from upgm_crop.dat.
-    read (8,*) pchron
-    read (8,*) tbase
-    read (8,*) toptlo
-    read (8,*) toptup
-    read (8,*) tupper
+    read (upgmcrop,*) pchron
+    read (upgmcrop,*) tbase
+    read (upgmcrop,*) toptlo
+    read (upgmcrop,*) toptup
+    read (upgmcrop,*) tupper
  
     ! read in method of calculating gdd (gmethod) from upgm_crop.dat
-    read (8,*) gmethod
+    read (upgmcrop,*) gmethod
  
     !debe added reading in maxht value for canopy height subroutine.
     !debe added ecanht for height in phase 1 of canopy height.
-    read (8,*) maxht,ecanht
+    read (upgmcrop,*) maxht,ecanht
     print *,'maxht = ',maxht,'ecanht = ',ecanht
  
     !debe added reading in growth_stress to set which kind of stress is to be used:
     ! 0=no stress, 1=water stress only, 2=temp stress only,
     ! 3=min of water and temp stress.
-    read (8,*) growth_stress
+    read (upgmcrop,*) growth_stress
     print *,'growth_stress = ',growth_stress
     !debe changed dimensions of dummy1 and dummy2 to allow both non-stresseed
     ! and stressed values to be read in.
     do i = 1,30
-      read (8,*) dummy1(i),dummy2(i)
+      read (upgmcrop,*) dummy1(i),dummy2(i)
       if (dummy1(i)=='ln'.or.dummy1(i)=='ls') dummy2(i) = dummy2(i)*pchron
     end do
   end if
 
 !debe added for CO2 table
 do k = 1, 10
-    read (9,*) co2x(k),co2y(k)
+    read (upgmco2,*) co2x(k),co2y(k)
     !print *, 'co2x = ', co2x, 'co2y = ', co2y 
 end do
 
 call climate_init(icli,cliname)    ! reads monthly and yearly climate variables
  
 if (am0cfl>0) then
-  call fopenk(17,'crop.out','unknown')    ! daily crop output of most state variables
-  call fopenk(59,'season.out','unknown')  ! seasonal summaries of yield and biomass
-  call fopenk(60,'inpt.out','unknown')    ! echo crop input data
-  call fopenk(62,'shoot.out','unknown')   ! crop shoot output
-  call fopenk(63,'emerge.out','unknown')  ! debe added for emergence output
-  call fopenk(64,'phenol.out','unknown')  ! debe added for phenology output
-  call fopenk(65,'canopyht.out','unknown')
+luocrop = 80000 + offsetforfiles
+luoshoot = 90000 + offsetforfiles
+luoseason = 100000 + offsetforfiles
+luoinpt = 110000 + offsetforfiles
+luoemerge = 120000 + offsetforfiles
+luophenol = 130000 + offsetforfiles
+luocanopyht = 140000 + offsetforfiles
+luoallcrop = 150000 + offsetforfiles
+cdbugfile = 160000 + offsetforfiles
+  call fopenk(luocrop,'crop.out','unknown')    ! daily crop output of most state variables
+  call fopenk(luoseason,'season.out','unknown')  ! seasonal summaries of yield and biomass
+  call fopenk(luoinpt,'inpt.out','unknown')    ! echo crop input data
+  call fopenk(luoshoot,'shoot.out','unknown')   ! crop shoot output
+  call fopenk(luoemerge,'emerge.out','unknown')  ! debe added for emergence output
+  call fopenk(luophenol,'phenol.out','unknown')  ! debe added for phenology output
+  call fopenk(luocanopyht,'canopyht.out','unknown')
                                           !debe added for canopy height output
   call cpout                              ! print headings for crop output files
 end if
 !
-if (am0cfl>1) call fopenk(61,'allcrop.prn','unknown')     ! main crop debug output file
-if (am0cdb>0) call fopenk(27,'cdbug.out','unknown')       ! crop submodel debug output file
+if (am0cfl>1) call fopenk(luoallcrop,'allcrop.prn','unknown')     ! main crop debug output file
+if (am0cdb>0) call fopenk(cdbugfile,'cdbug.out','unknown')       ! crop submodel debug output file
 !
 call upgm_driver(sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,antes,&
                & antss,blstrs,boots,browns,callgdd,canht,canopyflg,cliname,cots,&

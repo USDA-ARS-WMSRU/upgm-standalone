@@ -41,6 +41,7 @@ subroutine cinit(bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla, 
 !
 implicit none
 !
+include 'file.fi'
 include 'p1werm.inc'
 include 'p1solar.inc'
 include 'm1flag.inc'
@@ -526,7 +527,11 @@ else
   bcmrootstorez(1) = 0.0
 end if
 do i = 2,bnslay
-  if (((bszlyd(i-1)*mmtom<bczrtd).and.(bszlyd(i)*mmtom>=bczrtd))) then
+	!Rmarquez 2.14.17 -> changed logic for these conditions to check for
+	!					top of layer <= planting depth
+	!					and
+	!					bottom of layer > planting depth
+  if (((bszlyd(i-1)*mmtom<=bczrtd).and.(bszlyd(i)*mmtom>bczrtd))) then
               ! mg/plant * #/m^2 * 1kg/1.0e6mg = kg/m^2
      bcmrootstorez(i) = bc0storeinit*bcdpop*mgtokg
 !              write(*,*) "cinit: stor lay ", i, bczrtd, bcmrootstorez(i)
@@ -646,7 +651,7 @@ else
 end if
  
       ! print out heat average heat unit and days to maturity
-if (am0cfl>0) write (60,1100) pdate,hdate,bcthudf,dtm,bctdtm,phu,bcthum
+if (am0cfl>0) write (luoinpt,1100) pdate,hdate,bcthudf,dtm,bctdtm,phu,bcthum
  
       ! after printing the value, set the global parameter for maximum
       ! heat units to the new calculated value (this database value is

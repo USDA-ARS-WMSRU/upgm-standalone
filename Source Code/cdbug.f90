@@ -2,6 +2,8 @@ subroutine cdbug(isr,slay)
 !
 implicit none
 !
+include 'file.fi'
+
 include 'p1werm.inc'
 include 'm1flag.inc'
 include 's1layr.inc'
@@ -84,40 +86,40 @@ call caldatw(cd,cm,cy)
  
 !          write weather cligen and windgen variables
 if ((cd==tday).and.(cm==tmo).and.(cy==tyr).and.(isr==tisr)) then
-  write (27,1000) cd,cm,cy,isr
+  write (cdbugfile,1000) cd,cm,cy,isr
 else
-  write (27,1100) cd,cm,cy,isr
+  write (cdbugfile,1100) cd,cm,cy,isr
 end if
-write (27,1200)
-write (27,1300) awzdpt,awtdmx,awtdmn,aweirr,awudmx,awudmn,awtdpt,awadir,awhrmx, &
+write (cdbugfile,1200)
+write (cdbugfile,1300) awzdpt,awtdmx,awtdmn,aweirr,awudmx,awudmn,awtdpt,awadir,awhrmx, &
               & awrrh
  
 !      write(27,2045) isr
  
-write (27,1400) isr,isr,isr,isr,isr,isr,isr
+write (cdbugfile,1400) isr,isr,isr,isr,isr,isr,isr
 ! admf(isr) is not dimensioned correctly anymore - lew 04/23/99
 ! just commenting it out for now since it is a debug routine
 !      write(27,2051) amrslp(isr), acftcv(isr), acrlai(isr), aczrtd(isr),
 !     &               admf(isr), ahfwsf(isr), ac0nam(isr)
-write (27,1600) isr,isr,isr,isr
-write (27,1700) actdtm(isr),acthucum(isr),acmst(isr),acmrt(isr),ahzeta,ahzetp,  &
+write (cdbugfile,1600) isr,isr,isr,isr
+write (cdbugfile,1700) actdtm(isr),acthucum(isr),acmst(isr),acmrt(isr),ahzeta,ahzetp,  &
               & ahzpta
-! write (27,1800) isr,isr,isr,isr
-write (27,1800) isr,isr,isr
-!write (27,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr),as0rrk(isr),         &
+! write (cdbugfile,1800) isr,isr,isr,isr
+write (cdbugfile,1800) isr,isr,isr
+!write (cdbugfile,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr),as0rrk(isr),         &
 !              & aslrr(isr)
-write (27,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr),as0rrk(isr)
-write (27,2000)
+write (cdbugfile,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr),as0rrk(isr)
+write (cdbugfile,2000)
  
 do l = 1,slay
-  write (27,2100) l,aszlyt(l,isr),ahrsk(l,isr),ahrwc(l,isr),ahrwcs(l,isr),      &
+  write (cdbugfile,2100) l,aszlyt(l,isr),ahrsk(l,isr),ahrwc(l,isr),ahrwcs(l,isr),      &
                 & ahrwca(l,isr),ahrwcf(l,isr),ahrwcw(l,isr),ah0cb(l,isr),       &
                 & aheaep(l,isr),ahtsmx(l,isr),ahtsmn(l,isr)
 end do
-write (27,2200)
+write (cdbugfile,2200)
  
 do l = 1,slay
-  write (27,2300) l,asfsan(l,isr),asfsil(l,isr),asfcla(l,isr),asfom(l,isr),     &
+  write (cdbugfile,2300) l,asfsan(l,isr),asfsil(l,isr),asfcla(l,isr),asfom(l,isr),     &
                 & asdblk(l,isr),aslagm(l,isr),as0ags(l,isr),aslagn(l,isr),      &
                 & aslagx(l,isr),aseags(l,isr)
 end do
