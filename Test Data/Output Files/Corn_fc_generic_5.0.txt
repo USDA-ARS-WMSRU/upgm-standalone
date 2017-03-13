@@ -1,0 +1,94 @@
+File Name: Corn_fc_generic_5.0.txt	This output created at: 2/13/2009	8:14:25
+Path: D:\UPGM\UPGM-Intel\Corn_fc_generic_5.0.txt
+
+These are the inputs provided to execute PhenologyMMS:
+
+Crop:                                     Corn
+Variety:                                  Generic
+Location/ Weather File:                   FC_Generic_cli
+Planting Date Month (mm):                 04
+Planting Date Day (dd):                   24
+Planting Date Year (yyyy):                2001
+Day of Year:                              114
+Planting Depth (cm):                      5.0
+Planting Rate (plants/m^2):               8
+Initial Soil Moisture Conditions:         Optimum
+Latitude (degrees):                       40.165
+GDD Method:                               2
+Base Temperature (C):                     10
+Lower Optimum Temperature (C):            25
+Upper Optimum Temperature (C):            25
+Upper/Maximum Temperature (C):            30
+Maximum Canopy Height (cm):               190.0
+Phyllochron Value:                       35.0
+--------------------------------------------------
+
+Seeding to Emergence                    = GN 25
+Emergence to Leaf 4 (V4)                = GN 140
+Leaf 4 to Tassel Initiation             = GN 70
+Leaf 4 to Ear Initiation                = GN 75
+Leaf 4 to Internode Elongation Begins   = GN 80
+Leaf 4 to Leaf 12 (V12)                 = GN 280
+Leaf 12 to Tasseling                    = GN 350
+Leaf 12 to Silking (R1)                 = GN 350
+Reproductive Leaf 1 to Blister (R2)     = GN 165
+Reproductive Leaf 2 to Milk (R3)        = GN 110
+Reproductive Leaf 3 to Dough (R4)       = GN 80
+Reproductive Leaf 4 to Dent (R5)        = GN 165
+Reproductive Leaf 5 to Maturity (R6)    = GN 200
+Reproductive Leaf 6 to Harvest Ready    = GN 100
+ROW15                                   = GN  0.
+
+-----------------------------------------------------------
+-----------------------------------------------------------
+NOTE: If 999 is displayed in the output, the planting
+ date may be outside of the weather years in the selected
+ weather file. Also, the selected planting date might result
+ in a harvest date outside of the years in the
+ weather file.
+
+                                          Corn          
+                                           Leaf Number
+                                        DOY  Leaf Number
+                                       ------------------
+                                        126.0       1.0
+                                        133.0       2.1
+                                        139.0       3.0
+                                        145.0       4.1
+                                        150.0       5.0
+                                        155.0       6.0
+                                        160.0       7.1
+                                        164.0       8.0
+                                        168.0       9.1
+                                        172.0      10.2
+                                        175.0      11.0
+                                        179.0      12.3
+                                        182.0      13.2
+                                        185.0      14.2
+                                        188.0      15.2
+                                        191.0      16.2
+                                        194.0      17.2
+                                        197.0      18.2
+                                        200.0      19.3
+                                        203.0      20.3
+                                        206.0      21.3
+                                        209.0      22.3
+
+
+ Phenological Event       Day of Year  Date  DAP     DAE     GDD AP     GDD AE     NOLVS
+ Planting Date                   114   4/24
+ Emergence                       119   4/29    6               24.4
+ Leaf 4 (V4)                     145   5/25   32      27      163.0      142.9       4.1
+ Tassel initiation               155   6/ 4   42      37      231.1      211.0       6.0
+ Ear initiation                  156   6/ 5   43      38      238.3      218.2       6.2
+ Internode elongation begins     157   6/ 6   44      39      245.7      225.6       6.4
+ Leaf 12 (V12)                   179   6/28   66      61      449.4      429.2      12.3
+ Tasseling                       209   7/28   96      91      799.7      779.6      22.3
+ Silking (R1)                    209   7/28   96      91      799.7      779.6      22.3
+ Blister (R2)                    223   8/11  110     105      957.6      937.5      22.3
+ Milk (R3)                       233   8/21  120     115     1065.5     1045.4      22.3
+ Dough (R4)                      241   8/29  128     123     1146.6     1126.5      22.3
+ Dent (R5)                       262   9/19  149     144     1313.1     1293.0      22.3
+ Maturity (R6)                   313  11/ 9  200     195     1510.4     1490.3      22.3
+ Harvest Ready                   113   4/23  365     360     1613.6     1593.5      22.3
+ Canopy Height (cm)              190
