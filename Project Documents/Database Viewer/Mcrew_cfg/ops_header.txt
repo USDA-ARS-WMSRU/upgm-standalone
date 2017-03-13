@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="operation_db.xsl"?>
+<!DOCTYPE operationDB SYSTEM "operation_db.dtd">
+<!--operationDB.DTD: Proivided here for reference-->
+<!--
+<!ELEMENT operationdefn (action*) >
+<!ENTITY % identityDTD SYSTEM "identity.dtd">
+%identityDTD;
+<!ENTITY % paramdefnDTD SYSTEM "param_defn.dtd">
+%paramdefnDTD;
+<!ELEMENT action (identity, actionname, (paramdefn*), (groupid?))> 
+<!ELEMENT actionname (#PCDATA)>
+<!ELEMENT groupid (identity*)> 
+-->

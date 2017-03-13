@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!--<?xml-stylesheet type="text/xsl" href="tabelcolumn.xsl"?>-->
+<!DOCTYPE tablecolumn SYSTEM "tablecolumn.dtd">
+<!-- tablecolumn.dtd 
+    <?xml version="1.0" encoding="ISO-8859-1"?>
+    <!ELEMENT tablecolumn (columngroup*)>
+    <!ELEMENT columngroup (groupname, display, columndefn*)>
+    <!ELEMENT groupname (#PCDATA)>
+    <!ELEMENT display (#PCDATA)>
+    <!ELEMENT columndefn (columndataobject, columnlabel, tagname)>
+    <!ELEMENT columndataobject (#PCDATA)>
+    <!ELEMENT columnlabel (#PCDATA)>
+    <!ELEMENT tagname (#PCDATA)>
+-->
+<tablecolumn>
+	<columngroup>
+		<groupname>other</groupname>
+		<display>true</display>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Tillage Direction</columnlabel>
+			<tagname>odirect</tagname>
+		</columndefn>
+	</columngroup>
+	<columngroup>
+		<groupname>calibrate</groupname>
+		<display>true</display>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Crop Growth Parameters Selection</columnlabel>
+			<tagname>cbaflag</tagname>
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Target Yield</columnlabel>
+			<tagname>tgtyield</tagname>
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Yield units</columnlabel>
+			<tagname>hyldunits</tagname>
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Yield water content</columnlabel>
+			<tagname>hyldwater</tagname>
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Biomass Adj. Factor</columnlabel>
+			<tagname>cbafact</tagname>
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Yield Adj. Factor</columnlabel>
+			<tagname>cyrafact</tagname>
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Yield Coef.</columnlabel>
+			<tagname>yield_coefficient</tagname>
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Residue Intercept</columnlabel>
+			<tagname>residue_intercept</tagname>
+		</columndefn>
+	</columngroup>
+</tablecolumn>

@@ -1,0 +1,521 @@
+<?xml version="1.0"?>
+<!--<?xml-stylesheet type="text/xsl" href="tablecolumn.xsl"?>-->
+<!DOCTYPE tablecolumn SYSTEM "tablecolumn.dtd">
+
+<tablecolumn>
+
+		<!-- Row/Ridge direction column - additional default column display -->
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Row/Ridge\nDir.</columnlabel>
+			<tagname>odirect</tagname>
+                        <datacellstyle>readonlydata</datacellstyle>
+                	<frozen>false</frozen>  <!-- set to "true" if we don't want it to scroll -->
+                	<columnminwidth>50</columnminwidth>
+                	<columnwidth>75</columnwidth>
+                	<columnmaxwidth>75</columnmaxwidth>
+		</columndefn>
+
+		<!-- Surface Roughness parameters -->
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Roughness\nFlag</columnlabel>
+			<tagname>rroughflag</tagname>
+            <datacellstyle>readonlycheckboxdata</datacellstyle>
+                 	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Surface\nRoughness</columnlabel>
+			<tagname>rrough</tagname>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+
+		<!-- Ridge/Dike parameters -->
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Ridge\nFlag</columnlabel>
+			<tagname>rdgflag</tagname>
+            <datacellstyle>readonlycheckboxdata</datacellstyle>
+                 	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Ridge\nHeight</columnlabel>
+			<tagname>rdghit</tagname>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Ridge\nSpacing</columnlabel>
+			<tagname>rdgspac</tagname>
+                       <numberformat>#0</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Ridge\nWidth</columnlabel>
+			<tagname>rdgwidth</tagname>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Dike\nHeight</columnlabel>
+			<tagname>dkhit</tagname>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Dike\nSpacing</columnlabel>
+			<tagname>dkspac</tagname>
+                       <numberformat>#0</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+	
+		<!-- Add Residue parameters -->
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Flat Residue\nApplied</columnlabel>
+			<tagname>rflatmass</tagname>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Buried Residue\nApplied</columnlabel>
+			<tagname>rburiedmass</tagname>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Buried Residue\nDepth</columnlabel>
+			<tagname>rburieddepth</tagname>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>No. Residue\nStems</columnlabel>
+			<tagname>numst</tagname>
+                       <numberformat>#0</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Standing Residue\nHeight</columnlabel>
+			<tagname>rstandht</tagname>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Standing Residue\nApplied</columnlabel>
+			<tagname>rstandmass</tagname>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+
+		<!-- Add Manure parameters -->
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Total Manure\nApplied</columnlabel>
+			<tagname>manure_total_mass</tagname>
+                       <numberformat>#0</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>90</columnwidth>
+                	<columnmaxwidth>90</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Amount of\nManure Buried</columnlabel>
+			<tagname>manure_buried_ratio</tagname>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>100</columnwidth>
+                	<columnmaxwidth>100</columnmaxwidth>
+		</columndefn>
+
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Surface Manure\nApplied</columnlabel>
+			<tagname>M_rflatmass</tagname>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Buried Manure\nApplied</columnlabel>
+			<tagname>M_rburiedmass</tagname>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Buried Manure\nDepth</columnlabel>
+			<tagname>M_rburieddepth</tagname>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+		</columndefn>
+
+		<!-- Flatten Residue parameters -->
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Flatten\nFragile Residue</columnlabel>
+			<tagname>massflatvt1</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>105</columnwidth>
+                	<columnmaxwidth>105</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Flatten Moderately\nTough Residue</columnlabel>
+			<tagname>massflatvt2</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>130</columnwidth>
+                	<columnmaxwidth>130</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Flatten\nNon-Fragile Residue</columnlabel>
+			<tagname>massflatvt3</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>130</columnwidth>
+                	<columnmaxwidth>130</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Flatten\nWoody Residue</columnlabel>
+			<tagname>massflatvt4</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>100</columnwidth>
+                	<columnmaxwidth>100</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Flatten small\nstones/gravel</columnlabel>
+			<tagname>massflatvt5</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>100</columnwidth>
+                	<columnmaxwidth>100</columnmaxwidth>
+		</columndefn>
+
+		<!-- Bury Residue parameters -->
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Bury\nFragile Residue</columnlabel>
+			<tagname>massburyvt1</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>105</columnwidth>
+                	<columnmaxwidth>105</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Bury Moderately\nTough Residue</columnlabel>
+			<tagname>massburyvt2</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>110</columnwidth>
+                	<columnmaxwidth>110</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Bury\nNon-Fragile Residue</columnlabel>
+			<tagname>massburyvt3</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>130</columnwidth>
+                	<columnmaxwidth>130</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Bury\nWoody Residue</columnlabel>
+			<tagname>massburyvt4</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>100</columnwidth>
+                	<columnmaxwidth>100</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Bury small\nstones/gravel</columnlabel>
+			<tagname>massburyvt5</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>100</columnwidth>
+                	<columnmaxwidth>100</columnmaxwidth>
+		</columndefn>
+
+
+		<!-- Resurface Residue parameters -->
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Resurface\nFragile Residue</columnlabel>
+			<tagname>massresurvt1</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>105</columnwidth>
+                	<columnmaxwidth>105</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Resurface Moderately\nTough Residue</columnlabel>
+			<tagname>massresurvt2</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>140</columnwidth>
+                	<columnmaxwidth>140</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Resurface\nNon-Fragile Residue</columnlabel>
+			<tagname>massresurvt3</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>130</columnwidth>
+                	<columnmaxwidth>130</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Resurface\nWoody Residue</columnlabel>
+			<tagname>massresurvt4</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>100</columnwidth>
+                	<columnmaxwidth>100</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Resurface small\nstones/gravel</columnlabel>
+			<tagname>massresurvt5</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                       <numberformat>#0.00</numberformat>
+                	<columnminwidth>30</columnminwidth>
+                	<columnwidth>100</columnwidth>
+                	<columnmaxwidth>100</columnmaxwidth>
+		</columndefn>
+
+		<!-- P72 "Monitor Irrigation" process parameters -->		
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Irrig. water\nApplied (max)</columnlabel>
+			<tagname>irrmaxapp</tagname>
+                	<columnminwidth>85</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+                        <numberformat>#0.00</numberformat>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Irrig. water\nApplied (min)</columnlabel>
+			<tagname>irrminapp</tagname>
+                	<columnminwidth>85</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+                        <numberformat>#0.00</numberformat>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Min. Irrig.\nInterv.</columnlabel>
+			<tagname>irrminint</tagname>
+                	<columnminwidth>85</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+                        <numberformat>#0.00</numberformat>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Mgt. Allowed\nDepletion (0-1)</columnlabel>
+			<tagname>irrmad</tagname>
+                	<columnminwidth>90</columnminwidth>
+                	<columnwidth>90</columnwidth>
+                	<columnmaxwidth>90</columnmaxwidth>
+                        <numberformat>#0.00</numberformat>
+		</columndefn>
+
+		<!-- P73 "Single Irrigation" process parameters -->		
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Irrig. water\nApplied</columnlabel>
+			<tagname>irrdepth</tagname>
+                	<columnminwidth>85</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+                        <numberformat>#0.00</numberformat>
+		</columndefn>
+		<columndefn>
+			<columndataobject>operation</columndataobject>
+			<columnlabel>Duration Irrig.\nWater Applied</columnlabel>
+			<tagname>irrduration</tagname>
+                	<columnminwidth>85</columnminwidth>
+                	<columnwidth>85</columnwidth>
+                	<columnmaxwidth>85</columnmaxwidth>
+                        <numberformat>#0.00</numberformat>
+		</columndefn>				
+
+		<!-- Yield Calibration parameters -->
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>\n\nCalib.\nYield?</columnlabel>
+			<tagname>cbaflag</tagname>
+                        <datacellstyle>checkboxdata</datacellstyle>
+                	<columnminwidth>50</columnminwidth>
+                	<columnwidth>50</columnwidth>
+                	<columnmaxwidth>60</columnmaxwidth>
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>\n\nTarget\nYield</columnlabel>
+			<tagname>tgtyield</tagname>
+                	<columnminwidth>50</columnminwidth>
+                	<columnwidth>50</columnwidth>
+                	<columnmaxwidth>80</columnmaxwidth>
+                        <numberformat>#0.00</numberformat>
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>\nTarget\nYield\nUnits</columnlabel>
+			<tagname>hyldunits</tagname>
+                        <datacellstyle>readonlydata</datacellstyle>
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Yield\nH2O</columnlabel>
+			<tagname>hyldwater</tagname>
+                	<columnminwidth>50</columnminwidth>
+                	<columnwidth>50</columnwidth>
+                	<columnmaxwidth>50</columnmaxwidth>
+                        <numberformat>#0.0</numberformat>
+		</columndefn>
+				<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Plant\nPopulation</columnlabel>
+			<tagname>plantpop</tagname>
+                	<columnminwidth>75</columnminwidth>
+                	<columnwidth>75</columnwidth>
+                	<columnmaxwidth>75</columnmaxwidth>
+                        <numberformat>#0</numberformat>
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Biomass\nAdj.\nFactor</columnlabel>
+			<tagname>cbafact</tagname>
+                	<columnminwidth>60</columnminwidth>
+                	<columnwidth>60</columnwidth>
+                	<columnmaxwidth>60</columnmaxwidth>
+                        <numberformat>#0.000</numberformat>
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Yield\nCoef.</columnlabel>
+			<tagname>yield_coefficient</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                	<columnminwidth>60</columnminwidth>
+                	<columnwidth>60</columnwidth>
+                	<columnmaxwidth>60</columnmaxwidth>
+                        <numberformat>#0.00</numberformat>
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Residue\nIntercept</columnlabel>
+			<tagname>residue_intercept</tagname>
+                    <datacellstyle>readonlydata</datacellstyle>
+                	<columnminwidth>65</columnminwidth>
+                	<columnwidth>65</columnwidth>
+                	<columnmaxwidth>65</columnmaxwidth>
+                        <numberformat>#0.00</numberformat>
+                        <!-- <numberformat>#0</numberformat> English units -->
+                        <!-- <numberformat>#0.000</numberformat> for SI units -->
+		</columndefn>
+
+		<!-- Crop Maturity parameters -->
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Maturity\nmeasured\nin HU?</columnlabel>
+			<tagname>thudf</tagname>
+                        <datacellstyle>readonlycheckboxdata</datacellstyle>
+                	<columnminwidth>70</columnminwidth>
+                	<columnwidth>70</columnwidth>
+                	<columnmaxwidth>70</columnmaxwidth>
+
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Time to\nMaturity</columnlabel>
+			<tagname>dtm</tagname>
+                	<columnminwidth>70</columnminwidth>
+                	<columnwidth>70</columnwidth>
+                	<columnmaxwidth>70</columnmaxwidth>
+                        <numberformat>#0.00</numberformat>
+		</columndefn>
+		<columndefn>
+			<columndataobject>crop</columndataobject>
+			<columnlabel>Heat Units\nto Maturity</columnlabel>
+			<tagname>thum</tagname>
+                	<columnminwidth>75</columnminwidth>
+                	<columnwidth>75</columnwidth>
+                	<columnmaxwidth>75</columnmaxwidth>
+                        <numberformat>#0.00</numberformat>
+		</columndefn>
+</tablecolumn>

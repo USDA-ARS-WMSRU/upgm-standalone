@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!ENTITY % paramdefnDTD SYSTEM "param_defn.dtd">
+%paramdefnDTD;
+<!ELEMENT cropdefn (paramdefn*)>
+
+<!-- cropformatDTD; This file specifies the format of various crop names and crop parameters. 
+Crop parameters exist by themselves outside of any operations. The identity in the croop element 
+is maintined for extensibilty and compatibility with other operation formats.
+-->

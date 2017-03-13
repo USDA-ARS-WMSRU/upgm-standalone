@@ -1,0 +1,54 @@
+From:	Larry Wagner <wagner@weru.ksu.edu>
+Sent:	Friday, June 10, 2011 3:19 PM
+To:	Ascough, Jim
+Cc:	fredfox; Joseph Levin; McMaster, Greg; Edmunds, Debbie
+Subject:	WEPS as one of possibly many UPGM test frameworks
+
+Jim,
+
+I wanted to follow up our discussion this morning in writing on why we envision WEPS being a good 
+testbed for UPGM for the following reasons:
+
+a)  It provides all the required "components" to test  a crop model, e.g. hydrology, evaporation, climate, 
+soil, etc. and the tools to allow the inputs and many of the desired outputs to be readily accessed.
+
+b)  WEPS already has two hydrology/evaporation components: original WEPS hydrology and the WEPP 
+hydrology available which would allow one to evaluate their differences on UPGM performance.
+
+c)  It gives WEPS developers an opportunity to work on incorporating a new plant growth component 
+early in its development and make it easier and faster to release a version of WEPS with UPGM for NRCS 
+use once it has matured sufficiently to benefit them/us.
+
+d)  It will get you feedback on any WEPS related issues we have running UPGM within WEPS so that they 
+can be addressed earlier in the UPGM development cycle.
+
+e)  We envision having a commandline switch that could "turn on" the use of either the current WEPS 
+plant growth model or UPGM or even both based upon the crop record provided in a management file.  
+So, even for a single crop that has given us difficulties in simulating its growth nationwide, say wheat for 
+example, then an UPGM wheat record could be specified for use in a WEPS management file and 
+original WEPS crop records for all other crops.
+
+This is how I see introducing UPGM to NRCS with WEPS.  As soon as it became useful for one or more 
+crops (better growth characteristics than the original WEPS plant growth model), then it could be 
+automatically "turned on" by introducing UPGM growth records for those crops.
+There would be no requirement to re-populate the entire list of NRCS crops with UPGM growth records 
+before effectively using UPGM.
+
+f)  It does not restrict your development and/or testing under any other frameworks or models you 
+choose or need for UPGM.  In fact, this will probably be required as WEPS is unlikely to be supporting 
+"nutrients" and "nutrient cycling" in the foreseeable future.
+
+
+I think this mostly covers what I have been thinking regarding UPGM and WEPS.
+
+LEW
+
+--
+Larry E. Wagner, Agricultural Engineer
+USDA-ARS Engineering and Wind Erosion Research Unit
+1515 College Ave.,  Manhattan, KS 66502
+E-mail: larry.wagner@ars.usda.gov
+Phone:(785)537-5544  Fax:(785)537-5507
+URL: http://www.ars.usda.gov/npa/gmprc/eweru
+
+

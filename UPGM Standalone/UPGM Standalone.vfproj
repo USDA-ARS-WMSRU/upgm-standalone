@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject ProjectCreator="Intel Fortran" Keyword="Console Application" Version="11.0" ProjectIdGuid="{ECBE7692-0DF9-4831-8010-D91DC37D710B}">
+	<Platforms>
+		<Platform Name="Win32"/></Platforms>
+	<Configurations>
+		<Configuration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug" Interfaces="true"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" GenerateDebugInformation="true" SubSystem="subSystemConsole"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release|Win32">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" SubSystem="subSystemConsole"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Intel_SSA|Win32">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" SV_DiagLevel="svDiagLevel3" ModeOfStaticAnalysis="svDiagModeFull" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug" Interfaces="true"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" GenerateDebugInformation="true" SubSystem="subSystemConsole"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
+	<Files>
+		<Filter Name="Header Files" Filter="fi;fd">
+		<File RelativePath="..\Source Code\b1glob.inc"/>
+		<File RelativePath="..\Source Code\c1db1.inc"/>
+		<File RelativePath="..\Source Code\c1db2.inc"/>
+		<File RelativePath="..\Source Code\c1db3.inc"/>
+		<File RelativePath="..\Source Code\c1gen.inc"/>
+		<File RelativePath="..\Source Code\c1gen.inc"/>
+		<File RelativePath="..\Source Code\c1glob.inc"/>
+		<File RelativePath="..\Source Code\c1glob.inc"/>
+		<File RelativePath="..\Source Code\c1info.inc"/>
+		<File RelativePath="..\Source Code\c1report.inc"/>
+		<File RelativePath="..\Source Code\cecomp.inc"/>
+		<File RelativePath="..\Source Code\cenvr.inc"/>
+		<File RelativePath="..\Source Code\cfert.inc"/>
+		<File RelativePath="..\Source Code\cgrow.inc"/>
+		<File RelativePath="..\Source Code\chumus.inc"/>
+		<File RelativePath="..\Source Code\clai.inc"/>
+		<File RelativePath="..\Source Code\command.inc"/>
+		<File RelativePath="..\Source Code\cparm.inc"/>
+		<File RelativePath="..\Source Code\crop.inc"/>
+		<File RelativePath="..\Source Code\cropendseason.inc"/>
+		<File RelativePath="..\Source Code\csoil.inc"/>
+		<File RelativePath="..\Source Code\h1db1.inc"/>
+		<File RelativePath="..\Source Code\h1et.inc"/>
+		<File RelativePath="..\Source Code\h1hydro.inc"/>
+		<File RelativePath="..\Source Code\h1temp.inc"/>
+		<File RelativePath="..\Source Code\m1dbug.inc"/>
+		<File RelativePath="..\Source Code\m1flag.inc"/>
+		<File RelativePath="..\Source Code\m1sim.inc"/>
+		<File RelativePath="..\Source Code\main.inc"/>
+		<File RelativePath="..\Source Code\p1const.inc"/>
+		<File RelativePath="..\Source Code\p1solar.inc"/>
+		<File RelativePath="..\Source Code\p1unconv.inc"/>
+		<File RelativePath="..\Source Code\p1werm.inc"/>
+		<File RelativePath="..\Source Code\precision.inc"/>
+		<File RelativePath="..\Source Code\prevstate.inc"/>
+		<File RelativePath="..\Source Code\s1agg.inc"/>
+		<File RelativePath="..\Source Code\s1dbc.inc"/>
+		<File RelativePath="..\Source Code\s1dbh.inc"/>
+		<File RelativePath="..\Source Code\s1layr.inc"/>
+		<File RelativePath="..\Source Code\s1phys.inc"/>
+		<File RelativePath="..\Source Code\s1sgeo.inc"/>
+		<File RelativePath="..\Source Code\tcdbug.inc"/>
+		<File RelativePath="..\Source Code\tcrop.inc"/>
+		<File RelativePath="..\Source Code\w1cli.inc"/>
+		<File RelativePath="..\Source Code\w1clig.inc"/>
+		<File RelativePath="..\Source Code\w1pavg.inc"/>
+		<File RelativePath="..\Source Code\w1wind.inc"/></Filter>
+		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+		<File RelativePath="..\Source Code\file.fi"/></Filter>
+		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<File RelativePath="..\Source Code\caldat.f90"/>
+		<File RelativePath="..\Source Code\caldatw.f90"/>
+		<File RelativePath="..\Source Code\callcrop.f90"/>
+		<File RelativePath="..\Source Code\canopyht.f90"/>
+		<File RelativePath="..\Source Code\cdbug.f90"/>
+		<File RelativePath="..\Source Code\chillu.f90"/>
+		<File RelativePath="..\Source Code\cinit.f90"/>
+		<File RelativePath="..\Source Code\climate_init.f90"/>
+		<File RelativePath="..\Source Code\climate_input.f90"/>
+		<File RelativePath="..\Source Code\cookyield.f90"/>
+		<File RelativePath="..\Source Code\cpout.f90"/>
+		<File RelativePath="..\Source Code\crop.f90"/>
+		<File RelativePath="..\Source Code\crop_endseason.f90"/>
+		<File RelativePath="..\Source Code\cropinit.f90"/>
+		<File RelativePath="..\Source Code\cropupdate.f90"/>
+		<File RelativePath="..\Source Code\date1.f90"/>
+		<File RelativePath="..\Source Code\dayear.f90"/>
+		<File RelativePath="..\Source Code\daylen.f90"/>
+		<File RelativePath="..\Source Code\declination.f90"/>
+		<File RelativePath="..\Source Code\difdat.f90"/>
+		<File RelativePath="..\Source Code\emerge.f90"/>
+		<File RelativePath="..\Source Code\fopenk.f90"/>
+		<File RelativePath="..\Source Code\frac_lay.f90"/>
+		<File RelativePath="..\Source Code\gddcalc.f90"/>
+		<File RelativePath="..\Source Code\growth.f90"/>
+		<File RelativePath="..\Source Code\heatunit.f90"/>
+		<File RelativePath="..\Source Code\hourangle.f90"/>
+		<File RelativePath="..\Source Code\ht_dia_sai.f90"/>
+		<File RelativePath="..\Source Code\huc1.f90"/>
+		<File RelativePath="..\Source Code\julday.f90"/>
+		<File RelativePath="..\Source Code\leafno.f90"/>
+		<File RelativePath="..\Source Code\main.f90"/>
+		<File RelativePath="..\Source Code\nconc.f90"/>
+		<File RelativePath="..\Source Code\nmnim.f90"/>
+		<File RelativePath="..\Source Code\npcy.f90"/>
+		<File RelativePath="..\Source Code\npmin.f90"/>
+		<File RelativePath="..\Source Code\nuse.f90"/>
+		<File RelativePath="..\Source Code\nuts.f90"/>
+		<File RelativePath="..\Source Code\output_phenol.f90"/>
+		<File RelativePath="..\Source Code\phenol.f90"/>
+		<File RelativePath="..\Source Code\phenolbn.f90"/>
+		<File RelativePath="..\Source Code\phenolcn.f90"/>
+		<File RelativePath="..\Source Code\phenolhm.f90"/>
+		<File RelativePath="..\Source Code\phenolmms.f90"/>
+		<File RelativePath="..\Source Code\phenolpm.f90"/>
+		<File RelativePath="..\Source Code\phenolsb.f90"/>
+		<File RelativePath="..\Source Code\phenolsf.f90"/>
+		<File RelativePath="..\Source Code\phenolsg.f90"/>
+		<File RelativePath="..\Source Code\phenolsw.f90"/>
+		<File RelativePath="..\Source Code\phenolwb.f90"/>
+		<File RelativePath="..\Source Code\phenolww.f90"/>
+		<File RelativePath="..\Source Code\scrv1.f90"/>
+		<File RelativePath="..\Source Code\sdst.f90"/>
+		<File RelativePath="..\Source Code\shoot_grow.f90"/>
+		<File RelativePath="..\Source Code\shootnum.f90"/>
+		<File RelativePath="..\Source Code\spline.f90"/>
+		<File RelativePath="..\Source Code\splint.f90"/>
+		<File RelativePath="..\Source Code\temps.f90"/>
+		<File RelativePath="..\Source Code\trans.f90"/>
+		<File RelativePath="..\Source Code\upgm_driver.f90"/>
+		<File RelativePath="..\Source Code\water_stress.f90"/></Filter></Files>
+	<Globals/></VisualStudioProject>

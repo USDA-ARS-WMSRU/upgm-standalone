@@ -1,0 +1,344 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="crop_defn.xsl"?>
+<!DOCTYPE cropdefn SYSTEM "crop_defn.dtd">
+<!-- cropDefnDTD -->
+<!--
+<!ENTITY % paramdefnDTD SYSTEM "paramDefnDTD.dtd">
+%paramdefnDTD;
+<!ELEMENT cropdefn (paramdefn*)>
+-->
+<!-- paramDefnDTD -->
+<!--
+<!ELEMENT paramdefn (paramname, paramtype, paramunit?)>
+<!ELEMENT paramname (#PCDATA)>
+<!ELEMENT paramtype (#PCDATA)>
+<!ELEMENT	paramunit (#PCDATA)>
+	<!ATTLIST paramunit order CDATA "PRIMARY">
+-->
+<!-- The action for crops is planting process. All the parameters below are considered to be
+under default action (planting for e.g.) UNLIKE the parameters under various actions in operation_defn.xml
+-->
+<cropdefn>
+	<paramdefn>
+		<paramname>plantpop</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>#/m^2</paramunit>
+	</paramdefn>
+	<paramdefn><!--New -->
+		<paramname>dmaxshoot</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>#/plant</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>cbaflag</paramname>
+		<paramtype>int</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>tgtyield</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>cbafact</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>cyrafact</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>hyldflag</paramname>
+		<paramtype>int</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>hyldunits</paramname>
+		<paramtype>string</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>hyldwater</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>%</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>hyconfact</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>idc</paramname>
+		<paramtype>int</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>grf</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>fraction</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>ck</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>hui0</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>fraction</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>hmx</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>m</paramunit>
+	</paramdefn>
+	<paramdefn><!-- New -->
+		<paramname>growdepth</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>m</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>rdmx</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>m</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>tbas</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>degree C</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>topt</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>degree C</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>thudf</paramname>
+		<paramtype>int</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>dtm</paramname>
+		<paramtype>int</paramtype>
+		<paramunit>days</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<!--New -->
+		<paramname>thum</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>degree C day</paramunit>
+	</paramdefn>
+
+	<paramdefn>
+		<paramname>frsx1</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>degree C</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>frsx2</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>degree C</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>frsy1</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>fraction</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>frsy2</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>fraction</paramunit>
+	</paramdefn>
+	<paramdefn><!--New-->
+		<paramname>verndel</paramname>
+		<paramtype>float</paramtype>
+		<paramunit></paramunit>
+	</paramdefn>
+	<paramdefn><!--New-->
+		<paramname>bceff</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>(t/ha)/(MJ/m^2)</paramunit>
+	</paramdefn>
+
+	<paramdefn>
+		<paramname>a_lf</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>b_lf</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>c_lf</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>d_lf</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>a_rp</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>b_rp</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>c_rp</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>d_rp</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+
+	<paramdefn>
+		<paramname>a_ht</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>b_ht</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>ssaa</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>ssai=ssaa(kg/plant)**ssab</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>ssab</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>sla</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>m^2/kg</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>huie</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<!-- New -->
+		<paramname>transf</paramname>
+		<paramtype>int</paramtype>
+	</paramdefn>
+	<paramdefn><!-- New -->
+		<paramname>diammax</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>m</paramunit>
+	</paramdefn>
+
+	<paramdefn><!-- New -->
+		<paramname>storeinit</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>mg/plant</paramunit>
+	</paramdefn>
+	<paramdefn><!-- New -->
+		<paramname>mshoot</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>mg/shoot</paramunit>
+	</paramdefn>
+	<paramdefn><!-- New -->
+		<paramname>leafstem</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn><!-- New -->
+		<paramname>fshoot</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn><!-- New -->
+		<paramname>leaf2stor</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>fraction</paramunit>
+	</paramdefn>
+	<paramdefn><!-- New -->
+		<paramname>stem2stor</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>fraction</paramunit>
+	</paramdefn>
+	<paramdefn><!-- New -->
+		<paramname>stor2stor</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>fraction</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>rbc</paramname>
+		<paramtype>int</paramtype>
+	</paramdefn>
+
+	<paramdefn>
+		<paramname>standdk</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>kg/(kg day)</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>surfdk</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>kg/(kg day)</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>burieddk</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>kg/(kg day)</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>rootdk</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>kg/(kg day)</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>stemnodk</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>#/(# day)</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>stemdia</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>m</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>thrddys</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>day</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>covfact</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>m^2/kg</paramunit>
+	</paramdefn>
+
+	<paramdefn>
+		<paramname>resevapa</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>eratio=resevapa(kg/m^2)**resevapb</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>resevapb</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>yield_coefficient</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>kg/kg</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>residue_intercept</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>kg/m^2</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>regrow_location</paramname>
+		<paramtype>float</paramtype>
+		<paramunit>m</paramunit>
+	</paramdefn>
+	<paramdefn>
+		<paramname>noparam3</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>noparam2</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>noparam1</paramname>
+		<paramtype>float</paramtype>
+	</paramdefn>
+	<paramdefn>
+		<paramname>crop_notes</paramname>
+		<paramtype>string</paramtype>
+	</paramdefn>
+</cropdefn>

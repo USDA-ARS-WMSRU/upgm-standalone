@@ -1,0 +1,1915 @@
+<?xml version="1.0"?>
+<!--<?xml-stylesheet type="text/xsl" href="operationFormatXSL.xsl"?>-->
+<!DOCTYPE operationlang SYSTEM "operation_lang.dtd">
+<!-- operationLangDTD.dtd: Provided here for reference -->
+<!--
+<!ELEMENT operationlang (action*) >
+<!ENTITY % identityDTD SYSTEM "identity.dtd">
+%identityDTD;
+<!ENTITY % paramlangDTD SYSTEM "param_lang.dtd">
+%paramlangDTD;
+<!ELEMENT action (identity, (paramlang*))>
+
+-->
+<!-- paramLangDTD -->
+<!--
+<!ELEMENT paramlang (paramname, paramprompt?, (paramaltunit?), (conversion?), (paramchoice*))>
+	<!ELEMENT paramname (#PCDATA)>
+	<!ELEMENT paramprompt (#PCDATA)>
+	<!ELEMENT paramaltunit (#PCDATA)>
+	<!ELEMENT conversion ((factor?), (addend?))>
+	<!ELEMENT factor (#PCDATA)>
+	<!ELEMENT addend (#PCDATA)>
+	<!ELEMENT paramchoice (#PCDATA)>
+		<!ATTLIST paramchoice value CDATA "0">
+-->
+<operationlang>
+	<action>		<!--<actionname>Initialization</actionname>-->
+		<identity>
+			<code>O</code>
+			<id>00</id>
+		</identity>
+		<paramlang>
+			<paramname>op_notes0</paramname>
+			<paramprompt>Initialization Operation Notes</paramprompt>
+		</paramlang>
+	</action>
+	<action>		<!--<actionname>Direction and Speed</actionname>-->
+		<identity>
+			<code>O</code>
+			<id>01</id>
+		</identity>
+		<paramlang>
+			<paramname>ospeed</paramname>
+			<paramprompt>Speed</paramprompt>
+			<paramaltunit>mph</paramaltunit>
+			<conversion>
+				<factor>2.237</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>ostdspeed</paramname>
+			<paramprompt>Standard Speed</paramprompt>
+			<paramaltunit>mph</paramaltunit>
+			<conversion>
+				<factor>2.237</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>odirect</paramname>
+			<paramprompt>Direction from North</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>ominspeed</paramname>
+			<paramprompt>Minimum Speed</paramprompt>
+			<paramaltunit>mph</paramaltunit>
+			<conversion>
+				<factor>2.237</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>omaxspeed</paramname>
+			<paramprompt>Maximum Speed</paramprompt>
+			<paramaltunit>mph</paramaltunit>
+			<conversion>
+				<factor>2.237</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>op_notes1</paramname>
+			<paramprompt>Tillage Operation Notes</paramprompt>
+		</paramlang>
+	</action>
+	<action>		<!--<actionname>Others</actionname>-->
+		<identity>
+			<code>O</code>
+			<id>02</id>
+		</identity>
+		<paramlang>
+			<paramname>op_notes2</paramname>
+			<paramprompt>Other Operation Notes</paramprompt>
+		</paramlang>
+	</action>
+	<action>		<!--<actionname>Energy STIR Direction Speed</actionname>-->
+		<identity>
+			<code>O</code>
+			<id>03</id>
+		</identity>
+		<paramlang>
+			<paramname>oenergyarea</paramname>
+			<paramprompt>Diesel Energy per Area</paramprompt>
+			<paramaltunit>gal/acre</paramaltunit>
+			<conversion>
+				<factor>0.106907</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>ostir</paramname>
+			<paramprompt>Soil Tillage intensity Rating</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>ospeed</paramname>
+			<paramprompt>Speed</paramprompt>
+			<paramaltunit>mph</paramaltunit>
+			<conversion>
+				<factor>2.237</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>ostdspeed</paramname>
+			<paramprompt>Standard Speed</paramprompt>
+			<paramaltunit>mph</paramaltunit>
+			<conversion>
+				<factor>2.237</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>odirect</paramname>
+			<paramprompt>Direction from North</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>ominspeed</paramname>
+			<paramprompt>Minimum Speed</paramprompt>
+			<paramaltunit>mph</paramaltunit>
+			<conversion>
+				<factor>2.237</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>omaxspeed</paramname>
+			<paramprompt>Maximum Speed</paramprompt>
+			<paramaltunit>mph</paramaltunit>
+			<conversion>
+				<factor>2.237</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>op_notes3</paramname>
+			<paramprompt>Tillage Operation Notes</paramprompt>
+		</paramlang>
+	</action>
+	<action>		<!--<actionname>Energy STIR Others</actionname>-->
+		<identity>
+			<code>O</code>
+			<id>04</id>
+		</identity>
+		<paramlang>
+			<paramname>oenergyarea</paramname>
+			<paramprompt>Diesel Energy per Area</paramprompt>
+			<paramaltunit>gal/acre</paramaltunit>
+			<conversion>
+				<factor>0.106907</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>ostir</paramname>
+			<paramprompt>Soil Tillage intensity Rating</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>op_notes4</paramname>
+			<paramprompt>Other Operation Notes</paramprompt>
+		</paramlang>
+	</action>
+
+	<action>		<!--<actionname>Tillage</actionname>-->
+		<identity>
+			<code>G</code>
+			<id>01</id>
+		</identity>
+		<paramlang>
+			<paramname>gtdepth</paramname>
+			<paramprompt>Actual Depth</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>gtilint</paramname>
+			<paramprompt>Intensity</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>gtilArea</paramname>
+			<paramprompt>Area Affected</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>gtstddepth</paramname>
+			<paramprompt>Standard Depth</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>gtmindepth</paramname>
+			<paramprompt>Minimum Depth</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>gtmaxdepth</paramname>
+			<paramprompt>Maximum Depth</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+	</action>
+	<action>		<!--<actionname>Biomass Manipulation</actionname>-->
+		<identity>
+			<code>G</code>
+			<id>02</id>
+		</identity>
+		<paramlang>
+			<paramname>gbioarea</paramname>
+			<paramprompt>Area Affected</paramprompt>
+		</paramlang>
+	</action>
+	<action>		<!-- <actionname>Crop Name</actionname>-->
+		<identity>
+			<code>G</code>
+			<id>03</id>
+		</identity>
+		<paramlang>
+			<paramname>gcropname</paramname>
+			<paramprompt>Crop Name</paramprompt>
+		</paramlang>
+	</action>
+	<action>		<!--<actionname>Add Material to Field</actionname>-->
+		<identity>
+			<code>G</code>
+			<id>04</id>
+		</identity>
+		<paramlang>
+			<paramname>gamdname</paramname>
+			<paramprompt>Material Name</paramprompt>
+		</paramlang>
+	</action>
+	
+<!-- PROCESS PARAMETERS.
+Although order is not important, its maintained here to easily distinguish between Operations, Groups and Proceseses
+-->
+	<action>		<!--<actionname>Break Crust</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>01</id>
+		</identity>
+	</action>
+	
+	<action>		<!--<actionname>Random Roughness from tool</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>02</id>
+		</identity>
+		<paramlang>
+			<paramname>rroughflag</paramname>
+			<paramprompt>Random Roughness Flag</paramprompt>
+			<paramchoice value="0">Always use specified random roughness value</paramchoice>
+			<paramchoice value="1">Allow WEPS to auto-adjust random roughness value</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>rrough</paramname>
+			<paramprompt>Nominal Random Roughness</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+	</action>
+	
+	<action>		<!--<actionname>Ridges and Dikes</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>05</id>
+		</identity>
+		<paramlang>
+			<paramname>rdgflag</paramname>
+			<paramprompt>Ridge Flag</paramprompt>
+			<paramchoice value="0">Pre-existing ridges/dikes left unchanged</paramchoice>
+			<paramchoice value="1">Ridges/dikes set to specified values</paramchoice>
+			<paramchoice value="2">Ridges/dikes set, based on tillage depth</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>rdghit</paramname>
+			<paramprompt>Ridge Height</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rdgspac</paramname>
+			<paramprompt>Ridge Spacing</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rdgwidth</paramname>
+			<paramprompt>Ridge Top Width</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>dkhit</paramname>
+			<paramprompt>Dike Height</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>dkspac</paramname>
+			<paramprompt>Dike Spacing</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+	</action>
+	
+	<action>		<!-- <actionname>Aggregate Crushing</actionname> -->
+		<identity>
+			<code>P</code>
+			<id>11</id>
+		</identity>
+		<paramlang>
+			<paramname>asdf</paramname>
+			<paramprompt>Aggregate Size Distribution Factor</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>crif</paramname>
+			<paramprompt>Crushing Intensity Factor</paramprompt>
+		</paramlang>
+	</action>
+	
+	<action>		<!--<actionname>Soil Loosening</actionname> -->
+		<identity>
+			<code>P</code>
+			<id>12</id>
+		</identity>
+		<paramlang>
+			<paramname>soilos</paramname>
+			<paramprompt>Soil Loosening</paramprompt>
+		</paramlang>
+	</action>
+
+	<action>		<!-- <actionname>Layer Mixing</actionname> -->
+		<identity>
+			<code>P</code>
+			<id>13</id>
+		</identity>
+		<paramlang>
+			<paramname>laymix</paramname>
+			<paramprompt>Layer Mixing</paramprompt>
+		</paramlang>
+	</action>
+	
+	<action>		<!--<actionname>Invert</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>14</id>
+		</identity>
+	</action>
+				
+	<action>		<!--<actionname>Flatten Standing Biomass</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>24</id>
+		</identity>
+		<paramlang>
+			<paramname>fbioflagvt</paramname>
+			<paramprompt>Flatten Biomass Flag</paramprompt>
+			<paramchoice value="0">Flatten crop and residue</paramchoice>
+			<paramchoice value="1">Flatten crop only</paramchoice>
+			<paramchoice value="14">Flatten residue only</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>massflatvt1</paramname>
+			<paramprompt>Mass flattened (fragile residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>massflatvt2</paramname>
+			<paramprompt>Mass flattened (moderately tough residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>massflatvt3</paramname>
+			<paramprompt>Mass flattened (non-fragile/large residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>massflatvt4</paramname>
+			<paramprompt>Mass flattened (woody residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>massflatvt5</paramname>
+			<paramprompt>Mass flattened (small stones/gravel)</paramprompt>
+		</paramlang>
+	</action>
+
+	<action>		<!--<actionname>Bury Biomass </actionname>-->
+		<identity>
+			<code>P</code>
+			<id>25</id>
+		</identity>
+		<paramlang>
+			<paramname>burydist</paramname>
+			<paramprompt>Bury Biomass Flag</paramprompt>
+			<paramchoice value="0">Uniform burial distribution</paramchoice>
+			<paramchoice value="1">Mixing and inversion burial distribution</paramchoice>
+			<paramchoice value="2">Mixing burial distribution</paramchoice>
+			<paramchoice value="3">Inversion burial distribution</paramchoice>
+			<paramchoice value="4">Lifting, fracturing burial distribution</paramchoice>
+			<paramchoice value="5">Compression burial distribution</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>massburyvt1</paramname>
+			<paramprompt>Mass Buried (fragile residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>massburyvt2</paramname>
+			<paramprompt>Mass Buried (moderately tough residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>massburyvt3</paramname>
+			<paramprompt>Mass Buried (non-fragile/large residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>massburyvt4</paramname>
+			<paramprompt>Mass Buried (woody residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>massburyvt5</paramname>
+			<paramprompt>Mass Buried (small stones/gravel)</paramprompt>
+		</paramlang>
+	</action>
+	
+	<action>		<!--<actionname>Re-surface Biomass </actionname>-->
+		<identity>
+			<code>P</code>
+			<id>26</id>
+		</identity>
+		<paramlang>
+			<paramname>massresurvt1</paramname>
+			<paramprompt>Mass Resurfaced (fragile residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>massresurvt2</paramname>
+			<paramprompt>Mass Resurfaced (moderately tough residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>massresurvt3</paramname>
+			<paramprompt>Mass Resurfaced (non-fragile/large residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>massresurvt4</paramname>
+			<paramprompt>Mass Resurfaced (woody residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>massresurvt5</paramname>
+			<paramprompt>Mass Resurfaced (small stones/gravel)</paramprompt>
+		</paramlang>
+	</action>
+
+	<action>		<!--<actionname>Defoliate Growing Crop</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>30</id>
+		</identity>
+		<paramlang>
+			<paramname>defoliateflag</paramname>
+			<paramprompt>Defoliate Flag</paramprompt>
+			<paramchoice value="1">Crop defoliated</paramchoice>
+			<paramchoice value="0">Crop not defoliated</paramchoice>
+		</paramlang>
+	</action>
+	
+	<action>		<!--<actionname>Kill or Defoliate Growing Crop</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>31</id>
+		</identity>
+		<paramlang>
+			<paramname>kilflag</paramname>
+			<paramprompt>Kill/Defoliate Flag</paramprompt>
+			<paramchoice value="1">Annual crop killed, perennial crop regrows</paramchoice>
+			<paramchoice value="2">All crop types are killed</paramchoice>
+			<paramchoice value="3">Crop defoliated</paramchoice>
+			<paramchoice value="0">No crop killed</paramchoice>
+		</paramlang>
+	</action>
+	
+	<action>		<!--actionname>Cut/Remove Biomass to Height</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>32</id>
+		</identity>
+		<paramlang>
+			<paramname>cutflag</paramname>
+			<paramprompt>Cut Biomass Flag</paramprompt>
+			<paramchoice value="0">Cut Value = Height of standing stubble remaining</paramchoice>
+			<paramchoice value="1">Cut Value = Length of standing plant stalks removed</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>cutvalh</paramname>
+			<paramprompt>Cut Value</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>cyldrmh</paramname>
+			<paramprompt>Cut Yield Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>cplrmh</paramname>
+			<paramprompt>Cut Plant Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>cstrmh</paramname>
+			<paramprompt>Cut Standing Residue Removed</paramprompt>
+		</paramlang>
+	</action>
+
+	<action>		<!-- <actionname>Cut/Remove Biomass by Fraction</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>33</id>
+		</identity>
+		<paramlang>
+			<paramname>cutvalf</paramname>
+			<paramprompt>Plant Height Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>cyldrmf</paramname>
+			<paramprompt>Cut Yield Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>cplrmf</paramname>
+			<paramprompt>Cut Plant Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>cstrmf</paramname>
+			<paramprompt>Cut Standing Residue Removed</paramprompt>
+		</paramlang>
+	</action>
+	<action>		<!--actionname>Change Standing Biomass Fall Rate</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>34</id>
+		</identity>
+		<paramlang>
+			<paramname>frselpool</paramname>
+			<paramprompt>Select biomass pool type</paramprompt>
+			<paramchoice value="1">Crop</paramchoice>
+			<paramchoice value="2">Temporary</paramchoice>
+			<paramchoice value="3">Crop and Temporary</paramchoice>
+			<paramchoice value="4">Residue</paramchoice>
+			<paramchoice value="5">Crop and Residue</paramchoice>
+			<paramchoice value="6">Temporary and Residue</paramchoice>
+			<paramchoice value="7">Crop, Temporary and Residue</paramchoice>
+			<paramchoice value="0">No adjustments applied</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>ratemultvt1</paramname>
+			<paramprompt>Standing Biomass Fall Rate Multiplier (fragile residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>ratemultvt2</paramname>
+			<paramprompt>Standing Biomass Fall Rate Multiplier (moderately tough residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>ratemultvt3</paramname>
+			<paramprompt>Standing Biomass Fall Rate Multiplier (non-fragile/large residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>ratemultvt4</paramname>
+			<paramprompt>Standing Biomass Fall Rate Multiplier (woody residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>ratemultvt5</paramname>
+			<paramprompt>Standing Biomass Fall Rate Multiplier (small stones/gravel)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>threshmultvt1</paramname>
+			<paramprompt>Standing Biomass Fall Threshold Multiplier (fragile residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>threshmultvt2</paramname>
+			<paramprompt>Standing Biomass Fall Threshold Multiplier (moderately tough residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>threshmultvt3</paramname>
+			<paramprompt>Standing Biomass Fall Threshold Multiplier (non-fragile/large residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>threshmultvt4</paramname>
+			<paramprompt>Standing Biomass Fall Threshold Multiplier (woody residue)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>threshmultvt5</paramname>
+			<paramprompt>Standing Biomass Fall Threshold Multiplier (small stones/gravel)</paramprompt>
+		</paramlang>
+	</action>
+
+	<action>		<!--actionname>Thin Biomass to Population</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>37</id>
+		</identity>
+		<paramlang>
+			<paramname>thinvalp</paramname>
+			<paramprompt>Thinning Value</paramprompt>
+			<paramaltunit>#/ft^2</paramaltunit>
+			<conversion>
+				<factor>0.0929</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>tyldrmp</paramname>
+			<paramprompt>Thinned Yield Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>tplrmp</paramname>
+			<paramprompt>Thinned Plant Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>tstrmp</paramname>
+			<paramprompt>Thinned Standing Residue Removed</paramprompt>
+		</paramlang>
+	</action>
+
+	<action>		<!--actionname>Thin Biomass by Fraction</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>38</id>
+		</identity>
+		<paramlang>
+			<paramname>thinvalf</paramname>
+			<paramprompt>Thinning Value</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>tyldrmf</paramname>
+			<paramprompt>Thinned Yield Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>tplrmf</paramname>
+			<paramprompt>Thinned Plant Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>tstrmf</paramname>
+			<paramprompt>Thinned Standing Residue Removed</paramprompt>
+		</paramlang>
+	</action>
+	
+	<action>		<!--<actionname>End crop Biomass Manipulation</actionname-->
+		<identity>
+			<code>P</code>
+			<id>40</id>
+		</identity>
+	</action>
+
+	<action>		<!--actionname>Cut/Remove Biomass to Height (flags)</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>42</id>
+		</identity>
+		<paramlang>
+			<paramname>harv_report_flg</paramname>
+			<paramprompt>Report Harvest</paramprompt>
+			<paramchoice value="0">No Report</paramchoice>
+			<paramchoice value="1">Report</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>harv_calib_flg</paramname>
+			<paramprompt>Use Harvest in Calibration</paramprompt>
+			<paramchoice value="0">Do not Use</paramchoice>
+			<paramchoice value="1">Use for Calibration</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>harv_unit_flg</paramname>
+			<paramprompt>Harvest Units</paramprompt>
+			<paramchoice value="0">Use Units in Crop</paramchoice>
+			<paramchoice value="1">Use mass/area Units</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>mature_warn_flg</paramname>
+			<paramprompt>Crop Maturity Warnings</paramprompt>
+			<paramchoice value="0">No Warnings</paramchoice>
+			<paramchoice value="1">Warnings</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>cutflag</paramname>
+			<paramprompt>Cut Biomass Flag</paramprompt>
+			<paramchoice value="0">Cut Value = Height of standing stubble remaining</paramchoice>
+			<paramchoice value="1">Cut Value = Length of standing plant stalks removed</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>cutvalh</paramname>
+			<paramprompt>Cut Value</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>cyldrmh</paramname>
+			<paramprompt>Cut Yield Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>cplrmh</paramname>
+			<paramprompt>Cut Plant Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>cstrmh</paramname>
+			<paramprompt>Cut Standing Residue Removed</paramprompt>
+		</paramlang>
+	</action>
+
+	<action>		<!-- <actionname>Cut/Remove Biomass by Fraction (flags)</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>43</id>
+		</identity>
+		<paramlang>
+			<paramname>harv_report_flg</paramname>
+			<paramprompt>Report Harvest</paramprompt>
+			<paramchoice value="0">No Report</paramchoice>
+			<paramchoice value="1">Report</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>harv_calib_flg</paramname>
+			<paramprompt>Use Harvest in Calibration</paramprompt>
+			<paramchoice value="0">Do not Use</paramchoice>
+			<paramchoice value="1">Use for Calibration</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>harv_unit_flg</paramname>
+			<paramprompt>Harvest Units</paramprompt>
+			<paramchoice value="0">Use Units in Crop</paramchoice>
+			<paramchoice value="1">Use mass/area Units</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>mature_warn_flg</paramname>
+			<paramprompt>Crop Maturity Warnings</paramprompt>
+			<paramchoice value="0">No Warnings</paramchoice>
+			<paramchoice value="1">Warnings</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>cutvalf</paramname>
+			<paramprompt>Plant Height Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>cyldrmf</paramname>
+			<paramprompt>Cut Yield Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>cplrmf</paramname>
+			<paramprompt>Cut Plant Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>cstrmf</paramname>
+			<paramprompt>Cut Standing Residue Removed</paramprompt>
+		</paramlang>
+	</action>
+	<action>		<!--actionname>Thin Biomass to Population (flags)</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>47</id>
+		</identity>
+		<paramlang>
+			<paramname>harv_report_flg</paramname>
+			<paramprompt>Report Harvest</paramprompt>
+			<paramchoice value="0">No Report</paramchoice>
+			<paramchoice value="1">Report</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>harv_calib_flg</paramname>
+			<paramprompt>Use Harvest in Calibration</paramprompt>
+			<paramchoice value="0">Do not Use</paramchoice>
+			<paramchoice value="1">Use for Calibration</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>harv_unit_flg</paramname>
+			<paramprompt>Harvest Units</paramprompt>
+			<paramchoice value="0">Use Units in Crop</paramchoice>
+			<paramchoice value="1">Use mass/area Units</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>mature_warn_flg</paramname>
+			<paramprompt>Crop Maturity Warnings</paramprompt>
+			<paramchoice value="0">No Warnings</paramchoice>
+			<paramchoice value="1">Warnings</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>thinvalp</paramname>
+			<paramprompt>Thinning Value</paramprompt>
+			<paramaltunit>#/ft^2</paramaltunit>
+			<conversion>
+				<factor>0.0929</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>tyldrmp</paramname>
+			<paramprompt>Thinned Yield Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>tplrmp</paramname>
+			<paramprompt>Thinned Plant Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>tstrmp</paramname>
+			<paramprompt>Thinned Standing Residue Removed</paramprompt>
+		</paramlang>
+	</action>
+
+	<action>		<!--actionname>Thin Biomass by Fraction (flags)</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>48</id>
+		</identity>
+		<paramlang>
+			<paramname>harv_report_flg</paramname>
+			<paramprompt>Report Harvest</paramprompt>
+			<paramchoice value="0">No Report</paramchoice>
+			<paramchoice value="1">Report</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>harv_calib_flg</paramname>
+			<paramprompt>Use Harvest in Calibration</paramprompt>
+			<paramchoice value="0">Do not Use</paramchoice>
+			<paramchoice value="1">Use for Calibration</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>harv_unit_flg</paramname>
+			<paramprompt>Harvest Units</paramprompt>
+			<paramchoice value="0">Use Units in Crop</paramchoice>
+			<paramchoice value="1">Use mass/area Units</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>mature_warn_flg</paramname>
+			<paramprompt>Crop Maturity Warnings</paramprompt>
+			<paramchoice value="0">No Warnings</paramchoice>
+			<paramchoice value="1">Warnings</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>thinvalf</paramname>
+			<paramprompt>Thinning Value</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>tyldrmf</paramname>
+			<paramprompt>Thinned Yield Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>tplrmf</paramname>
+			<paramprompt>Thinned Plant Removed</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>tstrmf</paramname>
+			<paramprompt>Thinned Standing Residue Removed</paramprompt>
+		</paramlang>
+	</action>
+
+
+	<action>		<!--<actionname>Set Crop Residue Amounts</actionname-->
+		<identity>
+			<code>P</code>
+			<id>50</id>
+		</identity>
+		<paramlang>
+			<paramname>numst</paramname>
+			<paramprompt>Number of Standing Residue Stems</paramprompt>
+			<paramaltunit>#/ft^2</paramaltunit>
+			<conversion>
+				<factor>0.0929</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rstandht</paramname>
+			<paramprompt>Standing Residue Height</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>39.37</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rstandmass</paramname>
+			<paramprompt>Standing Residue Mass</paramprompt>
+			<paramaltunit>lb/acre</paramaltunit>
+			<conversion>
+				<factor>8921.8</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rflatmass</paramname>
+			<paramprompt>Flat Surface Residue Mass</paramprompt>
+			<paramaltunit>lb/acre</paramaltunit>
+			<conversion>
+				<factor>8921.8</factor>
+			</conversion>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>rbc</paramname>
+		        <paramprompt>Residue size/toughness class</paramprompt>
+			<paramchoice value="1">Fragile, very small residue, e.g. soybeans</paramchoice>
+			<paramchoice value="2">Moderately tough, short residue, e.g. wheat</paramchoice>
+			<paramchoice value="3">Non-fragile, medium residue, e.g. corn</paramchoice>
+			<paramchoice value="4">Woody, large residue</paramchoice>
+			<paramchoice value="5">Gravel, rock</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>rburiedmass</paramname>
+			<paramprompt>Buried Residue Mass</paramprompt>
+			<paramaltunit>lb/acre</paramaltunit>
+			<conversion>
+				<factor>8921.8</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rburieddepth</paramname>
+			<paramprompt>Buried Residue Depth</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rrootmass</paramname>
+			<paramprompt>Root Residue Mass</paramprompt>
+			<paramaltunit>lb/acre</paramaltunit>
+			<conversion>
+				<factor>8921.8</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rrootdepth</paramname>
+			<paramprompt>Root Residue Depth</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>standdk</paramname>
+			<paramprompt>decomposition rate for standing stalks</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>surfdk</paramname>
+			<paramprompt>decomposition rate for surface residue</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>burieddk</paramname>
+			<paramprompt>decomposition rate for buried crop residue</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>rootdk</paramname>
+			<paramprompt>decomposition rate for roots</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>stemnodk</paramname>
+			<paramprompt>decomposition (fall) rate for standing stalks</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>stemdia</paramname>
+			<paramprompt>average stem diameter</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>39.3696</factor>
+			</conversion>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>thrddys</paramname>
+			<paramprompt>decomposition days threshold when stems begin to fall</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>covfact</paramname>
+			<paramprompt>cover factor coefficient(mass to cover)</paramprompt>
+			<paramaltunit>cov=1-exp(-covfact*(lbs/acre))</paramaltunit>
+			<conversion>
+				<factor>0.00011209</factor>
+			</conversion>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>resevapa</paramname>
+			<paramprompt>Residue Evaporation Suppression multiplier coefficient a</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>resevapb</paramname>
+			<paramprompt>Residue Evaporation Suppression exponent coefficient b</paramprompt>
+		</paramlang>
+	</action>
+
+	<action>		<!--<actionname>Seeding Configuration</actionname-->
+		<identity>
+			<code>P</code>
+			<id>51</id>
+		</identity>
+		<paramlang>
+			<paramname>rowflag</paramname>
+			<paramprompt>Type of planting</paramprompt>
+			<paramchoice value="0">Broadcast Planting</paramchoice>
+			<paramchoice value="1">Use Implement Ridge Spacing</paramchoice>
+			<paramchoice value="2">Use Specified Row Spacing</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>rowspac</paramname>
+			<paramprompt>Crop row spacing</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rowridge</paramname>
+			<paramprompt>Seed placement (ridge/furrow)</paramprompt>
+			<paramchoice value="0">Seed row placed in furrow bottom</paramchoice>
+			<paramchoice value="2">Seed row placed on ridge top</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>plantpop</paramname>
+			<paramprompt>Plant population</paramprompt>
+			<paramaltunit>#/acre</paramaltunit>
+			<conversion>
+				<factor>4046.7</factor>
+			</conversion>
+		</paramlang>
+		<paramlang><!--New -->
+			<paramname>dmaxshoot</paramname>
+			<paramprompt>Maximum number of tillers (stems) per plant</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>cbaflag</paramname>
+			<paramprompt>Crop growth parameters selection</paramprompt>
+			<paramchoice value="0">Grow crop using baseline parameters </paramchoice>
+			<paramchoice value="1">Use given biomass and ratio adjustment factors</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>tgtyield</paramname>
+			<paramprompt>Target Harvestable yield</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>cbafact</paramname>
+			<paramprompt>Biomass adjustment factor</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>cyrafact</paramname>
+			<paramprompt>Yield/biomass ratio adjustment factor</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>hyldflag</paramname>
+			<paramprompt>Yield component specification</paramprompt>
+			<paramchoice value="0">Yield is all of reproductive mass (grain+)</paramchoice>
+			<paramchoice value="1">Yield is fraction of reproductive mass (grain)</paramchoice>
+			<paramchoice value="2">Yield is all or fraction of aboveground biomass</paramchoice>
+			<paramchoice value="3">Yield is all or fraction of the leaf mass</paramchoice>
+			<paramchoice value="4">Yield is all fraction of the stem mass</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>hyldunits</paramname>
+			<paramprompt>Units harvestable yield is reported in</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>hyldwater</paramname>
+			<paramprompt>Moisture content yield is reported in</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>hyconfact</paramname>
+			<paramprompt>Harvestable yield conversion factor (kg/m^2 to shown)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>idc</paramname>
+			<paramprompt>Crop Type</paramprompt>
+			<paramchoice value="1">Warm season legume (soybeans, etc.)</paramchoice>
+			<paramchoice value="2">Cool season legume (peas, etc.)</paramchoice>
+			<paramchoice value="3">Perennial Legume (alfalfa, etc.)</paramchoice>
+			<paramchoice value="4">Spring Seeded and Warm Season Annuals (cotton, sunflowers, corn, etc.)</paramchoice>
+			<paramchoice value="5">Cold Season Annuals (winter wheat, winter canola)</paramchoice>
+			<paramchoice value="6">Perennials (pasture,etc.)</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>grf</paramname>
+			<paramprompt>Grain (seed) fraction of reproductive biomass component</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>ck</paramname>
+			<paramprompt>light extinction coefficient</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>hui0</paramname>
+			<paramprompt>Ratio of heat units (start of senescence/total)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>hmx</paramname>
+			<paramprompt>maximum crop height</paramprompt>
+			<paramaltunit>ft</paramaltunit>
+			<conversion>
+				<factor>3.2808</factor>
+			</conversion>
+		</paramlang>
+		<paramlang><!-- New -->
+			<paramname>growdepth</paramname>
+			<paramprompt>Starting depth of growing point</paramprompt>
+			<paramaltunit>inches</paramaltunit>
+			<conversion>
+				<factor>39.3696</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rdmx</paramname>
+			<paramprompt>maximum root depth</paramprompt>
+			<paramaltunit>ft</paramaltunit>
+			<conversion>
+				<factor>3.2808</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>tbas</paramname>
+			<paramprompt>minimum temperature for plant growth</paramprompt>
+			<paramaltunit>degree F</paramaltunit>
+			<conversion>
+				<factor>1.8</factor>
+				<addend>32</addend>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>topt</paramname>
+			<paramprompt>optimal temperature for plant growth</paramprompt>
+			<paramaltunit>degree F</paramaltunit>
+			<conversion>
+				<factor>1.8</factor>
+				<addend>32</addend>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>thudf</paramname>
+			<paramprompt>Crop maturity measurement method</paramprompt>
+			<paramchoice value="0">Crop matures on average in Days shown</paramchoice>
+			<paramchoice value="1">Crop Matures in Heat Units shown</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>dtm</paramname>
+			<paramprompt>time of uninterrupted growth to maturity</paramprompt>
+		</paramlang>
+		<paramlang><!--New-->
+			<paramname>thum</paramname>
+			<paramprompt>Growing degree to maturity</paramprompt>
+			<paramaltunit>deg F day</paramaltunit>
+			<conversion>	
+				<factor>1.8</factor>
+			</conversion>
+		</paramlang>
+
+		<paramlang>
+			<paramname>frsx1</paramname>
+			<paramprompt>Upper frost damage threshold temperature</paramprompt>
+			<paramaltunit>degree F</paramaltunit>
+			<conversion>
+				<factor>1.8</factor>
+				<addend>32</addend>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>frsx2</paramname>
+			<paramprompt>Lower frost damage threshold temperature</paramprompt>
+			<paramaltunit>degree F</paramaltunit>
+			<conversion>
+				<factor>1.8</factor>
+				<addend>32</addend>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>frsy1</paramname>
+			<paramprompt>Damage at upper frost damage threshold temperature</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>frsy2</paramname>
+			<paramprompt>Damage at lower frost damage threshold temperature</paramprompt>
+		</paramlang>
+		<paramlang><!--New-->
+			<paramname>verndel</paramname>
+			<paramprompt>Thermal delay co-efficient pre-vernalization</paramprompt>
+		</paramlang>
+		<paramlang><!--New-->
+			<paramname>bceff</paramname>
+			<paramprompt>Biomass Conversion Efficiency</paramprompt>
+		</paramlang>
+	
+		<paramlang>
+			<paramname>a_lf</paramname>
+			<paramprompt>leaf fraction coefficient a</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>b_lf</paramname>
+			<paramprompt>leaf fraction coefficient b</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>c_lf</paramname>
+			<paramprompt>leaf fraction coefficient c</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>d_lf</paramname>
+			<paramprompt>leaf fraction coefficient d</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>a_rp</paramname>
+			<paramprompt>reproductive mass coefficient a</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>b_rp</paramname>
+			<paramprompt>reproductive mass coefficient b</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>c_rp</paramname>
+			<paramprompt>reproductive mass coefficient c</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>d_rp</paramname>
+			<paramprompt>reproductive mass coefficient d</paramprompt>
+		</paramlang>
+
+		<paramlang>
+			<paramname>a_ht</paramname>
+			<paramprompt>crop height curve shape coefficient a</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>b_ht</paramname>
+			<paramprompt>crop height curve shape coefficient b</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>ssaa</paramname>
+			<paramprompt>Specific stem silhouette area</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>ssab</paramname>
+			<paramprompt>Specific stem silhouette area exponent</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>sla</paramname>
+			<paramprompt>specific leaf area</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>huie</paramname>
+			<paramprompt>Heat units ratio to emergence</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>transf</paramname>
+			<paramprompt>Transplant or Seed flag</paramprompt>
+			<paramchoice value="0">plant shoots emerge in the required heat units to emergence</paramchoice>
+			<paramchoice value="1">Transplants placed in field (mass immediately divided into leaf, stem, roots)</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>diammax</paramname>
+			<paramprompt>maximum growth diameter of a single plant</paramprompt>
+			<paramaltunit>ft</paramaltunit>
+			<conversion>
+				<factor>3.281</factor>
+			</conversion>
+		</paramlang>
+
+		<paramlang>
+			<paramname>storeinit</paramname>
+			<paramprompt>planted mass,dry weight</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>mshoot</paramname>
+			<paramprompt>Root storage mass required for each regrowth shoot</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>leafstem</paramname>
+			<paramprompt>ratio of leaf mass/stem mass in shoot</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>fshoot</paramname>
+			<paramprompt>ratio of shoot diameter to shoot length at full extension</paramprompt>
+		</paramlang>
+		<paramlang>
+		    <paramname>leaf2stor</paramname>
+		    <paramprompt>fraction of leaf mass partitioning diverted to root store</paramprompt>
+		</paramlang>
+		<paramlang>
+		    <paramname>stem2stor</paramname>
+		    <paramprompt>fraction of stem mass partitioning diverted to root store</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>stor2stor</paramname>
+			<paramprompt>fraction of standing store mass partitioning diverted to root store</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>rbc</paramname>
+			<paramprompt>Residue size/toughness class</paramprompt>
+			<paramchoice value="1">Fragile, very small residue, e.g. soybeans</paramchoice>
+			<paramchoice value="2">Moderately tough, short residue, e.g. wheat</paramchoice>
+			<paramchoice value="3">Non-fragile, medium residue, e.g. corn</paramchoice>
+			<paramchoice value="4">Woody, large residue</paramchoice>
+			<paramchoice value="5">Gravel, rock</paramchoice>
+		</paramlang>
+
+		<paramlang>
+			<paramname>standdk</paramname>
+			<paramprompt>decomposition rate for standing stalks</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>surfdk</paramname>
+			<paramprompt>decomposition rate for surface residue</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>burieddk</paramname>
+			<paramprompt>decomposition rate for buried crop residue</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>rootdk</paramname>
+			<paramprompt>decomposition rate for roots</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>stemnodk</paramname>
+			<paramprompt>decomposition (fall) rate for standing stalks</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>stemdia</paramname>
+			<paramprompt>average stem diameter</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>39.3696</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>thrddys</paramname>
+			<paramprompt>decomposition days threshold when stems begin to fall</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>covfact</paramname>
+			<paramprompt>cover factor coefficient(mass to cover)</paramprompt>
+			<paramaltunit>cov=1-exp(-covfact*(lbs/acre))</paramaltunit>
+			<conversion>
+				<factor>0.00011209</factor>
+			</conversion>
+		</paramlang>
+
+		<paramlang>
+			<paramname>resevapa</paramname>
+			<paramprompt>Residue Evaporation Suppression multiplier coefficient a</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>resevapb</paramname>
+			<paramprompt>Residue Evaporation Suppression exponent coefficient b</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>yield_coefficient</paramname>
+			<paramprompt>Residue:Yield ratio</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>residue_intercept</paramname>
+			<paramprompt>Residue:Yield intercept</paramprompt>
+			<paramaltunit>lb/acre</paramaltunit>
+			<conversion>
+				<factor>8921.8</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>regrow_location</paramname>
+			<paramprompt>Location of regrowth (height)</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>39.3696</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>noparam3</paramname>
+			<paramprompt>Not Used</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>noparam2</paramname>
+			<paramprompt>Not Used</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>noparam1</paramname>
+			<paramprompt>Not Used</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>crop_notes</paramname>
+			<paramprompt>Crop Record Notes</paramprompt>
+		</paramlang>
+	</action>
+	
+	<action>		<!--<actionname>Remove Plant/Residue Material</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>61</id>
+		</identity>
+		<paramlang>
+			<paramname>selpos</paramname>
+			<paramprompt>Select plant/residue material</paramprompt>
+			<paramchoice value="1">Standing with Roots</paramchoice>
+			<paramchoice value="2">Flat</paramchoice>
+			<paramchoice value="3">Standing with Roots and Flat</paramchoice>
+			<paramchoice value="4">Buried</paramchoice>
+			<paramchoice value="5">Standing with Roots and Buried</paramchoice>
+			<paramchoice value="6">Flat and Buried</paramchoice>
+			<paramchoice value="7">Standing with Roots, Flat and Buried</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>selpool</paramname>
+			<paramprompt>Select biomass pool type</paramprompt>
+			<paramchoice value="1">Crop</paramchoice>
+			<paramchoice value="2">Temporary</paramchoice>
+			<paramchoice value="3">Crop and Temporary</paramchoice>
+			<paramchoice value="4">Residue</paramchoice>
+			<paramchoice value="5">Crop and Residue</paramchoice>
+			<paramchoice value="6">Temporary and Residue</paramchoice>
+			<paramchoice value="7">Crop, Temporary and Residue</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>rstore</paramname>
+			<paramprompt>Grain (fruit) Removed</paramprompt>
+		</paramlang>			
+		<paramlang>
+			<paramname>rleaf</paramname>
+			<paramprompt>Leaf Removed</paramprompt>
+		</paramlang>			
+		<paramlang>
+			<paramname>rstem</paramname>
+			<paramprompt>Stem Removed</paramprompt>
+		</paramlang>			
+		<paramlang>
+			<paramname>rrootstore</paramname>
+			<paramprompt>Storage Root Removed</paramprompt>
+		</paramlang>			
+		<paramlang>
+			<paramname>rrootfiber</paramname>
+			<paramprompt>Fibrous Roots Removed</paramprompt>
+		</paramlang>			
+	</action>
+	
+	<action>		<!--<actionname>Remove (by age pool) Plant/Residue Material</actionname>-->
+		<identity>
+			<code>P</code>
+			<id>62</id>
+		</identity>
+		<paramlang>
+			<paramname>harv_report_flg</paramname>
+			<paramprompt>Report Harvest</paramprompt>
+			<paramchoice value="0">No Report</paramchoice>
+			<paramchoice value="1">Report</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>harv_calib_flg</paramname>
+			<paramprompt>Use Harvest in Calibration</paramprompt>
+			<paramchoice value="0">Do not Use</paramchoice>
+			<paramchoice value="1">Use for Calibration</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>harv_unit_flg</paramname>
+			<paramprompt>Harvest Units</paramprompt>
+			<paramchoice value="0">Use Units in Crop</paramchoice>
+			<paramchoice value="1">Use mass/area Units</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>mature_warn_flg</paramname>
+			<paramprompt>Crop Maturity Warnings</paramprompt>
+			<paramchoice value="0">No Warnings</paramchoice>
+			<paramchoice value="1">Warnings</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>selpos</paramname>
+			<paramprompt>Select plant/residue material</paramprompt>
+			<paramchoice value="1">Standing with Roots</paramchoice>
+			<paramchoice value="2">Flat</paramchoice>
+			<paramchoice value="3">Standing with Roots and Flat</paramchoice>
+			<paramchoice value="4">Buried</paramchoice>
+			<paramchoice value="5">Standing with Roots and Buried</paramchoice>
+			<paramchoice value="6">Flat and Buried</paramchoice>
+			<paramchoice value="7">Standing with Roots, Flat and Buried</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>selpool</paramname>
+			<paramprompt>Select biomass pool type</paramprompt>
+			<paramchoice value="1">Crop</paramchoice>
+			<paramchoice value="2">Temporary</paramchoice>
+			<paramchoice value="3">Crop and Temporary</paramchoice>
+			<paramchoice value="4">Residue</paramchoice>
+			<paramchoice value="5">Crop and Residue</paramchoice>
+			<paramchoice value="6">Temporary and Residue</paramchoice>
+			<paramchoice value="7">Crop, Temporary and Residue</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>selagepool</paramname>
+			<paramprompt>Select residue age pool type</paramprompt>
+			<paramchoice value="0">All age pools</paramchoice>
+			<paramchoice value="2">Youngest age pool</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>rstore</paramname>
+			<paramprompt>Grain (fruit) Removed</paramprompt>
+		</paramlang>			
+		<paramlang>
+			<paramname>rleaf</paramname>
+			<paramprompt>Leaf Removed</paramprompt>
+		</paramlang>			
+		<paramlang>
+			<paramname>rstem</paramname>
+			<paramprompt>Stem Removed</paramprompt>
+		</paramlang>			
+		<paramlang>
+			<paramname>rrootstore</paramname>
+			<paramprompt>Storage Root Removed</paramprompt>
+		</paramlang>			
+		<paramlang>
+			<paramname>rrootfiber</paramname>
+			<paramprompt>Fibrous Roots Removed</paramprompt>
+		</paramlang>			
+	</action>
+	
+	<action>		<!--<actionname>Set Crop Residue Amounts</actionname-->
+		<identity>
+			<code>P</code>
+			<id>65</id>
+		</identity>
+		<paramlang>
+			<paramname>numst</paramname>
+			<paramprompt>Number of Standing Residue Stems</paramprompt>
+			<paramaltunit>#/ft^2</paramaltunit>
+			<conversion>
+				<factor>0.0929</factor>
+			</conversion> 
+		</paramlang>
+		<paramlang>
+			<paramname>rstandht</paramname>
+			<paramprompt>Standing Residue Height</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>39.37</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rstandmass</paramname>
+			<paramprompt>Standing Residue Mass</paramprompt>
+			<paramaltunit>lb/acre</paramaltunit>
+			<conversion>
+				<factor>8921.8</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rflatmass</paramname>
+			<paramprompt>Flat Surface Residue Mass</paramprompt>
+			<paramaltunit>lb/acre</paramaltunit>
+			<conversion>
+				<factor>8921.8</factor>
+			</conversion>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>rbc</paramname>
+		        <paramprompt>Residue size/toughness class</paramprompt>
+			<paramchoice value="1">Fragile, very small residue, e.g. soybeans</paramchoice>
+			<paramchoice value="2">Moderately tough, short residue, e.g. wheat</paramchoice>
+			<paramchoice value="3">Non-fragile, medium residue, e.g. corn</paramchoice>
+			<paramchoice value="4">Woody, large residue</paramchoice>
+			<paramchoice value="5">Gravel, rock</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>rburiedmass</paramname>
+			<paramprompt>Buried Residue Mass</paramprompt>
+			<paramaltunit>lb/acre</paramaltunit>
+			<conversion>
+				<factor>8921.8</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rburieddepth</paramname>
+			<paramprompt>Buried Residue Depth</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rrootmass</paramname>
+			<paramprompt>Root Residue Mass</paramprompt>
+			<paramaltunit>lb/acre</paramaltunit>
+			<conversion>
+				<factor>8921.8</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rrootdepth</paramname>
+			<paramprompt>Root Residue Depth</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>standdk</paramname>
+			<paramprompt>decomposition rate for standing stalks</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>surfdk</paramname>
+			<paramprompt>decomposition rate for surface residue</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>burieddk</paramname>
+			<paramprompt>decomposition rate for buried crop residue</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>rootdk</paramname>
+			<paramprompt>decomposition rate for roots</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>stemnodk</paramname>
+			<paramprompt>decomposition (fall) rate for standing stalks</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>stemdia</paramname>
+			<paramprompt>average stem diameter</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>39.3696</factor>
+			</conversion>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>thrddys</paramname>
+			<paramprompt>decomposition days threshold when stems begin to fall</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>covfact</paramname>
+			<paramprompt>cover factor coefficient(mass to cover)</paramprompt>
+			<paramaltunit>cov=1-exp(-covfact*(lbs/acre))</paramaltunit>
+			<conversion>
+				<factor>0.00011209</factor>
+			</conversion>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>resevapa</paramname>
+			<paramprompt>Residue Evaporation Suppression multiplier coefficient a</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>resevapb</paramname>
+			<paramprompt>Residue Evaporation Suppression exponent coefficient b</paramprompt>
+		</paramlang>
+	</action>
+
+	<action>		<!--<actionname>Add Manure Residue Amount</actionname-->
+		<identity>
+			<code>P</code>
+			<id>66</id>
+		</identity>
+		<paramlang>
+			<paramname>M_numst</paramname>
+			<paramprompt>Number of Standing Residue (manure) Stems</paramprompt>
+			<paramaltunit>#/ft^2</paramaltunit>
+			<conversion>
+				<factor>0.0929</factor>
+			</conversion> 
+		</paramlang>
+		<paramlang>
+			<paramname>M_rstandht</paramname>
+			<paramprompt>Standing Residue (manure) Height</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>39.37</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>M_rstandmass</paramname>
+			<paramprompt>Standing Residue (manure) Mass</paramprompt>
+			<paramaltunit>lb/acre</paramaltunit>
+			<conversion>
+				<factor>8921.8</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>M_rflatmass</paramname>
+			<paramprompt>Flat Surface Residue (manure) Mass</paramprompt>
+			<paramaltunit>lb/acre</paramaltunit>
+			<conversion>
+				<factor>8921.8</factor>
+			</conversion>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>rbc</paramname>
+		        <paramprompt>Residue size/toughness class</paramprompt>
+			<paramchoice value="1">Fragile, very small residue, e.g. soybeans</paramchoice>
+			<paramchoice value="2">Moderately tough, short residue, e.g. wheat</paramchoice>
+			<paramchoice value="3">Non-fragile, medium residue, e.g. corn</paramchoice>
+			<paramchoice value="4">Woody, large residue</paramchoice>
+			<paramchoice value="5">Gravel, rock</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>M_rburiedmass</paramname>
+			<paramprompt>Buried Manure Mass</paramprompt>
+			<paramaltunit>lb/acre</paramaltunit>
+			<conversion>
+				<factor>8921.8</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>M_rburieddepth</paramname>
+			<paramprompt>Buried Manure Depth</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>M_rrootmass</paramname>
+			<paramprompt>Root Residue (manure) Mass</paramprompt>
+			<paramaltunit>lb/acre</paramaltunit>
+			<conversion>
+				<factor>8921.8</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>M_rrootdepth</paramname>
+			<paramprompt>Root Residue (manure) Depth</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+
+		<paramlang>
+			<paramname>manure_total_mass</paramname>
+			<paramprompt>Total Manure Applied</paramprompt>
+			<paramaltunit>lb/acre</paramaltunit>
+			<conversion>
+				<factor>8921.8</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>manure_buried_ratio</paramname>
+			<paramprompt>Fraction of total manure buried</paramprompt>
+		</paramlang>
+
+		<paramlang><!-- Also in P51 -->
+			<paramname>standdk</paramname>
+			<paramprompt>decomposition rate for standing stalks</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>surfdk</paramname>
+			<paramprompt>decomposition rate for surface residue</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>burieddk</paramname>
+			<paramprompt>decomposition rate for buried crop residue</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>rootdk</paramname>
+			<paramprompt>decomposition rate for roots</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>stemnodk</paramname>
+			<paramprompt>decomposition (fall) rate for standing stalks</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>stemdia</paramname>
+			<paramprompt>average stem diameter</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>39.3696</factor>
+			</conversion>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>thrddys</paramname>
+			<paramprompt>decomposition days threshold when stems begin to fall</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>covfact</paramname>
+			<paramprompt>cover factor coefficient(mass to cover)</paramprompt>
+			<paramaltunit>cov=1-exp(-covfact*(lbs/acre))</paramaltunit>
+			<conversion>
+				<factor>0.00011209</factor>
+			</conversion>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>resevapa</paramname>
+			<paramprompt>Residue Evaporation Suppression multiplier coefficient a</paramprompt>
+		</paramlang>
+		<paramlang><!-- Also in P51 -->
+			<paramname>resevapb</paramname>
+			<paramprompt>Residue Evaporation Suppression exponent coefficient b</paramprompt>
+		</paramlang>
+	</action>
+
+	<action>
+		<identity>
+			<code>P</code>
+			<id>71</id>
+		</identity>
+		<paramlang>
+			<paramname>irrtype</paramname>
+			<paramprompt>Irrigation Application Method</paramprompt>
+			<paramchoice value="1">Sprinkler</paramchoice>
+			<paramchoice value="2">Other</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>irrdepth</paramname>
+			<paramprompt>Depth of water applied</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+	</action>
+
+	<action>
+		<identity>
+			<code>P</code>
+			<id>72</id>
+		</identity>
+		<paramlang>
+			<paramname>irrmonflag</paramname>
+			<paramprompt>Set Irrigation Monitoring Status</paramprompt>
+			<paramchoice value="0">Turn off Irrigation Monitoring</paramchoice>
+			<paramchoice value="1">Turn on Irrigation Monitoring</paramchoice>
+		</paramlang>
+		<paramlang>
+			<paramname>irrmaxapp</paramname>
+			<paramprompt>Maximum daily depth of water applied</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>irrrate</paramname>
+			<paramprompt>Rate of water application</paramprompt>
+			<paramaltunit>in/hour</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>irrduration</paramname>
+			<paramprompt>Duration of maximum daily depth water application</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>irrapploc</paramname>
+			<paramprompt>Application height (+ above) (- below) soil surface</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>irrminapp</paramname>
+			<paramprompt>Minimum irrigation application depth</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>irrmad</paramname>
+			<paramprompt>Management allowed depletion (0 to 1)</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>irrminint</paramname>
+			<paramprompt>Minimum days between irrigations</paramprompt>
+		</paramlang>
+	</action>
+
+	<action>
+		<identity>
+			<code>P</code>
+			<id>73</id>
+		</identity>
+		<paramlang>
+			<paramname>irrdepth</paramname>
+			<paramprompt>Depth of water applied</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>irrrate</paramname>
+			<paramprompt>Rate of water application</paramprompt>
+			<paramaltunit>in/hour</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>irrduration</paramname>
+			<paramprompt>Duration of water application</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>irrapploc</paramname>
+			<paramprompt>Application height (+ above) (- below) soil surface</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+	</action>
+	<action>
+		<identity>
+			<code>P</code>
+			<id>74</id>
+		</identity>
+	</action>
+</operationlang>

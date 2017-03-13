@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="crop_db.xsl"?>
+<!DOCTYPE cropDB SYSTEM "crop_db.dtd">
+<!-- crop_db.dtd: Provided here for reference-->
+<!--
+<!ELEMENT cropDB (cropname, param*)>
+<!ELEMENT cropname (#PCDATA)>
+<!ELEMENT param (name,value)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT value (#PCDATA)>
+-->

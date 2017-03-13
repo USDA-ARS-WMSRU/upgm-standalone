@@ -1,0 +1,732 @@
+<?xml version="1.0"?>
+<!--<?xml-stylesheet type="text/xsl" href="operation_defn.xsl"?>-->
+<!DOCTYPE manfileformat SYSTEM "man_fileformat.dtd">
+
+<!--
+<!ENTITY manfileformat (operationformat*)>
+<!ELEMENT operationformat (actionformat*) >
+<!ENTITY % identityDTD SYSTEM "identity.dtd">
+%identityDTD;
+<!ELEMENT actionformat (identity, paramformat *)> 
+<!ELEMENT paramformat (paramname*)>
+<!ELEMENT paramname (#PCDATA)>
+-->
+<manfileformat>
+	<actionformat>
+		<identity>
+			<code>O</code>
+			<id>00</id>
+		</identity>
+		<paramformatline symbol="T">
+			<paramname>op_notes0</paramname>
+		</paramformatline>
+	</actionformat>
+	<actionformat>
+		<identity>
+			<code>O</code>
+			<id>01</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>ospeed</paramname>
+			<paramname>odirect</paramname>
+			<paramname>ostdspeed</paramname>
+			<paramname>ominspeed</paramname>
+			<paramname>omaxspeed</paramname>
+		</paramformatline>
+		<paramformatline symbol="T">
+			<paramname>op_notes1</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>O</code>
+			<id>02</id>
+		</identity>
+		<paramformatline symbol="T">
+			<paramname>op_notes2</paramname>
+		</paramformatline>
+	</actionformat>
+	<actionformat>
+		<identity>
+			<code>O</code>
+			<id>03</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>oenergyarea</paramname>
+			<paramname>ostir</paramname>
+			<paramname>ospeed</paramname>
+			<paramname>odirect</paramname>
+			<paramname>ostdspeed</paramname>
+			<paramname>ominspeed</paramname>
+			<paramname>omaxspeed</paramname>
+		</paramformatline>
+		<paramformatline symbol="T">
+			<paramname>op_notes3</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>O</code>
+			<id>04</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>oenergyarea</paramname>
+			<paramname>ostir</paramname>
+		</paramformatline>
+		<paramformatline symbol="T">
+			<paramname>op_notes4</paramname>
+		</paramformatline>
+	</actionformat>
+				
+	<actionformat>
+		<identity>
+			<code>G</code>
+			<id>01</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>gtdepth</paramname>
+			<paramname>gtilint</paramname>
+			<paramname>gtilArea</paramname>
+			<paramname>gtstddepth</paramname>
+			<paramname>gtmindepth</paramname>
+			<paramname>gtmaxdepth</paramname>
+		</paramformatline>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>G</code>
+			<id>02</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>gbioarea</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>G</code>
+			<id>03</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>gcropname</paramname>
+		</paramformatline>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>G</code>
+			<id>04</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>gamdname</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>01</id>
+		</identity>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>02</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>rroughflag</paramname>
+			<paramname>rrough</paramname>
+		</paramformatline>
+	</actionformat>
+
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>03</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>rrough3</paramname>
+		</paramformatline>
+	</actionformat>
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>04</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>rrough4</paramname>
+		</paramformatline>
+	</actionformat>
+
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>05</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>rdgflag</paramname>
+			<paramname>rdghit</paramname>
+			<paramname>rdgspac</paramname>
+			<paramname>rdgwidth</paramname>
+			<paramname>dkhit</paramname>
+			<paramname>dkspac</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>11</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>asdf</paramname>
+			<paramname>crif</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>12</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>soilos</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>13</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>laymix</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>14</id>
+		</identity>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>24</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>fbioflagvt</paramname>
+			<paramname>massflatvt1</paramname>
+			<paramname>massflatvt2</paramname>
+			<paramname>massflatvt3</paramname>
+			<paramname>massflatvt4</paramname>
+			<paramname>massflatvt5</paramname>
+		</paramformatline>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>25</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>burydist</paramname>
+			<paramname>massburyvt1</paramname>
+			<paramname>massburyvt2</paramname>
+			<paramname>massburyvt3</paramname>
+			<paramname>massburyvt4</paramname>
+			<paramname>massburyvt5</paramname>
+		</paramformatline>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>26</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>massresurvt1</paramname>
+			<paramname>massresurvt2</paramname>
+			<paramname>massresurvt3</paramname>
+			<paramname>massresurvt4</paramname>
+			<paramname>massresurvt5</paramname>
+		</paramformatline>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>31</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>kilflag</paramname>
+		</paramformatline>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>32</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>cutflag</paramname>
+			<paramname>cutvalh</paramname>
+			<paramname>cyldrmh</paramname>
+			<paramname>cplrmh</paramname>
+			<paramname>cstrmh</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>33</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>cutvalf</paramname>
+			<paramname>cyldrmf</paramname>
+			<paramname>cplrmf</paramname>
+			<paramname>cstrmf</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>34</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>frselpool</paramname>
+			<paramname>ratemultvt1</paramname>
+			<paramname>ratemultvt2</paramname>
+			<paramname>ratemultvt3</paramname>
+			<paramname>ratemultvt4</paramname>
+			<paramname>ratemultvt5</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>threshmultvt1</paramname>
+			<paramname>threshmultvt2</paramname>
+			<paramname>threshmultvt3</paramname>
+			<paramname>threshmultvt4</paramname>
+			<paramname>threshmultvt5</paramname>
+		</paramformatline>
+	</actionformat>
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>37</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>thinvalp</paramname>
+			<paramname>tyldrmp</paramname>
+			<paramname>tplrmp</paramname>
+			<paramname>tstrmp</paramname>
+		</paramformatline>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>38</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>thinvalf</paramname>
+			<paramname>tyldrmf</paramname>
+			<paramname>tplrmf</paramname>
+			<paramname>tstrmf</paramname>
+		</paramformatline>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>40</id>
+		</identity>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>42</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>harv_report_flg</paramname>
+			<paramname>harv_calib_flg</paramname>
+			<paramname>harv_unit_flg</paramname>
+			<paramname>mature_warn_flg</paramname>
+			<paramname>cutflag</paramname>
+			<paramname>cutvalh</paramname>
+			<paramname>cyldrmh</paramname>
+			<paramname>cplrmh</paramname>
+			<paramname>cstrmh</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>43</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>harv_report_flg</paramname>
+			<paramname>harv_calib_flg</paramname>
+			<paramname>harv_unit_flg</paramname>
+			<paramname>mature_warn_flg</paramname>
+			<paramname>cutvalf</paramname>
+			<paramname>cyldrmf</paramname>
+			<paramname>cplrmf</paramname>
+			<paramname>cstrmf</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>47</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>harv_report_flg</paramname>
+			<paramname>harv_calib_flg</paramname>
+			<paramname>harv_unit_flg</paramname>
+			<paramname>mature_warn_flg</paramname>
+			<paramname>thinvalp</paramname>
+			<paramname>tyldrmp</paramname>
+			<paramname>tplrmp</paramname>
+			<paramname>tstrmp</paramname>
+		</paramformatline>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>48</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>harv_report_flg</paramname>
+			<paramname>harv_calib_flg</paramname>
+			<paramname>harv_unit_flg</paramname>
+			<paramname>mature_warn_flg</paramname>
+			<paramname>thinvalf</paramname>
+			<paramname>tyldrmf</paramname>
+			<paramname>tplrmf</paramname>
+			<paramname>tstrmf</paramname>
+		</paramformatline>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>50</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>numst</paramname>
+			<paramname>rstandht</paramname>
+			<paramname>rstandmass</paramname>
+			<paramname>rflatmass</paramname>
+			<paramname>rbc</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>rburiedmass</paramname>
+			<paramname>rburieddepth</paramname>
+			<paramname>rrootmass</paramname>
+			<paramname>rrootdepth</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>standdk</paramname>
+			<paramname>surfdk</paramname>
+			<paramname>burieddk</paramname>
+			<paramname>rootdk</paramname>
+			<paramname>stemnodk</paramname>
+			<paramname>stemdia</paramname>
+			<paramname>thrddys</paramname>
+			<paramname>covfact</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>resevapa</paramname>
+			<paramname>resevapb</paramname>
+		</paramformatline>
+		<paramformatline symbol="T">
+			<paramname>crop_notes</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>51</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>rowflag</paramname>
+			<paramname>rowspac</paramname>
+			<paramname>rowridge</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>plantpop</paramname>
+			<paramname>dmaxshoot</paramname>
+			<paramname>cbaflag</paramname>
+			<paramname>tgtyield</paramname>
+			<paramname>cbafact</paramname>
+			<paramname>cyrafact</paramname>
+			<paramname>hyldflag</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>hyldunits</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>hyldwater</paramname>
+			<paramname>hyconfact</paramname>
+			<paramname>idc</paramname>
+			<paramname>grf</paramname>
+			<paramname>ck</paramname>
+			<paramname>hui0</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>hmx</paramname>
+			<paramname>growdepth</paramname>
+			<paramname>rdmx</paramname>
+			<paramname>tbas</paramname>
+			<paramname>topt</paramname>
+			<paramname>thudf</paramname>
+			<paramname>dtm</paramname>
+			<paramname>thum</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>frsx1</paramname>
+			<paramname>frsx2</paramname>
+			<paramname>frsy1</paramname>
+			<paramname>frsy2</paramname>
+			<paramname>verndel</paramname>
+			<paramname>bceff</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>a_lf</paramname>
+			<paramname>b_lf</paramname>
+			<paramname>c_lf</paramname>
+			<paramname>d_lf</paramname>
+			<paramname>a_rp</paramname>
+			<paramname>b_rp</paramname>
+			<paramname>c_rp</paramname>
+			<paramname>d_rp</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>a_ht</paramname>
+			<paramname>b_ht</paramname>
+			<paramname>ssaa</paramname>
+			<paramname>ssab</paramname>
+			<paramname>sla</paramname>
+			<paramname>huie</paramname>
+			<paramname>transf</paramname>
+			<paramname>diammax</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>storeinit</paramname>
+			<paramname>mshoot</paramname>
+			<paramname>leafstem</paramname>
+			<paramname>fshoot</paramname>
+			<paramname>leaf2stor</paramname>
+			<paramname>stem2stor</paramname>
+			<paramname>stor2stor</paramname>
+			<paramname>rbc</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>standdk</paramname>
+			<paramname>surfdk</paramname>
+			<paramname>burieddk</paramname>
+			<paramname>rootdk</paramname>
+			<paramname>stemnodk</paramname>
+			<paramname>stemdia</paramname>
+			<paramname>thrddys</paramname>
+			<paramname>covfact</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>resevapa</paramname>
+			<paramname>resevapb</paramname>
+			<paramname>yield_coefficient</paramname>
+			<paramname>residue_intercept</paramname>
+			<paramname>regrow_location</paramname>
+			<paramname>noparam3</paramname>
+			<paramname>noparam2</paramname>
+			<paramname>noparam1</paramname>
+		</paramformatline>
+		<paramformatline symbol="T">
+			<paramname>crop_notes</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>61</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>selpos</paramname>		
+			<paramname>selpool</paramname>
+			<paramname>rstore</paramname>
+			<paramname>rleaf</paramname>
+			<paramname>rstem</paramname>
+			<paramname>rrootstore</paramname>
+			<paramname>rrootfiber</paramname>
+		</paramformatline>
+	
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>62</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>harv_report_flg</paramname>
+			<paramname>harv_calib_flg</paramname>
+			<paramname>harv_unit_flg</paramname>
+			<paramname>mature_warn_flg</paramname>
+			<paramname>selpos</paramname>		
+			<paramname>selpool</paramname>
+			<paramname>selagepool</paramname>
+			<paramname>rstore</paramname>
+			<paramname>rleaf</paramname>
+			<paramname>rstem</paramname>
+			<paramname>rrootstore</paramname>
+			<paramname>rrootfiber</paramname>
+		</paramformatline>
+	
+	</actionformat>
+	
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>65</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>numst</paramname>
+			<paramname>rstandht</paramname>
+			<paramname>rstandmass</paramname>
+			<paramname>rflatmass</paramname>
+			<paramname>rbc</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>rburiedmass</paramname>
+			<paramname>rburieddepth</paramname>
+			<paramname>rrootmass</paramname>
+			<paramname>rrootdepth</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>standdk</paramname>
+			<paramname>surfdk</paramname>
+			<paramname>burieddk</paramname>
+			<paramname>rootdk</paramname>
+			<paramname>stemnodk</paramname>
+			<paramname>stemdia</paramname>
+			<paramname>thrddys</paramname>
+			<paramname>covfact</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>resevapa</paramname>
+			<paramname>resevapb</paramname>
+		</paramformatline>
+		<paramformatline symbol="T">
+			<paramname>crop_notes</paramname>
+		</paramformatline>
+	</actionformat>
+	
+	<actionformat> <!-- New process for handling manure like RUSLE2 -->
+		<identity>
+			<code>P</code>
+			<id>66</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>M_numst</paramname>
+			<paramname>M_rstandht</paramname>
+			<paramname>M_rstandmass</paramname>
+			<paramname>M_rflatmass</paramname>
+			<paramname>rbc</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>M_rburiedmass</paramname>
+			<paramname>M_rburieddepth</paramname>
+			<paramname>M_rrootmass</paramname>
+			<paramname>M_rrootdepth</paramname>
+		</paramformatline>
+
+		<paramformatline symbol="+">
+			<paramname>manure_total_mass</paramname>
+			<paramname>manure_buried_ratio</paramname>
+		</paramformatline>
+
+		<paramformatline symbol="+">
+			<paramname>standdk</paramname>
+			<paramname>surfdk</paramname>
+			<paramname>burieddk</paramname>
+			<paramname>rootdk</paramname>
+			<paramname>stemnodk</paramname>
+			<paramname>stemdia</paramname>
+			<paramname>thrddys</paramname>
+			<paramname>covfact</paramname>
+		</paramformatline>
+		<paramformatline symbol="+">
+			<paramname>resevapa</paramname>
+			<paramname>resevapb</paramname>
+		</paramformatline>
+		<paramformatline symbol="T">
+			<paramname>crop_notes</paramname>
+		</paramformatline>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>71</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>irrtype</paramname>
+			<paramname>irrdepth</paramname>
+		</paramformatline>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>72</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>irrmonflag</paramname>
+			<paramname>irrmaxapp</paramname>
+			<paramname>irrrate</paramname>
+			<paramname>irrduration</paramname>
+			<paramname>irrapploc</paramname>
+			<paramname>irrminapp</paramname>
+			<paramname>irrmad</paramname>
+			<paramname>irrminint</paramname>
+		</paramformatline>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>73</id>
+		</identity>
+		<paramformatline symbol="+">
+			<paramname>irrdepth</paramname>
+			<paramname>irrrate</paramname>
+			<paramname>irrduration</paramname>
+			<paramname>irrapploc</paramname>
+		</paramformatline>
+	</actionformat>
+
+	<actionformat>
+		<identity>
+			<code>P</code>
+			<id>74</id>
+		</identity>
+	</actionformat>
+
+</manfileformat>
+		

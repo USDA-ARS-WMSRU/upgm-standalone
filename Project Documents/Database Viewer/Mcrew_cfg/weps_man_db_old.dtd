@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!ENTITY % operationDBDTD SYSTEM "operation_db.dtd">
+%operationDBDTD;
+<!ELEMENT wepsmanDB (version, rotationyears, wepsmanvalue*)>
+<!ELEMENT version (#PCDATA)>
+<!ELEMENT rotationyears (#PCDATA)>
+<!ELEMENT wepsmanvalue (date, operationDB*)>
+<!ELEMENT date (#PCDATA)>
+

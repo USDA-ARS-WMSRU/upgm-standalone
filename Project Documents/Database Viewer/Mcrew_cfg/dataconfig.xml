@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="dataconfig.xsl"?>
+<!DOCTYPE dataconfig SYSTEM "dataconfig.dtd"> 
+
+
+<!-- mcrewconfig.dtd -->
+<!--
+<!ELEMENT mcrewconfig (dataobject*, columndefn*)>
+	<!ELEMENT dataobject (objectname, defnfile?, displayfile?, langfile?, dtdfile?, fileextension?)>
+	<!ATTLIST dataobject type CDATA "control">
+		<!ELEMENT objectname (#PCDATA)>
+		<!ELEMENT defnfile (#PCDATA)>
+		<!ELEMENT displayfile (#PCDATA)>
+		<!ELEMENT langfile (#PCDATA)>
+		<!ELEMENT dtdfile (#PCDATA>
+		<!ELEMENT DBdir (#PCDATA)>
+		<!ELEMENT fileextension (#PCDATA)>
+		<!ELEMENT columndefn (columnnum, columndataobject, columnlabel, tagname)>
+		<!ELEMENT columnnum (#PCDATA)>
+		<!ELEMENT columndataobject (#PCDATA)> 
+		<!ELEMENT columnlabel (#PCDATA)>
+		<!ELEMENT tagname (#PCDATA)>
+-->
+
+<dataconfig>
+	<dataobject type="control">
+		<objectname>operation</objectname>
+		<defnfile>operation_defn.xml</defnfile>
+		<displayfile>operation_display.xml</displayfile>
+		<langfile>operation_lang.xml</langfile>
+		<fileextension>oprn</fileextension>
+	</dataobject>
+
+	<dataobject type="date">
+		<objectname>date</objectname>
+		<defnfile></defnfile>
+		<displayfile></displayfile>
+		<langfile></langfile>
+		<fileextension></fileextension>
+	</dataobject>
+	
+	<dataobject type="crop">
+		<objectname>crop</objectname>
+		<defnfile>crop_defn.xml</defnfile>
+		<displayfile>crop_display.xml</displayfile>
+		<langfile>crop_lang.xml</langfile>
+		<fileextension>crop</fileextension>
+	</dataobject>
+	
+	<!-- The next 2 dataobjects is used for saving the data-->
+	<dataobject type="management">
+		<objectname>management template</objectname>
+		<fileextension>xml</fileextension>
+	</dataobject>
+	
+	<dataobject type="management">
+		<objectname>management skeleton</objectname>
+		<fileextension>skel</fileextension>
+	</dataobject>
+        
+	<columndefn>
+		<columnnum>0</columnnum>
+		<columndataobject>date</columndataobject>
+		<columnlabel>\n\nDate</columnlabel>
+		<tagname>date</tagname>
+                <datacellstyle>date</datacellstyle>
+                <frozen>true</frozen>
+                <columnminwidth>93</columnminwidth>
+                <columnwidth>93</columnwidth>
+                <columnmaxwidth>100</columnmaxwidth>
+	</columndefn>
+	
+	<columndefn>
+		<columnnum>1</columnnum>
+		<columndataobject>operation</columndataobject>
+		<columnlabel>\n\n\nOperation Name</columnlabel>
+		<!--This values needs to be same as the data name
+		    in XML which the user wants to display-->
+		<tagname>operationname</tagname>
+                <datacellstyle>opdata</datacellstyle>
+                <frozen>true</frozen>
+                <columnminwidth>150</columnminwidth>
+                <columnwidth>400</columnwidth>
+                <columnmaxwidth>700</columnmaxwidth>
+	</columndefn>
+	
+	<columndefn>
+		<columnnum>2</columnnum>
+		<!-- The crop data is embedded inside an operation.
+		     Crop Object is used only when a new crop is needed
+		     to be added separately. Even then, finally the data
+		     values are copied from crop obejct to operation object -->
+		<columndataobject>crop</columndataobject>
+		<columnlabel>Crop\nor\nResidue</columnlabel>
+		<!--This values needs to be same as the data name
+		    in XML which the user wants to display-->
+		<tagname>gcropname</tagname>
+                <datacellstyle>cropdata</datacellstyle>
+                <frozen>true</frozen>
+                <columnminwidth>50</columnminwidth>
+                <columnwidth>150</columnwidth>
+                <columnmaxwidth>300</columnmaxwidth>
+                
+	</columndefn>
+	<misc>
+		<table_file>tablecolumn.xml</table_file>
+		<manformat_file>man_fileformat.xml</manformat_file>
+		<view_file>tableview.xml</view_file>
+	</misc>
+        
+        <cellstyle>
+            <styletag>headerdefault</styletag>
+            <readonly>true</readonly>
+            <defaultheader>true</defaultheader>
+            <fontname>Times New Roman</fontname>
+            <fontsize>14</fontsize>
+            <fontcolor>#000000</fontcolor>
+            <fontbold>true</fontbold>
+            <cellcolor>#FFCC33</cellcolor> 
+            <bordercolor>#000000</bordercolor>  
+            <bordercolormode>base_on_background</bordercolormode>
+            <borderside>all</borderside>
+            <rowminheight>55</rowminheight>
+            <rowheight>55</rowheight>    
+            <rowmaxheight>55</rowmaxheight>   
+            <cellrenderer>multiline</cellrenderer> 
+        </cellstyle>
+        
+        <cellstyle>
+            <styletag>datadefault</styletag>
+            <readonly>false</readonly>
+            <defaultdata>true</defaultdata>
+            <fontname>Courier</fontname>
+            <fontsize>11</fontsize>
+            <fontcolor>#000000</fontcolor>
+            <fontbold>false</fontbold>
+            <cellcolor>#CCCCCC</cellcolor>
+            <border>out</border>
+            <bordercolor>#000000</bordercolor>         
+            <borderside>all</borderside>  
+            <rowminheight>25</rowminheight>
+            <rowheight>25</rowheight>
+            <rowmaxheight>25</rowmaxheight>
+        </cellstyle>    
+        
+        <cellstyle>
+            <styletag>date</styletag>
+            <basestyle>datadefault</basestyle>
+            <readonly>true</readonly>
+            <cellrenderer>date</cellrenderer>
+        </cellstyle>    
+        
+        <cellstyle>
+            <styletag>comboboxdata</styletag>
+            <basestyle>datadefault</basestyle>
+            <cellrenderer>combobox</cellrenderer>
+        </cellstyle>   
+        
+        <cellstyle>
+            <styletag>checkboxdata</styletag>
+            <basestyle>datadefault</basestyle>
+            <cellrenderer>checkbox</cellrenderer>
+        </cellstyle>   
+        
+        <cellstyle>
+            <styletag>readonlydata</styletag>
+            <basestyle>datadefault</basestyle>
+            <readonly>true</readonly>
+        </cellstyle>    
+        
+        <cellstyle>
+            <styletag>readonlycheckboxdata</styletag>
+            <basestyle>checkboxdata</basestyle>
+            <readonly>true</readonly>
+        </cellstyle>  
+
+        <cellstyle>
+            <styletag>opdata</styletag>
+            <basestyle>datadefault</basestyle>
+            <cellrenderer>opfilelist</cellrenderer>
+        </cellstyle>  
+        
+        <cellstyle>
+            <styletag>cropdata</styletag>
+            <basestyle>datadefault</basestyle>
+            <cellrenderer>cropfilelist</cellrenderer>
+        </cellstyle>  
+
+</dataconfig>

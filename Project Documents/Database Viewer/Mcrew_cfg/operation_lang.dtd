@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!ELEMENT operationlang (action*) >
+<!ENTITY % identityDTD SYSTEM "identity.dtd">
+%identityDTD;
+<!ENTITY % paramlangDTD SYSTEM "param_lang.dtd">
+%paramlangDTD;
+<!ELEMENT action (identity, (paramlang*))>

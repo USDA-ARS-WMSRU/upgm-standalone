@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!ELEMENT paramdefn (paramname, paramtype, paramunit?)>
+<!ELEMENT paramname (#PCDATA)>
+<!ELEMENT paramtype (#PCDATA)>
+<!ELEMENT	paramunit (#PCDATA)>
+	<!ATTLIST paramunit order CDATA "PRIMARY">
+
+
+<!--param_defnDTD: This dtd sepcifies the structure of a parameter in any operation.
+'paramtype' specifies the type of the parameter such as float, int, String or choice. choice (choicelists) 
+parameters don't have any units.
+'paramunit' specifies the basic unit in which the output is written. Alternate units are in param-lang.dtd
+-->
+			

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!ELEMENT operationdefn (action*) >
+<!ENTITY % identityDTD SYSTEM "identity.dtd">
+%identityDTD;
+<!ENTITY % paramdefnDTD SYSTEM "param_defn.dtd">
+%paramdefnDTD;
+<!ELEMENT action (identity, actionname, (paramdefn*), (groupid?))> 
+<!ELEMENT actionname (#PCDATA)>
+<!ELEMENT groupid (identity*)> 
+
+<!--- operationFormatDTD.dtd: This file replaces the older operation management files
+specifying the format and structure of the operations for Operate and Group sections.
+
+The Process sections have lots of data and so is (to be) put into a separate file.
+The actual operations with the parameter values can be found in the manDB XML file.
+
+'actionname' specifies the name of the action
+
+groupd id is there only for processes (ones which have identity code = P)
+specifying to which group(s) they can belong to. 
+
+There can be any number of groups (multiple identities listed under a single groupid)
+to which a process can belong to.
+-->

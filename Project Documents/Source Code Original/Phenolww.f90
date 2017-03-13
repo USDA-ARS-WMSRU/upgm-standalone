@@ -1,0 +1,627 @@
+SUBROUTINE phenolww(aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae, &
+                  & dap,dav,daynum,ddae,ddap,ddav,dgdde,dgdds,dgddv,dummy2,drs, &
+                  & emrgflg,ems,first7,fps,gdda,gdde,gdds,gddv,gddwsf,gmethod,  &
+                  & heads,hrs,ies,joints,lnpout,mats,pchron,pdate,seedbed,srs,  &
+                  & tis,tss,year,endphenol)
+!
+!  this subroutine simulates phenological growth stages for winter wheat.
+! 
+!  note:  create a subroutine to convert input values all to gdd and pass
+!         the gdd values into each phenol subroutine.
+! 
+!  note:  can also have a subroutine calculating the stress factor (rai)
+!         for use in each phenol subroutine.  if for nothing else base
+!         rai on dryland/irrigated and dry/wet years.
+! 
+!  inputs: aepa(c,r), antes(c,r), antss(c,r), boots(c,r), dae(r),
+!          dap(r), dav(r), daynum(r), ddae((20)c), ddap(20)(c),
+!          ddav(20)(c), dgdde(20)(c), dgdds(20)(c), dgddv(20)(c),
+!          drs(c,r), dummy2(15)(r), first7(c,r), fps(c,r), gdde(r),
+!          gdds(r), gddv(r), heads(c,r), hrs(c,r), ies(c,r),
+!          joints(c,r), mats(c,r), nolvs(c), pchron(r), srs(c,r),
+!          tis(c,r), tss(c,r)
+! 
+! outputs: antes(c,r), antss(c,r), boots(c,r), ddae((20)c), ddap(20)(c),
+!          ddav(20)(c), dgdde(20)(c), dgdds(20)(c), dgddv(20)(c),
+!          drs(c,r), first7(c,r), fps(c,r), heads(c,r), hrs(c,r),
+!          ies(c,r), joints(c,r), mats(c,r), nolvs(c), srs(c,r),
+!          tis(c,r), tss(c,r)
+!                  
+IMPLICIT NONE
+!
+INCLUDE 'file.fi'
+!
+! Subroutine arguments
+!
+REAL :: aepa,bhfwsf,gdda,gdde,gdds,gddv,pchron,pdepth
+CHARACTER(128) :: cliname
+CHARACTER(80) :: cname,seedbed
+INTEGER :: daa,dae,dap,dav,daynum,emrgflg,first7,gmethod,pdate,year
+LOGICAL :: endphenol
+INTEGER,DIMENSION(4) :: antes,antss,boots,drs,ems,fps,heads,hrs,ies,joints,mats,&
+                      & srs,tis,tss
+INTEGER,DIMENSION(20) :: ddae,ddap,ddav
+REAL,DIMENSION(20) :: dgdde,dgdds,dgddv
+REAL,DIMENSION(30) :: dummy2
+REAL,DIMENSION(15,5) :: gddwsf
+REAL,DIMENSION(100,2) :: lnpout
+!
+! Local variables
+!
+REAL :: adjgdd
+INTEGER :: i,j,row
+INTEGER,DIMENSION(4) :: pdatearr
+REAL :: real
+!
+!debe changed upgm variable name 'bc0growdepth' to phenologymms variable name
+!of 'pdepth' to maintain consistency with phenologymms code.
+!debe added for writing out phenology info to a file.
+! 
+!debe added variables for output information
+! 
+!debe changed dimensions of dummy 2 array for stressed and non-stressed
+!  values.
+!debe changed the dimensions of lnpout to (100,2) from (60,2).
+!debe added bhfwsf to the call to each crop's phenol subroutine to
+! implement daily water stress effect on time to reach a growth stage
+!debe added adjgdd value for use in returning the adjusted gdd value
+! from the water_stress subroutine used in determining when a growth stage
+! can be entered.
+!debe added initialized gddwsf array to be used in place of dummy2 array.
+! it is used to check if enough gdd from emergence or vernalization have
+! been acculumated to allow the next growth stage to be entered.
+!debe added cliname to write the climate location name to phenol.out
+ 
+ 
+!debe added this variable to stop the call to phenol
+ 
+!debe added local variable's declaration and initialization
+!   local variables
+ 
+!     + + + argument definitions + + +
+!     adjgdd - the adjusted gdd required to enter the growth stage.
+!     aepa - the parameter for duration of anthesis (i.e., gdd from start
+!            to end of anthesis
+!     antes - end of anthesis growth stage. this array includes daynum, year,
+!             month and day of when this stage was reached.
+!     antss - start of anthesis growth stage. this array includes daynum, year,
+!             month and day of when this stage was reached.
+!     bhfwsf - water stress factor ratio (0-1).  this is read in daily.
+!     boots - booting growth stage. this array includes daynum, year,
+!             month and day of when this stage was reached.  booting is
+!            defined as flag leaf has completed its growth.
+!     cliname - the name of the location for the climate data.
+!     cname - crop name.
+!     daa - days after anthesis.
+!     dae - days after emergence.
+!     dap - days after planting.
+!     dav - days after vernalization.
+!     daynum - the current day numbered from jan 1.
+!     ddae - an array holding the dae for each growth stage.
+!     ddap - an array holding the dap for each growth stage.
+!     ddav - an array holding the dav for each growth stage.
+!     dgdde - an array holding the gdde for each growth stage.
+!     dgdds - an array holding the gdds for each growth stage.
+!     dgddv -  an array holding the gddv for each growth stage.
+!     drs - double ridge growth stage. this array includes daynum, year,
+!             month and day of when this stage was reached.
+!     dummy2 - an array to hold the gdd values, both under stressed
+!              and non- stressed conditions,required to reach each growth
+!              stage of the current crop.
+!     emrgflg - a flag to determine if the new emerge subroutine should be
+!               called (emrgflg=1) or to proceed with the weps/upgm method
+!               of achieving emergence (emrgflg=0).
+!     ems - day when emergence occurred. this array includes daynum, year,
+!             month and day of when this event occurred.
+!     endphenol - a flag to indicate if this subroutine should be called
+!                 again on the next day.
+!     first7 - used to set the value of aepa the first time phenolww is called.
+!     fps - flower primordium initiation growth stage. this array includes
+!           daynum, year, month and day of when this stage was reached.
+!     gdda - growing degree days from anthesis.
+!     gdde - growing degree days from emergence.
+!     gdds - growing degree days from seeding.
+!     gddv - growing degree days from vernalization.
+!     gddwsf - an array to hold the gn and gs gdd values plus the high and
+!              low water stress factor values.  these are used in calculating
+!              the slope of the line for each growth stage and this is then
+!              used to calculate the adjusted gdd value for the current
+!              growth stage.
+!              column one contains the gn values and is y2.
+!              column two contains the gs value and is y1.
+!              column three contains wsfhi (high water stress) and is x1.
+!              column four contains wsflo (low water stress) and is x2.
+!              column five contains the adjgdd value for the stage.
+!     gmethod - selects the method whereby gdd will be calculated.  a value
+!               of 1 corresponds to method 1 in phenologymms and is used
+!               for crops such as winter wheat, winter barley and proso
+!               millet. a value of 2 corresponds to method 2 in
+!               phenologymms and is used for crops such as corn, sorghum
+!               and sunflower.  a value of 3 is the way that weps/upgm
+!               calculated ggd for the day.
+!     heads - heading growth stage. this array includes daynum, year,
+!             month and day of when this stage was reached.
+!     hrs - time to harvest ripe growth stage. this array includes daynum,
+!           year, month and day of when this stage was reached.
+!     ies - start of internode elongation growth stage. this array includes
+!           daynum, year, month and day of when this stage was reached.
+!     joints - jointing growth stage. this array includes daynum, year,
+!             month and day of when this stage was reached.
+!     lnpout - an array used in writing out daynum and the number of leaves
+!              on that day.  the values are written each time a new leaf has
+!              appeared.
+!     mats - physiological maturity growth stage. this array includes daynum,
+!            year, month and day of when this stage was reached.
+!     pchron - phyllochron value which is the number of gdd per leaf.
+!     pdate - planting date.
+!     pdepth - depth of growing point at time of planting (m).
+!              bc0growdepth is assed into pdepth.
+!     seedbed - contains the soil moisture condition of the seedbed.
+!     srs - single ridge growth stage. this array includes daynum, year,
+!           month and day of when this stage was reached.
+!     tis - start of tillering growth stage. this array includes daynum, year,
+!           month and day of when this stage was reached.
+!     tss - terminal spikelet growth stage. this array includes daynum, year,
+!           month and day of when this stage was reached.
+!     year - year.
+ 
+ 
+!     + + + local variable definitions + + +
+!     i - this tells which row is to be read in from the dummy2 array.
+!     j - a counter variable for outputting the leaf number array.
+!     pdatearr - the planting date array. it contains the daynum,
+!                year, month and day that planting occurred.
+!     row - this holds the row to be filled in the gddwsf array in the
+!           water_stress subroutine.
+ 
+ 
+! initialize local variables
+j = 1
+ 
+ !     print *, 'year in phenolww =', year
+!debe initialize planting date array
+DO i = 1,4
+  pdatearr(i) = 0
+END DO
+pdatearr(2) = year
+ 
+! aepa is the parameter for duration of anthesis (i.e., gdd from start
+!  to end of anthesis).
+! set this value the first time only (first7=0).
+IF (first7.EQ.0) THEN
+  aepa = 120.        ! this is the value for crops which use method 1
+                     ! for gdd calculation.
+  first7 = 1
+END IF
+ 
+!debe added call to the water_stress subroutine which is called
+! only for the current growth stage.
+ 
+! emergence has occurred so fill the first row in the gddwsf array (only
+! print for the first period from e to tiller initiation):
+IF ((ems(1).NE.999).AND.(tis(1).EQ.999)) THEN
+  row = 1
+  i = 1
+  CALL water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+END IF
+ 
+! *******   fill growth stage arrays   *******
+ 
+!debe added code to change the adjusted value in gddwsf only when
+! the growth stage has been reached.
+ 
+!  start of tillering:
+IF (tis(1).EQ.999) THEN         ! tillering has not been reached.
+  row = 2
+  i = 2
+  CALL water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  IF (gdde.GE.gddwsf(2,5)) THEN        !if gdde is greater than the
+     tis(1) = daynum      !adjusted gdd in gddwsf, tillering has begun.
+     tis(2) = year
+     CALL date1(tis)
+     ddap(2) = dap
+     ddae(2) = dae
+     ddav(2) = dav
+     dgdds(2) = gdds
+     dgdde(2) = gdde
+     dgddv(2) = gddv
+     PRINT *,'tis = ',tis
+  END IF
+ 
+!  single ridge growth stage:
+!  single ridge occurs dummy2(3) gdd after vernalization, which is
+!  assumed to have occurred by midwinter (jan. 1 or july 1) for winter
+!  wheat.
+ 
+ELSE IF (srs(1).EQ.999) THEN
+!      print *, 'year in phenolww, srs =', year, 'daynum=', daynum
+  row = 3
+  i = 3
+  CALL water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  IF (gddv.GE.gddwsf(3,5)) THEN
+     srs(1) = daynum
+     srs(2) = year
+     CALL date1(srs)
+     ddap(3) = dap
+     ddae(3) = dae
+     ddav(3) = dav
+     dgdds(3) = gdds
+     dgdde(3) = gdde
+     dgddv(3) = gddv
+     PRINT *,'srs = ',srs
+  END IF
+ 
+!  double ridge growth stage:
+!  double ridge occurs dummy2(4) gdd phyllochrons after single ridge growth
+!  stage.  do not allow additional stages to occur on same day dr
+!  is reached.
+ 
+ELSE IF (drs(1).EQ.999) THEN
+  row = 4
+  i = 4
+  CALL water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  IF (gddv.GE.(gddwsf(3,5)+gddwsf(4,5))) THEN
+     drs(1) = daynum
+     drs(2) = year
+     CALL date1(drs)
+     ddap(4) = dap
+     ddae(4) = dae
+     ddav(4) = dav
+     dgdds(4) = gdds
+     dgdde(4) = gdde
+     dgddv(4) = gddv
+     PRINT *,'drs = ',drs
+  END IF
+ 
+!  flower primordium initiation:
+!  flower primordium initiation begins 0.3 phyllochrons after
+!  double ridge.
+ 
+ELSE IF (fps(1).EQ.999) THEN
+  IF (gddv.GE.(gddwsf(3,5)+gddwsf(4,5)+(0.3*pchron))) THEN
+     fps(1) = daynum
+     fps(2) = year
+     CALL date1(fps)
+     ddap(7) = dap
+     ddae(7) = dae
+     ddav(7) = dav
+     dgdds(7) = gdds
+     dgdde(7) = gdde
+     dgddv(7) = gddv
+     PRINT *,'fps = ',fps
+  END IF
+ 
+!  terminal spikelet stage:
+ 
+!debe 011509 combine tss and ies stages because they happen on about
+! the same day.
+ELSE IF ((tss(1).EQ.999).AND.(ies(1).EQ.999)) THEN
+!debe changed this to row 7 to agree with the heading
+! 'end spikelet initiation' in gddwsf.
+  row = 7
+  i = 5
+  CALL water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+             ! debe skip empty fps row in gddwsf so use row 7
+  IF (gddv.GE.(gddwsf(3,5)+gddwsf(4,5)+gddwsf(7,5))) THEN
+     tss(1) = daynum
+     tss(2) = year
+     CALL date1(tss)
+     ddap(5) = dap
+     ddae(5) = dae
+     ddav(5) = dav
+     dgdds(5) = gdds
+     dgdde(5) = gdde
+     dgddv(5) = gddv
+     PRINT *,'tss = ',tss
+  END IF
+ 
+! start of internode elongation:
+! internode elongation occurs on the same day as terminal spikelet (tss).
+!  internode elongation begins dummy2(5) gdd phyllochrons after double ridge
+!  growth stage.
+ 
+!debe changed this to row 6 to agree with heading 'stem elongation begins'
+! in gddwsf.
+  row = 6
+  i = 5
+  CALL water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  IF (gddv.GE.(gddwsf(3,5)+gddwsf(4,5)+gddwsf(6,5))) THEN
+     ies(1) = daynum
+     ies(2) = year
+     CALL date1(ies)
+     ddap(6) = dap
+     ddae(6) = dae
+     ddav(6) = dav
+     dgdds(6) = gdds
+     dgdde(6) = gdde
+     dgddv(6) = gddv
+     PRINT *,'ies = ',ies
+  END IF
+ 
+!  jointing growth stage prediction:
+ELSE IF (joints(1).EQ.999) THEN
+  row = 8
+  i = 6
+  CALL water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  IF (gddv.GE.(gddwsf(3,5)+gddwsf(4,5)+gddwsf(6,5)+gddwsf(8,5))) THEN
+     joints(1) = daynum
+     joints(2) = year
+     CALL date1(joints)
+     ddap(8) = dap
+     ddae(8) = dae
+     ddav(8) = dav
+     dgdds(8) = gdds
+     dgdde(8) = gdde
+     dgddv(8) = gddv
+     PRINT *,'joints = ',joints
+  END IF
+ 
+!  booting growth stage: this is defined as flag leaf has
+!  completed its growth.
+ELSE IF (boots(1).EQ.999) THEN
+  row = 9
+  i = 7
+  CALL water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  IF (gddv.GE.(gddwsf(3,5)+gddwsf(4,5)+gddwsf(6,5)+gddwsf(8,5)+gddwsf(9,5)))    &
+    & THEN
+     boots(1) = daynum
+     boots(2) = year
+     CALL date1(boots)
+     ddap(9) = dap
+     ddae(9) = dae
+     ddav(9) = dav
+     dgdds(9) = gdds
+     dgdde(9) = gdde
+     dgddv(9) = gddv
+     PRINT *,'boots = ',boots
+  END IF
+ 
+!  heading growth stage:
+!  if enough gdd have passed, then heading begins.  go to the
+!  code for next stage because anthesis is allowed to occur on same day
+!  as heading if enough degree-days accumulated today.
+ELSE IF (heads(1).EQ.999) THEN
+  row = 10
+  i = 8
+  CALL water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  IF (gddv.GE.(gddwsf(3,5)+gddwsf(4,5)+gddwsf(6,5)+gddwsf(8,5)+gddwsf(9,5)      &
+    & +gddwsf(10,5))) THEN
+     heads(1) = daynum
+     heads(2) = year
+     CALL date1(heads)
+     ddap(10) = dap
+     ddae(10) = dae
+     ddav(10) = dav
+     dgdds(10) = gdds
+     dgdde(10) = gdde
+     dgddv(10) = gddv
+     PRINT *,'heads = ',heads
+  END IF
+ 
+!  beginning of anthesis:
+!  allow end of anthesis to occur on same day if enough degree-days have
+!  accumulated today.
+ELSE IF (antss(1).EQ.999) THEN
+  row = 11
+  i = 9
+  CALL water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  IF (gddv.GE.(gddwsf(3,5)+gddwsf(4,5)+gddwsf(6,5)+gddwsf(8,5)+gddwsf(9,5)      &
+    & +gddwsf(10,5)+gddwsf(11,5))) THEN
+     antss(1) = daynum
+     antss(2) = year
+     CALL date1(antss)
+     ddap(11) = dap
+     ddae(11) = dae
+     ddav(11) = dav
+     dgdds(11) = gdds
+     dgdde(11) = gdde
+     dgddv(11) = gddv
+     PRINT *,'antss = ',antss
+  END IF
+ 
+!  end of anthesis:
+ 
+ELSE IF (antes(1).EQ.999) THEN
+! don't need to call water_stress subroutine because antes uses the same
+!  gddwsf array locations as antss. to signal antes stage aepa is added to
+!  the sum. aepa = anthesis end parameter
+  IF (gddv.GE.(gddwsf(3,5)+gddwsf(4,5)+gddwsf(6,5)+gddwsf(8,5)+gddwsf(9,5)      &
+    & +gddwsf(10,5)+gddwsf(11,5)+aepa)) THEN
+     antes(1) = daynum
+     antes(2) = year
+     CALL date1(antes)
+     ddap(12) = dap
+     ddae(12) = dae
+     ddav(12) = dav
+     dgdds(12) = gdds
+     dgdde(12) = gdde
+     dgddv(12) = gddv
+     PRINT *,'antes = ',antes
+  END IF
+ 
+!  physiological maturity:
+ 
+ELSE IF (mats(1).EQ.999) THEN
+  row = 13
+  i = 10
+  CALL water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  IF (gddv.GE.(gddwsf(3,5)+gddwsf(4,5)+gddwsf(6,5)+gddwsf(8,5)+gddwsf(9,5)      &
+    & +gddwsf(10,5)+gddwsf(11,5)+gddwsf(13,5))) THEN
+     mats(1) = daynum
+     mats(2) = year
+     CALL date1(mats)
+     ddap(13) = dap
+     ddae(13) = dae
+     ddav(13) = dav
+     dgdds(13) = gdds
+     dgdde(13) = gdde
+     dgddv(13) = gddv
+     PRINT *,'mats = ',mats
+  END IF
+ 
+! time to harvest ripe:
+ELSE IF (hrs(1).EQ.999) THEN
+  row = 14
+  i = 11
+  CALL water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  IF (gddv.GE.(gddwsf(3,5)+gddwsf(4,5)+gddwsf(6,5)+gddwsf(8,5)+gddwsf(9,5)      &
+    & +gddwsf(10,5)+gddwsf(11,5)+gddwsf(13,5)+gddwsf(14,5))) THEN
+     hrs(1) = daynum
+     hrs(2) = year
+     CALL date1(hrs)
+     ddap(14) = dap
+     ddae(14) = dae
+     ddav(14) = dav
+     dgdds(14) = gdds
+     dgdde(14) = gdde
+     dgddv(14) = gddv
+     PRINT *,'hrs = ',hrs
+  END IF
+END IF
+ 
+!
+! *******   output data   *******
+! output information from each crop's phenol subroutine.
+!
+IF (hrs(1).NE.999) THEN
+  PRINT *,'crop is: ',cname
+  PRINT *,'gdds = ',gdds
+  PRINT *,'dap = ',dap
+  PRINT *,'gdde = ',gdde
+  PRINT *,'dae = ',dae
+  PRINT *,'gddv = ',gddv
+  PRINT *,'dav = ',dav
+  PRINT *,'gdda = ',gdda
+  PRINT *,'daa = ',daa
+  PRINT *,'year = ',year
+ 
+! fill pdatearr
+  pdatearr(1) = pdate
+  CALL date1(pdatearr)
+ 
+!  heading for leaf number table
+  WRITE (luophenol,1000) cname
+ 
+!  write out a table with leaf numbers by doy
+  DO j = 1,100     !debe change do loop to j=1,100
+!  write only the integer values that are greater than 0.
+!  number of leaves at the booting stage is dgdde(9)/pchron.
+!  note: the variable nolvs could be used in place of dgdde(9)/pchron.
+     IF ((lnpout(j,2).LT.dgdde(9)/pchron).AND.(lnpout(j,2).GT.0.0))             &
+       & WRITE (luophenol,1100) lnpout(j,1),lnpout(j,2)
+  END DO
+ 
+!
+! convert integer boots(1) to a real number
+  WRITE (luophenol,1100) real(boots(1)),dgdde(9)/pchron
+ 
+  WRITE (luophenol,1200)
+                   ! leaf number table
+ 
+!debe added items to print to the output file phenol.out
+  WRITE (luophenol,1300) cname,cliname,pdepth,pdatearr(1),pdatearr(3),          &
+                       & pdatearr(4),gmethod,emrgflg,seedbed,bhfwsf
+ 
+  WRITE (luophenol,1400) pdatearr(1),pdatearr(3),pdatearr(4),ems(1),ems(3),     &
+                       & ems(4),ddap(1),dgdds(1),tis(1),tis(3),tis(4),ddap(2),  &
+                       & ddae(2),dgdds(2),dgdde(2),dgdde(2)/pchron,srs(1),srs(3)&
+                       & ,srs(4),ddap(3),ddae(3),ddav(3),dgdds(3),dgdde(3),     &
+                       & dgddv(3),dgdde(3)/pchron,drs(1),drs(3),drs(4),ddap(4), &
+                       & ddae(4),ddav(4),dgdds(4),dgdde(4),dgddv(4),dgdde(4)    &
+                       & /pchron,fps(1),fps(3),fps(4),ddap(7),ddae(7),ddav(7),  &
+                       & dgdds(7),dgdde(7),dgddv(7),dgdde(7)/pchron,ies(1),     &
+                       & ies(3),ies(4),ddap(6),ddae(6),ddav(6),dgdds(6),dgdde(6)&
+                       & ,dgddv(6),dgdde(6)/pchron,tss(1),tss(3),tss(4),ddap(5),&
+                       & ddae(5),ddav(5),dgdds(5),dgdde(5),dgddv(5),dgdde(5)    &
+                       & /pchron,joints(1),joints(3),joints(4),ddap(8),ddae(8), &
+                       & ddav(8),dgdds(8),dgdde(8),dgddv(8),dgdde(8)/pchron,    &
+                       & boots(1),boots(3),boots(4),ddap(9),ddae(9),ddav(9),    &
+                       & dgdds(9),dgdde(9),dgddv(9),dgdde(9)/pchron,heads(1),   &
+                       & heads(3),heads(4),ddap(10),ddae(10),ddav(10),dgdds(10),&
+                       & dgdde(10),dgddv(10),dgdde(9)/pchron,antss(1),antss(3), &
+                       & antss(4),ddap(11),ddae(11),ddav(11),dgdds(11),dgdde(11)&
+                       & ,dgddv(11),dgdde(9)/pchron,antes(1),antes(3),antes(4), &
+                       & ddap(12),ddae(12),ddav(12),dgdds(12),dgdde(12),        &
+                       & dgddv(12),dgdde(9)/pchron,mats(1),mats(3),mats(4),     &
+                       & ddap(13),ddae(13),ddav(13),dgdds(13),dgdde(13),        &
+                       & dgddv(13),dgdde(9)/pchron,hrs(1),hrs(3),hrs(4),ddap(14)&
+                       & ,ddae(14),ddav(14),dgdds(14),dgdde(14),dgddv(14),      &
+                       & dgdde(9)/pchron
+ 
+! debe added writing out and formatting of the gddwsf array
+  WRITE (luophenol,1500) gddwsf(1,1),gddwsf(1,2),gddwsf(1,3),gddwsf(1,4),       &
+                       & gddwsf(1,5),gddwsf(2,1),gddwsf(2,2),gddwsf(2,3),       &
+                       & gddwsf(2,4),gddwsf(2,5),gddwsf(3,1),gddwsf(3,2),       &
+                       & gddwsf(3,3),gddwsf(3,4),gddwsf(3,5),gddwsf(4,1),       &
+                       & gddwsf(4,2),gddwsf(4,3),gddwsf(4,4),gddwsf(4,5),       &
+                       & gddwsf(5,1),gddwsf(5,2),gddwsf(5,3),gddwsf(5,4),       &
+                       & gddwsf(5,5),gddwsf(6,1),gddwsf(6,2),gddwsf(6,3),       &
+                       & gddwsf(6,4),gddwsf(6,5),gddwsf(7,1),gddwsf(7,2),       &
+                       & gddwsf(7,3),gddwsf(7,4),gddwsf(7,5),gddwsf(8,1),       &
+                       & gddwsf(8,2),gddwsf(8,3),gddwsf(8,4),gddwsf(8,5),       &
+                       & gddwsf(9,1),gddwsf(9,2),gddwsf(9,3),gddwsf(9,4),       &
+                       & gddwsf(9,5),gddwsf(10,1),gddwsf(10,2),gddwsf(10,3),    &
+                       & gddwsf(10,4),gddwsf(10,5),gddwsf(11,1),gddwsf(11,2),   &
+                       & gddwsf(11,3),gddwsf(11,4),gddwsf(11,5),gddwsf(12,1),   &
+                       & gddwsf(12,2),gddwsf(12,3),gddwsf(12,4),gddwsf(12,5),   &
+                       & gddwsf(13,1),gddwsf(13,2),gddwsf(13,3),gddwsf(13,4),   &
+                       & gddwsf(13,5),gddwsf(14,1),gddwsf(14,2),gddwsf(14,3),   &
+                       & gddwsf(14,4),gddwsf(14,5),gddwsf(15,1),gddwsf(15,2),   &
+                       & gddwsf(15,3),gddwsf(15,4),gddwsf(15,5)
+ 
+  endphenol = .TRUE.
+ 
+END IF
+ 1000 FORMAT (42x,a14)
+ 1100 FORMAT (40x,f5.1,6x,f4.1)
+ 1200 FORMAT (/1x) ! write a blank line after outputting the
+ 
+ 1300 FORMAT ('crop name =',2x,a15,/x,'climate location =',2x,a128,/x,          &
+             &'planting depth =',2x,f5.3,'(m)',/x,'planting date =',2x,i3,':',  &
+            & i2,'/',i2,/x,'gdd method =',2x,i1,/x,'emergence method used =',2x,&
+            & i1,/x,'seedbed soil moisture =',2x,a17,/x,'water stress factor =',&
+            & 2x,f3.1,/x)
+ 
+ 1400 FORMAT (' phenological event',7x,'day of year',2x,'date',2x,'dap',5x,     &
+            & 'dae',5x,'dav',5x,'gdd ap',5x,'gdd ae',5x,'gdd av',5x,'nolvs',    &
+             &/1x'planting date',18x,i4,2x,i2,'/',i2,/1x,'emergence',22x,i4,2x, &
+            & i2,'/',i2,1x,i4,21x,f6.1,/1x,'first tiller',19x,i4,2x,i2,'/',i2,  &
+            & 1x,i4,4x,i4,13x,f6.1,5x,f6.1,15x,f6.1,/1x,'single ridge',19x,i4,  &
+            & 2x,i2,'/',i2,1x,i4,4x,i4,4x,i4,5x,f6.1,5x,f6.1,5x,f6.1,4x,f6.1,   &
+            & /1x,'double ridge',19x,i4,2x,i2,'/',i2,1x,i4,4x,i4,4x,i4,5x,f6.1, &
+            & 5x,f6.1,5x,f6.1,4x,f6.1,/1x,'floret primordia init begins',3x,i4, &
+            & 2x,i2,'/',i2,1x,i4,4x,i4,4x,i4,5x,f6.1,5x,f6.1,5x,f6.1,4x,f6.1,   &
+            & /1x,'stem elongation begins',9x,i4,2x,i2,'/',i2,1x,i4,4x,i4,4x,i4,&
+            & 5x,f6.1,5x,f6.1,5x,f6.1,4x,f6.1,/1x,'end spikelet initiation',8x, &
+            & i4,2x,i2,'/',i2,1x,i4,4x,i4,4x,i4,5x,f6.1,5x,f6.1,5x,f6.1,4x,f6.1,&
+            & /1x,'jointing',23x,i4,2x,i2,'/',i2,1x,i4,4x,i4,4x,i4,5x,f6.1,5x,  &
+            & f6.1,5x,f6.1,4x,f6.1,/1x,'booting',24x,i4,2x,i2,'/',i2,1x,i4,4x,  &
+            & i4,4x,i4,5x,f6.1,5x,f6.1,5x,f6.1,4x,f6.1,/1x,'heading',24x,i4,2x, &
+            & i2,'/',i2,1x,i4,4x,i4,4x,i4,5x,f6.1,5x,f6.1,5x,f6.1,4x,f6.1,/1x,  &
+             &'anthesis starts',16x,i4,2x,i2,'/',i2,1x,i4,4x,i4,4x,i4,5x,f6.1,  &
+            & 5x,f6.1,5x,f6.1,4x,f6.1,/1x,'anthesis ends',18x,i4,2x,i2,'/',i2,  &
+            & 1x,i4,4x,i4,4x,i4,5x,f6.1,5x,f6.1,5x,f6.1,4x,f6.1,/1x,            &
+             &'physiological maturity',9x,i4,2x,i2,'/',i2,1x,i4,4x,i4,4x,i4,5x, &
+            & f6.1,5x,f6.1,5x,f6.1,4x,f6.1,/1x,'harvest ready',18x,i4,2x,i2,'/',&
+            & i2,1x,i4,4x,i4,4x,i4,5x,f6.1,5x,f6.1,5x,f6.1,4x,f6.1,/1x)
+ 
+!  heading for gddwsf array
+ 1500 FORMAT (/2x,39x,'gddwsf array',/1x,'phenological event',12x,'gn gdd',2x,  &
+             &'gs gdd',2x,'wsfhi',2x,'wsflo',2x,'adjgdd',/1x,'emergence',22x,   &
+            & f5.1,3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,'first tiller',19x,f5.1, &
+            & 3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,'single ridge',19x,f5.1,3x,   &
+            & f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,'double ridge',19x,f5.1,3x,f5.1, &
+            & 3x,f3.1,4x,f3.1,4x,f5.1,/1x,'floret primordia init begins',3x,    &
+            & f5.1,3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,'stem elongation begins',&
+            & 9x,f5.1,3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,                      &
+             &'end spikelet initiation',8x,f5.1,3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,&
+            & /1x,'jointing',23x,f5.1,3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,      &
+             &'booting',24x,f5.1,3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,'heading', &
+            & 24x,f5.1,3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,'anthesis starts',   &
+            & 16x,f5.1,3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,'anthesis ends',18x, &
+            & f5.1,3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,'physiological maturity',&
+            & 9x,f5.1,3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,'harvest ready',18x,  &
+            & f5.1,3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,'row 15',25x,f5.1,3x,    &
+            & f5.1,3x,f3.1,4x,f3.1,6x,f3.1,/1x)
+! 
+END SUBROUTINE phenolww  

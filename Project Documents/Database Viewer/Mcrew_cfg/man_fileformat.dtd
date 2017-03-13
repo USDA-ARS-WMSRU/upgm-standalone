@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!ELEMENT manfileformat (actionformat*)>
+<!ENTITY % identityDTD SYSTEM "identity.dtd">
+%identityDTD;
+<!ELEMENT actionformat (identity, paramformatline*)> 
+<!ELEMENT paramformatline (paramname*)>
+		<!ATTLIST paramformatline symbol CDATA #REQUIRED>
+<!ELEMENT paramname (#PCDATA)>

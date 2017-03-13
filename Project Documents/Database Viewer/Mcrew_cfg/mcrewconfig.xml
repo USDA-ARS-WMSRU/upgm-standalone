@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="mcrewconfig.xsl"?>
+<!DOCTYPE mcrewconfig SYSTEM "mcrewconfig.dtd">
+
+<!-- mcrewconfig.dtd -->
+<!--
+<!ELEMENT mcrewconfig (dataobject*, columndefn*)>
+	<!ELEMENT dataobject (objectname, defnfile?, displayfile?, langfile?, dtdfile?, DBdir?, fileextension?)>
+	<!ATTLIST dataobject type CDATA "control">
+		<!ELEMENT objectname (#PCDATA)>
+		<!ELEMENT defnfile (#PCDATA)>
+		<!ELEMENT displayfile (#PCDATA)>
+		<!ELEMENT langfile (#PCDATA)>
+		<!ELEMENT dtdfile (#PCDATA>
+		<!ELEMENT DBdir (#PCDATA)>
+		<!ELEMENT fileextension (#PCDATA)>
+	<!ELEMENT columndefn (columnnum, columndataobject, columnlabel, tagname)>
+		<!ELEMENT columnnum (#PCDATA)>
+		<!ELEMENT columndataobject (#PCDATA)> 
+		<!ELEMENT columnlabel (#PCDATA)>
+		<!ELEMENT tagname (#PCDATA)>
+-->
+
+<mcrewconfig>
+	<dataobject type="control">
+		<objectname>weps_operation</objectname>
+		<defnfile>operation_defn.xml</defnfile>
+		<displayfile>operation_display.xml</displayfile>
+		<langfile>operation_lang.xml</langfile>
+		<DBdir>Operations</DBdir>
+		<fileextension>oprn</fileextension>
+	</dataobject>
+
+	<dataobject type="date">
+		<objectname>date</objectname>
+		<defnfile></defnfile>
+		<displayfile></displayfile>
+		<langfile></langfile>
+		<DBdir></DBdir>
+		<fileextension></fileextension>
+	</dataobject>
+	
+	<dataobject type="crop">
+		<objectname>crops</objectname>
+		<defnfile>crop_defn.xml</defnfile>
+		<displayfile>crop_display.xml</displayfile>
+		<langfile>crop_lang.xml</langfile>
+		<DBdir>Crops</DBdir>
+		<fileextension>crop</fileextension>
+	</dataobject>
+	
+	<!-- The next dataobject is used for saving the dsata -->
+	<dataobject type="management">
+		<objectname>wepsmanagement</objectname>
+		<DBdir>Mcrew-Man</DBdir>
+		<fileextension>xml</fileextension>
+	</dataobject>
+	
+	
+	<columndefn>
+		<columnnum>0</columnnum>
+		<columndataobject>date</columndataobject>
+		<columnlabel>Date</columnlabel>
+		<tagname>Date</tagname>
+	</columndefn>
+	
+	<columndefn>
+		<columnnum>1</columnnum>
+		<columndataobject>weps_operation</columndataobject>
+		<columnlabel>Operation Name1</columnlabel>
+		<tagname>operationname</tagname> <!--This values need to be same as the data name
+                                                     in XML which the user wants to display-->
+	</columndefn>
+	
+	<columndefn>
+		<columnnum>2</columnnum>
+		<columndataobject>crops</columndataobject> <!-- The crop data is embedded inside an operation.
+                                                                Crop Object is used only when a new crop is needed
+                                                                to be added separately. Even then, finally the data
+                                                                values are copied from crop obejct to operation object -->
+		<columnlabel>Crops and/or Residue</columnlabel>
+		<tagname>gcropname</tagname><!--This values needs to be same as the data name
+                                                in XML which the user wants to display-->
+	</columndefn>
+</mcrewconfig>

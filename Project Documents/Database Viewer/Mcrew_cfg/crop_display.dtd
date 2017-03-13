@@ -1,0 +1,10 @@
+<?xml encoding="ISO-8859-1"?>
+<!ENTITY % paramdisplayDTD SYSTEM "param_display.dtd">
+%paramdisplayDTD;
+<!ELEMENT cropdisplay (category*) >
+<!ELEMENT category (categoryname, paramdisplay* ) >
+<!ELEMENT categoryname (#PCDATA)>
+
+
+<!-- This DTD  sepecifies the display format for Crops Database.
+-->

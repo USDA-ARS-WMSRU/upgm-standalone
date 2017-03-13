@@ -1,0 +1,14 @@
+<?xml encoding="ISO-8859-1"?>
+<!ELEMENT paramdisplay (paramname, displayattribute+, valueattribute?, format?)>
+<!ELEMENT paramname (#PCDATA)>
+<!ELEMENT displayattribute (#PCDATA)> 
+<!ELEMENT valueattribute (#PCDATA)> 
+<!ELEMENT format (#PCDATA)> 
+
+
+<!--paramDisplayDTD: This file specifies the format of display structure of any parameter
+'paramname': name of the parameter
+'displayattribute': displayattribute can be V (Viewable), E (Editable), H (Hidden)
+'valueattribute': C (Choice List), S (String), N (Number)
+Every parameter can have atmost one of displayatribute and one of valueattribute
+-->

@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<!--
+NOTE: The order that columns are listed here does not matter.  This is used only to hide/show columns in the table.
+-->
+<tableviews>
+	<view>	<!--Default view is special, the view is always in the menu-->
+		<name>default</name>		
+		<column>date</column>
+		<column>operationname</column>
+		<column>gcropname</column>
+		<column>odirect</column>
+	</view>
+	
+	<view>
+		<name>calib</name>			<!-- name is used internally by the code-->
+		<menu>Calibration</menu>		<!-- menu is the text to display in a menu item.  If this element is not here a menu is not displayed.-->
+		<toolbar>images/yCalOff.gif</toolbar>	<!-- toolbar is the image to use for a toolbar button.  If this element is not here a toolbar button is not displayed-->
+							<!-- default view columns will be retained by default (currently no method provided to not show some default view columns) -->
+		<column>cbaflag</column>
+		<column>tgtyield</column>
+		<column>hyldunits</column>
+		<column>hyldwater</column>
+		<column>plantpop</column>
+		<column>cbafact</column>
+		<column>yield_coefficient</column>
+		<column>residue_intercept</column>
+	</view>
+	<view>
+		<name>roughness</name>
+		<menu>Surface Roughness</menu>
+		<!-- <column>rroughflag</column> -->
+		<column>rrough</column>
+	</view>
+
+	<view>
+		<name>ridges_dikes</name>
+		<menu>Ridges/Dikes</menu>  <!-- Won't accept "Ridges & Dikes" -->
+		<!-- <column>rdgflag</column> -->
+		<column>rdghit</column>
+		<column>rdgspac</column>
+		<column>rdgwidth</column>
+		<column>dkhit</column>
+		<column>dkspac</column>		
+	</view>
+
+		<!-- P72 "Monitor Irrigation" process parameters -->		
+	<view>
+		<name>monitor_irrigation</name>
+		<menu>Irrigation Monitoring</menu>
+		<column>irrmaxapp</column>
+		<column>irrminapp</column>
+		<column>irrminint</column>
+		<column>irrmad</column>
+	</view>
+			<!-- P73 "Single Irrigation" process parameters -->		
+	<view>
+		<name>single_irrigation</name>
+		<menu>Single Irrigation</menu>
+		<column>irrdepth</column>
+		<column>irrduration</column>
+	</view>
+
+
+	<view>
+		<name>crop_maturity</name>
+		<menu>Crop Maturity</menu>
+		<column>thudf</column>
+		<column>dtm</column>
+		<column>thum</column>
+	</view>
+
+	<view>
+		<name>auto_flat_residue</name>
+		<!-- no <menu> tag, show view will not be accessible via View menu - usually don't want "auto" views in menu -->
+		<auto>true</auto>	<!-- will automatically display if operation has this parameter -->
+					<!-- will automatically display all columns listed if any one parameter is present -->
+		<column>rflatmass</column>
+		<!-- <column>rbc</column> -->
+	</view>
+
+	<view>
+		<name>auto_manure</name>
+		<auto>true</auto>
+		<column>manure_total_mass</column>
+		<column>manure_buried_ratio</column>
+		<column>M_burieddepth</column>
+	</view>
+
+	<view>
+		<name>add_flat_residue</name>		
+		<menu>Add Flat Residue</menu>
+		<column>rflatmass</column>
+		<!-- <column>rbc</column> -->
+	</view>
+
+	<view>
+		<name>add_standing_residue</name>		
+		<menu>Add Standing Residue</menu>
+		<column>numst</column>
+		<column>rstandht</column>
+		<column>rstandmass</column>
+		<!-- <column>rbc</column> -->
+	</view>
+
+	<view>
+		<name>flatten_residue</name>		
+		<menu>Flatten Residue</menu>
+		<column>massflatvt1</column>
+		<column>massflatvt2</column>
+		<column>massflatvt3</column>
+		<!-- <column>massflatvt4</column> -->
+		<!-- <column>massflatvt5</column> -->
+	</view>
+
+	<view>
+		<name>resurface_residue</name>		
+		<menu>Resurface Residue</menu>
+		<column>massresurvt1</column>
+		<column>massresurvt2</column>
+		<column>massresurvt3</column>
+		<!-- <column>massresurvt4</column> -->
+		<!-- <column>massresurvt5</column> -->
+	</view>
+
+	<view>
+		<name>bury_residue</name>		
+		<menu>Bury Residue</menu>
+		<column>massburyvt1</column>
+		<column>massburyvt2</column>
+		<column>massburyvt3</column>
+		<!-- <column>massburyvt4</column> -->
+		<!-- <column>massburyvt5</column> -->
+	</view>
+	
+</tableviews>
+
+

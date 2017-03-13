@@ -1,0 +1,6 @@
+# exclude project zip files
+*.zip
+# explicit zip includes
+!Project\ Documents/Before\ Restructure.zip
+# exclude output files
+*.out

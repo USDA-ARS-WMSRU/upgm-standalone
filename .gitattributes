@@ -1,0 +1,21 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# These files are text and should be normalized (Convert crlf => lf)
+*.f90 text
+*.inc text
+*.dat text
+*.txt text
+*.xml text
+*.dtd text
+*.xsl text
+
+# These files are binary and should not be normalized
+*.doc binary
+*.docx binary
+*.jar binary
+*.png binary
+*.zip binary
+
+# These files are always crlf
+*.bat text eol=crlf

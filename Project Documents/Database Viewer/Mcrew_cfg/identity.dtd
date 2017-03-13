@@ -1,0 +1,9 @@
+ <!ELEMENT identity (code, id?)>
+ <!ELEMENT code (#PCDATA) >
+ <!ELEMENT id (#PCDATA) >
+
+<!-- identity.dtd: This file specifies the format of identity of an element.
+'code' represents one of Operate(O), Process(P) and Group(G)
+'id' is the integer id of the Operate, Process or Group
+
+-->

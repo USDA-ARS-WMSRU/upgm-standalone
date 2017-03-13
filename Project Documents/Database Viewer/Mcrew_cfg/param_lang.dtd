@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!ELEMENT paramlang (paramname, paramprompt?, (paramaltunit?), (conversion?), (paramchoice*))>
+	<!ELEMENT paramname (#PCDATA)>
+	<!ELEMENT paramprompt (#PCDATA)>
+	<!ELEMENT paramaltunit (#PCDATA)>
+	<!ELEMENT conversion ((factor?), (addend?))>
+	<!ELEMENT factor (#PCDATA)>
+	<!ELEMENT addend (#PCDATA)>
+	<!ELEMENT paramchoice (#PCDATA)>
+		<!ATTLIST paramchoice value CDATA "0">
+
+<!--param_langDD: This DTD extends the structure of a parameter. This way, the language dependent description can be put into 
+separate '*.lang' XML file.
+'paramaltunit' specifies the alternate unit (maximum one) in which the output is written. 
+'conversion' spcefies the conversioin factor from primary unit (in Defn file) to alternate unit
+***At present, there is no way (in DTD specification) to ensure that a value for conversion has to be there if theres 
+is a alternate unit.
+'paramchoice' specifies the various choice the parameter can have, if its choice list type parameter. Each
+choice has a value associated with it (through 'value' attribute).
+
+-->
+			

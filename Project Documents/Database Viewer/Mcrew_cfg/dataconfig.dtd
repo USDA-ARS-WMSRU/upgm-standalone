@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!ELEMENT dataconfig (dataobject*, columndefn*, misc, cellstyle*, choicelist*)>
+	<!ELEMENT dataobject (objectname, defnfile?, displayfile?, langfile?, dtdfile?, fileextension?)>
+	<!ATTLIST dataobject type CDATA "control">
+		<!ELEMENT objectname (#PCDATA)>
+		<!ELEMENT defnfile (#PCDATA)>
+		<!ELEMENT displayfile (#PCDATA)>
+		<!ELEMENT langfile (#PCDATA)>
+		<!ELEMENT dtdfile (#PCDATA)>
+		<!ELEMENT fileextension (#PCDATA)>
+	<!ELEMENT columndefn (columnnum, columndataobject, columnlabel, tagname, datacellstyle?, headercellstyle?, frozen?, columnminwidth?, columnwidth?, columnmaxwidth?, numberformat?)>
+		<!ELEMENT columnnum (#PCDATA)>
+		<!ELEMENT columndataobject (#PCDATA)> <!-- the name should be one of the objects name from dataobjects -->
+		<!ELEMENT columnlabel (#PCDATA)>
+		<!ELEMENT tagname (#PCDATA)>
+                <!ELEMENT datacellstyle (#PCDATA)>
+                <!ELEMENT headercellstyle (#PCDATA)>
+                <!ELEMENT frozen (#PCDATA)>
+                <!ELEMENT columnminwidth (#PCDATA)>
+                <!ELEMENT columnwidth (#PCDATA)>
+                <!ELEMENT columnmaxwidth (#PCDATA)>
+                <!ELEMENT numberformat (#PCDATA)>
+	<!ELEMENT misc (table_file, manformat_file)>
+		<!ELEMENT table_file (#PCDATA)>
+		<!ELEMENT manformat_file (#PCDATA)>              
+	<!ELEMENT cellstyle (styletag, basestyle?, readonly?, defaultheader?, defaultdata?, fontname?, fontsize?, fontcolor?, fontbold?, cellcolor?, border?, bordercolor?, bordercolormode?, borderside*, rowminheight?, rowheight?, rowmaxheight?, cellrenderer?)>
+		<!ELEMENT styletag (#PCDATA)>
+                <!ELEMENT basestyle (#PCDATA)>
+                <!ELEMENT readonly (#PCDATA)>
+                <!ELEMENT defaultheader (#PCDATA)>
+                <!ELEMENT defaultdata (#PCDATA)>
+                <!ELEMENT fontname (#PCDATA)>
+                <!ELEMENT fontsize (#PCDATA)>
+                <!ELEMENT fontcolor (#PCDATA)>
+                <!ELEMENT fontbold (#PCDATA)>
+                <!ELEMENT cellcolor (#PCDATA)>
+                <!ELEMENT border (#PCDATA)>
+                <!ELEMENT bordercolor (#PCDATA)>
+                <!ELEMENT bordercolormode (#PCDATA)>
+                <!ELEMENT borderside (#PCDATA)>
+                <!ELEMENT rowminheight (#PCDATA)>
+                <!ELEMENT rowheight (#PCDATA)>
+                <!ELEMENT rowmaxheight (#PCDATA)>
+                <!ELEMENT cellrenderer (#PCDATA)>
+        <!ELEMENT choicelist (choicelisttag, prompt?, choice*)>
+                <!ELEMENT choicelisttag (#PCDATA)>
+                <!ELEMENT prompt (#PCDATA)>
+                <!ELEMENT choice (#PCDATA)>
+                
+                    <!ATTLIST choice value CDATA "0">
+                
+                
+
+                
+
+
+                

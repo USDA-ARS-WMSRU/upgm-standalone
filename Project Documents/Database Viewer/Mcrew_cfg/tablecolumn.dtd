@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!ELEMENT tablecolumn (columngroup*)>
+<!ELEMENT columngroup (groupname, display, columndefn*)>
+<!ELEMENT groupname (#PCDATA)>
+<!ELEMENT display (#PCDATA)>
+<!ELEMENT columndefn (columnnum?, columndataobject, columnlabel, tagname, datacellstyle?, headercellstyle?, frozen?, columnminwidth?, columnwidth?, columnmaxwidth?, numberformat?)>
+		<!ELEMENT columnnum (#PCDATA)>
+		<!ELEMENT columndataobject (#PCDATA)> <!-- the name should be one of the objects name from dataobjects -->
+		<!ELEMENT columnlabel (#PCDATA)>
+		<!ELEMENT tagname (#PCDATA)>
+                <!ELEMENT datacellstyle (#PCDATA)>
+                <!ELEMENT headercellstyle (#PCDATA)>
+                <!ELEMENT frozen (#PCDATA)>
+                <!ELEMENT columnminwidth (#PCDATA)>
+                <!ELEMENT columnwidth (#PCDATA)>
+                <!ELEMENT columnmaxwidth (#PCDATA)>
+                <!ELEMENT numberformat (#PCDATA)>

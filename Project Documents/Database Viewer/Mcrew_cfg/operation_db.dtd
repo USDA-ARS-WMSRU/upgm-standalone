@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!ENTITY % identityDTD SYSTEM "identity.dtd">
+%identityDTD;
+<!ELEMENT operationDB (operationname, actionvalue*)>
+<!ELEMENT operationname (#PCDATA)>
+<!ELEMENT actionvalue (identity, param*)>
+<!ELEMENT param (name,value)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT value (#PCDATA)>
+
+<!--operationDBXML: This file replaces the older operation database file.
+The file contains the sample data for all parameters under various operations.
+'date ' exists for only the data saved by user. There is no date for sample database values
+-->

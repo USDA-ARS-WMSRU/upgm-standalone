@@ -1,0 +1,425 @@
+<?xml version="1.0"?>
+<!--<?xml-stylesheet type="text/xsl" href="cropFormatXSL.xsl"?>-->
+<!DOCTYPE croplang SYSTEM "crop_lang.dtd">
+<!-- cropLangDTD -->
+<!--
+<!ELEMENT croplang (paramlang*) >
+-->
+
+<!-- paramLangDTD -->
+<!--
+<!ELEMENT paramlang (paramname, paramprompt?, (paramaltunit?), (conversion?), (paramchoice*))>
+	<!ELEMENT paramname (#PCDATA)>
+	<!ELEMENT paramprompt (#PCDATA)>
+	<!ELEMENT paramaltunit (#PCDATA)>
+	<!ELEMENT conversion ((factor?), (addend?))>
+	<!ELEMENT factor (#PCDATA)>
+	<!ELEMENT addend (#PCDATA)>
+	<!ELEMENT paramchoice (#PCDATA)>
+		<!ATTLIST paramchoice value CDATA "0">
+-->
+
+<croplang>
+
+ <!-- Can't display these as they are not parameters in crop db
+		<paramlang>
+			<paramname>gcropname</paramname>
+			<paramprompt>Crop Name</paramprompt>
+		</paramlang>
+		<paramlang>
+			<paramname>rowspac</paramname>
+			<paramprompt>Crop row spacing</paramprompt>
+			<paramaltunit>in</paramaltunit>
+			<conversion>
+				<factor>0.03937</factor>
+			</conversion>
+		</paramlang>
+		<paramlang>
+			<paramname>rowridge</paramname>
+			<paramprompt>Seed placement (ridge/furrow)</paramprompt>
+			<paramtype>int</paramtype>
+			<paramchoice value="0">Seed row placed in furrow bottom</paramchoice>
+			<paramchoice value="2">Seed row placed on ridge top</paramchoice>
+		</paramlang>
+ -->
+
+	<paramlang>
+		<paramname>plantpop</paramname>
+		<paramprompt>Plant population</paramprompt>
+		<paramaltunit>#/acre</paramaltunit>
+		<conversion>
+			<factor>4046.7</factor>
+		</conversion>
+	</paramlang>
+	<paramlang><!--New -->
+		<paramname>dmaxshoot</paramname>
+		<paramprompt>Maximum number of shoots per plant</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>cbaflag</paramname>
+		<paramprompt>Crop growth calibration selection</paramprompt>
+		<paramchoice value="0">Crop NOT selected for calibration</paramchoice>
+		<paramchoice value="1">Select Crop for calibration to match target yield</paramchoice>
+	</paramlang>
+	<paramlang>
+		<paramname>tgtyield</paramname>
+		<paramprompt>Target harvested yield</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>cbafact</paramname>
+		<paramprompt>Biomass adjustment factor</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>cyrafact</paramname>
+		<paramprompt>Yield/biomass ratio adjustment factor</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>hyldflag</paramname>
+		<paramprompt>Which plant component is (partially) harvested?</paramprompt>
+		<paramchoice value="0">constant fraction of reproductive mass (grain+)</paramchoice>
+		<paramchoice value="1">increasing fraction of reproductive mass (grain)</paramchoice>
+		<paramchoice value="2">all or fraction of aboveground biomass</paramchoice>
+		<paramchoice value="3">all or fraction of the leaf mass</paramchoice>
+		<paramchoice value="4">all or fraction of the stem mass</paramchoice>
+		<paramchoice value="5">all or fraction of underground mass</paramchoice>
+	</paramlang>
+	<paramlang>
+		<paramname>hyldunits</paramname>
+		<paramprompt>Units for reporting harvested yield</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>hyldwater</paramname>
+		<paramprompt>Moisture content for reporting harvested yield</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>hyconfact</paramname>
+		<paramprompt>Harvested yield conversion factor (kg/m^2 to units shown)</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>idc</paramname>
+		<paramprompt>Crop Type</paramprompt>
+		<paramchoice value="1">Warm season legume (soybeans, etc.)</paramchoice>
+		<paramchoice value="2">Cool season legume (peas, etc.)</paramchoice>
+		<paramchoice value="3">Perennial Legume (alfalfa, etc.)</paramchoice>
+		<paramchoice value="4">Spring Seeded and Warm Season Annuals (cotton, sunflowers, corn, etc.)</paramchoice>
+		<paramchoice value="5">Cold Season Annuals (winter wheat, winter canola)</paramchoice>
+		<paramchoice value="6">Perennials (pasture,etc.)</paramchoice>
+		<paramchoice value="7">Bi-annuals or Perennials with Tuber Dormancy</paramchoice>
+	</paramlang>
+	<paramlang>
+		<paramname>grf</paramname>
+		<paramprompt>Harvested fraction of plant component (grain fraction etc.)</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>ck</paramname>
+		<paramprompt>Light extinction coefficient</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>hui0</paramname>
+		<paramprompt>Heat unit index at start of senescence</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>hmx</paramname>
+		<paramprompt>Maximum crop height</paramprompt>
+		<paramaltunit>ft</paramaltunit>
+		<conversion>
+			<factor>3.2808</factor>
+		</conversion>
+	</paramlang>
+	<paramlang><!-- New -->
+		<paramname>growdepth</paramname>
+		<paramprompt>Starting depth of growing point</paramprompt>
+		<paramaltunit>inches</paramaltunit>
+		<conversion>
+			<factor>39.3696</factor>
+		</conversion>
+	</paramlang>
+	<paramlang>
+		<paramname>rdmx</paramname>
+		<paramprompt>Maximum root depth</paramprompt>
+		<paramaltunit>ft</paramaltunit>
+		<conversion>
+			<factor>3.2808</factor>
+		</conversion>
+	</paramlang>
+	<paramlang>
+		<paramname>tbas</paramname>
+		<paramprompt>Minimum temperature for plant growth</paramprompt>
+		<paramaltunit>degree F</paramaltunit>
+		<conversion>
+			<factor>1.8</factor>
+			<addend>32</addend>
+		</conversion>
+	</paramlang>
+	<paramlang>
+		<paramname>topt</paramname>
+		<paramprompt>Optimum temperature for plant growth</paramprompt>
+		<paramaltunit>degree F</paramaltunit>
+		<conversion>
+			<factor>1.8</factor>
+			<addend>32</addend>
+		</conversion>
+	</paramlang>
+	<paramlang>
+		<paramname>thudf</paramname>
+		<paramprompt>Crop maturity measurement method</paramprompt>
+		<paramchoice value="0">Crop matures on average in Days shown</paramchoice>
+		<paramchoice value="1">Crop Matures in Heat Units shown</paramchoice>
+	</paramlang>
+	<paramlang>
+		<paramname>dtm</paramname>
+		<paramprompt>Days to maturity</paramprompt>
+	</paramlang>
+	<paramlang><!--New-->
+		<paramname>thum</paramname>
+		<paramprompt>Heat units to maturity</paramprompt>
+		<paramaltunit>deg F day</paramaltunit>
+		<conversion>	
+			<factor>1.8</factor>
+		</conversion>
+	</paramlang>
+
+	<paramlang>
+		<paramname>frsx1</paramname>
+		<paramprompt>Higher temperature</paramprompt>
+		<paramaltunit>deg F</paramaltunit>
+		<conversion>
+			<factor>1.8</factor>
+			<addend>32</addend>
+		</conversion>
+	</paramlang>
+	<paramlang>
+		<paramname>frsx2</paramname>
+		<paramprompt>Lower temperature</paramprompt>
+		<paramaltunit>deg F</paramaltunit>
+		<conversion>
+			<factor>1.8</factor>
+			<addend>32</addend>
+		</conversion>
+	</paramlang>
+	<paramlang>
+		<paramname>frsy1</paramname>
+		<paramprompt>Reduction in green leaf area at higher temperature</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>frsy2</paramname>
+		<paramprompt>Reduction in green leaf area at lower temperature</paramprompt>
+	</paramlang>
+	<paramlang><!--New-->
+		<paramname>verndel</paramname>
+		<paramprompt>Thermal delay coefficient pre-vernalization</paramprompt>
+	</paramlang>
+	<paramlang><!--New-->
+		<paramname>bceff</paramname>
+		<paramprompt>Biomass Conversion Efficiency</paramprompt>
+	</paramlang>
+	
+	<paramlang>
+		<paramname>a_lf</paramname>
+		<paramprompt>Leaf fraction coefficient a</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>b_lf</paramname>
+		<paramprompt>Leaf fraction coefficient b</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>c_lf</paramname>
+		<paramprompt>Leaf fraction coefficient c</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>d_lf</paramname>
+		<paramprompt>Leaf fraction coefficient d</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>a_rp</paramname>
+		<paramprompt>Reproductive mass coefficient a</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>b_rp</paramname>
+		<paramprompt>Reproductive mass coefficient b</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>c_rp</paramname>
+		<paramprompt>Reproductive mass coefficient c</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>d_rp</paramname>
+		<paramprompt>Reproductive mass coefficient d</paramprompt>
+	</paramlang>
+
+	<paramlang>
+		<paramname>a_ht</paramname>
+		<paramprompt>Crop height coefficient a</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>b_ht</paramname>
+		<paramprompt>Crop height coefficient b</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>ssaa</paramname>
+		<paramprompt>Stem silhouette area coefficient a</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>ssab</paramname>
+		<paramprompt>Stem silhouette area coefficient b</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>sla</paramname>
+		<paramprompt>Specific leaf area</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>huie</paramname>
+		<paramprompt>Heat unit index at emergence</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>transf</paramname>
+		<paramprompt>Transplant or Seed flag</paramprompt>
+		<paramchoice value="0">Seeds planted in field</paramchoice>
+		<paramchoice value="1">Transplants planted in field (mass immediately divided into leaf, stem, roots)</paramchoice>
+	</paramlang>
+	<paramlang>
+		<paramname>diammax</paramname>
+		<paramprompt>Maximum growth diameter of a single plant</paramprompt>
+		<paramaltunit>ft</paramaltunit>
+		<conversion>
+	    		<factor>3.281</factor>
+	    	</conversion>
+	</paramlang>
+
+	<paramlang>
+		<paramname>storeinit</paramname>
+		<paramprompt>Planted mass,dry weight</paramprompt>
+		<paramaltunit>ounce/plant</paramaltunit>
+		<conversion>
+	    		<factor>0.000035274</factor>
+	    	</conversion>
+	</paramlang>
+	<paramlang>
+		<paramname>mshoot</paramname>
+		<paramprompt>Root storage mass required for each regrowth shoot</paramprompt>
+		<paramaltunit>ounce/plant</paramaltunit>
+		<conversion>
+	    		<factor>0.000035274</factor>
+	    	</conversion>
+	</paramlang>
+	<paramlang>
+		<paramname>leafstem</paramname>
+		<paramprompt>Ratio of leaf mass/stem mass in shoot</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>fshoot</paramname>
+		<paramprompt>Ratio of stem diameter to stem length</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>leaf2stor</paramname>
+		<paramprompt>Fraction of leaf mass partitioning diverted to root storage</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>stem2stor</paramname>
+		<paramprompt>Fraction of stem mass partitioning diverted to root storage</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>stor2stor</paramname>
+		<paramprompt>Fraction of reproductive mass partitioning diverted to root storage</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>rbc</paramname>
+		<paramprompt>Residue size/toughness class</paramprompt>
+		<paramchoice value="1">Fragile, very small residue, e.g. soybeans</paramchoice>
+		<paramchoice value="2">Moderately tough, short residue, e.g. wheat</paramchoice>
+		<paramchoice value="3">Non-fragile, medium residue, e.g. corn</paramchoice>
+		<paramchoice value="4">Woody, large residue</paramchoice>
+		<paramchoice value="5">Gravel, rock</paramchoice>
+	</paramlang>
+
+	<paramlang>
+		<paramname>standdk</paramname>
+		<paramprompt>Decomposition rate for standing stalks</paramprompt>
+		<paramaltunit>lb/(lb day)</paramaltunit>
+	</paramlang>
+	<paramlang>
+		<paramname>surfdk</paramname>
+		<paramprompt>Decomposition rate for surface (flat) stalks</paramprompt>
+		<paramaltunit>lb/(lb day)</paramaltunit>
+	</paramlang>
+	<paramlang>
+		<paramname>burieddk</paramname>
+		<paramprompt>Decomposition rate for buried stalks</paramprompt>
+		<paramaltunit>lb/(lb day)</paramaltunit>
+	</paramlang>
+	<paramlang>
+		<paramname>rootdk</paramname>
+		<paramprompt>Decomposition rate for roots</paramprompt>
+		<paramaltunit>lb/(lb day)</paramaltunit>
+	</paramlang>
+	<paramlang>
+		<paramname>stemnodk</paramname>
+		<paramprompt>Fall rate for standing stalks</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>stemdia</paramname>
+		<paramprompt>Stalk diameter</paramprompt>
+		<paramaltunit>inches</paramaltunit>
+		<conversion>
+			<factor>39.3696</factor>
+		</conversion>
+	</paramlang>
+	<paramlang>
+		<paramname>thrddys</paramname>
+		<paramprompt>Decomposition days after which stems begin to fall</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>covfact</paramname>
+		<paramprompt>Mass to cover factor</paramprompt>
+		<paramaltunit>acres/lb</paramaltunit>
+		<conversion>
+			<factor>0.00011209</factor>
+		</conversion>
+	</paramlang>
+
+	<paramlang>
+		<paramname>resevapa</paramname>
+		<paramprompt>Residue Evaporation Suppression multiplier coefficient a</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>resevapb</paramname>
+		<paramprompt>Residue Evaporation Suppression exponent coefficient b</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>yield_coefficient</paramname>
+		<paramprompt>Residue:Yield ratio</paramprompt>
+		<paramaltunit>lb/lb</paramaltunit>
+	</paramlang>
+	<paramlang>
+		<paramname>residue_intercept</paramname>
+		<paramprompt>Residue:Yield intercept</paramprompt>
+		<paramaltunit>lb/acre</paramaltunit>
+		<conversion>
+			<factor>8921.8</factor>
+		</conversion>
+	</paramlang>
+	<paramlang>
+		<paramname>regrow_location</paramname>
+		<paramprompt>Location of regrowth (height)</paramprompt>
+		<paramaltunit>in</paramaltunit>
+		<conversion>
+			<factor>39.3696</factor>
+		</conversion>
+	</paramlang>
+	<paramlang>
+		<paramname>noparam3</paramname>
+		<paramprompt>Not Used</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>noparam2</paramname>
+		<paramprompt>Not Used</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>noparam1</paramname>
+		<paramprompt>Not Used</paramprompt>
+	</paramlang>
+	<paramlang>
+		<paramname>crop_notes</paramname>
+		<paramprompt>Crop Record Notes</paramprompt>
+	</paramlang>
+</croplang>

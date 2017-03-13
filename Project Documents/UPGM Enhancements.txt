@@ -1,0 +1,162 @@
+From:	McMaster, Greg
+Sent:	Friday, February 18, 2011 4:48 PM
+To:	Ascough, Jim
+Cc:	Edmunds, Debbie
+Subject:	FW: Trip to Manhattan
+
+Jimbo,
+
+I had meant to forward this to you yesterday, but didn’t get to it.  It somewhat relates to Larry’s e-
+mail to us today (that I haven’t really read yet).
+
+G.
+
+ 
+From: Larry Wagner [mailto:wagner@weru.ksu.edu]  
+Sent: Wednesday, February 16, 2011 4:44 PM 
+To: McMaster, Greg 
+Cc: fredfox 
+Subject: Re: Trip to Manhattan
+
+For your info, here is the full agenda of what Mike Sporcic was interested in discussing 
+with us and  
+Seth Dabney (RUSLE2): 
+ 
+        1. Develop a method to model the decomposition of at least three pools of biomass in the WEPS and 
+RUSLE2 models, Standing residue (leaves and Stems, maybe reproductive parts for WEPS), Flat residue, 
+(leaves and Stems, maybe reproductive parts for WEPS), and Dead roots.  Currently both models decay all 
+residue at the same rate. 
+        2. Root growth, in WEPS.  Currently we model root growth the same for all crops, as a percentage of 
+the surface growth.  The EPIC version the we use is very simple.  We need better estimates of the root 
+growth for the OM sub factor in the Soil Condition Index.  Currently WEPS will not match RUSLE2 
+because the calculation of the 4 in root biomass is not the same.  One solution would be to just add the hard 
+values from RUSLE2.  I would like to explore the possibility of improving the root growth in WEPS and 
+then decide what to do with SCI.
+        3. We may want to review the harvest indexes we use in both models to make sure we are current 
+with the findings we are getting from the CEAP biomass project you are involved with.
+ 
+LEW
+ 
+ 
+On 2/16/2011 5:37 PM, Larry Wagner wrote: 
+Greg,  
+ 
+A few quick comments to your numbered items below.  
+ 
+LEW  
+ 
+On 2/16/2011 3:49 PM, McMaster, Greg wrote: 
+Hi Larry,  
+ 
+Sorry for the generally slow, or maybe no response to some of the last  
+e-mails.  So a few very quick responses on all this.  
+ 
+1) Thanks for your reply to the UPGM workplan.  In things like using XML  
+file format, I knew what your response was going to be and had already  
+been discussing this with Jim.  So, I think that is a given. 
+Good.  Our programmer has been dealing with this from the FORTRAN perspective  
+some and I think it will work out fine.  The only issue we are aware of is that some  
+F90/95 compilers contain lots of bugs that affect the XML library package as it  
+uses these "new" features extensively (but most old-school FORTRAN programmers  
+don't use at all).  Using a compiler that works with the XML library (compiles the XML 
+code)  
+is the real solution here (and possibly bugging the compiler manufacturer to fix  
+the specific bugs that cause the XML library to fail to compile or work correctly). 
+2) Help on funding your student programmers:  Jim and I have been  
+figuring out how to even bring this up with the Lajenator, knowing his  
+knee-jerk reaction would be "NO, NO, NO".  So we have had different  
+ideas such as talking with Jack Carlson (NRCS), but thinking this  
+wouldn't probably work.  Then we had an idea, which included initially  
+asking Laj, getting the "NO", but then we approach Will Blackburn for a  
+combined (your unit and Jim/I) appeal to for help, that maybe we might  
+have a chance for Will and Laj both to kick in at least some funds.  I  
+will need to fill you in on a few behind the scene activities when we  
+meet. 
+There has been a change here since I last sent you that email.  NRCS (Mike Sporcic)  
+has apparently found a different source of NRCS funds and the paperwork has been  
+submitted to get funds to cover them for at least the remainder of this fiscal year.  
+So, unless something keeps those funds from arriving, I should be ok for awhile.  
+Next FY is an entirely different matter though.  We can discuss longer term funding  
+issues when you get here.  
+
+Good on our end, and bad on your end, Jim is already getting the funding  
+for 1 student programmer (to replace the previous one), and likely is  
+getting finding for another programmer for 2 years. At least one will be  
+able to put most of their time on the UPGM project.  (In fairness to  
+Laj, of what he knows of the programmers and assignment, he would say  
+that he is sufficiently funding the work and is keeping it "within the  
+Unit".) 
+In the long run, it will work better to have the student programmers work with you  
+there at Ft. Collins. 
+3) Jim has been meaning for a couple of weeks to talk with Fred on a  
+couple of specific model/coding issues with UPGM that relates to the  
+project.  I'll keep on him, but the good news is that Jim, Debbie, and I  
+have been putting in a lot more work into our end of UPGM, and making  
+some good progress.  Especially for myself, I'm learning a lot and  
+accumulating a lot of questions! 
+Yes, If Jim has questions regarding coding of UPGM and the current WEPS crop  
+growth model, he needs to touch base with Fred. 
+4) Hotels: I've been meaning to book the rooms for Debbie and I (the  
+Jimbo isn't coming), but wanted to called the Comfort Suites to see if  
+they will reduce their government rates from $90 to $77 (the maximum  
+allowed), with the rationale that if they are not full, isn't 2 booked  
+rooms at a reduced rate better than nothing?  We'll see, otherwise it  
+will be the Fairfield Inn. 
+Hmm, I don't know what rate the guys from the Desert Research Institute got, but  
+they were very happy with the accommodations.  They probably put more than one  
+person in a room though as well.  I'm surprised that they have higher government  
+rates than allowed by the government.  I guess they don't really want to accommodate  
+us Feds. :-)  
+ 
+Hmm, will it be possible for Jim to join us via a MyMeeting session or teleconference  
+for part of our meeting, if we deem it to be very useful to get his direct input and insights  
+on specific issues? 
+5) And now to the travel dates:  Debbie and I had been planning on  
+driving to Manhattan on Sunday, then start work Monday morning.  We  
+would then leave by noon on Friday and get back to Fort Fun early  
+evening.  So if you need a day that week, we could adjust to either  
+driving on Monday or coming back on Thursday.  Just let me know real  
+soon so we can reserve hotel rooms and get the official travel forms  
+approved. 
+OK.  I will let Mike know what your plans are.  I think that Mike's session will only be  
+a half day and possibly Friday afternoon will work for him.  Also, since you will be here  
+for most of the week, we can probably squeeze his session in sometime when we need  
+a break from each other.  You might be interested in his issues (residue decomposition  
+and compatibility between RUSLE2 and WEPS is one of them). 
+That's what I can think of at the moment.  
+ 
+G.  
+ 
+ 
+-----Original Message-----  
+From: Larry Wagner [mailto:wagner@weru.ksu.edu]  
+Sent: Wednesday, February 16, 2011 1:46 PM  
+To: McMaster, Greg  
+Subject: Trip to Manhattan  
+ 
+Greg,  
+ 
+Just a followup to the phone message I left.  
+ 
+Mike Sporcic is wanting to meet with Fred and I, possibly the week of  
+March the 6th  
+when you, Jim, etc. were to be coming down.  I don't want Mike to  
+interfere with our  
+time together, but didn't know your exact plans.  If you are traveling  
+(driving) on Monday,  
+for example, then Mike could possibly meet with us on that day, etc.  
+ 
+So, let me know your actual plans for the meeting in Manhattan.  
+ 
+Thanks,  
+ 
+LEW 
+
+
+-- 
+Larry E. Wagner, Agricultural Engineer
+USDA-ARS Engineering and Wind Erosion Research Unit
+1515 College Ave.,  Manhattan, KS 66502
+E-mail: larry.wagner@ars.usda.gov
+Phone:(785)537-5544  Fax:(785)537-5507
+URL: http://www.ars.usda.gov/npa/gmprc/eweru 

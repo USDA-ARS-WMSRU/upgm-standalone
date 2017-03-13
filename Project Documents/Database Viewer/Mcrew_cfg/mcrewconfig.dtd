@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!ELEMENT mcrewconfig (dataobject*, columndefn*)>
+	<!ELEMENT dataobject (objectname, defnfile?, displayfile?, langfile?, dtdfile?, DBdir?, fileextension?)>
+	<!ATTLIST dataobject type CDATA "control">
+		<!ELEMENT objectname (#PCDATA)>
+		<!ELEMENT defnfile (#PCDATA)>
+		<!ELEMENT displayfile (#PCDATA)>
+		<!ELEMENT langfile (#PCDATA)>
+		<!ELEMENT dtdfile (#PCDATA)>
+		<!ELEMENT DBdir (#PCDATA)>
+		<!ELEMENT fileextension (#PCDATA)>
+	<!ELEMENT columndefn (columnnum, columndataobject, columnlabel, tagname)>
+		<!ELEMENT columnnum (#PCDATA)>
+		<!ELEMENT columndataobject (#PCDATA)> <!-- the name should be one of the objects name from dataobjects -->
+		<!ELEMENT columnlabel (#PCDATA)>
+		<!ELEMENT tagname (#PCDATA)>

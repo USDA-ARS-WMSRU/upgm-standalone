@@ -1,0 +1,10 @@
+<?xml encoding="ISO-8859-1"?>
+<!ELEMENT operationdisplay (action*) >
+<!ENTITY % identityDTD SYSTEM "identity.dtd">
+%identityDTD;
+<!ENTITY % paramdisplayDTD SYSTEM "param_display.dtd">
+%paramdisplayDTD;
+<!ELEMENT action (identity , paramdisplay*)>
+
+<!--operationDisplayDTD: This file specifies the display information of various parameters.
+-->

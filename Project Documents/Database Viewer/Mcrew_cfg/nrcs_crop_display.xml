@@ -1,0 +1,432 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="crop_display.xsl"?>
+<!DOCTYPE cropdisplay SYSTEM "crop_display.dtd">
+<!-- Display atributes
+		V = Viewable
+		E = Editable
+		H = Hidden
+-->
+<!-- Display Box Object Type
+		N = Number
+		C = Choice List
+		S = String
+		T = Multi-line Text
+-->
+<!-- cropDisplayDTD -->
+<!--
+<!ENTITY % paramdispDTD SYSTEM "paramDisplayDTD.DTD">
+%paramdispDTD;
+<!ELEMENT cropdisplay (category*) >
+<!ELEMENT category (categoryname, paramdisplay* ) >
+<!ELEMENT categoryname (#PCDATA)>
+-->
+<!-- paramDisplayDTD -->
+<!--
+<!ELEMENT paramdisplay (paramname, displayattribute+, valueattribute+)>
+<!ELEMENT paramname (#PCDATA)>
+<!ELEMENT displayattribute (#PCDATA)>
+<!ELEMENT valueattribute (#PCDATA)>
+
+-->
+<cropdisplay>
+		
+	<category>
+	<categoryname>Crop growth parameters</categoryname>
+		<paramdisplay>
+			<paramname>idc</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>C</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>transf</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>C</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>plantpop</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>H</valueattribute>
+                       <format>#0.000</format>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>dmaxshoot</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>growdepth</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+                        <format>#0.000</format>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>regrow_location</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+                        <format>#0.000</format>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>storeinit</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+                        <format>#0.0000</format>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>mshoot</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+                        <format>#0.000</format>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>leafstem</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>fshoot</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>huie</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+
+		<paramdisplay>
+			<paramname>rdmx</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+                        <format>#0.00</format>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>hmx</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+                        <format>#0.00</format>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>a_ht</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>b_ht</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+
+		<paramdisplay>
+			<paramname>thudf</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>C</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>dtm</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>thum</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+                        <format>#0.00</format>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>hui0</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>tbas</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>topt</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+	</category>
+
+	<category>
+	<categoryname>Geometry</categoryname>
+		<paramdisplay>
+			<paramname>diammax</paramname>
+			<displayattribute>H</displayattribute>	
+			<valueattribute>N</valueattribute>
+                        <format>#0.00</format>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>ssaa</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>ssab</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>sla</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>ck</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>bceff</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+	</category>
+
+	<category>
+	<categoryname>Cold</categoryname>
+		<paramdisplay>
+			<paramname>frsx1</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>frsy1</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>frsx2</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>frsy2</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>verndel</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+	</category>
+	
+	<category>
+	<categoryname>Harvest/Yield info</categoryname>
+<!--	<categoryname>Harvest</categoryname> -->
+		<paramdisplay>
+			<paramname>hyldflag</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>C</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>grf</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>hyldunits</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>S</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>hyldwater</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>hyconfact</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>	
+<!--
+	<category>
+	<categoryname>Partitioning</categoryname>
+-->
+		<paramdisplay>
+			<paramname>a_lf</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>b_lf</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>c_lf</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>d_lf</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>a_rp</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>b_rp</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>c_rp</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>d_rp</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>yield_coefficient</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>residue_intercept</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+                        <format>#0.00</format>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>leaf2stor</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>stem2stor</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>stor2stor</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+<!--
+	</category>
+-->
+<!--
+	<category>
+	<categoryname>Calibration</categoryname>
+-->
+		<paramdisplay>
+			<paramname>cbaflag</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>C</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>tgtyield</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+                        <format>#0.00</format>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>cbafact</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>cyrafact</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>noparam3</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>noparam2</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>noparam1</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+<!--
+	</category>
+-->
+	</category>
+
+	<category>
+	<categoryname>Decomposition</categoryname>
+		<paramdisplay>
+			<paramname>rbc</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>C</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>thrddys</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>stemnodk</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>standdk</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>surfdk</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>burieddk</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>rootdk</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>stemdia</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>covfact</paramname>
+			<displayattribute>V</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>resevapa</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+		<paramdisplay>
+			<paramname>resevapb</paramname>
+			<displayattribute>H</displayattribute>
+			<valueattribute>N</valueattribute>
+		</paramdisplay>
+	</category>
+
+	<category>
+	<categoryname>Crop Notes</categoryname>
+		<paramdisplay>
+			<paramname>crop_notes</paramname>
+			<displayattribute>E</displayattribute>
+			<valueattribute>T</valueattribute>
+		</paramdisplay>
+	</category>
+
+
+</cropdisplay>
+
