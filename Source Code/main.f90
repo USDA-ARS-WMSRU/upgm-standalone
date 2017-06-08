@@ -681,7 +681,7 @@ am0cgf = .false.       ! supposed to indicate a growing crop
 !am0hrvfl = 0          ! harvest flag (default is off)
 am0hrvfl = 0
             !debe turned it on
-acxrow(1) = 0.76       ! row spacing (m)
+acxrow(1) = 0.2286       ! row spacing (m)
 ahfwsf(1) = 1.0        ! water stress factor
 
 !Rmarquez 2.10.17 -> Added read code for the new soil layer profile file.

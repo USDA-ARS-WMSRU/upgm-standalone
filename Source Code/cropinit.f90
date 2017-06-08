@@ -47,7 +47,6 @@ include 'c1report.inc'
 include 'c1db1.inc'
 include 'c1db2.inc'
 include 'c1glob.inc'
-include 'b1glob.inc'
 include 'tcrop.inc'
 !
 ! Dummy arguments
@@ -479,10 +478,6 @@ acxstm(isr) = 0.0
 acrbc(isr) = 1
 accovfact(isr) = 0.0
 ac0ck(isr) = 0.0
- 
-abdstm(isr) = 0.0
-abffcv(isr) = 0.0
-abfscv(isr) = 0.0
  
       ! initialize some derived globals for crop global variables
 acfcancov(isr) = 0.0
