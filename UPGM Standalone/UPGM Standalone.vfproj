@@ -85,6 +85,9 @@
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 		<File RelativePath="..\Source Code\file.fi"/></Filter>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<Filter Name="structs">
+		<File RelativePath="..\Source Code\structs\constants.f90"/>
+		<File RelativePath="..\Source Code\structs\cropstruct.f90"/></Filter>
 		<File RelativePath="..\Source Code\caldat.f90"/>
 		<File RelativePath="..\Source Code\caldatw.f90"/>
 		<File RelativePath="..\Source Code\callcrop.f90"/>
