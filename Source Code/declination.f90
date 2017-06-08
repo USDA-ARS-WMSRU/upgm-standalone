@@ -1,8 +1,8 @@
 function declination(idoy)
 !
+    use constants, only : degtorad
 implicit none
 !
-include 'p1unconv.inc'
 !
 ! Dummy arguments
 !

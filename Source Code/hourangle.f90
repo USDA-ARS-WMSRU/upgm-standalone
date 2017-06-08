@@ -1,8 +1,8 @@
 function hourangle(dlat,dec,riseangle)
 !
+    use constants, only : degtorad, radtodeg
 implicit none
 !
-include 'p1unconv.inc'
 !
 ! PARAMETER definitions
 !

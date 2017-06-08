@@ -1,9 +1,9 @@
 subroutine shootnum(bnslay,bc0idc,bcdpop,bc0shoot,bcdmaxshoot,bcmtotshoot,      &
                   & bcmrootstorez,bcdstm)
 !
+    use constants, only: mgtokg
 implicit none
 !
-include 'p1unconv.inc'
 !
 ! PARAMETER definitions
 !

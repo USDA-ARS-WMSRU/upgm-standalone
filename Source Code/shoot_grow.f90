@@ -34,12 +34,12 @@ subroutine shoot_grow(bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,  
 ! levels that are half steps between dry and medium and medium and optimum.
 ! later added tempsw, the array index for these new arrays. it needed to be
 ! initialized in cinit and passed through. 5122011
+    use constants, only : mgtokg, mmtom
  
 implicit none
 !
 include 'file.fi'
 include 'm1flag.inc'
-include 'p1unconv.inc'
 include 'command.inc'
 !
 ! PARAMETER definitions

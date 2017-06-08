@@ -39,6 +39,7 @@ subroutine cinit(bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla, 
 !    
 ! note: some variables are used in more than one subroutine.
 !
+    use constants, only : mgtokg, mmtom
 implicit none
 !
 include 'file.fi'
@@ -47,7 +48,6 @@ include 'p1solar.inc'
 include 'm1flag.inc'
 include 'm1sim.inc'
 include 'w1clig.inc'
-include 'p1unconv.inc'
 include 'csoil.inc'
 include 'chumus.inc'
 include 'cfert.inc'
