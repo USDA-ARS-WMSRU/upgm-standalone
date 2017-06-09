@@ -13,15 +13,15 @@
 !
 !     + + + VARIABLE DECLARATIONS + + +
 !
-      real             asfsan(0:mnsz, mnsub)
-      real             asfsil(0:mnsz, mnsub)
-      real             asfcla(0:mnsz, mnsub)
-      real             asvroc(0:mnsz, mnsub)
-      real             asfvcs(mnsz, mnsub)
-      real             asfcs(mnsz, mnsub)
-      real             asfms(mnsz, mnsub)
-      real             asffs(mnsz, mnsub)
-      real             asfvfs(mnsz, mnsub)
+      real             asfsan(0:mnsz, mnsub) !not used
+      real             asfsil(0:mnsz, mnsub) !not used
+      real             asfcla(0:mnsz, mnsub) !used
+      real             asvroc(0:mnsz, mnsub) !not used
+      real             asfvcs(mnsz, mnsub) !not used
+      real             asfcs(mnsz, mnsub) !not used
+      real             asfms(mnsz, mnsub) !not used
+      real             asffs(mnsz, mnsub) !not used
+      real             asfvfs(mnsz, mnsub) !not used
       real             asfwdc(mnsz, mnsub)       ! Not used - not input in Version 1.0 IFC file
 
 !

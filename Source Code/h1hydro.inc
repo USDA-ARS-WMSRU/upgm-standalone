@@ -15,7 +15,7 @@
       real             aheaep(mnsz,mnsub)
       real             ah0cb(mnsz,mnsub)
       real             ahrsk(mnsz,mnsub)
-      real             ahfwsf(mnsub)
+      real             ahfwsf(mnsub)  !used
       real             ahzsno(mnsub)
       real             ahtsno(mnsub)
       real             ahfsnfrz(mnsub)

@@ -12,6 +12,7 @@
 !
 !     + + + VARIABLE DECLARATIONS + + +
 !
+	!none used 
       real             ahrwcr(mnsz, mnsub)
       real             ahrwcw(mnsz, mnsub)
       real             ahrwcf(mnsz, mnsub)

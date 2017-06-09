@@ -6,7 +6,7 @@
 
 
 !     + + + VARIABLE DECLARATIONS + + +
-      real trad_lai
+      real trad_lai !used
 
 	  common / lai / trad_lai
 

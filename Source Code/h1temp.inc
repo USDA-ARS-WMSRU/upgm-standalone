@@ -9,8 +9,8 @@
 !     + + + VARIABLE DECLARATIONS + + +
 
       real             ahtsav(mnsz,mnsub)
-      real             ahtsmx(mnsz,mnsub)
-      real             ahtsmn(mnsz,mnsub)
+      real             ahtsmx(mnsz,mnsub)  !used
+      real             ahtsmn(mnsz,mnsub)  !used
       real             ahfice(mnsz,mnsub)
 
       common / h1temp /                                                 &

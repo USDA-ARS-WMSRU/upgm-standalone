@@ -13,15 +13,15 @@
       integer          mnarpt
       integer          mnbr
       integer          mnbpt
-      integer          mncz
+      integer          mncz  !used
       integer          mnspt
       integer          mnsrpt
-      integer          mnsub
-      integer          mnsz
-      integer          mntime
-      integer          mnbpls
-      integer          mndk
-      integer          mngdpt
+      integer          mnsub  !used
+      integer          mnsz  !used
+      integer          mntime  !used
+      integer          mnbpls  !used
+      integer          mndk  !used
+      integer          mngdpt 
       integer          mnrbc
 
       integer          mnhhrs

@@ -17,7 +17,7 @@
       real             ahzeta
       real             ahzetp
       real             ahzpta
-      real             ahzptp
+      real             ahzptp  !used
       real             ah0drat
 
       common /h1et/                                                     &

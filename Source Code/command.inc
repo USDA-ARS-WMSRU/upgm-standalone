@@ -20,8 +20,8 @@
       integer cook_yield
 !      integer growth_stress 
 !debe commented out growth_stress because it is now read in.
-      real    water_stress_max
-      integer layer_scale
+      real    water_stress_max !used
+      integer layer_scale 
       integer layer_infla
       integer layer_weighting
       integer puddle_warm

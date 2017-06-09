@@ -6,7 +6,6 @@ include 'p1werm.inc'
 include 'file.fi'
 include 'w1clig.inc'
 include 'm1sim.inc'
-include 'w1pavg.inc'
 include 'w1cli.inc'
 !
 ! Dummy arguments
@@ -243,8 +242,6 @@ aweirr = wgrad(dayidx)*0.04186
 ! calculate air density from temperature and pressure
 !
 awtdav = (awtdmx+awtdmn)/2.
-awdair = 348.56*(1.013-0.1183*(amzele/1000.)+0.0048*(amzele/1000.)**2.)         &
-       & /(awtdav+273.1)
 !
 return
 !

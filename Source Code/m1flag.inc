@@ -11,16 +11,16 @@
 !     + + + VARIABLE DECLARATIONS + + +
 
       logical          am0ifl
-      logical          am0cif
+      logical          am0cif  !used
       logical          am0eif
-      logical          am0cgf
+      logical          am0cgf  !used
       logical          am0dif
       logical          am0sif
       logical          am0oif
       integer          am0hfl
       integer          am0sfl
       integer          am0tfl
-      integer          am0cfl
+      integer          am0cfl  !used
       integer          am0dfl
       integer          am0efl
       logical          am0gdf

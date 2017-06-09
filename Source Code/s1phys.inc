@@ -12,13 +12,13 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
 
-      real             asdblk(0:mnsz, mnsub)
-      real             asdsblk(mnsz, mnsub)
-      real             asdwblk(mnsz, mnsub)
-      real             asdblk0(mnsz, mnsub)
-      real             asdpart(mnsz, mnsub)
-      real             restrict_depth(mnsub)
-      real             bedrock_depth(mnsub)
+      real             asdblk(0:mnsz, mnsub) !used
+      real             asdsblk(mnsz, mnsub) !not used
+      real             asdwblk(mnsz, mnsub) !not used
+      real             asdblk0(mnsz, mnsub) !not used
+      real             asdpart(mnsz, mnsub) !not used
+      real             restrict_depth(mnsub) !not used
+      real             bedrock_depth(mnsub) !not used
 
       common / s1phys /                                                 &
      &    asdblk, asdsblk, asdwblk, asdblk0, asdpart,                   &

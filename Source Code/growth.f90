@@ -24,13 +24,12 @@ subroutine growth(bnslay,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,   
 !debe added joints, heads and mats to help with debugging to specific growth stages.
 !debe added co2x, co2y, co2atmos, co2eff for use in affecting plant growth by co2.
 !    
-    use constants, only : hatom2, mmtom
+    use constants, only : hatom2, mmtom, max_arg_exp, max_real
 implicit none
 !
 include 'file.fi'
 include 'p1werm.inc'
 include 'm1flag.inc'
-include 'precision.inc'
 include 'p1const.inc'
 include 'command.inc'
 include 'clai.inc'

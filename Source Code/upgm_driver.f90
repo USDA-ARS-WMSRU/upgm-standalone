@@ -13,7 +13,6 @@ subroutine upgm_driver(sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,
 implicit none
 !
 include 'p1werm.inc'
-include 'precision.inc'
 include 'command.inc'
 include 'file.fi'
 include 'w1clig.inc'
@@ -31,7 +30,6 @@ include 'h1temp.inc'
 include 'c1info.inc'
 include 'c1db1.inc'
 include 'c1db2.inc'
-include 'w1wind.inc'
 include 'c1glob.inc'
 include 'h1et.inc'
 include 's1sgeo.inc'

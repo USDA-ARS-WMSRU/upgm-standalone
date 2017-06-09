@@ -11,13 +11,13 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
 
-      integer  wcd(mndayr)
-      integer  wcm(mndayr)
-      integer  wcy(mndayr)
-      integer  maxday
-      integer  n_header
+      integer  wcd(mndayr) !init but not used
+      integer  wcm(mndayr) !init but not used
+      integer  wcy(mndayr) !init but not used
+      integer  maxday !used to read in climate
+      integer  n_header !used to read in cligen stuff
       
-      real     wwzdpt(mndayr) 
+      real     wwzdpt(mndayr) !not used
       real     wwdurpt(mndayr)
       real     wwpeaktpt(mndayr)
       real     wwpeakipt(mndayr)

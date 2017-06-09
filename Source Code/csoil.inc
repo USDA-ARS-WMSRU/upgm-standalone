@@ -14,7 +14,7 @@
 !     Parameter include files:  p1werm.inc
 
 !     + + + VARIABLE DECLARATIONS + + +
-      real cnt,cpt,cdg,cn,cp,fc,gsw
+      real cnt,cpt,cdg,cn,cp,fc,gsw !used
       real pdsw,po,psp,rq,rz,st,suno3,sut,sws,t,wt,za
 
       integer ids

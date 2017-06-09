@@ -6,7 +6,7 @@
 !     parameters used to define sunrise and sunset (daylength) for different purposes
 
       real             beamrise
-      real             civilrise
+      real             civilrise  !used
       real             nautrise
       real             astrorise
 

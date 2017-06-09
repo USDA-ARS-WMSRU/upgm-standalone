@@ -14,7 +14,7 @@
 !     of the WERM code if this file has been included.
 
       integer   SEC_PER_DAY
-      real      pi
+      real      pi  !used
       real      anemht, awzzo, awzdisp
       integer   wzoflg
       real      KG_per_M2_to_LBS_per_ACRE

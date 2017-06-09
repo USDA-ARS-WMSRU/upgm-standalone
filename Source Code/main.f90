@@ -3,7 +3,6 @@ program main
 implicit none
 !
 include 'p1werm.inc'
-include 'precision.inc'
 include 'command.inc'
 include 'file.fi'
 include 'w1clig.inc'
@@ -21,7 +20,6 @@ include 'h1temp.inc'
 include 'c1info.inc'
 include 'c1db1.inc'
 include 'c1db2.inc'
-include 'w1wind.inc'
 include 'c1glob.inc'
 include 'h1et.inc'
 include 's1sgeo.inc'
@@ -745,11 +743,6 @@ amalat = -38.0
 !
 am0cdb = 1        ! set crop debug output flag (default to no output)
 !
-awudmx = 10.0     ! set max daily wind speed
-awudmn = 1.0      ! set min daily wind speed
-awadir = 0.0      ! set wind dir
-awhrmx = 12.0     ! set wind dir
-!
 awrrh = 0.0       ! relative humidity?
 !
 acthucum(1) = 0.0 ! initialize accumulated heat units
@@ -786,11 +779,6 @@ as0ags(1,1) = 0.0
 aslagn(1,1) = 0.0
 aslagx(1,1) = 0.0
 aseags(1,1) = 0.0
-!
-! initialize math precision global variables
-!
-max_real = huge(1.0)*0.999150
-max_arg_exp = log(max_real)
 !
 !
 ! read in plant parameters from cropxml.dat

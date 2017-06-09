@@ -9,18 +9,18 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
 
-      real             asdagd(0:mnsz, mnsub)
-      real             aseags(0:mnsz, mnsub)
-      real             aslagm(0:mnsz, mnsub)
-      real             aslagn(0:mnsz, mnsub)
-      real             aslagx(0:mnsz, mnsub)
-      real             as0ags(0:mnsz, mnsub)
-      real             aseagm(mnsz, mnsub)
-      real             aseagmn(mnsz, mnsub)
-      real             aseagmx(mnsz, mnsub)
-      real             ask4d(mnsz, mnsub)
-      real             aslmin(mnsz, mnsub)
-      real             aslmax(mnsz, mnsub)
+      real             asdagd(0:mnsz, mnsub) !not used
+      real             aseags(0:mnsz, mnsub) !not used
+      real             aslagm(0:mnsz, mnsub) !not used
+      real             aslagn(0:mnsz, mnsub) !not used
+      real             aslagx(0:mnsz, mnsub) !not used
+      real             as0ags(0:mnsz, mnsub) !not used
+      real             aseagm(mnsz, mnsub)   !not used
+      real             aseagmn(mnsz, mnsub) !not used
+      real             aseagmx(mnsz, mnsub) !not used
+      real             ask4d(mnsz, mnsub) !not used
+      real             aslmin(mnsz, mnsub) !not used
+      real             aslmax(mnsz, mnsub) !not used
 
       common / s1agg /                                                  &
      & asdagd, aseags, aslagm, aslagn, aslagx, as0ags,                  &

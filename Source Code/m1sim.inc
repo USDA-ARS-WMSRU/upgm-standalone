@@ -11,10 +11,10 @@
 !     + + + VARIABLE DECLARATIONS + + +
 
       integer          ntstep
-      integer          am0jd
+      integer          am0jd  !used
       integer          erod_interval
-      real             amalat
-      real             amalon
+      real             amalat  !used
+      real             amalon  
       real             amzele
 
       common /m1sim/                                                    &

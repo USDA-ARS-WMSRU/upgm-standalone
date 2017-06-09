@@ -9,17 +9,17 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
 
-      real             aszrgh(mnsub)
-      real             aszrho(mnsub)
-      real             asxrgw(mnsub)
-      real             asxrgs(mnsub)
-      real             asargo(mnsub)
-      real             asxdks(mnsub)
-      real             asxdkh(mnsub)
-      real             as0rrk(mnsub)
-      real             aslrrc(mnsub)
-      real             aslrr(mnsub)
-      real             aslrro(mnsub)
+      real             aszrgh(mnsub) !used
+      real             aszrho(mnsub) !not used
+      real             asxrgw(mnsub) !not used
+      real             asxrgs(mnsub) !used
+      real             asargo(mnsub) !used
+      real             asxdks(mnsub) !not used
+      real             asxdkh(mnsub) !not used
+      real             as0rrk(mnsub) !not used
+      real             aslrrc(mnsub) !not used
+      real             aslrr(mnsub)  !not used
+      real             aslrro(mnsub) !not used
 
       common / s1sgeo /                                                 &
      &                 aszrgh, aszrho, asxrgw, asxrgs, asargo, asxdks,  &

@@ -25,12 +25,12 @@
       character        series(mnsub)*80
 !      character        wsum*80
 
-      integer          daysim
-      integer          erosrpt
+      integer          daysim  !used
+      integer          erosrpt 
       integer          gnrpt(8)
-      integer          id
-      integer          im
-      integer          iy
+      integer          id  !used
+      integer          im  !used
+      integer          iy  !used
       integer          ijday
       integer          ld
       integer          lm

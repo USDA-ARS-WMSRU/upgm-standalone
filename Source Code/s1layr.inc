@@ -12,10 +12,10 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
 
-      integer          nslay(mnsub)
-      real             aszlyt(mnsz+1, mnsub)
-      real             aszlyd(mnsz, mnsub)
-      real             asfcle(mnsz, mnsub)
+      integer          nslay(mnsub) !used
+      real             aszlyt(mnsz+1, mnsub) !used
+      real             aszlyd(mnsz, mnsub) !used
+      real             asfcle(mnsz, mnsub) !not used
       real             watertable_depth(mnsub)   ! Not used right now
 
       common / s1layr /                                                 &

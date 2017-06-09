@@ -27,8 +27,8 @@
     real, parameter :: civilrise = 96.0             ! solar altitude angle defined as civil twilight
     
     ! math precision constants
-    !real, parameter :: max_real = huge(1.0)*0.999150
-    !real, parameter :: max_arg_exp = log(max_real)
+    real, parameter :: max_real = huge(1.0)*0.999150
+    real, parameter :: max_arg_exp = log(max_real)
 
     end module constants
     

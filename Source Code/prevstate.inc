@@ -14,33 +14,33 @@
 !     Parameter include files required:  p1werm.inc
 
 !     + + + VARIABLE DECLARATIONS + + +
-      real             prevstandstem(mnsub)
-      real             prevstandleaf(mnsub)
-      real             prevstandstore(mnsub)
+      real             prevstandstem(mnsub) !used
+      real             prevstandleaf(mnsub)  !used
+      real             prevstandstore(mnsub)  !used
 
-      real             prevflatstem(mnsub)
-      real             prevflatleaf(mnsub)
-      real             prevflatstore(mnsub)
+      real             prevflatstem(mnsub)  !used
+      real             prevflatleaf(mnsub)  !used
+      real             prevflatstore(mnsub)  !used
 
-      real             prevmshoot(mnsub)
-      real             prevmtotshoot(mnsub)
-      real             prevbgstemz(mnsz,mnsub)
+      real             prevmshoot(mnsub)  !used
+      real             prevmtotshoot(mnsub)  !used
+      real             prevbgstemz(mnsz,mnsub)  !used
 
-      real             prevrootstorez(mnsz,mnsub)
-      real             prevrootfiberz(mnsz,mnsub)
+      real             prevrootstorez(mnsz,mnsub)  !used
+      real             prevrootfiberz(mnsz,mnsub)  !used
 
-      real             prevht(mnsub)
-      real             prevzshoot(mnsub)
-      real             prevstm(mnsub)
-      real             prevrtd(mnsub)
+      real             prevht(mnsub)  !used
+      real             prevzshoot(mnsub)  !used
+      real             prevstm(mnsub)  !used
+      real             prevrtd(mnsub)  !used
 
-      integer          prevdayap(mnsub)
-      real             prevhucum(mnsub)
-      real             prevrthucum(mnsub)
+      integer          prevdayap(mnsub)  !used
+      real             prevhucum(mnsub)  !used
+      real             prevrthucum(mnsub)  !used
 
-      real             prevgrainf(mnsub)
-      real             prevchillucum(mnsub)
-      real             prevliveleaf(mnsub)
+      real             prevgrainf(mnsub)  !used
+      real             prevchillucum(mnsub)  !used
+      real             prevliveleaf(mnsub)  !used
 
       common / prevstate /                                              &
      &           prevstandstem, prevstandleaf, prevstandstore,          &

@@ -15,25 +15,25 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
 
-      real             awrrh
-      real             awtdav
-      real             awtyav
-      real             awzypt
-      real             awtmav(12)
-      real             awtmnav(12)
-      real             awtmxav(12)
-      real             awzmpt(12)
-      real             awtdmxprev
-      real             awtdmn
-      real             awtdmx
-      real             awtdmnnext
-      real             awtdpt
-      real             awzdpt
-      real             awdurpt
-      real             awpeaktpt
-      real             awpeakipt
-      real             aweirr
-      character*80     awclsn
+      real             awrrh  !used for cdbug only
+      real             awtdav !calculated but not used
+      real             awtyav !calculated but not used
+      real             awzypt !here only
+      real             awtmav(12) !calculated but not used
+      real             awtmnav(12) !used for monthly min air temp
+      real             awtmxav(12) !used for monthly max air temp
+      real             awzmpt(12) !initialized but not used
+      real             awtdmxprev  !initialized but not used
+      real             awtdmn	! used in call crop
+      real             awtdmx ! used in call crop
+      real             awtdmnnext !initialized but not used
+      real             awtdpt !initialized but not used
+      real             awzdpt ! used in call crop
+      real             awdurpt  !initialized but not used
+      real             awpeaktpt !initialized but not used
+      real             awpeakipt !initialized but not used
+      real             aweirr ! used in call crop
+      character*80     awclsn !here only
 
       common / w1clig /                                                 &
      &                  awrrh, awtdav, awzypt,                          &
