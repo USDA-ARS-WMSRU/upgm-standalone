@@ -39,13 +39,12 @@ subroutine cinit(ctrl, bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bs
 !    
 ! note: some variables are used in more than one subroutine.
 !
-    use constants, only : mgtokg, mmtom
+    use constants, only : mgtokg, mmtom, civilrise
     use upgm_simdata, only : upgm_ctrls, controls
 implicit none
 !
 include 'file.fi'
 include 'p1werm.inc'
-include 'p1solar.inc'
 include 'm1flag.inc'
 include 'w1clig.inc'
 include 'csoil.inc'

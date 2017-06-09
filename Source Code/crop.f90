@@ -94,14 +94,13 @@ subroutine crop(ctrl,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,bsfsmb,bsfc
 ! level on the plant, i.e., the adjustment factor. Nedded to have it initialized before calculating 
 ! this value in Growth.f90
 !
-    use constants, only : mgtokg
+    use constants, only : mgtokg, civilrise
 
 implicit none
 !
 include 'file.fi'
 include 'p1werm.inc'
 include 'm1flag.inc'
-include 'p1solar.inc'
 include 'cenvr.inc'
 include 'cparm.inc'
 include 'chumus.inc'
