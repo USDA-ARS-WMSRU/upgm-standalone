@@ -35,17 +35,13 @@
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
 	<Files>
 		<Filter Name="Header Files" Filter="fi;fd">
-		<File RelativePath="..\Source Code\b1glob.inc"/>
 		<File RelativePath="..\Source Code\c1db1.inc"/>
 		<File RelativePath="..\Source Code\c1db2.inc"/>
 		<File RelativePath="..\Source Code\c1db3.inc"/>
 		<File RelativePath="..\Source Code\c1gen.inc"/>
-		<File RelativePath="..\Source Code\c1gen.inc"/>
-		<File RelativePath="..\Source Code\c1glob.inc"/>
 		<File RelativePath="..\Source Code\c1glob.inc"/>
 		<File RelativePath="..\Source Code\c1info.inc"/>
 		<File RelativePath="..\Source Code\c1report.inc"/>
-		<File RelativePath="..\Source Code\cecomp.inc"/>
 		<File RelativePath="..\Source Code\cenvr.inc"/>
 		<File RelativePath="..\Source Code\cfert.inc"/>
 		<File RelativePath="..\Source Code\cgrow.inc"/>
@@ -53,8 +49,6 @@
 		<File RelativePath="..\Source Code\clai.inc"/>
 		<File RelativePath="..\Source Code\command.inc"/>
 		<File RelativePath="..\Source Code\cparm.inc"/>
-		<File RelativePath="..\Source Code\crop.inc"/>
-		<File RelativePath="..\Source Code\cropendseason.inc"/>
 		<File RelativePath="..\Source Code\csoil.inc"/>
 		<File RelativePath="..\Source Code\h1db1.inc"/>
 		<File RelativePath="..\Source Code\h1et.inc"/>
@@ -66,9 +60,7 @@
 		<File RelativePath="..\Source Code\main.inc"/>
 		<File RelativePath="..\Source Code\p1const.inc"/>
 		<File RelativePath="..\Source Code\p1solar.inc"/>
-		<File RelativePath="..\Source Code\p1unconv.inc"/>
 		<File RelativePath="..\Source Code\p1werm.inc"/>
-		<File RelativePath="..\Source Code\precision.inc"/>
 		<File RelativePath="..\Source Code\prevstate.inc"/>
 		<File RelativePath="..\Source Code\s1agg.inc"/>
 		<File RelativePath="..\Source Code\s1dbc.inc"/>
@@ -79,9 +71,7 @@
 		<File RelativePath="..\Source Code\tcdbug.inc"/>
 		<File RelativePath="..\Source Code\tcrop.inc"/>
 		<File RelativePath="..\Source Code\w1cli.inc"/>
-		<File RelativePath="..\Source Code\w1clig.inc"/>
-		<File RelativePath="..\Source Code\w1pavg.inc"/>
-		<File RelativePath="..\Source Code\w1wind.inc"/></Filter>
+		<File RelativePath="..\Source Code\w1clig.inc"/></Filter>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 		<File RelativePath="..\Source Code\file.fi"/></Filter>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
