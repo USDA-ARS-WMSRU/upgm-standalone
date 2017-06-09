@@ -87,7 +87,7 @@ else if (cname=='spring wheat') then
   gdds1 = (dummy2(3)+dummy2(4)+dummy2(5))
 else if (cname=='sunflower') then
   gdds1 = dummy2(2)
-else if (cname=='winter barley') then
+else if (cname=='winter barley') then 
   gdds1 = (dummy2(2)+dummy2(3)+dummy2(4)+dummy2(5))
 else if (cname=='winter wheat') then
   gdds1 = (dummy2(2)+dummy2(3)+dummy2(4)+dummy2(5))

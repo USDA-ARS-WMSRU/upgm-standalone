@@ -858,37 +858,6 @@ cname = cropname   ! debe added for phenol subroutine call
 ! initialized and passed on to crop.
 !phenolflg = 1 !this is now passed from main on through to crop and is global
 !
-!debe set cropname to the proper form so it can be used in the phenol and
-! canopyht subroutines and not need to be changed in either one.
- 
-if (cropname=='corn') then
-  cropname = 'corn'
-else if (cropname=='drybeans') then
-  cropname = 'dry beans'
-!debe added the following for hay millet.  the crop parameters are for
-! pearl millet, forage.  this is the only forage millet in the crop
-! parameters file.
-else if (cropname=='milletpearlforage') then
-  cropname = 'hay millet'
-else if (cropname=='milletfoxtailseed') then
-  cropname = 'hay millet'
-else if (cropname=='milletprosograin') then
-  cropname = 'proso millet'
-else if (cropname=='sorghum') then
-  cropname = 'sorghum'
-else if (cropname=='barleyspring') then
-  cropname = 'spring barley'
-else if (cropname=='wheatspring') then
-  cropname = 'spring wheat'
-else if (cropname=='sunflower') then
-  cropname = 'sunflower'
-else if (cropname=='barleywinter') then
-  cropname = 'winter barley'
-else if (cropname=='wheatwinter') then
-  cropname = 'winter wheat'
- 
-end if
- 
 !     day of year
 call caldatw(dd,mm,yy)
 jd = dayear(dd,mm,yy)

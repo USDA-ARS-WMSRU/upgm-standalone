@@ -57,6 +57,7 @@ integer :: offsetforfiles = 0
 double precision :: current_depth = 0
 integer :: max_depth = 1
 integer :: io = 0
+integer(kind=4) :: upgmflg
 !
 ! local variables
 !
@@ -796,6 +797,35 @@ max_arg_exp = log(max_real)
 ! read in plant parameters from cropxml.dat
 !
 read (cropxml,' (a80) ') ac0nam(1)
+!debe set cropname to the proper form so it can be used in the phenol and
+! canopyht subroutines and not need to be changed in either one.
+ 
+if (ac0nam(1)=='corn') then
+  ac0nam(1) = 'corn'
+else if (ac0nam(1)=='drybeans') then
+  ac0nam(1) = 'dry beans'
+!debe added the following for hay millet.  the crop parameters are for
+! pearl millet, forage.  this is the only forage millet in the crop
+! parameters file.
+else if (ac0nam(1)=='milletpearlforage') then
+  ac0nam(1) = 'hay millet'
+else if (ac0nam(1)=='milletfoxtailseed') then
+  ac0nam(1) = 'hay millet'
+else if (ac0nam(1)=='milletprosograin') then
+  ac0nam(1) = 'proso millet'
+else if (ac0nam(1)=='sorghum') then
+  ac0nam(1) = 'sorghum'
+else if (ac0nam(1)=='barleyspring') then
+  ac0nam(1) = 'spring barley'
+else if (ac0nam(1)=='wheatspring') then
+  ac0nam(1) = 'spring wheat'
+else if (ac0nam(1)=='sunflower') then
+  ac0nam(1) = 'sunflower'
+else if (ac0nam(1)=='barleywinter') then
+  ac0nam(1) = 'winter barley'
+else if (ac0nam(1)=='wheatwinter') then
+  ac0nam(1) = 'winter wheat'
+end if
 read (cropxml,*) acdpop(1),acdmaxshoot(1),acbaflg(1),acytgt(1),acbaf(1),acyraf(1),    &
          & achyfg(1),acynmu(1)
 read (cropxml,*) acywct(1),acycon(1),ac0idc(1),acgrf(1),ac0ck(1),acehu0(1),aczmxc(1), &
@@ -847,7 +877,29 @@ read (upgmcrop,*) canopyflg,emrgflg,phenolflg
       seedsw = 3
     else if (seedbed=='Plantedindust') then
       seedsw = 4
+    end if 
+    
+    ! force All flags to be either 0 or 1. nathan 8/13/2015
+    if(canopyflg==0.and.emrgflg==0.and.phenolflg==0) then
+        upgmflg = 0
+    else
+        upgmflg = 1
+        canopyflg = 1
+        emrgflg = 1
+        phenolflg = 1
     end if
+    
+    ! RMarquez 06.08.2017 -> Added in check to switch UPGM off if a user chooses a crop that is not supported.
+    if(upgmflg == 1 .and. index("corn,sorghum,dry beans,spring barley,sunflower," //&
+     "winter barley,hay millet,proso millet,spring wheat,winter wheat" &
+     ,trim(cropname)) == 0) then
+        upgmflg = 0
+        canopyflg = 0
+        emrgflg = 0
+        phenolflg = 0
+    end if
+    
+    
     print *,'seedbed = ',seedbed
     print *,'canopyflg = ',canopyflg,'emrgflg = ',emrgflg,'phenolflg = ',phenolflg
                                        !, 'seedsw = ', seedsw
