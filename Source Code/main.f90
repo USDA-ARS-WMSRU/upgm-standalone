@@ -1,4 +1,5 @@
 program main
+    use upgm_simdata, only : upgm_ctrls
 !
 implicit none
 !
@@ -13,7 +14,6 @@ include 's1phys.inc'
 include 'd1glob.inc'
 include 'c1gen.inc'
 include 'm1flag.inc'
-include 'm1sim.inc'
 include 'm1dbug.inc'
 include 'h1hydro.inc'
 include 'h1temp.inc'
@@ -739,8 +739,8 @@ ahtsmx(1,1) = 24.0
 ahtsmn(1,1) = 22.0
 ahfice(1,1) = 0.0
 !
-amzele = 100.0    ! default simulation site elevation (m)
-amalat = -38.0
+!amzele = 100.0    ! default simulation site elevation (m) !RMarquez 06.09.2017 -> this variable is not used
+upgm_ctrls%sim%amalat = -38.0
 !
 am0cdb = 1        ! set crop debug output flag (default to no output)
 !
@@ -973,7 +973,7 @@ end if
 if (am0cfl>1) call fopenk(luoallcrop,'allcrop.prn','unknown')     ! main crop debug output file
 if (am0cdb>0) call fopenk(cdbugfile,'cdbug.out','unknown')       ! crop submodel debug output file
 !
-call upgm_driver(sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,antes,&
+call upgm_driver(upgm_ctrls,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,antes,&
                & antss,blstrs,boots,browns,callgdd,canht,canopyflg,cliname,cots,&
                & cropname,dayhtinc,dents,doughs,drs,dummy1,dummy2,ears,ecanht,  &
                & egdd,emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,fullbs,  &

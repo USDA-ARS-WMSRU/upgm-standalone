@@ -1,4 +1,4 @@
-subroutine crop(bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,bsfsmb,bsfcla,  &
+subroutine crop(ctrl,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,bsfsmb,bsfcla,  &
               & bs0ph,bsftan,bsftap,bsmno3,bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,  &
               & bc0bp3,bc0ck,bcgrf,bcehu0,bczmxc,bc0nam,bc0idc,bcxrow,bctdtm,   &
               & bczmrt,bctmin,bctopt,bc0fd1,bc0fd2,cc0fd1,cc0fd2,bc0bceff,bdmb, &
@@ -30,6 +30,7 @@ subroutine crop(bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,bsfsmb,bsfcla,  
               & maxht,mffls,milks,mpods,mseeds,opens,pchron,pd,phenolflg,pm,py, &
               & seedsw,silks,soilwat,srs,tbase,tis,toptlo,toptup,tsints,tss,    &
               & tupper,wfpslo,wfpsup,yelows,co2x,co2y,co2atmos)
+    use upgm_simdata, only : upgm_ctrls, controls
 !
 !debe dummy1 is not currently used here or passed on but left it here in
 ! case it is used in the future. ! verns is also not currently used.
@@ -108,6 +109,7 @@ include 'cfert.inc'
 !
 ! PARAMETER definitions
 !
+    type(controls) :: ctrl
 real,parameter :: chilluv = 50.0,shoot_delay = 7.0,verndelmax = 0.04,           &
                 & dev_floor = 0.01,spring_trig = 0.29
 !
@@ -859,7 +861,7 @@ cname = cropname   ! debe added for phenol subroutine call
 !phenolflg = 1 !this is now passed from main on through to crop and is global
 !
 !     day of year
-call caldatw(dd,mm,yy)
+call caldat(ctrl%sim%julday, dd,mm,yy)
 jd = dayear(dd,mm,yy)
 !
 !debe set daynum = jd here at the top of the subroutine
@@ -888,7 +890,7 @@ end do
 !     bm0cif is flag to initialize crop at start of planting
  
 if (bm0cif) then
-  call cinit(bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla,     &
+  call cinit(ctrl, bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla,     &
            & bs0ph,bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,bc0bp3,bsmno3,bc0fd1,     &
            & bc0fd2,bctopt,bctmin,cc0fd1,cc0fd2,bc0sla,bc0idc,dd,mm,yy,bcthudf, &
            & bctdtm,bcthum,bc0hue,bcdmaxshoot,bc0shoot,bc0growdepth,            &
@@ -1221,7 +1223,7 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
 ! original value once emergence occurs. to avoid the problem where huiy
 ! = bcthu_shoot_end in the call to shoot_grow, add 0.00001 to huiy below:
      if (huiy>=bcthu_shoot_end) bcthu_shoot_end = huiy + 0.00001      !should 'then' be here?
-     call shoot_grow(bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
+     call shoot_grow(ctrl,bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
                    & bc0ssa,bc0ssb,bc0diammax,hui,huiy,bcthu_shoot_beg,         &
                    & bcthu_shoot_end,bcmstandstem,bcmstandleaf,bcmstandstore,   &
                    & bcmflatstem,bcmflatleaf,bcmflatstore,bcmshoot,bcmtotshoot, &
@@ -1232,7 +1234,7 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
                    & ddap,dgdds,elong,ems,germs,gddday,yy,emrgflg,icli,pd,pm,py,&
                    & yr,cliname,egdd,ggdd,tempsw)                          !used dap in place of bcdayap
   else if ((huiy<bcthu_shoot_end).and.(hui>bcthu_shoot_beg)) then
-     call shoot_grow(bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
+     call shoot_grow(ctrl, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
                    & bc0ssa,bc0ssb,bc0diammax,hui,huiy,bcthu_shoot_beg,         &
                    & bcthu_shoot_end,bcmstandstem,bcmstandleaf,bcmstandstore,   &
                    & bcmflatstem,bcmflatleaf,bcmflatstore,bcmshoot,bcmtotshoot, &
@@ -1264,7 +1266,7 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
   !   print*, 'in crop before call to growth, daysim = ', daysim
  
 !          ! calculate plant growth state variables
-  call growth(bnslay,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,b_fr,  &
+  call growth(ctrl, bnslay,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,b_fr,  &
             & bcxrow,bc0diammax,bczmrt,bctmin,bctopt,bc0bceff,bc0alf,bc0blf,    &
             & bc0clf,bc0dlf,bc0arp,bc0brp,bc0crp,bc0drp,bc0aht,bc0bht,bc0ssa,   &
             & bc0ssb,bc0sla,bcxstm,bhtsmn,bwtdmx,bwtdmn,bweirr,bhfwsf,hui,huiy, &

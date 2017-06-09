@@ -1,4 +1,4 @@
-subroutine cinit(bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla, &
+subroutine cinit(ctrl, bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla, &
                & bs0ph,bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,bc0bp3,bsmno3,bc0fd1, &
                & bc0fd2,bctopt,bctmin,cc0fd1,cc0fd2,bc0sla,bc0idc,dd,mm,yy,     &
                & bcthudf,bctdtm,bcthum,bc0hue,bcdmaxshoot,bc0shoot,bc0growdepth,&
@@ -40,13 +40,13 @@ subroutine cinit(bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla, 
 ! note: some variables are used in more than one subroutine.
 !
     use constants, only : mgtokg, mmtom
+    use upgm_simdata, only : upgm_ctrls, controls
 implicit none
 !
 include 'file.fi'
 include 'p1werm.inc'
 include 'p1solar.inc'
 include 'm1flag.inc'
-include 'm1sim.inc'
 include 'w1clig.inc'
 include 'csoil.inc'
 include 'chumus.inc'
@@ -57,6 +57,7 @@ include 'cparm.inc'
 !
 ! Dummy arguments
 !
+    type(controls) :: ctrl
 real :: bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,bc0bp3,bc0fd1,bc0fd2,bc0growdepth,   &
       & bc0hue,bc0shoot,bc0sla,bc0storeinit,bcdmaxshoot,bcdpop,bcdstm,          &
       & bcfliveleaf,bcgrainf,bcleafareatrend,bcmflatleaf,bcmflatstem,           &
@@ -557,10 +558,10 @@ slaix = 0.0
 ssaix = 0.0
  
 !     set variable in local include file
-xlat = amalat
+xlat = ctrl%sim%amalat
  
 !     minimum and maximum daylength for a location
-if (amalat>0.) then
+if (ctrl%sim%amalat>0.) then
   sdmn = 354
   sdmx = 173
 else
@@ -574,11 +575,11 @@ end if
 !     hlmx = daylen(amalat, sdmx, civilrise)
  
 !     planting day of year
-call caldatw(dd,mm,yy)
+call caldat(ctrl%sim%julday, dd,mm,yy)
 pdate = dayear(dd,mm,yy)
 !     initial daylength calculations
-hrlt = daylen(amalat,pdate,civilrise)
-hrlty = daylen(amalat,pdate-1,civilrise)
+hrlt = daylen(ctrl%sim%amalat,pdate,civilrise)
+hrlty = daylen(ctrl%sim%amalat,pdate-1,civilrise)
  
 !     start calculation of seasonal heat unit requirement
 sphu = 0.

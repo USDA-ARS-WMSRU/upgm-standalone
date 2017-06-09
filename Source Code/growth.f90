@@ -1,4 +1,4 @@
-subroutine growth(bnslay,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,   &
+subroutine growth(ctrl, bnslay,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,   &
                 & b_fr,bcxrow,bc0diammax,bczmrt,bctmin,bctopt,cc0be,bc0alf,     &
                 & bc0blf,bc0clf,bc0dlf,bc0arp,bc0brp,bc0crp,bc0drp,bc0aht,      &
                 & bc0bht,bc0ssa,bc0ssb,bc0sla,bcxstm,bhtsmn,bwtdmx,bwtdmn,      &
@@ -25,6 +25,7 @@ subroutine growth(bnslay,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,   
 !debe added co2x, co2y, co2atmos, co2eff for use in affecting plant growth by co2.
 !    
     use constants, only : hatom2, mmtom, max_arg_exp, max_real
+    use upgm_simdata, only : upgm_ctrls, controls
 implicit none
 !
 include 'file.fi'
@@ -38,6 +39,7 @@ include 'cgrow.inc'
 !
 ! Dummy arguments
 !
+    type(controls) :: ctrl
 real :: a_fr,bc0aht,bc0alf,bc0arp,bc0bht,bc0blf,bc0brp,bc0ck,bc0clf,bc0crp,     &
       & bc0diammax,bc0dlf,bc0drp,bc0sla,bc0ssa,bc0ssb,bcbaf,bcdpop,bcdstm,      &
       & bcehu0,bcfleaf2stor,bcfliveleaf,bcfstem2stor,bcfstor2stor,bcgrainf,     &
@@ -361,7 +363,7 @@ real,dimension(mnsz) :: wfl,za
 !     + + + end of specifications + + +
 
 
-call caldatw(day,mo,yr)
+call caldat(ctrl%sim%julday, day,mo,yr)
               !function
           !  and weight fraction by layer used to distribute root mass
           !  into the soil layers

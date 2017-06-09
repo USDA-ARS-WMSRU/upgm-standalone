@@ -1,4 +1,4 @@
-subroutine upgm_driver(sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,&
+subroutine upgm_driver(ctrl,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,&
                      & antes,antss,blstrs,boots,browns,callgdd,canht,canopyflg, &
                      & cliname,cots,cropname,dayhtinc,dents,doughs,drs,dummy1,  &
                      & dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,ergdd,  &
@@ -10,6 +10,7 @@ subroutine upgm_driver(sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,
                      & toptup,tsints,tss,tupper,wfpslo,wfpsup,yelows,seedbed,   &
                      & swtype,growcrop_flg,am0hrvfl,co2x,co2y,co2atmos)
 !
+    use upgm_simdata, only : upgm_ctrls, controls
 implicit none
 !
 include 'p1werm.inc'
@@ -23,7 +24,6 @@ include 's1phys.inc'
 include 'd1glob.inc'
 include 'c1gen.inc'
 include 'm1flag.inc'
-include 'm1sim.inc'
 include 'm1dbug.inc'
 include 'h1hydro.inc'
 include 'h1temp.inc'
@@ -39,6 +39,7 @@ include 'prevstate.inc'
 !
 ! Dummy arguments
 !
+type(controls) :: ctrl
 real :: aepa,canht,dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,     &
       & tupper,co2atmos
 integer :: am0hrvfl,canopyflg,emrgflg,end_jday,first7,gmethod,growth_stress,    &
@@ -59,6 +60,7 @@ real,dimension(6) :: egdd,ggdd
 real,dimension(4) :: ergdd,germgdd,wfpslo,wfpsup
 character(80),dimension(4) :: soilwat
 real,dimension(10) :: co2x,co2y
+integer(kind=4) :: day_iter
 !
 ! Local variables
 !
@@ -72,10 +74,12 @@ real :: elrate,germd,wlow,wup
 !
 ! start of time loop - does this work correctly across multiple years and crops?
 !
-do am0jd = start_jday,end_jday   ! currently must start on 1/1 and end on 12/31
+
+do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/31
 !
+  ctrl%sim%julday = day_iter
  
-  call caldat(am0jd,id,im,iy)
+  call caldat(ctrl%sim%julday,id,im,iy)
 !  if ((im.lt.4).and.(iy.eq.1)) then
 !      print*, 'in main id = ', id,'im = ', im, 'iy = ', iy !, 'wwtdmx = ', wwtdmx(dayidx)
 !  end if
@@ -104,10 +108,14 @@ do am0jd = start_jday,end_jday   ! currently must start on 1/1 and end on 12/31
   !co2dy = day; co2mn = month; co2yr = year
   !co2atmos = atmospheric co2 value for the day.
   read (upgmco2atmos,*) co2dy, co2mn, co2yr, co2atmos  !upgm_co2atmos.dat
+
+!************************************************************************************
+  !start of "crop growth" -> same for all models. 
+  
   
 !  if ((id.ne.29).or.(im.ne.2)) then !check if leap year
     !
-  if (am0jd==plant_jday) then
+  if (ctrl%sim%julday==plant_jday) then
      write (*,*) 'planting date: ',pd,'/',pm,'/',py
      growcrop_flg = .true.
      am0cif = .true.
@@ -120,7 +128,7 @@ do am0jd = start_jday,end_jday   ! currently must start on 1/1 and end on 12/31
     ! debe added new method of determining when harvest day occurs utilizing the
     ! phenolflg and writing out the value in season.out
   if (((phenolflg==1).and.(hrs(1)/=999).and.am0hrvfl==0).or.                    &
-    & ((phenolflg==0).and.(am0jd==harvest_jday))) then
+    & ((phenolflg==0).and.( ctrl%sim%julday==harvest_jday))) then
  
      if (phenolflg==1) then
         write (*,*) 'harvest date: ',hrs(1),hrs(2),hrs(3),hrs(4)
@@ -131,7 +139,7 @@ do am0jd = start_jday,end_jday   ! currently must start on 1/1 and end on 12/31
      am0hrvfl = 1     ! debe uncommented this line because it is now needed to prevent crop_endseason
                       ! being called after harvest every day until the end date of simulation.
     !
-     call crop_endseason(ac0nam(sr),am0cfl,nslay(sr),ac0idc(sr),acdayam(sr),    &
+     call crop_endseason(ctrl, ac0nam(sr),am0cfl,nslay(sr),ac0idc(sr),acdayam(sr),    &
                        & acthum(sr),acxstmrep(sr),prevstandstem(sr),            &
                        & prevstandleaf(sr),prevstandstore(sr),prevflatstem(sr), &
                        & prevflatleaf(sr),prevflatstore(sr),prevbgstemz(1,sr),  &
@@ -166,7 +174,7 @@ do am0jd = start_jday,end_jday   ! currently must start on 1/1 and end on 12/31
     ! debe added passing the new variable 'phenolflg' which is read in from upgm_crop.dat
     ! and the phenological growth stages variables to callcrop which will pass
     ! them on to crop.
-     call callcrop(aepa,aifs,am0jd-plant_jday+1,1,antes,antss,blstrs,boots,     &
+     call callcrop(ctrl,aepa,aifs,ctrl%sim%julday-plant_jday+1,1,antes,antss,blstrs,boots,     &
                  & browns,callgdd,canht,canopyflg,cliname,cots,cropname,        &
                  & dayhtinc,dents,doughs,drs,dummy1,dummy2,ears,ecanht,egdd,    &
                  & emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,fullbs,     &
@@ -182,9 +190,13 @@ do am0jd = start_jday,end_jday   ! currently must start on 1/1 and end on 12/31
          ! reached before hrs(1) has a value .ne. to 999 when using phenolflg = 1,
          ! simulation will continue until it does reach a harvest date.
      if (((phenolflg==1).and.(hrs(1)/=999)).or.                                 &
-       & ((phenolflg==0).and.(am0jd==harvest_jday))) growcrop_flg = .false.
+       & ((phenolflg==0).and.(ctrl%sim%julday==harvest_jday))) growcrop_flg = .false.
  
   end if
+  
+    !end of "crop growth" -> same for all models.
+!************************************************************************************
+   
 ! end if !end leap year check
 end do ! end do loop for current day
     ! debe print out canopy height and the canopyflg at the end of the run

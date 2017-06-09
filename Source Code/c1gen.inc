@@ -10,16 +10,16 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
 
-      integer          ac0rg(mnsub)
-      real             acdpop(mnsub)
-      real             acytgt(mnsub)
-      integer          achyfg(mnsub)
-      character*80     acynmu(mnsub)
-      real             acycon(mnsub)
-      real             acywct(mnsub)
-      integer          acrsfg(mnsub)
-      real             acxrow(mnsub)
-      integer          acthudf(mnsub)
+      integer          ac0rg(mnsub) !used
+      real             acdpop(mnsub) !used
+      real             acytgt(mnsub) !used
+      integer          achyfg(mnsub) !used
+      character*80     acynmu(mnsub) !used
+      real             acycon(mnsub) !used
+      real             acywct(mnsub) !used
+      integer          acrsfg(mnsub) !used
+      real             acxrow(mnsub) !used
+      integer          acthudf(mnsub) !used
       integer          aplant_day(mnsub)
       integer          aplant_month(mnsub)
       integer          aplant_rotyr(mnsub)

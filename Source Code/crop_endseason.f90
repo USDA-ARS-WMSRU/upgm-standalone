@@ -1,4 +1,4 @@
-subroutine crop_endseason(bc0nam,bm0cfl,bnslay,bc0idc,bcdayam,bcthum,bcxstmrep, &
+subroutine crop_endseason(ctrl, bc0nam,bm0cfl,bnslay,bc0idc,bcdayam,bcthum,bcxstmrep, &
                         & bprevstandstem,bprevstandleaf,bprevstandstore,        &
                         & bprevflatstem,bprevflatleaf,bprevflatstore,           &
                         & bprevbgstemz,bprevrootstorez,bprevrootfiberz,bprevht, &
@@ -13,12 +13,14 @@ subroutine crop_endseason(bc0nam,bm0cfl,bnslay,bc0idc,bcdayam,bcthum,bcxstmrep, 
 ! stage arrays for anthesis, harvest ready, internode elongation, jointing and
 ! maturity. other growth stage arrays will need to be added for other crops.
 !
+        use upgm_simdata, only : upgm_ctrls, controls
 implicit none
 !
 include 'file.fi'
 !
 ! Dummy arguments
 !
+    type(controls) :: ctrl
 real :: acycon,bcthum,bcxstmrep,bprevchillucum,bprevflatleaf,bprevflatstem,     &
       & bprevflatstore,bprevgrainf,bprevht,bprevhucum,bprevliveleaf,bprevrtd,   &
       & bprevrthucum,bprevstandleaf,bprevstandstem,bprevstandstore,bprevstm
@@ -152,7 +154,7 @@ integer :: dd,lay,mm,yy
   !phenolflg1 = 0
   !mats1 = 170
   !
-call caldatw(dd,mm,yy)
+call caldat(ctrl%sim%julday, dd,mm,yy)
  
       ! end of season print statements when crop submodel output flag set
       ! added initialization flag to prevent printing if crop not yet initialized

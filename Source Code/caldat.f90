@@ -2,8 +2,6 @@ subroutine caldat(ijulian,dd,mm,yyyy)
 !
 implicit none
 !
-include 'm1sim.inc'
-!
 ! PARAMETER definitions
 !
 integer,parameter :: igreg = 2299161
@@ -67,7 +65,7 @@ integer :: ja,jalpha,jb,jc,jd,je,julian
 !     if the date is -1 then use the simulation date.
 
 julian = ijulian
-if (julian==-1) julian = am0jd
+!if (julian==-1) julian = am0jd
  
 if (julian>=igreg) then
   alpha = (dble(julian-1867216)-dble(0.25))/dble(36524.25)

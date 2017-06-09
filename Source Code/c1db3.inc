@@ -10,13 +10,13 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
 
-      real             ac0bn1(mnsub)
-      real             ac0bn2(mnsub)
-      real             ac0bn3(mnsub)
-      real             ac0bp1(mnsub)
-      real             ac0bp2(mnsub)
-      real             ac0bp3(mnsub)
-      real             acfny(mnsub)
+      real             ac0bn1(mnsub) !used
+      real             ac0bn2(mnsub) !used
+      real             ac0bn3(mnsub) !used
+      real             ac0bp1(mnsub) !used
+      real             ac0bp2(mnsub) !used
+      real             ac0bp3(mnsub) !used
+      real             acfny(mnsub) 
       real             acfpy(mnsub)
       real             acfwy(mnsub)
 

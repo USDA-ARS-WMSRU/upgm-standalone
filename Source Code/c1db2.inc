@@ -10,17 +10,17 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
 
-      real             actopt(mnsub)
-      real             actmin(mnsub)
+      real             actopt(mnsub) !used
+      real             actmin(mnsub) !used
       real             acfdla(mnsub)
       real             acrdla(mnsub)
       real             ac0caf(mnsub)
       real             ac0psf(mnsub)
       real             ac0pt1(2,mnsub)
       real             ac0pt2(2,mnsub)
-      real             ac0fd1(2,mnsub)
-      real             ac0fd2(2,mnsub)
-      real             ac0ck(mnsub)
+      real             ac0fd1(2,mnsub) !used
+      real             ac0fd2(2,mnsub) !used
+      real             ac0ck(mnsub) !used
 
       common / c1db2 /                                                  &
      &                 actopt, actmin, acfdla, acrdla,                  &

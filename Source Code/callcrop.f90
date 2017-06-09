@@ -1,4 +1,4 @@
-subroutine callcrop(aepa,aifs,daysim,sr,antes,antss,blstrs,boots,browns,callgdd,&
+subroutine callcrop(ctrl, aepa,aifs,daysim,sr,antes,antss,blstrs,boots,browns,callgdd,&
                   & canht,canopyflg,cliname,cots,cropname,dayhtinc,dents,doughs,&
                   & drs,dummy1,dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,&
                   & ergdd,eseeds,first7,fps,fullbs,gddtbg,germgdd,germs,ggdd,   &
@@ -8,7 +8,7 @@ subroutine callcrop(aepa,aifs,daysim,sr,antes,antss,blstrs,boots,browns,callgdd,
                   & seedsw,silks,soilwat,srs,tbase,tis,toptlo,toptup,tsints,tss,&
                   & tupper,wfpslo,wfpsup,yelows,co2x,co2y,co2atmos)
  
- 
+     use upgm_simdata, only : upgm_ctrls, controls
 !debe 082508 removed sram0jd-plant_jday+1 from the subroutine argument list
 ! because this caused many errors. i think a mistake was made in copying in
 ! the passing arguments from main. the first two arguments are (daysim, sr)
@@ -90,6 +90,7 @@ include 'cenvr.inc'
 !
 ! Dummy arguments
 !
+    type(controls) :: ctrl
 real :: aepa,canht,dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,     &
       & tupper,co2atmos
 logical :: callgdd
@@ -703,7 +704,7 @@ if (am0cgf) then
  
   if (am0cdb==1) call cdbug(sr,nslay(sr))
 !  print*, 'in callcrop just before call to crop seedsw = ', seedsw
-  call crop(nslay(sr),aszlyt(1,sr),aszlyd(1,sr),asdblk(1,sr),asfcce(1,sr),      &
+  call crop(ctrl,nslay(sr),aszlyt(1,sr),aszlyd(1,sr),asdblk(1,sr),asfcce(1,sr),      &
           & asfom(1,sr),asfcec(1,sr),asfsmb(1,sr),asfcla(1,sr),as0ph(1,sr),     &
           & asftan(1,sr),asftap(1,sr),asmno3(sr),ac0bn1(sr),ac0bn2(sr),         &
           & ac0bn3(sr),ac0bp1(sr),ac0bp2(sr),ac0bp3(sr),ac0ck(sr),acgrf(sr),    &
@@ -751,7 +752,7 @@ if (am0cgf) then
 ! canopyflg = 1.
 !debe added growth stage array variables and phenolflg to be passed to crop from main.
  
-  if (am0cdb==1) call cdbug(sr,nslay(sr))
+  if (am0cdb==1) call cdbug(sr,nslay(sr),ctrl%sim%julday)
 end if
  
       ! check for abandoned stems in crop regrowth

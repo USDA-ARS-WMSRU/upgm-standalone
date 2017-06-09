@@ -11,64 +11,64 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
 
-      integer          acbaflg(mnsub)
-      real             acbaf(mnsub)
-      real             acyraf(mnsub)
+      integer          acbaflg(mnsub) !used
+      real             acbaf(mnsub) !used
+      real             acyraf(mnsub) !used
       real             acrcn(mnsub)
-      integer          actdtm(mnsub)
-      real             acthum(mnsub)
-      real             aczmrt(mnsub)
-      real             aczmxc(mnsub)
+      integer          actdtm(mnsub) !used
+      real             acthum(mnsub) !used
+      real             aczmrt(mnsub) !used
+      real             aczmxc(mnsub) !used
       real             acrbe(mnsub)
       real             acrbed(mnsub)
       real             ac0lad(mncz, mnsub)
       real             ac0sad(mncz, mnsub)
-      real             acgrf(mnsub)
-      real             acehu0(mnsub)
-      real             actverndel(mnsub)
-      real             ac0bceff(mnsub)
-      real             ac0alf(mnsub)
-      real             ac0blf(mnsub)
-      real             ac0clf(mnsub)
-      real             ac0dlf(mnsub)
-      real             ac0arp(mnsub)
-      real             ac0brp(mnsub)
-      real             ac0crp(mnsub)
-      real             ac0drp(mnsub)
-      real             ac0aht(mnsub)
-      real             ac0bht(mnsub)
-      real             ac0ssa(mnsub)
-      real             ac0ssb(mnsub)
-      real             ac0sla(mnsub)
-      real             ac0hue(mnsub)
+      real             acgrf(mnsub) !used
+      real             acehu0(mnsub) !used
+      real             actverndel(mnsub) !used
+      real             ac0bceff(mnsub) !used
+      real             ac0alf(mnsub) !used
+      real             ac0blf(mnsub) !used
+      real             ac0clf(mnsub) !used
+      real             ac0dlf(mnsub) !used
+      real             ac0arp(mnsub) !used
+      real             ac0brp(mnsub) !used
+      real             ac0crp(mnsub) !used
+      real             ac0drp(mnsub) !used
+      real             ac0aht(mnsub) !used
+      real             ac0bht(mnsub) !used
+      real             ac0ssa(mnsub) !used
+      real             ac0ssb(mnsub) !used
+      real             ac0sla(mnsub) !used
+      real             ac0hue(mnsub) !used
 
-      integer          acrbc(mnsub)
+      integer          acrbc(mnsub) !used
 
 !  These are the names used by decomp (with an "ac" prepended)
-      real             acdkrate(mndk,mnsub)
-      real             acxstm(mnsub)
-      real             acddsthrsh(mnsub)
-      real             accovfact(mnsub)
+      real             acdkrate(mndk,mnsub) !used
+      real             acxstm(mnsub) !used
+      real             acddsthrsh(mnsub) !used
+      real             accovfact(mnsub) !used
 ! ------
 
-      real    acdmaxshoot(mnsub)
-      integer ac0transf(mnsub)
-      real    ac0storeinit(mnsub)
-      real    acfshoot(mnsub)
-      real    ac0growdepth(mnsub)
-      real    acfleafstem(mnsub)
-      real    ac0shoot(mnsub)
-      real    ac0diammax(mnsub)
+      real    acdmaxshoot(mnsub) !used
+      integer ac0transf(mnsub) !used
+      real    ac0storeinit(mnsub) !used
+      real    acfshoot(mnsub) !used
+      real    ac0growdepth(mnsub) !used
+      real    acfleafstem(mnsub) !used
+      real    ac0shoot(mnsub) !used
+      real    ac0diammax(mnsub) !used
 
-      real    acfleaf2stor(mnsub)
-      real    acfstem2stor(mnsub)
-      real    acfstor2stor(mnsub)
+      real    acfleaf2stor(mnsub) !used
+      real    acfstem2stor(mnsub) !used
+      real    acfstor2stor(mnsub) !used
 
-      real    acresevapa(mnsub)
-      real    acresevapb(mnsub)
+      real    acresevapa(mnsub) !used 
+      real    acresevapb(mnsub) !used
 
-      real    acyld_coef(mnsub)
-      real    acresid_int(mnsub)
+      real    acyld_coef(mnsub) !used
+      real    acresid_int(mnsub) !used
 
       real    aczloc_regrow(mnsub)
 

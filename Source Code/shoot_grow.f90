@@ -1,4 +1,4 @@
-subroutine shoot_grow(bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,  &
+subroutine shoot_grow(ctrl, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,  &
                     & bc0ssa,bc0ssb,bc0diammax,hui,huiy,bcthu_shoot_beg,        &
                     & bcthu_shoot_end,bcmstandstem,bcmstandleaf,bcmstandstore,  &
                     & bcmflatstem,bcmflatleaf,bcmflatstore,bcmshoot,bcmtotshoot,&
@@ -35,7 +35,7 @@ subroutine shoot_grow(bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,  
 ! later added tempsw, the array index for these new arrays. it needed to be
 ! initialized in cinit and passed through. 5122011
     use constants, only : mgtokg, mmtom
- 
+    use upgm_simdata, only : upgm_ctrls, controls
 implicit none
 !
 include 'file.fi'
@@ -48,6 +48,7 @@ real,parameter :: shoot_exp = 2.0,be_stor = 0.7,rootf = 0.4
 !
 ! Dummy arguments
 !
+    type(controls) :: ctrl
 real :: bc0diammax,bc0growdepth,bc0ssa,bc0ssb,bcdpop,bcdstm,bcfleafstem,        &
       & bcfliveleaf,bcfshoot,bcgrf,bcmflatleaf,bcmflatstem,bcmflatstore,        &
       & bcmshoot,bcmstandleaf,bcmstandstem,bcmstandstore,bcmtotshoot,           &
@@ -286,7 +287,7 @@ character(80) :: seedbed
  
 !     + + + end of specifications + + +
  
-call caldatw(day,mo,yr)
+call caldat(ctrl%sim%julday, day,mo,yr)
 doy = dayear(day,mo,yr)
  
    ! fraction of shoot growth from stored reserves (today and yesterday)

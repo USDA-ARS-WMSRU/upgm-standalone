@@ -1,4 +1,4 @@
-subroutine cdbug(isr,slay)
+subroutine cdbug(isr,slay, julday)
 !
 implicit none
 !
@@ -25,6 +25,7 @@ include 'tcdbug.inc'
 ! Dummy arguments
 !
 integer :: isr,slay
+integer :: julday
 !
 ! Local variables
 !
@@ -79,7 +80,7 @@ if (am0cif.eqv..true.) then
   tyr = -1
   tisr = -1
 end if
-call caldatw(cd,cm,cy)
+call caldat(0,cd,cm,cy)
  
 !     + + + end specifications + + +
  
