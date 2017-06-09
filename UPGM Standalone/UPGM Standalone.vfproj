@@ -56,10 +56,7 @@
 		<File RelativePath="..\Source Code\h1temp.inc"/>
 		<File RelativePath="..\Source Code\m1dbug.inc"/>
 		<File RelativePath="..\Source Code\m1flag.inc"/>
-		<File RelativePath="..\Source Code\m1sim.inc"/>
 		<File RelativePath="..\Source Code\main.inc"/>
-		<File RelativePath="..\Source Code\p1const.inc"/>
-		<File RelativePath="..\Source Code\p1solar.inc"/>
 		<File RelativePath="..\Source Code\p1werm.inc"/>
 		<File RelativePath="..\Source Code\prevstate.inc"/>
 		<File RelativePath="..\Source Code\s1agg.inc"/>
@@ -75,11 +72,16 @@
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 		<File RelativePath="..\Source Code\file.fi"/></Filter>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<Filter Name="upgm">
+		<File RelativePath="..\Source Code\upgm\upgm_mod.f90"/></Filter>
+		<Filter Name="support">
+		<File RelativePath="..\Source Code\support\support_mod.f90"/></Filter>
 		<Filter Name="structs">
-		<File RelativePath="..\Source Code\structs\constants.f90"/>
-		<File RelativePath="..\Source Code\structs\cropstruct.f90"/></Filter>
+		<File RelativePath="..\Source Code\structs\biomaterial.f90"/>
+		<File RelativePath="..\Source Code\structs\constants_mod.f90"/>
+		<File RelativePath="..\Source Code\structs\cropstruct.f90"/>
+		<File RelativePath="..\Source Code\structs\upgm_simdata_mod.f90"/></Filter>
 		<File RelativePath="..\Source Code\caldat.f90"/>
-		<File RelativePath="..\Source Code\caldatw.f90"/>
 		<File RelativePath="..\Source Code\callcrop.f90"/>
 		<File RelativePath="..\Source Code\canopyht.f90"/>
 		<File RelativePath="..\Source Code\cdbug.f90"/>
