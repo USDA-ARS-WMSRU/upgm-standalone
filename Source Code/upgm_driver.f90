@@ -141,7 +141,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
      am0hrvfl = 1     ! debe uncommented this line because it is now needed to prevent crop_endseason
                       ! being called after harvest every day until the end date of simulation.
     !
-     call crop_endseason(ctrl, ac0nam(sr),am0cfl,nslay(sr),ac0idc(sr),acdayam(sr),    &
+     call crop_endseason(ctrl,ac0nam(sr),am0cfl,nslay(sr),ac0idc(sr),acdayam(sr),    &
                        & acthum(sr),acxstmrep(sr),prevstandstem(sr),            &
                        & prevstandleaf(sr),prevstandstore(sr),prevflatstem(sr), &
                        & prevflatleaf(sr),prevflatstore(sr),prevbgstemz(1,sr),  &
@@ -149,7 +149,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
                        & prevstm(sr),prevrtd(sr),prevdayap(sr),prevhucum(sr),   &
                        & prevrthucum(sr),prevgrainf(sr),prevchillucum(sr),      &
                        & prevliveleaf(sr),acdayspring(sr),mature_warn_flg,      &
-                       & acycon,acynmu,ies,joints,boots,heads,antss,mats,hrs,   &
+                       & acycon(sr),acynmu(sr),ies,joints,boots,heads,antss,mats,hrs,   &
                        & phenolflg)
     !debe added acycon to the passing arguments to crop_endseason to allow calculation
     ! of the yield in crop_endseason.
