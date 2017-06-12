@@ -1,6 +1,7 @@
 program main
     use upgm_simdata, only : upgm_ctrls
     use climate
+    use soil
 !
 implicit none
 !
@@ -10,7 +11,6 @@ include 'file.fi'
 include 's1layr.inc'
 include 's1dbc.inc'
 include 's1dbh.inc'
-include 's1phys.inc'
 include 'd1glob.inc'
 include 'c1gen.inc'
 include 'm1flag.inc'
@@ -22,7 +22,6 @@ include 'c1db1.inc'
 include 'c1db2.inc'
 include 'c1glob.inc'
 include 'h1et.inc'
-include 's1sgeo.inc'
 include 'h1db1.inc'
 include 's1agg.inc'
 include 'prevstate.inc'
@@ -317,7 +316,6 @@ integer(kind=4) :: upgmflg
 !     amalat - latitude of a location
 !     amzele - average site elevation (m) (unitless)
 !     as0ags - soil layer aggregate size geometric standard dev. (mm)
-!     as0rrk - random roughness parameter k (shape)
 !     asdblk - soil layer bulk density for each subregion
 !     aseags - soil layer dry aggregate stability (j/m^2)
 !     asfsan - soil layer sand content
@@ -731,7 +729,7 @@ asftap(1,1) = 0.0
 asmno3(1) = 0.0
 asfcla(1,1) = 20.0
 admbgz(1,1,1) = 0.0
-asdblk(1,1) = 1.0
+spp_data%asdblk(1) = 1.0
 asfsan(1,1) = 40.0
 asfsil(1,1) = 40.0
 !
@@ -756,8 +754,6 @@ ahzpta = 0.0      ! initialize actual plant transpiration
 ahzea = 0.0       ! initialize bare soil evaporation
 ahzep = 0.0       ! initialize potential bare soil evaporation
 ahzptp = 0.0      ! initialize potential plant transpiration
-!
-as0rrk(1) = 0.0
 ! aslrrc(1) = 0.0 ! initialize random roughness parms
 ! aslrr(1) = 0.0  ! these are not used and are commented out jcaii 4/30/2013
 ahrsk(1,1) = 0.0  ! saturated soil hydraulic conductivity
@@ -972,7 +968,7 @@ end if
 if (am0cfl>1) call fopenk(luoallcrop,'allcrop.prn','unknown')     ! main crop debug output file
 if (am0cdb>0) call fopenk(cdbugfile,'cdbug.out','unknown')       ! crop submodel debug output file
 !
-call upgm_driver(upgm_ctrls,cli_data,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,antes,&
+call upgm_driver(upgm_ctrls,cli_data,spp_data,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,antes,&
                & antss,blstrs,boots,browns,callgdd,canht,canopyflg,cliname,cots,&
                & cropname,dayhtinc,dents,doughs,drs,dummy1,dummy2,ears,ecanht,  &
                & egdd,emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,fullbs,  &

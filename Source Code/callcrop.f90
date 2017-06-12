@@ -1,4 +1,4 @@
-subroutine callcrop(ctrl, clidat, aepa,aifs,daysim,sr,antes,antss,blstrs,boots,browns,callgdd,&
+subroutine callcrop(ctrl,clidat,sppdat,aepa,aifs,daysim,sr,antes,antss,blstrs,boots,browns,callgdd,&
                   & canht,canopyflg,cliname,cots,cropname,dayhtinc,dents,doughs,&
                   & drs,dummy1,dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,&
                   & ergdd,eseeds,first7,fps,fullbs,gddtbg,germgdd,germs,ggdd,   &
@@ -10,6 +10,7 @@ subroutine callcrop(ctrl, clidat, aepa,aifs,daysim,sr,antes,antss,blstrs,boots,b
  
      use upgm_simdata, only : upgm_ctrls, controls
      use climate, only : climate_data
+     use soil, only : soil_phys_props
 !debe 082508 removed sram0jd-plant_jday+1 from the subroutine argument list
 ! because this caused many errors. i think a mistake was made in copying in
 ! the passing arguments from main. the first two arguments are (daysim, sr)
@@ -78,8 +79,6 @@ include 'm1dbug.inc'
 include 's1layr.inc'
 include 's1dbc.inc'
 include 's1dbh.inc'
-include 's1phys.inc'
-include 's1sgeo.inc'
 include 'h1hydro.inc'
 include 'h1et.inc'
 include 'h1temp.inc'
@@ -92,6 +91,7 @@ include 'cenvr.inc'
 !
     type(controls) :: ctrl
     type(climate_data) :: clidat
+    type(soil_phys_props) :: sppdat
 real :: aepa,canht,dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,     &
       & tupper,co2atmos
 logical :: callgdd
@@ -703,9 +703,9 @@ if ((ac0shoot(sr)<=0.0).or.(acdpop(sr)<=0.0)) am0cgf = .false.
 !     only continue if crop is growing
 if (am0cgf) then
  
-  if (am0cdb==1) call cdbug(sr,nslay(sr),ctrl%sim%julday,clidat )
+  if (am0cdb==1) call cdbug(sr,nslay(sr),ctrl,clidat,sppdat )
 !  print*, 'in callcrop just before call to crop seedsw = ', seedsw
-  call crop(ctrl,clidat,nslay(sr),aszlyt(1,sr),aszlyd(1,sr),asdblk(1,sr),asfcce(1,sr),      &
+  call crop(ctrl,clidat, nslay(sr),aszlyt(1,sr),aszlyd(1,sr),sppdat%asdblk(1),asfcce(1,sr),      &
           & asfom(1,sr),asfcec(1,sr),asfsmb(1,sr),asfcla(1,sr),as0ph(1,sr),     &
           & asftan(1,sr),asftap(1,sr),asmno3(sr),ac0bn1(sr),ac0bn2(sr),         &
           & ac0bn3(sr),ac0bp1(sr),ac0bp2(sr),ac0bp3(sr),ac0ck(sr),acgrf(sr),    &
@@ -753,7 +753,7 @@ if (am0cgf) then
 ! canopyflg = 1.
 !debe added growth stage array variables and phenolflg to be passed to crop from main.
  
-  if (am0cdb==1) call cdbug(sr,nslay(sr),ctrl%sim%julday, clidat)
+  if (am0cdb==1) call cdbug(sr,nslay(sr),ctrl, clidat,sppdat)
 end if
  
       ! check for abandoned stems in crop regrowth
@@ -793,7 +793,7 @@ call cropupdate(acmstandstem(sr),acmstandleaf(sr),acmstandstore(sr),            
               & aczht(sr),acdstm(sr),aczrtd(sr),acthucum(sr),aczgrowpt(sr),     &
               & acmbgstem(sr),acmrootstore(sr),acmrootfiber(sr),acxstmrep(sr),  &
               & acm(sr),acmst(sr),acmf(sr),acmrt(sr),acmrtz(1,sr),acrcd(sr),    &
-              & aszrgh(sr),asxrgs(sr),asargo(sr),acrsai(sr),acrlai(sr),         &
+              & sppdat%aszrgh(sr),sppdat%asxrgs(sr),sppdat%asargo(sr),acrsai(sr),acrlai(sr),         &
               & acrsaz(1,sr),acrlaz(1,sr),acffcv(sr),acfscv(sr),acftcv(sr),     &
               & acfcancov(sr),ac0rg(sr),acxrow(sr),nslay(sr),ac0ssa(sr),        &
               & ac0ssb(sr),ac0sla(sr),accovfact(sr),ac0ck(sr),acxstm(sr),       &

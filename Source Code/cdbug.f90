@@ -1,6 +1,8 @@
-subroutine cdbug(isr,slay,julday, clidat)
+subroutine cdbug(isr,slay, ctrl, clidat, sppdat)
 !
+    use upgm_simdata, only : controls
     use climate, only : climate_data
+    use soil, only : soil_phys_props
 implicit none
 !
 include 'file.fi'
@@ -8,11 +10,9 @@ include 'file.fi'
 include 'p1werm.inc'
 include 'm1flag.inc'
 include 's1layr.inc'
-include 's1phys.inc'
 include 's1agg.inc'
 include 's1dbh.inc'
 include 's1dbc.inc'
-include 's1sgeo.inc'
 include 'c1db1.inc'
 include 'c1db2.inc'
 include 'c1glob.inc'
@@ -20,11 +20,12 @@ include 'h1et.inc'
 include 'h1hydro.inc'
 include 'h1db1.inc'
 include 'h1temp.inc'
-include 'tcdbug.inc'
 !
 ! Dummy arguments
 !
+    type(controls) :: ctrl
     type(climate_data) :: clidat
+    type(soil_phys_props) :: sppdat
 integer :: isr,slay
 integer :: julday
 !
@@ -76,17 +77,17 @@ integer :: cd,cm,cy,l
 !     + + + data initializations + + +
  
 if (am0cif.eqv..true.) then
-  tday = -1
-  tmo = -1
-  tyr = -1
-  tisr = -1
+  ctrl%sim%tday = -1
+  ctrl%sim%tmo = -1
+  ctrl%sim%tyr = -1
+  ctrl%sim%tisr = -1
 end if
 call caldat(0,cd,cm,cy)
  
 !     + + + end specifications + + +
  
 !          write weather cligen and windgen variables
-if ((cd==tday).and.(cm==tmo).and.(cy==tyr).and.(isr==tisr)) then
+if ((cd==ctrl%sim%tday).and.(cm==ctrl%sim%tmo).and.(cy==ctrl%sim%tyr).and.(isr==ctrl%sim%tisr)) then
   write (cdbugfile,1000) cd,cm,cy,isr
 else
   write (cdbugfile,1100) cd,cm,cy,isr
@@ -105,10 +106,10 @@ write (cdbugfile,1600) isr,isr,isr,isr
 write (cdbugfile,1700) actdtm(isr),acthucum(isr),acmst(isr),acmrt(isr),ahzeta,ahzetp,  &
               & ahzpta
 ! write (cdbugfile,1800) isr,isr,isr,isr
-write (cdbugfile,1800) isr,isr,isr
+write (cdbugfile,1800) isr,isr
 !write (cdbugfile,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr),as0rrk(isr),         &
 !              & aslrr(isr)
-write (cdbugfile,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr),as0rrk(isr)
+write (cdbugfile,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr)
 write (cdbugfile,2000)
  
 do l = 1,slay
@@ -120,14 +121,14 @@ write (cdbugfile,2200)
  
 do l = 1,slay
   write (cdbugfile,2300) l,asfsan(l,isr),asfsil(l,isr),asfcla(l,isr),asfom(l,isr),     &
-                & asdblk(l,isr),aslagm(l,isr),as0ags(l,isr),aslagn(l,isr),      &
+                & sppdat%asdblk(l),aslagm(l,isr),as0ags(l,isr),aslagn(l,isr),      &
                 & aslagx(l,isr),aseags(l,isr)
 end do
  
-tisr = isr
-tday = cd
-tmo = cm
-tyr = cy
+ctrl%sim%tisr = isr
+ctrl%sim%tday = cd
+ctrl%sim%tmo = cm
+ctrl%sim%tyr = cy
  
 !     + + + input formats + + +
  
@@ -147,10 +148,9 @@ tyr = cy
  1700 format (i10,4F10.2,2F12.2)
 !1800 format ('      ahzea     ahzep    ahzptp ',' actmin(',i2,') actopt(',i2,  &
 !            &') as0rrk(',i2,')',' aslrr(',i2,')')
- 1800 format ('      ahzea     ahzep    ahzptp ',' actmin(',i2,') actopt(',i2,  &
-             &') as0rrk(',i2,')')
+ 1800 format ('      ahzea     ahzep    ahzptp ',' actmin(',i2,') actopt(',i2,')')
 !1900 format (2f10.2,2f10.3,3f12.2)
- 1900 format (2F10.2,2F10.3,2F12.2)
+ 1900 format (2F10.2,2F10.3,1F12.2)
  2000 format ('layer aszlyt  ahrsk ahrwc ahrwcs ahrwca',                        &
              &' ahrwcf ahrwcw ah0cb aheaep ahtsmx ahtsmn')
  2100 format (i4,1x,f7.2,1x,e7.1,f6.2,4F7.2,f6.2,3F7.2)

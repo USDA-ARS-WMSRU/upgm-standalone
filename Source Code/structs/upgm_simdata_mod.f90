@@ -21,6 +21,11 @@
         integer :: init_year    ! initial sim year
         integer :: julday       ! julian day
         
+        integer :: tisr         ! The last accessed day of simulation month.
+        integer :: tday         ! The last accessed month of simulation year.
+        integer :: tmo          ! The last accessed year of simulation run.
+        integer :: tyr          ! The last accessed subregion index.
+        
         real(kind=4) :: amalat  !  Latitude of simulation site (degrees)
     end type simulation
     
