@@ -1,4 +1,4 @@
-subroutine upgm_driver(ctrl,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,&
+subroutine upgm_driver(ctrl,clidat, sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,&
                      & antes,antss,blstrs,boots,browns,callgdd,canht,canopyflg, &
                      & cliname,cots,cropname,dayhtinc,dents,doughs,drs,dummy1,  &
                      & dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,ergdd,  &
@@ -11,12 +11,13 @@ subroutine upgm_driver(ctrl,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,
                      & swtype,growcrop_flg,am0hrvfl,co2x,co2y,co2atmos)
 !
     use upgm_simdata, only : upgm_ctrls, controls
+    use climate, only : climate_data
 implicit none
 !
 include 'p1werm.inc'
 include 'command.inc'
 include 'file.fi'
-include 'w1clig.inc'
+!include 'w1clig.inc'
 include 's1layr.inc'
 include 's1dbc.inc'
 include 's1dbh.inc'
@@ -39,7 +40,8 @@ include 'prevstate.inc'
 !
 ! Dummy arguments
 !
-type(controls) :: ctrl
+    type(controls) :: ctrl
+    type(climate_data) :: clidat
 real :: aepa,canht,dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,     &
       & tupper,co2atmos
 integer :: am0hrvfl,canopyflg,emrgflg,end_jday,first7,gmethod,growth_stress,    &
@@ -94,7 +96,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
  
 !  if ((id.ne.29).or.(im.ne.2)) then !check if leap year
     ! this reads in one day of climate data
-  call climate_input(id,im,iy,icli)
+  call climate_input(clidat, id,im,iy,icli)
 !  if ((id.ne.29).or.(im.ne.2)) then !check if leap year
     !
     ! read in daily water stress
@@ -174,7 +176,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
     ! debe added passing the new variable 'phenolflg' which is read in from upgm_crop.dat
     ! and the phenological growth stages variables to callcrop which will pass
     ! them on to crop.
-     call callcrop(ctrl,aepa,aifs,ctrl%sim%julday-plant_jday+1,1,antes,antss,blstrs,boots,     &
+     call callcrop(ctrl,clidat, aepa,aifs,ctrl%sim%julday-plant_jday+1,1,antes,antss,blstrs,boots,     &
                  & browns,callgdd,canht,canopyflg,cliname,cots,cropname,        &
                  & dayhtinc,dents,doughs,drs,dummy1,dummy2,ears,ecanht,egdd,    &
                  & emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,fullbs,     &

@@ -1,5 +1,6 @@
-subroutine cdbug(isr,slay, julday)
+subroutine cdbug(isr,slay,julday, clidat)
 !
+    use climate, only : climate_data
 implicit none
 !
 include 'file.fi'
@@ -15,7 +16,6 @@ include 's1sgeo.inc'
 include 'c1db1.inc'
 include 'c1db2.inc'
 include 'c1glob.inc'
-include 'w1clig.inc'
 include 'h1et.inc'
 include 'h1hydro.inc'
 include 'h1db1.inc'
@@ -24,6 +24,7 @@ include 'tcdbug.inc'
 !
 ! Dummy arguments
 !
+    type(climate_data) :: clidat
 integer :: isr,slay
 integer :: julday
 !
@@ -91,7 +92,7 @@ else
   write (cdbugfile,1100) cd,cm,cy,isr
 end if
 write (cdbugfile,1200)
-write (cdbugfile,1300) awzdpt,awtdmx,awtdmn,aweirr,awtdpt,awrrh
+write (cdbugfile,1300) clidat%awzdpt, clidat%awtdmx, clidat%awtdmn, clidat%aweirr
  
 !      write(27,2045) isr
  
@@ -135,8 +136,8 @@ tyr = cy
              &'    after  call to crop         subregion no. ',i3)
  1100 format ('**',1x,2(i2,'/'),i4,                                             &
              &'    before call to crop         subregion no. ',i3)
- 1200 format (' awzdpt  awtdmx  awtdmn  aweirr  awtdpt  awrrh')
-1300         format (f7.2,5F8.2)
+ 1200 format (' awzdpt  awtdmx  awtdmn  aweirr')
+1300         format (f7.2,3F8.2)
 ! 2045 format ('subregion number',i3)
  1400 format ('amrslp(',i2,') acftcv(',i2,') acrlai(',i2,')',' aczrtd(',i2,     &
              &') admf(',i2,') ahfwsf(',i2,')',' ac0nam(',i2,')')

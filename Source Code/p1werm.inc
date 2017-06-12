@@ -30,7 +30,6 @@
       integer          mnmon
       integer          mnopdat
 
-      integer          mndayr
 
 !     + + + VARIABLE DECLARATIONS + + +
 
@@ -55,7 +54,6 @@
       parameter (mnmon = 13)
       parameter (mnopdat = 32)
 
-      parameter (mndayr = 366)
 
 !     + + + VARIABLE DEFINITIONS + + +
 

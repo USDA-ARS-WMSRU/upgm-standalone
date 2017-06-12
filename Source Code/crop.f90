@@ -1,9 +1,9 @@
-subroutine crop(ctrl,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,bsfsmb,bsfcla,  &
+subroutine crop(ctrl,clidat,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,bsfsmb,bsfcla,  &
               & bs0ph,bsftan,bsftap,bsmno3,bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,  &
               & bc0bp3,bc0ck,bcgrf,bcehu0,bczmxc,bc0nam,bc0idc,bcxrow,bctdtm,   &
               & bczmrt,bctmin,bctopt,bc0fd1,bc0fd2,cc0fd1,cc0fd2,bc0bceff,bdmb, &
               & bc0alf,bc0blf,bc0clf,bc0dlf,bc0arp,bc0brp,bc0crp,bc0drp,bc0aht, &
-              & bc0bht,bc0sla,bc0hue,bctverndel,bweirr,bwtdmx,bwtdmn,bwzdpt,    &
+              & bc0bht,bc0sla,bc0hue,bctverndel,    &
               & bhtsmx,bhtsmn,bhzpta,bhzeta,bhzptp,bhfwsf,bm0cif,bm0cgf,bcthudf,&
               & bcbaflg,bcbaf,bcyraf,bchyfg,bcthum,bcdpop,bcdmaxshoot,bc0transf,&
               & bc0storeinit,bcfshoot,bc0growdepth,bcfleafstem,bc0shoot,        &
@@ -95,6 +95,7 @@ subroutine crop(ctrl,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,bsfsmb,bsfc
 ! this value in Growth.f90
 !
     use constants, only : mgtokg, civilrise
+    use climate, only : climate_data
 
 implicit none
 !
@@ -109,6 +110,7 @@ include 'cfert.inc'
 ! PARAMETER definitions
 !
     type(controls) :: ctrl
+    type(climate_data) :: clidat
 real,parameter :: chilluv = 50.0,shoot_delay = 7.0,verndelmax = 0.04,           &
                 & dev_floor = 0.01,spring_trig = 0.29
 !
@@ -134,7 +136,7 @@ real :: bprevflatstore,bprevgrainf,bprevht,bprevhucum,bprevliveleaf,bprevmshoot,
       & bprevmtotshoot,bprevrtd,bprevrthucum,bprevstandleaf,bprevstandstem,     &
       & bprevstandstore,bprevstm,bprevzshoot,bsmno3,btdstm,btgrainf,btmflatleaf,&
       & btmflatstem,btmflatstore,btmstandleaf,btmstandstem,btmstandstore,       &
-      & btxstmrep,btzht,bweirr,bwtdmn,bwtdmx,bwzdpt,canht,cc0fd1,cc0fd2,        &
+      & btxstmrep,btzht,canht,cc0fd1,cc0fd2,        &
       & dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,tupper,         &
       & ln,co2atmos,co2eff 
 character(80) :: cliname
@@ -889,7 +891,7 @@ end do
 !     bm0cif is flag to initialize crop at start of planting
  
 if (bm0cif) then
-  call cinit(ctrl, bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla,     &
+  call cinit(ctrl, clidat,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla,     &
            & bs0ph,bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,bc0bp3,bsmno3,bc0fd1,     &
            & bc0fd2,bctopt,bctmin,cc0fd1,cc0fd2,bc0sla,bc0idc,dd,mm,yy,bcthudf, &
            & bctdtm,bcthum,bc0hue,bcdmaxshoot,bc0shoot,bc0growdepth,            &
@@ -964,7 +966,7 @@ end if
 !debe added call to phenolmms. call it after call to cinit to insure that
 !variables are initialized.
 call phenolmms(aepa,aifs,antes,antss,bc0growdepth,bctmin,bhfwsf,blstrs,boots,   &
-             & browns,bwtdmn,bwtdmx,canht,cliname,cname,cots,cropname,daa,dae,  &
+             & browns,clidat%awtdmn,clidat%awtdmx,canht,cliname,cname,cots,cropname,daa,dae,  &
              & dap,dav,dayhtinc,daynum,dd,ddae,ddap,ddav,dents,dgdde,dgdds,     &
              & dgddv,doughs,drs,dummy2,ears,ecanht,emrgflg,ems,endlgs,endphenol,&
              & epods,eseeds,first7,fps,fullbs,gdda,gddday,gdde,gdds,gddv,gddwsf,&
@@ -987,7 +989,7 @@ if ((mm==1).and.(dd==1).and.(yy==2)) jan1 = .true.
  
       ! check for consecutive "warm" days based on daily
       ! average temperature
-if (0.5*(bwtdmx+bwtdmn)>bctmin) then
+if (0.5*(clidat%awtdmx+clidat%awtdmn)>bctmin) then
           ! this is a warm day
   bctwarmdays = bctwarmdays + 1
 else
@@ -997,7 +999,7 @@ else
 end if
  
       ! accumulate chill units
-call chillu(bctchillucum,bwtdmx,bwtdmn)
+call chillu(bctchillucum,clidat%awtdmx,clidat%awtdmn)
  
       ! zero out temp pool variables used in testing for residue
       ! from regrowth in callcrop
@@ -1151,10 +1153,10 @@ else
               ! freezing.
 !if( bwtdmn .gt. 0.0 ) then accumulate heat units using set heat unit
 ! delay
-     bcthucum = bcthucum + huc1(bwtdmx,bwtdmn,bctopt,bctmin)*hu_delay
+     bcthucum = bcthucum + huc1(clidat%awtdmx,clidat%awtdmn,bctopt,bctmin)*hu_delay
 !              end if
               ! root depth growth heat units
-     bctrthucum = bctrthucum + huc1(bwtdmx,bwtdmn,bctopt,bctmin)
+     bctrthucum = bctrthucum + huc1(clidat%awtdmx,clidat%awtdmn,bctopt,bctmin)
               ! do not cap this for annuals, to allow it to continue
               ! root mass partition is reduced to lower levels after the
               ! first full year. out of range is capped in the function
@@ -1222,7 +1224,7 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
 ! original value once emergence occurs. to avoid the problem where huiy
 ! = bcthu_shoot_end in the call to shoot_grow, add 0.00001 to huiy below:
      if (huiy>=bcthu_shoot_end) bcthu_shoot_end = huiy + 0.00001      !should 'then' be here?
-     call shoot_grow(ctrl,bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
+     call shoot_grow(ctrl,clidat,bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
                    & bc0ssa,bc0ssb,bc0diammax,hui,huiy,bcthu_shoot_beg,         &
                    & bcthu_shoot_end,bcmstandstem,bcmstandleaf,bcmstandstore,   &
                    & bcmflatstem,bcmflatleaf,bcmflatstore,bcmshoot,bcmtotshoot, &
@@ -1233,7 +1235,7 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
                    & ddap,dgdds,elong,ems,germs,gddday,yy,emrgflg,icli,pd,pm,py,&
                    & yr,cliname,egdd,ggdd,tempsw)                          !used dap in place of bcdayap
   else if ((huiy<bcthu_shoot_end).and.(hui>bcthu_shoot_beg)) then
-     call shoot_grow(ctrl, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
+     call shoot_grow(ctrl,clidat, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
                    & bc0ssa,bc0ssb,bc0diammax,hui,huiy,bcthu_shoot_beg,         &
                    & bcthu_shoot_end,bcmstandstem,bcmstandleaf,bcmstandstore,   &
                    & bcmflatstem,bcmflatleaf,bcmflatstore,bcmshoot,bcmtotshoot, &
@@ -1268,7 +1270,7 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
   call growth(ctrl, bnslay,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,b_fr,  &
             & bcxrow,bc0diammax,bczmrt,bctmin,bctopt,bc0bceff,bc0alf,bc0blf,    &
             & bc0clf,bc0dlf,bc0arp,bc0brp,bc0crp,bc0drp,bc0aht,bc0bht,bc0ssa,   &
-            & bc0ssb,bc0sla,bcxstm,bhtsmn,bwtdmx,bwtdmn,bweirr,bhfwsf,hui,huiy, &
+            & bc0ssb,bc0sla,bcxstm,bhtsmn,clidat%awtdmx,clidat%awtdmn,clidat%aweirr,bhfwsf,hui,huiy, &
             & huirt,huirty,hu_delay,bcthu_shoot_end,bcbaflg,bcbaf,bcyraf,bchyfg,&
             & bcfleaf2stor,bcfstem2stor,bcfstor2stor,bcyld_coef,bcresid_int,    &
             & bcmstandstem,bcmstandleaf,bcmstandstore,bcmflatstem,bcmflatleaf,  &

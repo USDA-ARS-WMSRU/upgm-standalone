@@ -1,19 +1,23 @@
-Subroutine climate_input(ccd,ccm,ccy,icli)
+Subroutine climate_input(clidat, ccd,ccm,ccy,icli)
 !
+    use constants, only : langleydaytomj
+    use climate, only : n_header, climate_data
 implicit none
 !
 include 'p1werm.inc'
 include 'file.fi'
-include 'w1clig.inc'
-include 'w1cli.inc'
+!include 'w1clig.inc'
+!include 'w1cli.inc'
 !
 ! Dummy arguments
 !
+    type(climate_data) :: clidat
 integer :: ccd,ccm,ccy,icli
 !
 ! Local variables
 !
-integer :: dayidx,i
+integer :: dayidx = 0
+integer :: i
 real :: dummy
 character(80) :: header
 !
@@ -74,7 +78,6 @@ character(80) :: header
 !     lstday
  
 !     dayear, lstday declared here but commented out in code jcaii 8/08/08
-data dayidx/0/
 !data wrnflg/.true./
  
 ! this code added to re-initialize the reading of a cligen file
@@ -100,12 +103,12 @@ if (icli==0) then    ! read in historical precip, tmax, tmin, and solar radiatio
  
   dayidx = ccd
 !
-  read (upgmcli,*) wcd(dayidx),wcm(dayidx),wcy(dayidx),wwzdpt(dayidx),wwtdmx(dayidx), &
-           & wwtdmn(dayidx),wgrad(dayidx)
+  read (upgmcli,*) clidat%wcd(dayidx),clidat%wcm(dayidx),clidat%wcy(dayidx),clidat%wwzdpt(dayidx),clidat%wwtdmx(dayidx), &
+           & clidat%wwtdmn(dayidx),clidat%wgrad(dayidx)
  
 !   print*, ' in if statement checking for leap year'
-  if ((wcd(dayidx)==29).and.(wcm(dayidx)==2)) read (upgmcli,*) wcd(dayidx),wcm(dayidx)&
-    & ,wcy(dayidx),wwzdpt(dayidx),wwtdmx(dayidx),wwtdmn(dayidx),wgrad(dayidx)
+  if ((clidat%wcd(dayidx)==29).and.(clidat%wcm(dayidx)==2)) read (upgmcli,*) clidat%wcd(dayidx),clidat%wcm(dayidx)&
+    & ,clidat%wcy(dayidx),clidat%wwzdpt(dayidx),clidat%wwtdmx(dayidx),clidat%wwtdmn(dayidx),clidat%wgrad(dayidx)
  
 ! if ((wcm(dayidx).lt.4).and.(wcy(dayidx).eq.2)) then
 ! print*, 'day= ', wcd(dayidx), 'month= ', wcm(dayidx), 'tmax= ', wwtdmx(dayidx)
@@ -116,17 +119,10 @@ if (icli==0) then    ! read in historical precip, tmax, tmin, and solar radiatio
 !         &  ,wwpeakipt(dayidx),wwtdmx(dayidx),wwtdmn(dayidx)                   &
 !         &  ,wgrad(dayidx),dummy,dummy,wwtdpt(dayidx)
 !
-  if ((wcd(dayidx)/=ccd).or.(wcm(dayidx)/=ccm).or.(wcy(dayidx)/=ccy)) then
+  if ((clidat%wcd(dayidx)/=ccd).or.(clidat%wcm(dayidx)/=ccm).or.(clidat%wcy(dayidx)/=ccy)) then
      write (*,*) 'error in dates in historical climate file - stop'
      call exit(1)
   end if
-!
-! set dummy values for other variables so they won't blow up in debug mode
-!
-  wwdurpt(dayidx) = 0.0
-  wwpeaktpt(dayidx) = 0.0
-  wwpeakipt(dayidx) = 0.0
-  wwtdpt(dayidx) = 0.0
 !
 end if
 !
@@ -134,8 +130,6 @@ if (icli==1) then    ! read from standard cligen climate file
   if (dayidx==0) then
 !
      rewind luicli
-!  n_header = 15        !we are assuming that we are only working with latest cligen (forest service)
-     n_header = 16
 !debe 031309 changed above to header = 16 to allow for climate file name
 ! entered in the first row of the header.
 !
@@ -155,10 +149,10 @@ if (icli==1) then    ! read from standard cligen climate file
   dayidx = ccd
 !
 !    read (luicli,*,iostat=ioc) wcd(dayidx),wcm(dayidx),wcy(dayidx),            &
-  read (luicli,*) wcd(dayidx),wcm(dayidx),wcy(dayidx),wwzdpt(dayidx),           &
-                & wwdurpt(dayidx),wwpeaktpt(dayidx),wwpeakipt(dayidx),          &
-                & wwtdmx(dayidx),wwtdmn(dayidx),wgrad(dayidx),dummy,dummy,      &
-                & wwtdpt(dayidx)
+  read (luicli,*) clidat%wcd(dayidx),clidat%wcm(dayidx),clidat%wcy(dayidx),clidat%wwzdpt(dayidx),           &
+                & dummy,dummy,dummy,          &
+                & clidat%wwtdmx(dayidx),clidat%wwtdmn(dayidx),clidat%wgrad(dayidx),dummy,dummy,      &
+                & dummy
 !
 ! 1030     format (2(2x,i2),1x,i4,1x,2f6.2,f5.2,1x,f6.2,3f7.2,f6.2,
 !     &      2f7.2)
@@ -214,33 +208,13 @@ if (icli==1) then    ! read from standard cligen climate file
 !
 end if
 !
-awzdpt = wwzdpt(dayidx)
-awdurpt = wwdurpt(dayidx)
-awpeaktpt = wwpeaktpt(dayidx)
-awpeakipt = wwpeakipt(dayidx)
+clidat%awzdpt = clidat%wwzdpt(dayidx)
 !
-if (dayidx>1) then
-  awtdmxprev = wwtdmx(dayidx-1)
-else
-  awtdmxprev = wwtdmx(dayidx)
-end if
+clidat%awtdmn = clidat%wwtdmn(dayidx)
+clidat%awtdmx = clidat%wwtdmx(dayidx)
 !
-awtdmn = wwtdmn(dayidx)
-awtdmx = wwtdmx(dayidx)
-!
-if (dayidx<maxday) then
-  awtdmnnext = wwtdmn(dayidx+1)
-else
-  awtdmnnext = wwtdmn(dayidx)
-end if
-!
-awtdpt = wwtdpt(dayidx)
-aweirr = wgrad(dayidx)*0.04186
+clidat%aweirr = clidat%wgrad(dayidx)*langleydaytomj
 !dayidx = dayidx + 1
-!
-! calculate air density from temperature and pressure
-!
-awtdav = (awtdmx+awtdmn)/2.
 !
 return
 !

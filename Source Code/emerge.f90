@@ -1,4 +1,4 @@
-subroutine emerge(cliname,cropname,dap,daynum,ddap,dgdds,egdd,elong,emrgflg,ems,&
+subroutine emerge(clidat, cliname, cropname,dap,daynum,ddap,dgdds,egdd,elong,emrgflg,ems,&
                 & ergdd,gddday,gddtbg,germgdd,germs,ggdd,pd,pdepth,pm,py,seedsw,&
                 & soilwat,tempsw,year)
 !
@@ -52,14 +52,14 @@ subroutine emerge(cliname,cropname,dap,daynum,ddap,dgdds,egdd,elong,emrgflg,ems,
 !
 !     + + + purpose + + +
 !     to calculate the day of emergence based on soil moisture and accumulated thermal time.
-!
+    use climate, only : climate_data
 implicit none
 !
 include 'file.fi'
-include 'w1clig.inc'
 !
 ! Dummy arguments
 !
+    type(climate_data) :: clidat
 character(80) :: cliname
 character(80) :: cropname
 integer :: dap,daynum,emrgflg,pd,pm,py,seedsw,tempsw,year
@@ -190,7 +190,7 @@ end do
 ! need to convert planting depth (pdepth) value from weps/upgm in meters
 ! to cm for pdepth used in emerge.
 pdepthnew = pdepth*100.
-precip = awzdpt       !awzdpt comes from the common block w1clig.inc
+precip = clidat%awzdpt       !awzdpt comes from the common block w1clig.inc
  
 !debe added the following code for precip .ge. than 7 mm. a 6 element array was needed to hold the
 ! half steps between dry and medium and medium and optimum.

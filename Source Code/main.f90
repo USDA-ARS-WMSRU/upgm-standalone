@@ -1,12 +1,12 @@
 program main
     use upgm_simdata, only : upgm_ctrls
+    use climate
 !
 implicit none
 !
 include 'p1werm.inc'
 include 'command.inc'
 include 'file.fi'
-include 'w1clig.inc'
 include 's1layr.inc'
 include 's1dbc.inc'
 include 's1dbh.inc'
@@ -26,6 +26,7 @@ include 's1sgeo.inc'
 include 'h1db1.inc'
 include 's1agg.inc'
 include 'prevstate.inc'
+
 !
 ! Local variables
 !
@@ -744,8 +745,6 @@ upgm_ctrls%sim%amalat = -38.0
 !
 am0cdb = 1        ! set crop debug output flag (default to no output)
 !
-awrrh = 0.0       ! relative humidity?
-!
 acthucum(1) = 0.0 ! initialize accumulated heat units
 acmst(1) = 0.0    ! initialize total standing crop mass
 acmrt(1) = 0.0    ! initialize total root crop mass
@@ -947,7 +946,7 @@ do k = 1, 10
     !print *, 'co2x = ', co2x, 'co2y = ', co2y 
 end do
 
-call climate_init(icli,cliname)    ! reads monthly and yearly climate variables
+call climate_init(cli_data,icli,cliname)    ! reads monthly and yearly climate variables
  
 if (am0cfl>0) then
 luocrop = 80000 + offsetforfiles
@@ -973,7 +972,7 @@ end if
 if (am0cfl>1) call fopenk(luoallcrop,'allcrop.prn','unknown')     ! main crop debug output file
 if (am0cdb>0) call fopenk(cdbugfile,'cdbug.out','unknown')       ! crop submodel debug output file
 !
-call upgm_driver(upgm_ctrls,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,antes,&
+call upgm_driver(upgm_ctrls,cli_data,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,antes,&
                & antss,blstrs,boots,browns,callgdd,canht,canopyflg,cliname,cots,&
                & cropname,dayhtinc,dents,doughs,drs,dummy1,dummy2,ears,ecanht,  &
                & egdd,emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,fullbs,  &

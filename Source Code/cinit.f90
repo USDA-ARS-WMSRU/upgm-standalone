@@ -1,4 +1,4 @@
-subroutine cinit(ctrl, bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla, &
+subroutine cinit(ctrl,clidat,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla, &
                & bs0ph,bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,bc0bp3,bsmno3,bc0fd1, &
                & bc0fd2,bctopt,bctmin,cc0fd1,cc0fd2,bc0sla,bc0idc,dd,mm,yy,     &
                & bcthudf,bctdtm,bcthum,bc0hue,bcdmaxshoot,bc0shoot,bc0growdepth,&
@@ -41,12 +41,12 @@ subroutine cinit(ctrl, bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bs
 !
     use constants, only : mgtokg, mmtom, civilrise
     use upgm_simdata, only : upgm_ctrls, controls
+    use climate, only : climate_data
 implicit none
 !
 include 'file.fi'
 include 'p1werm.inc'
 include 'm1flag.inc'
-include 'w1clig.inc'
 include 'csoil.inc'
 include 'chumus.inc'
 include 'cfert.inc'
@@ -57,6 +57,7 @@ include 'cparm.inc'
 ! Dummy arguments
 !
     type(controls) :: ctrl
+    type(climate_data) :: clidat
 real :: bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,bc0bp3,bc0fd1,bc0fd2,bc0growdepth,   &
       & bc0hue,bc0shoot,bc0sla,bc0storeinit,bcdmaxshoot,bcdpop,bcdstm,          &
       & bcfliveleaf,bcgrainf,bcleafareatrend,bcmflatleaf,bcmflatstem,           &
@@ -446,8 +447,8 @@ data dy_mon/ - 15,15,45,74,105,135,166,196,227,258,288,319,349,380/
 !     in july.1?
 
 do i = 1,12
-  mx_air_temp(i+1) = awtmxav(i)
-  mn_air_temp(i+1) = awtmnav(i)
+  mx_air_temp(i+1) = clidat%awtmxav(i)
+  mn_air_temp(i+1) = clidat%awtmnav(i)
 end do
 mx_air_temp(1) = mx_air_temp(13)
 mx_air_temp(14) = mx_air_temp(2)

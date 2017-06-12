@@ -1,4 +1,4 @@
-subroutine shoot_grow(ctrl, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,  &
+subroutine shoot_grow(ctrl, clidat, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,  &
                     & bc0ssa,bc0ssb,bc0diammax,hui,huiy,bcthu_shoot_beg,        &
                     & bcthu_shoot_end,bcmstandstem,bcmstandleaf,bcmstandstore,  &
                     & bcmflatstem,bcmflatleaf,bcmflatstore,bcmshoot,bcmtotshoot,&
@@ -36,6 +36,7 @@ subroutine shoot_grow(ctrl, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfsh
 ! initialized in cinit and passed through. 5122011
     use constants, only : mgtokg, mmtom
     use upgm_simdata, only : upgm_ctrls, controls
+    use climate, only: climate_data
 implicit none
 !
 include 'file.fi'
@@ -49,6 +50,7 @@ real,parameter :: shoot_exp = 2.0,be_stor = 0.7,rootf = 0.4
 ! Dummy arguments
 !
     type(controls) :: ctrl
+    type(climate_data) :: clidat
 real :: bc0diammax,bc0growdepth,bc0ssa,bc0ssb,bcdpop,bcdstm,bcfleafstem,        &
       & bcfliveleaf,bcfshoot,bcgrf,bcmflatleaf,bcmflatstem,bcmflatstore,        &
       & bcmshoot,bcmstandleaf,bcmstandstem,bcmstandstore,bcmtotshoot,           &
@@ -481,7 +483,7 @@ end if
 if (emrgflg==1) then
       ! not used: wfpslo,wfpsup
   !debe added this to prevent emerge being called after emergence has occurred
-  if (ems(1)==999) call emerge(cliname,cropname,dap,doy,ddap,dgdds,egdd,elong,  &
+  if (ems(1)==999) call emerge(clidat, cliname,cropname,dap,doy,ddap,dgdds,egdd,elong,  &
                              & emrgflg,ems,ergdd,gddday,gddtbg,germgdd,germs,   &
                              & ggdd,pd,bc0growdepth,pm,py,seedsw,soilwat,tempsw,&
                              & yy)
