@@ -76,7 +76,6 @@ include 'd1glob.inc'
 include 'd1gen.inc'
 include 'm1flag.inc'
 include 'm1dbug.inc'
-include 's1layr.inc'
 include 's1dbc.inc'
 include 's1dbh.inc'
 include 'h1hydro.inc'
@@ -703,9 +702,9 @@ if ((ac0shoot(sr)<=0.0).or.(acdpop(sr)<=0.0)) am0cgf = .false.
 !     only continue if crop is growing
 if (am0cgf) then
  
-  if (am0cdb==1) call cdbug(sr,nslay(sr),ctrl,clidat,sppdat )
+  if (am0cdb==1) call cdbug(sr,sppdat%nslay(sr),ctrl,clidat,sppdat )
 !  print*, 'in callcrop just before call to crop seedsw = ', seedsw
-  call crop(ctrl,clidat, nslay(sr),aszlyt(1,sr),aszlyd(1,sr),sppdat%asdblk(1),asfcce(1,sr),      &
+  call crop(ctrl,clidat, sppdat%nslay(sr),sppdat%aszlyt(1,sr),sppdat%aszlyd(1,sr),sppdat%asdblk(1),asfcce(1,sr),      &
           & asfom(1,sr),asfcec(1,sr),asfsmb(1,sr),asfcla(1,sr),as0ph(1,sr),     &
           & asftan(1,sr),asftap(1,sr),asmno3(sr),ac0bn1(sr),ac0bn2(sr),         &
           & ac0bn3(sr),ac0bp1(sr),ac0bp2(sr),ac0bp3(sr),ac0ck(sr),acgrf(sr),    &
@@ -753,7 +752,7 @@ if (am0cgf) then
 ! canopyflg = 1.
 !debe added growth stage array variables and phenolflg to be passed to crop from main.
  
-  if (am0cdb==1) call cdbug(sr,nslay(sr),ctrl, clidat,sppdat)
+  if (am0cdb==1) call cdbug(sr,sppdat%nslay(sr),ctrl, clidat,sppdat)
 end if
  
       ! check for abandoned stems in crop regrowth
@@ -762,7 +761,7 @@ if ((atmstandstem(sr)+atmstandleaf(sr)+atmstandstore(sr)+atmflatstem(sr)        
           ! zero out residue pools which crop is not transferring
   atmflatrootstore(sr) = 0.0
   atmflatrootfiber(sr) = 0.0
-  do lay = 1,nslay(sr)
+  do lay = 1,sppdat%nslay(sr)
      atmbgleafz(lay,sr) = 0.0
      atmbgstorez(lay,sr) = 0.0
      atmbgrootstorez(lay,sr) = 0.0
@@ -783,7 +782,7 @@ if ((atmstandstem(sr)+atmstandleaf(sr)+atmstandstore(sr)+atmflatstem(sr)        
            & acresevapb(sr),ad0nam(1,sr),adxstm(1,sr),adrbc(1,sr),ad0sla(1,sr), &
            & ad0ck(1,sr),dkrate(1,1,sr),covfact(1,sr),ddsthrsh(1,sr),           &
            & adhyfg(1,sr),adresevapa(1,sr),adresevapb(1,sr),cumdds(1,sr),       &
-           & cumddf(1,sr),cumddg(1,1,sr),nslay(sr))
+           & cumddf(1,sr),cumddg(1,1,sr),sppdat%nslay(sr))
 end if
  
 ! update all derived globals for crop global variables
@@ -795,7 +794,7 @@ call cropupdate(acmstandstem(sr),acmstandleaf(sr),acmstandstore(sr),            
               & acm(sr),acmst(sr),acmf(sr),acmrt(sr),acmrtz(1,sr),acrcd(sr),    &
               & sppdat%aszrgh(sr),sppdat%asxrgs(sr),sppdat%asargo(sr),acrsai(sr),acrlai(sr),         &
               & acrsaz(1,sr),acrlaz(1,sr),acffcv(sr),acfscv(sr),acftcv(sr),     &
-              & acfcancov(sr),ac0rg(sr),acxrow(sr),nslay(sr),ac0ssa(sr),        &
+              & acfcancov(sr),ac0rg(sr),acxrow(sr),sppdat%nslay(sr),ac0ssa(sr),        &
               & ac0ssb(sr),ac0sla(sr),accovfact(sr),ac0ck(sr),acxstm(sr),       &
               & acdpop(sr))
  

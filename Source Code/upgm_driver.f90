@@ -17,8 +17,6 @@ implicit none
 !
 include 'p1werm.inc'
 include 'file.fi'
-!include 'w1clig.inc'
-include 's1layr.inc'
 include 's1dbc.inc'
 include 's1dbh.inc'
 include 'd1glob.inc'
@@ -140,7 +138,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
      am0hrvfl = 1     ! debe uncommented this line because it is now needed to prevent crop_endseason
                       ! being called after harvest every day until the end date of simulation.
     !
-     call crop_endseason(ctrl,ac0nam(sr),am0cfl,nslay(sr),ac0idc(sr),acdayam(sr),    &
+     call crop_endseason(ctrl,ac0nam(sr),am0cfl,sppdat%nslay(sr),ac0idc(sr),acdayam(sr),    &
                        & acthum(sr),acxstmrep(sr),prevstandstem(sr),            &
                        & prevstandleaf(sr),prevstandstore(sr),prevflatstem(sr), &
                        & prevflatleaf(sr),prevflatstore(sr),prevbgstemz(1,sr),  &

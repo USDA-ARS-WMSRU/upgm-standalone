@@ -7,7 +7,6 @@ implicit none
 !
 include 'p1werm.inc'
 include 'file.fi'
-include 's1layr.inc'
 include 's1dbc.inc'
 include 's1dbh.inc'
 include 'd1glob.inc'
@@ -689,7 +688,7 @@ max_depth = 0
 do
     ! start max depth at 1
     max_depth = max_depth + 1
-    read (soilprofile, *, IOSTAT=io) aszlyt(max_depth,1)
+    read (soilprofile, *, IOSTAT=io) spp_data%aszlyt(max_depth,1)
     if (io > 0) then
         ! error, exit
         exit
@@ -699,9 +698,9 @@ do
     else
         ! thickness for layer max_depth read in,
         ! accumulate into current_depth
-        current_depth = current_depth + aszlyt(max_depth, 1)
+        current_depth = current_depth +  spp_data%aszlyt(max_depth, 1)
         ! set depth for max_depth to be current_depth
-        aszlyd(max_depth, 1) = current_depth
+         spp_data%aszlyd(max_depth, 1) = current_depth
     end if
 enddo
 !
@@ -712,7 +711,7 @@ enddo
 !
 ! number of soil layers
 !
-nslay(1) = max_depth - 1 !Overshoot by 1 in read soil profile loop
+ spp_data%nslay(1) = max_depth - 1 !Overshoot by 1 in read soil profile loop
 !nslay(1) = 1
 
 !

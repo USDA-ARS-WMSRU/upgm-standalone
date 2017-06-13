@@ -9,7 +9,6 @@ include 'file.fi'
 
 include 'p1werm.inc'
 include 'm1flag.inc'
-include 's1layr.inc'
 include 's1agg.inc'
 include 's1dbh.inc'
 include 's1dbc.inc'
@@ -112,7 +111,7 @@ write (cdbugfile,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr)
 write (cdbugfile,2000)
  
 do l = 1,slay
-  write (cdbugfile,2100) l,aszlyt(l,isr),ahrsk(l,isr),ahrwc(l,isr),ahrwcs(l,isr),      &
+  write (cdbugfile,2100) l,sppdat%aszlyt(l,isr),ahrsk(l,isr),ahrwc(l,isr),ahrwcs(l,isr),      &
                 & ahrwca(l,isr),ahrwcf(l,isr),ahrwcw(l,isr),ah0cb(l,isr),       &
                 & aheaep(l,isr),ahtsmx(l,isr),ahtsmn(l,isr)
 end do
