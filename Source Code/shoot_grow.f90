@@ -41,7 +41,6 @@ implicit none
 !
 include 'file.fi'
 include 'm1flag.inc'
-include 'command.inc'
 !
 ! PARAMETER definitions
 !
@@ -502,7 +501,7 @@ lost_mass = 0.0
       ! since it is illogical to store yield into the storage root while
       ! at the same time using the storage root to grow the shoot
  
-if ((cook_yield==1).and.(bcyld_coef>1.0).and.(bcresid_int>=0.0).and.            &
+if ((ctrl%sim%cook_yield==1).and.(bcyld_coef>1.0).and.(bcresid_int>=0.0).and.            &
   & ((bchyfg==0).or.(bchyfg==1))) call cookyield(bchyfg,bnslay,dlfwt,dstwt,     &
   & drpwt,drswt,bcmstandstem,bcmstandleaf,bcmstandstore,bcmflatstem,bcmflatleaf,&
   & bcmflatstore,bcmrootstorez,lost_mass,bcyld_coef,bcresid_int,bcgrf)

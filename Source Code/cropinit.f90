@@ -43,7 +43,6 @@ implicit none
 include 'p1werm.inc'
 include 'c1info.inc'
 include 'c1gen.inc'
-include 'c1report.inc'
 include 'c1db1.inc'
 include 'c1db2.inc'
 include 'c1glob.inc'
@@ -482,9 +481,6 @@ ac0ck(isr) = 0.0
       ! initialize some derived globals for crop global variables
 acfcancov(isr) = 0.0
 acrcd(isr) = 0.0
- 
-!     crop harvest reporting day counters
-cprevrotation(isr) = 1
  
 !     initialize crop yield reporting parameters in case harvest call before planting
 ac0nam(isr) = ''

@@ -16,7 +16,6 @@ subroutine upgm_driver(ctrl,clidat,sppdat,sr,start_jday,end_jday,plant_jday,harv
 implicit none
 !
 include 'p1werm.inc'
-include 'command.inc'
 include 'file.fi'
 !include 'w1clig.inc'
 include 's1layr.inc'

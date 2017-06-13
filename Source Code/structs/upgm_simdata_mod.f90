@@ -16,9 +16,6 @@
         integer :: plant_day    ! planting day
         integer :: plant_mon    ! planting month
         integer :: plant_year   ! planting year.  currently, not the calendar year.
-        integer :: init_day     ! initial simulation day
-        integer :: init_mon     ! initial sim month
-        integer :: init_year    ! initial sim year
         integer :: julday       ! julian day
         
         integer :: tisr         ! The last accessed day of simulation month.
@@ -27,6 +24,19 @@
         integer :: tyr          ! The last accessed subregion index.
         
         real(kind=4) :: amalat  !  Latitude of simulation site (degrees)
+        
+        integer :: cook_yield = 1 ! default to using functional yield/residue ratio info
+!     cook_yield - flag setting which uses input from crop record to 
+!                  guarantee a fixed yield/redsidue ratio at harvest
+!                  (this is cooking the books :-(
+        real :: water_stress_max = 0.0
+!     water_stress_max - Cap water stress at some maximum value
+!                  (note maximum stress occurs at 0.0 and minimum stress at 1.0)
+!                   water_stress_max = x.xx   ! specified stress limit        
+        integer :: winter_ann_root = 1 ! RMarquez 06/13/2017 -> changed this to 1, has some impact on wheat.
+        !select root growth option for winter annuals
+        !winter_ann_root = 0                                    ! root depth grows at same rate as height
+        !winter_ann_root = 1                                    ! root depth grows with fall heat units
     end type simulation
     
     type controls

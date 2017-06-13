@@ -6,7 +6,6 @@ program main
 implicit none
 !
 include 'p1werm.inc'
-include 'command.inc'
 include 'file.fi'
 include 's1layr.inc'
 include 's1dbc.inc'
@@ -611,7 +610,6 @@ wlow = 0.0
 wup = 0.0
 seedbed = ''
 swtype = ''
-water_stress_max = 0.0 ! command line parameter in full WEPS, added 8/11/15
 
 !debe initialized counter variable to read in CO2 values from the table
 k = 0
@@ -667,8 +665,7 @@ call cropinit(1,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,canopyflg,    
 !debe added growth_stress because it is now read in. debe added temperature
 ! variables, cropname and gmethod to be initialized in cropinit.
 !
-! not previously called jcaii  7/28/08
-cook_yield = 1     ! default to using functional yield/residue ratio info
+! not previously called jcaii  7/28/08 
 !
 sr = 1
 !

@@ -53,7 +53,6 @@ integer :: cd,cm,cy,l
  
 !     + + + local common blocks + + +
 !     include 'cenvr.inc'
-!     include 'main.inc'
  
 !     + + + local variables + + +
  

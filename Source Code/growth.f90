@@ -31,7 +31,6 @@ implicit none
 include 'file.fi'
 include 'p1werm.inc'
 include 'm1flag.inc'
-include 'command.inc'
 include 'clai.inc'
 !DE added
 include 'cgrow.inc'
@@ -501,7 +500,7 @@ pddm = pddm*bcbaf
       ! else
           !  = bhfwsf
       ! end if
-bhfwsf_adj = max(water_stress_max,bhfwsf)
+bhfwsf_adj = max(ctrl%sim%water_stress_max,bhfwsf)
       !bhfwsf_adj = 1 !no water stress
  
 !     begin stress factor section
@@ -557,7 +556,7 @@ pddm = pddm*bcdpop !de added to convert pddm mass per plant to mass per sq. m
       ! reset when a harvest removes all the leaves. this index also
       ! is not delayed in prevernalization winter annuals. made to
       ! parallel winter annual rooting depth flag as well.
-if (winter_ann_root==0) then
+if (ctrl%sim%winter_ann_root==0) then
   p_rw = (.4-.2*hui)                                                    ! c-5
 else
   p_rw = max(0.05,(.4-.2*huirt))                                        ! c-5
@@ -640,7 +639,7 @@ end if
  
       ! yield residue relationship adjustment
  
-if ((cook_yield==1).and.(bcyld_coef>1.0).and.(bcresid_int>=0.0).and.            &
+if ((ctrl%sim%cook_yield==1).and.(bcyld_coef>1.0).and.(bcresid_int>=0.0).and.            &
   & ((bchyfg==0).or.(bchyfg==1).or.(bchyfg==5)))                                &
   & call cookyield(bchyfg,bnslay,dlfwt,dstwt,drpwt,drswt,bcmstandstem,          &
   & bcmstandleaf,bcmstandstore,bcmflatstem,bcmflatleaf,bcmflatstore,            &
@@ -778,7 +777,7 @@ end if
 !     just increases it. this is now based on a no delay heat unit
 !     accumulation to allow rapid root depth development by winter
 !     annuals.
-if (winter_ann_root==0) then
+if (ctrl%sim%winter_ann_root==0) then
   prdy = min(bczmrt,bczmrt*hufy+0.1)
   prd = min(bczmrt,bczmrt*huf+0.1)
 else
