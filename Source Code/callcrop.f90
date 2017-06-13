@@ -11,6 +11,7 @@ subroutine callcrop(ctrl,clidat,sppdat,aepa,aifs,daysim,sr,antes,antss,blstrs,bo
      use upgm_simdata, only : upgm_ctrls, controls
      use climate, only : climate_data
      use soil, only : soil_phys_props
+     use constants, only : mnsz, mnsub,mnbpls,mncz,mndk
 !debe 082508 removed sram0jd-plant_jday+1 from the subroutine argument list
 ! because this caused many errors. i think a mistake was made in copying in
 ! the passing arguments from main. the first two arguments are (daysim, sr)
@@ -65,7 +66,6 @@ subroutine callcrop(ctrl,clidat,sppdat,aepa,aifs,daysim,sr,antes,antss,blstrs,bo
 !
 implicit none
 !
-include 'p1werm.inc'
 include 'c1db1.inc'
 include 'c1db2.inc'
 include 'c1db3.inc'
@@ -77,7 +77,6 @@ include 'd1gen.inc'
 include 'm1flag.inc'
 include 'm1dbug.inc'
 include 's1dbc.inc'
-include 's1dbh.inc'
 include 'h1hydro.inc'
 include 'h1et.inc'
 include 'h1temp.inc'
@@ -705,7 +704,7 @@ if (am0cgf) then
   if (am0cdb==1) call cdbug(sr,sppdat%nslay(sr),ctrl,clidat,sppdat )
 !  print*, 'in callcrop just before call to crop seedsw = ', seedsw
   call crop(ctrl,clidat, sppdat%nslay(sr),sppdat%aszlyt(1,sr),sppdat%aszlyd(1,sr),sppdat%asdblk(1),asfcce(1,sr),      &
-          & asfom(1,sr),asfcec(1,sr),asfsmb(1,sr),asfcla(1,sr),as0ph(1,sr),     &
+          & asfom(1,sr),asfcec(1,sr),asfsmb(1,sr),sppdat%asfcla(1,sr),as0ph(1,sr),     &
           & asftan(1,sr),asftap(1,sr),asmno3(sr),ac0bn1(sr),ac0bn2(sr),         &
           & ac0bn3(sr),ac0bp1(sr),ac0bp2(sr),ac0bp3(sr),ac0ck(sr),acgrf(sr),    &
           & acehu0(sr),aczmxc(sr),ac0nam(sr),ac0idc(sr),acxrow(sr),actdtm(sr),  &

@@ -1,8 +1,8 @@
 subroutine nmnim(k)
 !
+    use constants, only : mnsz
 implicit none
 !
-include 'p1werm.inc'
 include 'chumus.inc'
 include 'cfert.inc'
 include 'csoil.inc'

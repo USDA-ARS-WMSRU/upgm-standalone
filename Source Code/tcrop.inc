@@ -25,29 +25,29 @@
 !     Parameter include files required:  p1werm.inc
 !
 !     + + + VARIABLE DECLARATIONS + + +
-      real             atmstandstem(mnsub) !added state
-      real             atmstandleaf(mnsub) !added state
-      real             atmstandstore(mnsub) !added state
+      real             atmstandstem(mnsub) !added state !in biomat
+      real             atmstandleaf(mnsub) !added state !in biomat
+      real             atmstandstore(mnsub) !added state !in biomat
 
-      real             atmflatstem(mnsub) !added state
-      real             atmflatleaf(mnsub) !added state
-      real             atmflatstore(mnsub) !added state
+      real             atmflatstem(mnsub) !added state !in biomat
+      real             atmflatleaf(mnsub) !added state !in biomat
+      real             atmflatstore(mnsub) !added state !in biomat
 
-      real             atmflatrootstore(mnsub) !added state
-      real             atmflatrootfiber(mnsub) !added state
+      real             atmflatrootstore(mnsub) !added state !in biomat
+      real             atmflatrootfiber(mnsub) !added state !in biomat
 
-      real             atmbgstemz(mnsz,mnsub) !added state
-      real             atmbgleafz(mnsz,mnsub) !added state
-      real             atmbgstorez(mnsz,mnsub) !added state
+      real             atmbgstemz(mnsz,mnsub) !added state !in biomat
+      real             atmbgleafz(mnsz,mnsub) !added state !in biomat
+      real             atmbgstorez(mnsz,mnsub) !added state !in biomat
 
-      real             atmbgrootstorez(mnsz,mnsub) !added state
-      real             atmbgrootfiberz(mnsz,mnsub) !added state
+      real             atmbgrootstorez(mnsz,mnsub) !added state !in biomat
+      real             atmbgrootfiberz(mnsz,mnsub) !added state !in biomat
 
-      real             atzht(mnsub)  !changed from tczht state
-      real             atdstm(mnsub) !changed from tcdstm state
-      real             atxstmrep(mnsub) !changed from tcxstmrep state
-      real             atzrtd(mnsub) !changed from tczrtd state
-      real             atgrainf(mnsub) !added state
+      real             atzht(mnsub)  !changed from tczht state !in biomat
+      real             atdstm(mnsub) !changed from tcdstm state !in biomat
+      real             atxstmrep(mnsub) !changed from tcxstmrep state !in biomat
+      real             atzrtd(mnsub) !changed from tczrtd state !in biomat
+      real             atgrainf(mnsub) !added state !in biomat
 
       common / tcrop /                                                  &
      &           atmstandstem, atmstandleaf, atmstandstore,             &

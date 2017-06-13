@@ -9,9 +9,9 @@ subroutine trans(bcmstandstem,bcmstandleaf,bcmstandstore,bcmflatstem,           
                & bcdkrate,bccovfact,bcddsthrsh,bchyfg,bcresevapa,bcresevapb,    &
                & bd0nam,bdxstm,bdrbc,bd0sla,bd0ck,bdkrate,bcovfact,bddsthrsh,   &
                & bdhyfg,bdresevapa,bdresevapb,bcumdds,bcumddf,bcumddg,nslay)
+    use constants, only : mndk, mnsz, mnbpls
 implicit none
 !
-include 'p1werm.inc'
 !
 ! Dummy arguments
 !

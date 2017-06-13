@@ -3,14 +3,11 @@ subroutine cdbug(isr,slay, ctrl, clidat, sppdat)
     use upgm_simdata, only : controls
     use climate, only : climate_data
     use soil, only : soil_phys_props
+    use constants, only : mnsz, mnsub, mnhhrs, mncz,mndk
 implicit none
 !
 include 'file.fi'
-
-include 'p1werm.inc'
 include 'm1flag.inc'
-include 's1agg.inc'
-include 's1dbh.inc'
 include 's1dbc.inc'
 include 'c1db1.inc'
 include 'c1db2.inc'
@@ -118,9 +115,8 @@ end do
 write (cdbugfile,2200)
  
 do l = 1,slay
-  write (cdbugfile,2300) l,asfsan(l,isr),asfsil(l,isr),asfcla(l,isr),asfom(l,isr),     &
-                & sppdat%asdblk(l),aslagm(l,isr),as0ags(l,isr),aslagn(l,isr),      &
-                & aslagx(l,isr),aseags(l,isr)
+  write (cdbugfile,2300) l,sppdat%asfcla(l,isr),asfom(l,isr),     &
+                & sppdat%asdblk(l)
 end do
  
 ctrl%sim%tisr = isr
@@ -152,8 +148,7 @@ ctrl%sim%tyr = cy
  2000 format ('layer aszlyt  ahrsk ahrwc ahrwcs ahrwca',                        &
              &' ahrwcf ahrwcw ah0cb aheaep ahtsmx ahtsmn')
  2100 format (i4,1x,f7.2,1x,e7.1,f6.2,4F7.2,f6.2,3F7.2)
- 2200 format (' layer  asfsan asfsil asfcla asfom asdblk aslagm  as0ags',       &
-             &' aslagn  aslagx  aseags')
- 2300 format (i4,2x,3F7.2,f7.3,2F7.2,f8.2,f7.3,2F8.2)
+ 2200 format (' layer  asfcla asfom asdblk')
+ 2300 format (i4,2x,1F7.2,f7.3,F7.2)
  
 end subroutine cdbug

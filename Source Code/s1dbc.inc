@@ -13,27 +13,19 @@
 !     + + + VARIABLE DECLARATIONS + + +
 
       real             as0ph(mnsz, mnsub) !used
-      real             ascmg(mnsz, mnsub) !not used
-      real             ascna(mnsz, mnsub) !not used
       real             asfcce(mnsz, mnsub) !used
       real             asfcec(mnsz, mnsub) !used
-      real             asfesp(mnsz, mnsub) !not used
       real             asfom(0:mnsz, mnsub) !used
-      real             asfnoh(mnsz,mnsub) !not used
-      real             asfpoh(mnsz,mnsub) !not used
-      real             asfpsp(mnsz,mnsub) !not used
       real             asfsmb(mnsz,mnsub) !used
       real             asftap(mnsz,mnsub) !used
       real             asftan(mnsz,mnsub) !used
       real             asmno3(mnsub)      !used
-      real             asrsar(mnsz,mnsub) !not used
-      real             as0ec(mnsz,mnsub)         ! Not used - not read in Version 1.0 IFC file
 
 
       common / s1dbc /                                                  &
-     &                 as0ph, ascmg, ascna, asfcce, asfcec, asfesp,     &
-     &                 asfom, asfnoh, asfpsp, asfpoh, asfsmb,           &
-     &                 asftan, asftap, asmno3, asrsar, as0ec
+     &                 as0ph, asfcce, asfcec,     &
+     &                 asfom, asfsmb,           &
+     &                 asftan, asftap, asmno3
 
 !     + + + VARIABLE DEFINITIONS + + +
 

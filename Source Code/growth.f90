@@ -24,12 +24,11 @@ subroutine growth(ctrl, bnslay,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_
 !debe added joints, heads and mats to help with debugging to specific growth stages.
 !debe added co2x, co2y, co2atmos, co2eff for use in affecting plant growth by co2.
 !    
-    use constants, only : hatom2, mmtom, max_arg_exp, max_real, pi
+    use constants, only : hatom2, mmtom, max_arg_exp, max_real, pi, mnsz
     use upgm_simdata, only : upgm_ctrls, controls
 implicit none
 !
 include 'file.fi'
-include 'p1werm.inc'
 include 'm1flag.inc'
 include 'clai.inc'
 !DE added

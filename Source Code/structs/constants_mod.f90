@@ -37,9 +37,9 @@
     integer, parameter :: mntime = 1400
     integer, parameter :: mnbpls = 5
     integer, parameter :: mndk = 5
+    integer, parameter :: mnhhrs = 24
     integer, parameter :: num_months = 12
     integer, parameter :: mndayr = 366
-    
     
     end module constants
     

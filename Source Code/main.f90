@@ -1,14 +1,13 @@
 program main
     use upgm_simdata, only : upgm_ctrls
+    use constants, only : mnsz, mnsub, mnbpls,mncz, mnhhrs,mndk
     use climate
     use soil
 !
 implicit none
 !
-include 'p1werm.inc'
 include 'file.fi'
 include 's1dbc.inc'
-include 's1dbh.inc'
 include 'd1glob.inc'
 include 'c1gen.inc'
 include 'm1flag.inc'
@@ -21,7 +20,6 @@ include 'c1db2.inc'
 include 'c1glob.inc'
 include 'h1et.inc'
 include 'h1db1.inc'
-include 's1agg.inc'
 include 'prevstate.inc'
 
 !
@@ -723,11 +721,9 @@ asfom(1,1) = 3.0
 asftan(1,1) = 0.0
 asftap(1,1) = 0.0
 asmno3(1) = 0.0
-asfcla(1,1) = 20.0
+spp_data%asfcla(1,1) = 20.0
 admbgz(1,1,1) = 0.0
 spp_data%asdblk(1) = 1.0
-asfsan(1,1) = 40.0
-asfsil(1,1) = 40.0
 !
 ahtsav(1,1) = 20.0
 ahtsmx(1,1) = 24.0
@@ -763,14 +759,6 @@ ahrwcs(1,1) = 0.0
 ahrwca(1,1) = 0.0
 ahrwcf(1,1) = 0.0
 ahrwcw(1,1) = 0.0
-!
-!soil layer aggregate size distribution stuff
-!
-aslagm(1,1) = 0.0
-as0ags(1,1) = 0.0
-aslagn(1,1) = 0.0
-aslagx(1,1) = 0.0
-aseags(1,1) = 0.0
 !
 !
 ! read in plant parameters from cropxml.dat

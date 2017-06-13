@@ -38,9 +38,9 @@ subroutine cropinit(isr,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,      
 !debe added ecanht so that it can be read in instead of set in the code for each crop.
 !debe added all growth stage variables and phenolflg to be initialized here.
 !debe added CO2 variables to be initialized here.
+    use constants, only : mnsub,mnsz, mncz,mndk
 implicit none
 !
-include 'p1werm.inc'
 include 'c1info.inc'
 include 'c1gen.inc'
 include 'c1db1.inc'

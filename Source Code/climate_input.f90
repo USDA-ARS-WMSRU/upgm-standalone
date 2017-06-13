@@ -4,7 +4,6 @@ Subroutine climate_input(clidat, ccd,ccm,ccy,icli)
     use climate, only : n_header, climate_data
 implicit none
 !
-include 'p1werm.inc'
 include 'file.fi'
 !include 'w1clig.inc'
 !include 'w1cli.inc'

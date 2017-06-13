@@ -1,8 +1,8 @@
 subroutine npcy
 !
+    use constants, only : mnsz
 implicit none
 !
-include 'p1werm.inc'
 include 'cgrow.inc'
 include 'csoil.inc'
 include 'chumus.inc'

@@ -1,8 +1,8 @@
 subroutine nuse(bn1,bn2,bn3,bp1,bp2,bp4)
 !
+    use constants, only : mnsz
 implicit none
 !
-include 'p1werm.inc'
 include 'cgrow.inc'
 include 'csoil.inc'
 include 'cfert.inc'

@@ -10,15 +10,14 @@ subroutine upgm_driver(ctrl,clidat,sppdat,sr,start_jday,end_jday,plant_jday,harv
                      & toptup,tsints,tss,tupper,wfpslo,wfpsup,yelows,seedbed,   &
                      & swtype,growcrop_flg,am0hrvfl,co2x,co2y,co2atmos)
 !
+    use constants, only : mnsz, mnsub, mnbpls, mncz, mndk, mnhhrs
     use upgm_simdata, only : controls
     use climate, only : climate_data
     use soil, only : soil_phys_props
 implicit none
 !
-include 'p1werm.inc'
 include 'file.fi'
 include 's1dbc.inc'
-include 's1dbh.inc'
 include 'd1glob.inc'
 include 'c1gen.inc'
 include 'm1flag.inc'
@@ -31,7 +30,6 @@ include 'c1db2.inc'
 include 'c1glob.inc'
 include 'h1et.inc'
 include 'h1db1.inc'
-include 's1agg.inc'
 include 'prevstate.inc'
 !
 ! Dummy arguments

@@ -1,8 +1,8 @@
 subroutine npmin(j)
 !
+    use constants, only : mnsz
 implicit none
 !
-include 'p1werm.inc'
 include 'csoil.inc'
 include 'cfert.inc'
 !

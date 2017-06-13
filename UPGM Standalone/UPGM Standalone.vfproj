@@ -54,11 +54,8 @@
 		<File RelativePath="..\Source Code\h1temp.inc"/>
 		<File RelativePath="..\Source Code\m1dbug.inc"/>
 		<File RelativePath="..\Source Code\m1flag.inc"/>
-		<File RelativePath="..\Source Code\p1werm.inc"/>
 		<File RelativePath="..\Source Code\prevstate.inc"/>
-		<File RelativePath="..\Source Code\s1agg.inc"/>
 		<File RelativePath="..\Source Code\s1dbc.inc"/>
-		<File RelativePath="..\Source Code\s1dbh.inc"/>
 		<File RelativePath="..\Source Code\tcrop.inc"/></Filter>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 		<File RelativePath="..\Source Code\file.fi"/></Filter>

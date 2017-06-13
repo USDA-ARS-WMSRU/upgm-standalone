@@ -7,9 +7,9 @@ subroutine cropupdate(bcmstandstem,bcmstandleaf,bcmstandstore,bcmflatstem,      
                     & bcfcancov,bc0rg,bcxrow,bnslay,bc0ssa,bc0ssb,bc0sla,       &
                     & bcovfact,bc0ck,bcxstm,bcdpop)
 !
+    use constants, only : mncz,mnsub,mnsz
 implicit none
 !
-include 'p1werm.inc'
 include 'c1glob.inc' !added to have access to variable 'acmrt'
 !
 ! Dummy arguments
