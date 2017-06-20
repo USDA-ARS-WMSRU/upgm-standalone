@@ -1,4 +1,4 @@
-subroutine cropinit(isr,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,      &
+subroutine cropinit(bio,isr,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,      &
                   & canopyflg,cliname,cots,cropname,dayhtinc,dents,doughs,drs,  &
                   & dummy1,dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,    &
                   & ergdd,eseeds,first7,fps,fullbs,gddtbg,germgdd,germs,ggdd,   &
@@ -39,6 +39,7 @@ subroutine cropinit(isr,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,      
 !debe added all growth stage variables and phenolflg to be initialized here.
 !debe added CO2 variables to be initialized here.
     use constants, only : mnsub,mnsz, mncz,mndk
+    use biomaterial, only : biomatter
 implicit none
 !
 include 'c1info.inc'
@@ -50,6 +51,7 @@ include 'tcrop.inc'
 !
 ! Dummy arguments
 !
+    type(biomatter) :: bio
 real :: aepa,dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,tupper,    &
       & co2atmos
 logical :: callgdd
@@ -504,7 +506,7 @@ end do
 acddsthrsh(isr) = 0.0
  
       ! temporary crop
-atmstandstem(isr) = 0.0
+bio%mass%standstem = 0.0
 atmstandleaf(isr) = 0.0
 atmstandstore(isr) = 0.0
 atmflatstem(isr) = 0.0

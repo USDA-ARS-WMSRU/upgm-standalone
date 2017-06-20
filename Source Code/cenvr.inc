@@ -9,16 +9,16 @@
 !     related to the weather data and temperature factors.
 
 !     + + + VARIABLE DECLARATIONS + + +
-       real vpd,tava,hrlt,hrlty,                                        &
-     & dhu, hui, huiy, huirt, huirty, dhuf, ehu, tplant, fhr,           &
-     & ts,hu,xlat,cta,ceta,ctab,cetab,ctas,cetas,ctay,cetay,prcp,       &
-     & prcpb,prcpy,prcps,ctp,ctpb,ctpy,ctps, frs1, frs2,phu
-      integer jda,jd
+       real hrlt,hrlty,                                        &
+     & hui, huiy, huirt, huirty, ehu,           &
+     & ts,xlat,       &
+     & phu
+      integer jd
 
-       common / envr / vpd,tava,hrlt,hrlty,                             &
-     & dhu, hui, huiy, huirt, huirty, dhuf, jda, jd, ehu, frs1, frs2,   &
-     & tplant,fhr,ts,hu,xlat,cta,ceta,ctab,cetab,ctas,cetas,            &
-     & ctay,cetay,prcp,prcpb,prcpy,prcps,ctp,ctpb,ctpy,ctps,phu
+       common / envr / hrlt,hrlty,                             &
+     & hui, huiy, huirt, huirty, jd, ehu,   &
+     & ts,xlat,            &
+     & phu
 
 !     + + + VARIABLE DEFINITIONS + + +
 !    cta - actual cummulated transpiration (mm)

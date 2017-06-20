@@ -8,19 +8,16 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
 
-      real             ahtsav(mnsz,mnsub)
       real             ahtsmx(mnsz,mnsub)  !used
       real             ahtsmn(mnsz,mnsub)  !used
-      real             ahfice(mnsz,mnsub)
 
       common / h1temp /                                                 &
-     &                  ahtsav, ahtsmx, ahtsmn, ahfice
+     &                  ahtsmx, ahtsmn
 
 !     + + + VARIABLE DEFINITIONS + + +
 
-!     ahtsav - Mean daily soil temperature (deg C)
 !     ahtsmx - Maximum daily soil temperature (deg C)
 !     ahtsmn - Minimum daily soil temperature (deg C)
-!     ahfice - fraction of soil water in layer which is frozen
+
 
 

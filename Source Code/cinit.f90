@@ -546,15 +546,6 @@ bctchillucum = 0.0
 bcthu_shoot_beg = 0.0
 bcthu_shoot_end = bc0hue
  
-cta = 0.
-ceta = 0.
-prcp = 0.
-ctp = 0.
-daye = 0
-frs1 = bc0fd1
-frs2 = bc0fd2
-slaix = 0.0
-ssaix = 0.0
  
 !     set variable in local include file
 xlat = ctrl%sim%amalat

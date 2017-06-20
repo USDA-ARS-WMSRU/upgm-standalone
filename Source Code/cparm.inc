@@ -9,12 +9,12 @@
 !     used in s-curve calculations of lai, co2, frost & harvest index.
 
 !     + + + VARIABLE DECLARATIONS + + +
-      real a_la,b_la,a_co,b_co,a_fr,b_fr,a_hi
-      real b_hi,a_s11,b_s11,a_s8,b_s8,parm
+      real a_fr,b_fr
+      real b_hi,a_s11,b_s11,a_s8,b_s8
 
       common / par /                                                    &
-     & a_la,b_la,a_co,b_co,a_fr,b_fr,a_hi,                              &
-     & b_hi,a_s11,b_s11,a_s8,b_s8,parm(12)
+     & a_fr,b_fr,                             &
+     & a_s11,b_s11,a_s8,b_s8
 
 !     + + + VARIABLE DEFINITIONS + + +
 ! dlax1 - fraction of grwing season (1st x-coordinate in lai s-curve)

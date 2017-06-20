@@ -15,14 +15,14 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
       real cnt,cpt,cdg,cn,cp,fc,gsw !used
-      real pdsw,po,psp,rq,rz,st,suno3,sut,sws,t,wt,za
+      real po,psp,rq,rz,st,suno3,sut,sws,t,wt,za
 
       integer ids
 
       common / csoil /                                                  &
      &                cnt, cpt, cdg,                                    &
      &                cn(mnsz), cp(mnsz), fc(mnsz),                     &
-     &                gsw, ids, pdsw, po,                               &
+     &                gsw, ids, po,                               &
      &                psp(mnsz), rq, rz, st(mnsz),                      &
      &                suno3, sut, sws, t(mnsz),                         &
      &                wt(mnsz), za(mnsz)

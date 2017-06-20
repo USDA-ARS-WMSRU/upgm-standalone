@@ -10,41 +10,10 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
 
-      real             ahrwc(mnsz,mnsub)
-      real             ahrwcdmx(mnsz,mnsub)
-      real             aheaep(mnsz,mnsub)
-      real             ah0cb(mnsz,mnsub)
-      real             ahrsk(mnsz,mnsub)
       real             ahfwsf(mnsub)  !used
-      real             ahzsno(mnsub)
-      real             ahtsno(mnsub)
-      real             ahfsnfrz(mnsub)
-      real             ahzirr(mnsub)
-      real             ahzdmaxirr(mnsub)
-      real             ahratirr(mnsub)
-      real             ahdurirr(mnsub)
-      real             ahlocirr(mnsub)
-      real             ahminirr(mnsub)
-      integer          am0monirr(mnsub)
-      real             ahmadirr(mnsub)
-      integer          ahndayirr(mnsub)
-      integer          ahmintirr(mnsub)
-      real             ahzoutflow(mnsub)
-      real             ahzper(mnsub)
-      real             ahzrun(mnsub)
-      real             ahzinf(mnsub)
-      real             ahzsmt(mnsub)
-      real             ahzwid(mnsub)
-      real             ahzeasurf(mnsub)
 
       common / h1hydro /                                                &
-     &                  ahrwc, ahrwcdmx, aheaep, ah0cb, ahrsk, ahfwsf,  &
-     &                  ahzsno, ahtsno, ahfsnfrz,                       &
-     &                  ahzirr, ahzdmaxirr, ahratirr, ahdurirr,         &
-     &                  ahlocirr, ahminirr, am0monirr, ahmadirr,        &
-     &                  ahndayirr, ahmintirr, ahzoutflow,               &
-     &                  ahzper, ahzrun, ahzinf,                         &
-     &                  ahzsmt, ahzwid, ahzeasurf
+     &                 ahfwsf
 
 !     + + + VARIABLE DEFINITIONS + + +
 

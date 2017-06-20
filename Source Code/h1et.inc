@@ -12,17 +12,12 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
 
-      real             ahzea
-      real             ahzep
-      real             ahzeta
-      real             ahzetp
-      real             ahzpta
+      real             ahzeta !used
+      real             ahzpta !used
       real             ahzptp  !used
-      real             ah0drat
 
       common /h1et/                                                     &
-     &               ahzea, ahzep, ahzeta, ahzetp, ahzpta, ahzptp,      &
-     &               ah0drat
+     &               ahzeta, ahzpta, ahzptp
 
 !     + + + VARIABLE DEFINITIONS + + +
 

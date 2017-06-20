@@ -9,22 +9,20 @@
 !     Parameter include files:  p1werm.inc
 
 !     + + + VARIABLE DECLARATIONS + + +
-      integer ir, je, daye,dtm , iprint
-      real dm,ddm,slai0,                                                &
-     & rw,rwt,u,su,yld,                                                 &
-     & pdm,strs,prw,pdmag,pclfwt,pcstwt,pcrpwt,pclfarea,pcstarea,pslai, &
-     & pssai,pcht,pchty,clfwt,cstwt,crpwt,clfarea,cstarea,ssai,         &
-     & parea,pclfwtx,clfwtx,slai, dmag,                                 &
-     & clfwtb,cstwtb,crpwtb,dmagb,clfwty,cstwty,crpwty,dmagy,clfwts,    &
-     & cstwts,crpwts,dmags, prd, prdy, slaix, ssaix, pddm
+      integer ir, je, dtm 
+      real dm,ddm,                                                &
+     & rw,rwt,u,                                                 &
+     & strs, &
+     & pcht,pchty,clfwt,clfarea,         &
+     & parea,                                 &
+     &  prd, prdy,  pddm
 
-      common / grow / dm,ddm,slai0,iprint,                              &
-     & ir,rw,rwt(mnsz),u(mnsz),su,yld,je,                               &
-     & pdm,strs,prw,pdmag,pclfwt,pcstwt,pcrpwt,pclfarea,pcstarea,pslai, &
-     & pssai,pcht,pchty,clfwt,cstwt,crpwt,clfarea,cstarea,ssai,         &
-     & parea, pclfwtx,clfwtx, slai, dmag,                               &
-     & clfwtb,cstwtb,crpwtb,dmagb,clfwty,cstwty,crpwty,dmagy,clfwts,    &
-     & cstwts,crpwts,dmags, prd, prdy, slaix, ssaix, daye, dtm, pddm
+      common / grow / dm,ddm,                              &
+     & ir,rw,rwt(mnsz),u(mnsz),je,                               &
+     & strs, &
+     & pcht,pchty,clfwt,clfarea,         &
+     & parea,                               &
+     & prd, prdy,  dtm, pddm
 
 !     + + + VARIABLE DEFINITIONS + + +
 !     clfarea - green leaf area per plant

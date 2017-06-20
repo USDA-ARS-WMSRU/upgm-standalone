@@ -20,10 +20,6 @@
       integer          acrsfg(mnsub) !used
       real             acxrow(mnsub) !used
       integer          acthudf(mnsub) !used
-      integer          aplant_day(mnsub)
-      integer          aplant_month(mnsub)
-      integer          aplant_rotyr(mnsub)
-
       common / c1gen /                                                  &
      &                 ac0rg,                                           &
      &                 acdpop,                                          &
@@ -33,10 +29,7 @@
      &                 acycon, acywct,                                  &
      &                 acrsfg,                                          &
      &                 acxrow,                                          &
-     &                 acthudf,                                         &
-     &                 aplant_day,                                      &
-     &                 aplant_month,                                    &
-     &                 aplant_rotyr
+     &                 acthudf
 
 !     + + + VARIABLE DEFINITIONS + + +
 !     ac0rg  - Crop seeding location in relation to ridge

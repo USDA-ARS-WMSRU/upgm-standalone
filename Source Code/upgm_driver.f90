@@ -1,4 +1,4 @@
-subroutine upgm_driver(ctrl,clidat,sppdat,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,&
+subroutine upgm_driver(ctrl,clidat,sppdat,bio,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,&
                      & antes,antss,blstrs,boots,browns,callgdd,canht,canopyflg, &
                      & cliname,cots,cropname,dayhtinc,dents,doughs,drs,dummy1,  &
                      & dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,ergdd,  &
@@ -14,6 +14,7 @@ subroutine upgm_driver(ctrl,clidat,sppdat,sr,start_jday,end_jday,plant_jday,harv
     use upgm_simdata, only : controls
     use climate, only : climate_data
     use soil, only : soil_phys_props
+    use biomaterial
 implicit none
 !
 include 'file.fi'
@@ -29,7 +30,6 @@ include 'c1db1.inc'
 include 'c1db2.inc'
 include 'c1glob.inc'
 include 'h1et.inc'
-include 'h1db1.inc'
 include 'prevstate.inc'
 !
 ! Dummy arguments
@@ -37,6 +37,7 @@ include 'prevstate.inc'
     type(controls) :: ctrl
     type(climate_data) :: clidat
     type(soil_phys_props) :: sppdat
+    type(biomatter) :: bio
 real :: aepa,canht,dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,     &
       & tupper,co2atmos
 integer :: am0hrvfl,canopyflg,emrgflg,end_jday,first7,gmethod,growth_stress,    &
@@ -171,7 +172,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
     ! debe added passing the new variable 'phenolflg' which is read in from upgm_crop.dat
     ! and the phenological growth stages variables to callcrop which will pass
     ! them on to crop.
-     call callcrop(ctrl,clidat,sppdat,aepa,aifs,ctrl%sim%julday-plant_jday+1,1,antes,antss,blstrs,boots,     &
+     call callcrop(ctrl,clidat,sppdat,bio,aepa,aifs,ctrl%sim%julday-plant_jday+1,1,antes,antss,blstrs,boots,     &
                  & browns,callgdd,canht,canopyflg,cliname,cots,cropname,        &
                  & dayhtinc,dents,doughs,drs,dummy1,dummy2,ears,ecanht,egdd,    &
                  & emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,fullbs,     &

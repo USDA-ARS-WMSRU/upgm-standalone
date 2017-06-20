@@ -25,7 +25,6 @@
 !     Parameter include files required:  p1werm.inc
 !
 !     + + + VARIABLE DECLARATIONS + + +
-      real             atmstandstem(mnsub) !added state !in biomat
       real             atmstandleaf(mnsub) !added state !in biomat
       real             atmstandstore(mnsub) !added state !in biomat
 
@@ -50,7 +49,7 @@
       real             atgrainf(mnsub) !added state !in biomat
 
       common / tcrop /                                                  &
-     &           atmstandstem, atmstandleaf, atmstandstore,             &
+     &           atmstandleaf, atmstandstore,             &
      &           atmflatstem, atmflatleaf, atmflatstore,                &
      &           atmflatrootstore, atmflatrootfiber,                    &
      &           atmbgstemz, atmbgleafz, atmbgstorez,                   &

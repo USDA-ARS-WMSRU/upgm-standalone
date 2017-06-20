@@ -14,15 +14,10 @@
       integer          acbaflg(mnsub) !used
       real             acbaf(mnsub) !used
       real             acyraf(mnsub) !used
-      real             acrcn(mnsub)
       integer          actdtm(mnsub) !used
       real             acthum(mnsub) !used
       real             aczmrt(mnsub) !used
       real             aczmxc(mnsub) !used
-      real             acrbe(mnsub)
-      real             acrbed(mnsub)
-      real             ac0lad(mncz, mnsub)
-      real             ac0sad(mncz, mnsub)
       real             acgrf(mnsub) !used
       real             acehu0(mnsub) !used
       real             actverndel(mnsub) !used
@@ -75,8 +70,8 @@
       common / c1db1 /                                                  &
      &                 acbaflg,                                         &
      &                 acbaf, acyraf,                                   &
-     &                 acrcn, actdtm, acthum, aczmrt, aczmxc,           &
-     &                 acrbe, acrbed, ac0lad, ac0sad ,acgrf,            &
+     &                 actdtm, acthum, aczmrt, aczmxc,           &
+     &                 acgrf,            &
      &                 acehu0, actverndel, ac0bceff, ac0alf ,ac0blf,    &
      &                 ac0clf, ac0dlf, ac0arp, ac0brp, ac0crp, ac0drp,  &
      &                 ac0aht, ac0bht, ac0ssa, ac0ssb, ac0sla, ac0hue,  &

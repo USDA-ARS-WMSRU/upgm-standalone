@@ -14,7 +14,6 @@ include 'c1db2.inc'
 include 'c1glob.inc'
 include 'h1et.inc'
 include 'h1hydro.inc'
-include 'h1db1.inc'
 include 'h1temp.inc'
 !
 ! Dummy arguments
@@ -98,19 +97,17 @@ write (cdbugfile,1400) isr,isr,isr,isr,isr,isr,isr
 !      write(27,2051) amrslp(isr), acftcv(isr), acrlai(isr), aczrtd(isr),
 !     &               admf(isr), ahfwsf(isr), ac0nam(isr)
 write (cdbugfile,1600) isr,isr,isr,isr
-write (cdbugfile,1700) actdtm(isr),acthucum(isr),acmst(isr),acmrt(isr),ahzeta,ahzetp,  &
-              & ahzpta
+write (cdbugfile,1700) actdtm(isr),acthucum(isr),acmst(isr),acmrt(isr)
 ! write (cdbugfile,1800) isr,isr,isr,isr
 write (cdbugfile,1800) isr,isr
 !write (cdbugfile,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr),as0rrk(isr),         &
 !              & aslrr(isr)
-write (cdbugfile,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr)
+write (cdbugfile,1900) ahzptp,actmin(isr),actopt(isr)
 write (cdbugfile,2000)
  
 do l = 1,slay
-  write (cdbugfile,2100) l,sppdat%aszlyt(l,isr),ahrsk(l,isr),ahrwc(l,isr),ahrwcs(l,isr),      &
-                & ahrwca(l,isr),ahrwcf(l,isr),ahrwcw(l,isr),ah0cb(l,isr),       &
-                & aheaep(l,isr),ahtsmx(l,isr),ahtsmn(l,isr)
+  write (cdbugfile,2100) l,sppdat%aszlyt(l,isr),      &
+                & ahtsmx(l,isr),ahtsmn(l,isr)
 end do
 write (cdbugfile,2200)
  
@@ -138,16 +135,15 @@ ctrl%sim%tyr = cy
              &') admf(',i2,') ahfwsf(',i2,')',' ac0nam(',i2,')')
  1500 format (2F10.2,2F10.5,2x,f10.2,f10.2,3x,a12)
  1600 format ('actdtm(',i2,') sum-phu(',i2,') acmst(',i2,')','  acmrt(',i2,     &
-             &')  ahzeta      ahzetp     ',' ahzpta ')
+             &')')
  1700 format (i10,4F10.2,2F12.2)
 !1800 format ('      ahzea     ahzep    ahzptp ',' actmin(',i2,') actopt(',i2,  &
 !            &') as0rrk(',i2,')',' aslrr(',i2,')')
- 1800 format ('      ahzea     ahzep    ahzptp ',' actmin(',i2,') actopt(',i2,')')
+ 1800 format ('      ahzptp ',' actmin(',i2,') actopt(',i2,')')
 !1900 format (2f10.2,2f10.3,3f12.2)
  1900 format (2F10.2,2F10.3,1F12.2)
- 2000 format ('layer aszlyt  ahrsk ahrwc ahrwcs ahrwca',                        &
-             &' ahrwcf ahrwcw ah0cb aheaep ahtsmx ahtsmn')
- 2100 format (i4,1x,f7.2,1x,e7.1,f6.2,4F7.2,f6.2,3F7.2)
+ 2000 format ('layer aszlyt ahtsmx ahtsmn')
+ 2100 format (i4,1x,f7.2,1x,2F7.2)
  2200 format (' layer  asfcla asfom asdblk')
  2300 format (i4,2x,1F7.2,f7.3,F7.2)
  

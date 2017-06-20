@@ -3,6 +3,7 @@ program main
     use constants, only : mnsz, mnsub, mnbpls,mncz, mnhhrs,mndk
     use climate
     use soil
+    use biomaterial
 !
 implicit none
 !
@@ -19,12 +20,12 @@ include 'c1db1.inc'
 include 'c1db2.inc'
 include 'c1glob.inc'
 include 'h1et.inc'
-include 'h1db1.inc'
 include 'prevstate.inc'
 
 !
 ! Local variables
 !
+    type(biomatter) :: bio
 real :: aepa,canht,dayhtinc,ecanht,elrate,gddtbg,germd,maxht,pchron,tbase,      &
       & toptlo,toptup,tupper,wlow,wup,co2atmos
 integer,dimension(4) :: aifs,antes,antss,blstrs,boots,browns,cots,dents,doughs, &
@@ -650,7 +651,7 @@ call fopenk(soilprofile, 'upgm_soil_profile.dat', 'old') ! open soil profile fil
 ! which method of calculating canopy height will be used. added dayhtinc to get
 ! the daily increase in height when using the phenologymms method of calculating
 ! canopy height. debe added the CO2 variables to be initialized.
-call cropinit(1,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,canopyflg,    &
+call cropinit(bio,1,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,canopyflg,    &
             & cliname,cots,cropname,dayhtinc,dents,doughs,drs,dummy1,dummy2,    &
             & ears,ecanht,egdd,emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,&
             & fullbs,gddtbg,germgdd,germs,ggdd,gmethod,gpds,growth_stress,      &
@@ -725,10 +726,8 @@ spp_data%asfcla(1,1) = 20.0
 admbgz(1,1,1) = 0.0
 spp_data%asdblk(1) = 1.0
 !
-ahtsav(1,1) = 20.0
 ahtsmx(1,1) = 24.0
 ahtsmn(1,1) = 22.0
-ahfice(1,1) = 0.0
 !
 !amzele = 100.0    ! default simulation site elevation (m) !RMarquez 06.09.2017 -> this variable is not used
 upgm_ctrls%sim%amalat = -38.0
@@ -741,24 +740,10 @@ acmrt(1) = 0.0    ! initialize total root crop mass
 acxstmrep = 0.0   ! initialize repesentative stem dia.
 !
 ahzeta = 0.0      ! initialize actual evapotranspiration
-ahzetp = 0.0      ! initialize potential evapotranspiration
 ahzpta = 0.0      ! initialize actual plant transpiration
-ahzea = 0.0       ! initialize bare soil evaporation
-ahzep = 0.0       ! initialize potential bare soil evaporation
 ahzptp = 0.0      ! initialize potential plant transpiration
 ! aslrrc(1) = 0.0 ! initialize random roughness parms
 ! aslrr(1) = 0.0  ! these are not used and are commented out jcaii 4/30/2013
-ahrsk(1,1) = 0.0  ! saturated soil hydraulic conductivity
-ahrwc(1,1) = 0.0  ! soil water content
-ah0cb(1,1) = 0.0
-aheaep(1,1) = 0.0
-!
-!soil layer water content variables
-!
-ahrwcs(1,1) = 0.0
-ahrwca(1,1) = 0.0
-ahrwcf(1,1) = 0.0
-ahrwcw(1,1) = 0.0
 !
 !
 ! read in plant parameters from cropxml.dat
@@ -952,7 +937,7 @@ end if
 if (am0cfl>1) call fopenk(luoallcrop,'allcrop.prn','unknown')     ! main crop debug output file
 if (am0cdb>0) call fopenk(cdbugfile,'cdbug.out','unknown')       ! crop submodel debug output file
 !
-call upgm_driver(upgm_ctrls,cli_data,spp_data,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,antes,&
+call upgm_driver(upgm_ctrls,cli_data,spp_data,bio,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,antes,&
                & antss,blstrs,boots,browns,callgdd,canht,canopyflg,cliname,cots,&
                & cropname,dayhtinc,dents,doughs,drs,dummy1,dummy2,ears,ecanht,  &
                & egdd,emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,fullbs,  &

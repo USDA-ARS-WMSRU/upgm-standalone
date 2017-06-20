@@ -1,4 +1,4 @@
-subroutine callcrop(ctrl,clidat,sppdat,aepa,aifs,daysim,sr,antes,antss,blstrs,boots,browns,callgdd,&
+subroutine callcrop(ctrl,clidat,sppdat,bio,aepa,aifs,daysim,sr,antes,antss,blstrs,boots,browns,callgdd,&
                   & canht,canopyflg,cliname,cots,cropname,dayhtinc,dents,doughs,&
                   & drs,dummy1,dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,&
                   & ergdd,eseeds,first7,fps,fullbs,gddtbg,germgdd,germs,ggdd,   &
@@ -12,6 +12,7 @@ subroutine callcrop(ctrl,clidat,sppdat,aepa,aifs,daysim,sr,antes,antss,blstrs,bo
      use climate, only : climate_data
      use soil, only : soil_phys_props
      use constants, only : mnsz, mnsub,mnbpls,mncz,mndk
+     use biomaterial
 !debe 082508 removed sram0jd-plant_jday+1 from the subroutine argument list
 ! because this caused many errors. i think a mistake was made in copying in
 ! the passing arguments from main. the first two arguments are (daysim, sr)
@@ -90,6 +91,7 @@ include 'cenvr.inc'
     type(controls) :: ctrl
     type(climate_data) :: clidat
     type(soil_phys_props) :: sppdat
+    type(biomatter) :: bio
 real :: aepa,canht,dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,     &
       & tupper,co2atmos
 logical :: callgdd
@@ -732,7 +734,7 @@ if (am0cgf) then
           & prevrootfiberz(1,sr),prevht(sr),prevzshoot(sr),prevstm(sr),         &
           & prevrtd(sr),prevdayap(sr),prevhucum(sr),prevrthucum(sr),            &
           & prevgrainf(sr),prevchillucum(sr),prevliveleaf(sr),daysim,           &
-          & acdayspring(sr),aczloc_regrow(sr),atmstandstem(sr),atmstandleaf(sr),&
+          & acdayspring(sr),aczloc_regrow(sr),bio%mass%standstem,atmstandleaf(sr),&
           & atmstandstore(sr),atmflatstem(sr),atmflatleaf(sr),atmflatstore(sr), &
           & atmbgstemz(1,sr),atzht(sr),atdstm(sr),atxstmrep(sr),atgrainf(sr),   &
           & aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,canht,canopyflg,  &
@@ -755,7 +757,7 @@ if (am0cgf) then
 end if
  
       ! check for abandoned stems in crop regrowth
-if ((atmstandstem(sr)+atmstandleaf(sr)+atmstandstore(sr)+atmflatstem(sr)        &
+if ((bio%mass%standstem+atmstandleaf(sr)+atmstandstore(sr)+atmflatstem(sr)        &
   & +atmflatleaf(sr)+atmflatstore(sr))>0.0) then
           ! zero out residue pools which crop is not transferring
   atmflatrootstore(sr) = 0.0
@@ -766,7 +768,7 @@ if ((atmstandstem(sr)+atmstandleaf(sr)+atmstandstore(sr)+atmflatstem(sr)        
      atmbgrootstorez(lay,sr) = 0.0
      atmbgrootfiberz(lay,sr) = 0.0
   end do
-  call trans(atmstandstem(sr),atmstandleaf(sr),atmstandstore(sr),atmflatstem(sr)&
+  call trans(bio%mass%standstem,atmstandleaf(sr),atmstandstore(sr),atmflatstem(sr)&
            & ,atmflatleaf(sr),atmflatstore(sr),atmflatrootstore(sr),            &
            & atmflatrootfiber(sr),atmbgstemz(1,sr),atmbgleafz(1,sr),            &
            & atmbgstorez(1,sr),atmbgrootstorez(1,sr),atmbgrootfiberz(1,sr),     &
@@ -797,8 +799,6 @@ call cropupdate(acmstandstem(sr),acmstandleaf(sr),acmstandstore(sr),            
               & ac0ssb(sr),ac0sla(sr),accovfact(sr),ac0ck(sr),acxstm(sr),       &
               & acdpop(sr))
  
-! dependent variables have been updated
-am0cropupfl = 0
 !
 ! call timer(timcrop,timstop)
 !

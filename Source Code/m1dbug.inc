@@ -11,15 +11,10 @@
 
 !     + + + VARIABLE DECLARATIONS + + +
 
-      integer          am0hdb
-      integer          am0sdb
-      integer          am0tdb
       integer          am0cdb  !used
-      integer          am0ddb
-      integer          am0edb
 
       common / m1dbug /                                                 &
-     &                  am0hdb, am0sdb, am0tdb, am0cdb, am0ddb, am0edb
+     &                   am0cdb
 
 !     + + + VARIABLE DEFINITIONS + + +
 
