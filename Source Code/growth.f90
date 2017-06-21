@@ -1,4 +1,4 @@
-subroutine growth(ctrl, bnslay,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,   &
+subroutine growth(ctrl, bnslay,bio,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,   &
                 & b_fr,bcxrow,bc0diammax,bczmrt,bctmin,bctopt,cc0be,bc0alf,     &
                 & bc0blf,bc0clf,bc0dlf,bc0arp,bc0brp,bc0crp,bc0drp,bc0aht,      &
                 & bc0bht,bc0ssa,bc0ssb,bc0sla,bcxstm,bhtsmn,bwtdmx,bwtdmn,      &
@@ -26,10 +26,10 @@ subroutine growth(ctrl, bnslay,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_
 !    
     use constants, only : hatom2, mmtom, max_arg_exp, max_real, pi, mnsz
     use upgm_simdata, only : upgm_ctrls, controls
+    use biomaterial
 implicit none
 !
 include 'file.fi'
-include 'm1flag.inc'
 include 'clai.inc'
 !DE added
 include 'cgrow.inc'
@@ -37,6 +37,7 @@ include 'cgrow.inc'
 ! Dummy arguments
 !
     type(controls) :: ctrl
+    type(biomatter) :: bio 
 real :: a_fr,bc0aht,bc0alf,bc0arp,bc0bht,bc0blf,bc0brp,bc0ck,bc0clf,bc0crp,     &
       & bc0diammax,bc0dlf,bc0drp,bc0sla,bc0ssa,bc0ssb,bcbaf,bcdpop,bcdstm,      &
       & bcehu0,bcfleaf2stor,bcfliveleaf,bcfstem2stor,bcfstor2stor,bcgrainf,     &
@@ -859,7 +860,7 @@ end if
  
 !     the following write statements are for 'crop.out'
 !     am0cfl is flag to print crop submodel output
-if (am0cfl>=1) then
+if (bio%growth%am0cfl>=1) then
 !          ! temporary sum for output
   temp_store = 0.0
  

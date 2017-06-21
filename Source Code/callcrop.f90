@@ -75,8 +75,6 @@ include 'c1glob.inc'
 include 'c1gen.inc'
 include 'd1glob.inc'
 include 'd1gen.inc'
-include 'm1flag.inc'
-include 'm1dbug.inc'
 include 's1dbc.inc'
 include 'h1hydro.inc'
 include 'h1et.inc'
@@ -697,14 +695,14 @@ integer :: lay
 ! to be disabled, we won't worry about it right now.  lew - 04/23/99
 !
 ! check for a valid growing crop
-if ((ac0shoot(sr)<=0.0).or.(acdpop(sr)<=0.0)) am0cgf = .false.
+if ((ac0shoot(sr)<=0.0).or.(acdpop(sr)<=0.0)) bio%growth%am0cgf = .false.
 !
 !     only continue if crop is growing
-if (am0cgf) then
+if (bio%growth%am0cgf) then
  
-  if (am0cdb==1) call cdbug(sr,sppdat%nslay,ctrl,clidat,sppdat )
+  if (ctrl%sim%am0cdb==1) call cdbug(sr,sppdat%nslay,ctrl,clidat,sppdat,bio )
 !  print*, 'in callcrop just before call to crop seedsw = ', seedsw
-  call crop(ctrl,clidat, sppdat%nslay,sppdat%aszlyt(1,sr),sppdat%aszlyd(1,sr),sppdat%asdblk(1),asfcce(1,sr),      &
+  call crop(ctrl,clidat,bio, sppdat%nslay,sppdat%aszlyt(1,sr),sppdat%aszlyd(1,sr),sppdat%asdblk(1),asfcce(1,sr),      &
           & asfom(1,sr),asfcec(1,sr),asfsmb(1,sr),sppdat%asfcla(1,sr),as0ph(1,sr),     &
           & asftan(1,sr),asftap(1,sr),asmno3(sr),ac0bn1(sr),ac0bn2(sr),         &
           & ac0bn3(sr),ac0bp1(sr),ac0bp2(sr),ac0bp3(sr),ac0ck(sr),acgrf(sr),    &
@@ -714,7 +712,7 @@ if (am0cgf) then
           & ac0blf(sr),ac0clf(sr),ac0dlf(sr),ac0arp(sr),ac0brp(sr),ac0crp(sr),  &
           & ac0drp(sr),ac0aht(sr),ac0bht(sr),ac0sla(sr),ac0hue(sr),             &
           & actverndel(sr),ahtsmx(1,sr),ahtsmn(1,sr)&
-          & ,ahzpta,ahzeta,ahzptp,ahfwsf(sr),am0cif,am0cgf,acthudf(sr),         &
+          & ,ahzpta,ahzeta,ahzptp,ahfwsf(sr),bio%growth%am0cif,bio%growth%am0cgf,acthudf(sr),         &
           & acbaflg(sr),acbaf(sr),acyraf(sr),achyfg(sr),acthum(sr),acdpop(sr),  &
           & acdmaxshoot(sr),ac0transf(sr),ac0storeinit(sr),acfshoot(sr),        &
           & ac0growdepth(sr),acfleafstem(sr),ac0shoot(sr),ac0diammax(sr),       &
@@ -752,7 +750,7 @@ if (am0cgf) then
 ! canopyflg = 1.
 !debe added growth stage array variables and phenolflg to be passed to crop from main.
  
-  if (am0cdb==1) call cdbug(sr,sppdat%nslay,ctrl, clidat,sppdat)
+  if (ctrl%sim%am0cdb==1) call cdbug(sr,sppdat%nslay,ctrl, clidat,sppdat,bio)
 end if
  
       ! check for abandoned stems in crop regrowth

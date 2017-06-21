@@ -1,4 +1,4 @@
-subroutine shoot_grow(ctrl, clidat, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,  &
+subroutine shoot_grow(ctrl, clidat, bio, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,  &
                     & bc0ssa,bc0ssb,bc0diammax,hui,huiy,bcthu_shoot_beg,        &
                     & bcthu_shoot_end,bcmstandstem,bcmstandleaf,bcmstandstore,  &
                     & bcmflatstem,bcmflatleaf,bcmflatstore,bcmshoot,bcmtotshoot,&
@@ -37,10 +37,10 @@ subroutine shoot_grow(ctrl, clidat, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafst
     use constants, only : mgtokg, mmtom
     use upgm_simdata, only : upgm_ctrls, controls
     use climate, only: climate_data
+    use biomaterial
 implicit none
 !
 include 'file.fi'
-include 'm1flag.inc'
 !
 ! PARAMETER definitions
 !
@@ -50,6 +50,7 @@ real,parameter :: shoot_exp = 2.0,be_stor = 0.7,rootf = 0.4
 !
     type(controls) :: ctrl
     type(climate_data) :: clidat
+    type(biomatter) :: bio   
 real :: bc0diammax,bc0growdepth,bc0ssa,bc0ssb,bcdpop,bcdstm,bcfleafstem,        &
       & bcfliveleaf,bcfshoot,bcgrf,bcmflatleaf,bcmflatstem,bcmflatstore,        &
       & bcmshoot,bcmstandleaf,bcmstandstem,bcmstandstore,bcmtotshoot,           &
@@ -593,7 +594,7 @@ end do
 ! debe took bcdayap out of the list to write out. bcdayap was not passed
 ! into shoot_grow and so when trying to print bcdayap it was not
 ! initialized and it held garbage. put in dap instead.
-if (am0cfl>=1) write (luoshoot,1100) daysim,doy,yr,dap,shoot_hui,s_root_sum,    &
+if (bio%growth%am0cfl>=1) write (luoshoot,1100) daysim,doy,yr,dap,shoot_hui,s_root_sum,    &
                                    & f_root_sum,tot_mass_req,end_shoot_mass,    &
                                    & end_root_mass,d_root_mass,d_shoot_mass,    &
                                    & d_s_root_mass,end_stem_mass,end_stem_area, &

@@ -1,4 +1,4 @@
-subroutine cinit(ctrl,clidat,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla, &
+subroutine cinit(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla, &
                & bs0ph,bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,bc0bp3,bsmno3,bc0fd1, &
                & bc0fd2,bctopt,bctmin,cc0fd1,cc0fd2,bc0sla,bc0idc,dd,mm,yy,     &
                & bcthudf,bctdtm,bcthum,bc0hue,bcdmaxshoot,bc0shoot,bc0growdepth,&
@@ -42,10 +42,10 @@ subroutine cinit(ctrl,clidat,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bs
     use constants, only : mgtokg, mmtom, civilrise, mnsz
     use upgm_simdata, only : upgm_ctrls, controls
     use climate, only : climate_data
+    use biomaterial
 implicit none
 !
 include 'file.fi'
-include 'm1flag.inc'
 include 'csoil.inc'
 include 'chumus.inc'
 include 'cfert.inc'
@@ -57,6 +57,7 @@ include 'cparm.inc'
 !
     type(controls) :: ctrl
     type(climate_data) :: clidat
+    type(biomatter) :: bio
 real :: bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,bc0bp3,bc0fd1,bc0fd2,bc0growdepth,   &
       & bc0hue,bc0shoot,bc0sla,bc0storeinit,bcdmaxshoot,bcdpop,bcdstm,          &
       & bcfliveleaf,bcgrainf,bcleafareatrend,bcmflatleaf,bcmflatstem,           &
@@ -642,7 +643,7 @@ else
 end if
  
       ! print out heat average heat unit and days to maturity
-if (am0cfl>0) write (luoinpt,1100) pdate,hdate,bcthudf,dtm,bctdtm,phu,bcthum
+if (bio%growth%am0cfl>0) write (luoinpt,1100) pdate,hdate,bcthudf,dtm,bctdtm,phu,bcthum
  
       ! after printing the value, set the global parameter for maximum
       ! heat units to the new calculated value (this database value is

@@ -37,6 +37,7 @@
         !select root growth option for winter annuals
         !winter_ann_root = 0                                    ! root depth grows at same rate as height
         !winter_ann_root = 1                                    ! root depth grows with fall heat units
+        integer :: am0cdb  ! flag to print CROP variables before and after call to CROP
     end type simulation
     
     type controls

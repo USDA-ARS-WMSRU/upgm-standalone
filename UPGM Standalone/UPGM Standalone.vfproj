@@ -51,8 +51,6 @@
 		<File RelativePath="..\Source Code\h1et.inc"/>
 		<File RelativePath="..\Source Code\h1hydro.inc"/>
 		<File RelativePath="..\Source Code\h1temp.inc"/>
-		<File RelativePath="..\Source Code\m1dbug.inc"/>
-		<File RelativePath="..\Source Code\m1flag.inc"/>
 		<File RelativePath="..\Source Code\prevstate.inc"/>
 		<File RelativePath="..\Source Code\s1dbc.inc"/></Filter>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">

@@ -21,8 +21,6 @@ include 'file.fi'
 include 's1dbc.inc'
 include 'd1glob.inc'
 include 'c1gen.inc'
-include 'm1flag.inc'
-include 'm1dbug.inc'
 include 'h1hydro.inc'
 include 'h1temp.inc'
 include 'c1info.inc'
@@ -116,8 +114,8 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
   if (ctrl%sim%julday==plant_jday) then
      write (*,*) 'planting date: ',pd,'/',pm,'/',py
      growcrop_flg = .true.
-     am0cif = .true.
-     am0cgf = .true.
+     bio%growth%am0cif = .true.
+     bio%growth%am0cgf = .true.
   end if
 !
  
@@ -133,11 +131,11 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
      else if (phenolflg==0) then
         write (*,*) 'harvest date: ',hd,'/',hm,'/',hy
      end if
-     am0cgf = .false.
+     bio%growth%am0cgf = .false.
      am0hrvfl = 1     ! debe uncommented this line because it is now needed to prevent crop_endseason
                       ! being called after harvest every day until the end date of simulation.
     !
-     call crop_endseason(ctrl,ac0nam(sr),am0cfl,sppdat%nslay,ac0idc(sr),acdayam(sr),    &
+     call crop_endseason(ctrl,ac0nam(sr),bio%growth%am0cfl,sppdat%nslay,ac0idc(sr),acdayam(sr),    &
                        & acthum(sr),acxstmrep(sr),prevstandstem(sr),            &
                        & prevstandleaf(sr),prevstandstore(sr),prevflatstem(sr), &
                        & prevflatleaf(sr),prevflatstore(sr),prevbgstemz(1,sr),  &

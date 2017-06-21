@@ -1,13 +1,13 @@
-subroutine cdbug(isr,slay, ctrl, clidat, sppdat)
+subroutine cdbug(isr,slay, ctrl, clidat, sppdat, bio)
 !
     use upgm_simdata, only : controls
     use climate, only : climate_data
     use soil, only : soil_phys_props
     use constants, only : mnsz, mnsub, mnhhrs, mncz,mndk
+    use biomaterial
 implicit none
 !
 include 'file.fi'
-include 'm1flag.inc'
 include 's1dbc.inc'
 include 'c1db1.inc'
 include 'c1db2.inc'
@@ -21,6 +21,7 @@ include 'h1temp.inc'
     type(controls) :: ctrl
     type(climate_data) :: clidat
     type(soil_phys_props) :: sppdat
+    type(biomatter) :: bio
 integer :: isr,slay
 integer :: julday
 !
@@ -70,7 +71,7 @@ integer :: cd,cm,cy,l
  
 !     + + + data initializations + + +
  
-if (am0cif.eqv..true.) then
+if (bio%growth%am0cif.eqv..true.) then
   ctrl%sim%tday = -1
   ctrl%sim%tmo = -1
   ctrl%sim%tyr = -1

@@ -11,8 +11,6 @@ include 'file.fi'
 include 's1dbc.inc'
 include 'd1glob.inc'
 include 'c1gen.inc'
-include 'm1flag.inc'
-include 'm1dbug.inc'
 include 'h1hydro.inc'
 include 'h1temp.inc'
 include 'c1info.inc'
@@ -706,9 +704,9 @@ call cropinit(spp_data,bio,1,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,c
 sr = 1
 !
 growcrop_flg = .false.
-am0cif = .false.       ! flag to initialize crop initialization routines (set to true on planting date)
-am0cfl = 1             ! flag to specify if detailed (submodel) output file should be generated
-am0cgf = .false.       ! supposed to indicate a growing crop
+bio%growth%am0cif = .false.       ! flag to initialize crop initialization routines (set to true on planting date)
+bio%growth%am0cfl = 1             ! flag to specify if detailed (submodel) output file should be generated
+bio%growth%am0cgf = .false.       ! supposed to indicate a growing crop
 !am0hrvfl = 0          ! harvest flag (default is off)
 am0hrvfl = 0
             !debe turned it on
@@ -737,7 +735,7 @@ ahtsmn(1,1) = 22.0
 !amzele = 100.0    ! default simulation site elevation (m) !RMarquez 06.09.2017 -> this variable is not used
 upgm_ctrls%sim%amalat = -38.0
 !
-am0cdb = 1        ! set crop debug output flag (default to no output)
+upgm_ctrls%sim%am0cdb = 1        ! set crop debug output flag (default to no output)
 !
 acthucum(1) = 0.0 ! initialize accumulated heat units
 acmst(1) = 0.0    ! initialize total standing crop mass
@@ -918,7 +916,7 @@ end do
 
 call climate_init(cli_data,icli,cliname)    ! reads monthly and yearly climate variables
  
-if (am0cfl>0) then
+if (bio%growth%am0cfl>0) then
 luocrop = 80000 + offsetforfiles
 luoshoot = 90000 + offsetforfiles
 luoseason = 100000 + offsetforfiles
@@ -936,11 +934,11 @@ cdbugfile = 160000 + offsetforfiles
   call fopenk(luophenol,'phenol.out','unknown')  ! debe added for phenology output
   call fopenk(luocanopyht,'canopyht.out','unknown')
                                           !debe added for canopy height output
-  call cpout                              ! print headings for crop output files
+  call cpout(bio)                              ! print headings for crop output files
 end if
 !
-if (am0cfl>1) call fopenk(luoallcrop,'allcrop.prn','unknown')     ! main crop debug output file
-if (am0cdb>0) call fopenk(cdbugfile,'cdbug.out','unknown')       ! crop submodel debug output file
+if (bio%growth%am0cfl>1) call fopenk(luoallcrop,'allcrop.prn','unknown')     ! main crop debug output file
+if (upgm_ctrls%sim%am0cdb>0) call fopenk(cdbugfile,'cdbug.out','unknown')       ! crop submodel debug output file
 !
 call upgm_driver(upgm_ctrls,cli_data,spp_data,bio,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,antes,&
                & antss,blstrs,boots,browns,callgdd,canht,canopyflg,cliname,cots,&

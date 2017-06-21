@@ -41,6 +41,8 @@ module biomaterial
   type biostate_growth
      logical :: am0cgf      ! flag if set to .true. then run CROP growth subroutines.
      logical :: am0cif      ! flag if set to .true. then run CROP growth initialization subroutine.
+     integer :: am0cfl      ! flag if set to .true. then print crop submodel output
+
      real :: thucum         ! crop accumulated heat units
      real :: trthucum       ! accumulated root growth heat units (degree-days)
 

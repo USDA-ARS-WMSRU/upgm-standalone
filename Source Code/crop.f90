@@ -1,4 +1,4 @@
-subroutine crop(ctrl,clidat,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,bsfsmb,bsfcla,  &
+subroutine crop(ctrl,clidat, bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,bsfsmb,bsfcla,  &
               & bs0ph,bsftan,bsftap,bsmno3,bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,  &
               & bc0bp3,bc0ck,bcgrf,bcehu0,bczmxc,bc0nam,bc0idc,bcxrow,bctdtm,   &
               & bczmrt,bctmin,bctopt,bc0fd1,bc0fd2,cc0fd1,cc0fd2,bc0bceff,bdmb, &
@@ -96,11 +96,10 @@ subroutine crop(ctrl,clidat,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,bsfs
 !
     use constants, only : mgtokg, civilrise, mnsz
     use climate, only : climate_data
-
+    use biomaterial
 implicit none
 !
 include 'file.fi'
-include 'm1flag.inc'
 include 'cenvr.inc'
 include 'cparm.inc'
 include 'chumus.inc'
@@ -110,6 +109,7 @@ include 'cfert.inc'
 !
     type(controls) :: ctrl
     type(climate_data) :: clidat
+    type(biomatter) :: bio    
 real,parameter :: chilluv = 50.0,shoot_delay = 7.0,verndelmax = 0.04,           &
                 & dev_floor = 0.01,spring_trig = 0.29
 !
@@ -890,7 +890,7 @@ end do
 !     bm0cif is flag to initialize crop at start of planting
  
 if (bm0cif) then
-  call cinit(ctrl, clidat,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla,     &
+  call cinit(ctrl, clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla,     &
            & bs0ph,bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,bc0bp3,bsmno3,bc0fd1,     &
            & bc0fd2,bctopt,bctmin,cc0fd1,cc0fd2,bc0sla,bc0idc,dd,mm,yy,bcthudf, &
            & bctdtm,bcthum,bc0hue,bcdmaxshoot,bc0shoot,bc0growdepth,            &
@@ -934,7 +934,7 @@ if (bm0cif) then
   bprevchillucum = bctchillucum
   bprevliveleaf = bcfliveleaf
  
-  if (am0cfl>=1) then
+  if (bio%growth%am0cfl>=1) then
           ! put double blank lines in daily files to create growth blocks
      write (luocrop,*)           ! crop.out
      write (luocrop,*)           ! crop.out
@@ -1223,7 +1223,7 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
 ! original value once emergence occurs. to avoid the problem where huiy
 ! = bcthu_shoot_end in the call to shoot_grow, add 0.00001 to huiy below:
      if (huiy>=bcthu_shoot_end) bcthu_shoot_end = huiy + 0.00001      !should 'then' be here?
-     call shoot_grow(ctrl,clidat,bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
+     call shoot_grow(ctrl,clidat, bio,bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
                    & bc0ssa,bc0ssb,bc0diammax,hui,huiy,bcthu_shoot_beg,         &
                    & bcthu_shoot_end,bcmstandstem,bcmstandleaf,bcmstandstore,   &
                    & bcmflatstem,bcmflatleaf,bcmflatstore,bcmshoot,bcmtotshoot, &
@@ -1234,7 +1234,7 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
                    & ddap,dgdds,elong,ems,germs,gddday,yy,emrgflg,icli,pd,pm,py,&
                    & yr,cliname,egdd,ggdd,tempsw)                          !used dap in place of bcdayap
   else if ((huiy<bcthu_shoot_end).and.(hui>bcthu_shoot_beg)) then
-     call shoot_grow(ctrl,clidat, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
+     call shoot_grow(ctrl,clidat, bio, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
                    & bc0ssa,bc0ssb,bc0diammax,hui,huiy,bcthu_shoot_beg,         &
                    & bcthu_shoot_end,bcmstandstem,bcmstandleaf,bcmstandstore,   &
                    & bcmflatstem,bcmflatleaf,bcmflatstore,bcmshoot,bcmtotshoot, &
@@ -1256,7 +1256,7 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
               ! complete
      bczgrowpt = (-bczloc_regrow)
                   ! single blank line to separate shoot growth periods
-     if (am0cfl>=1) write (luoshoot,*)
+     if (bio%growth%am0cfl>=1) write (luoshoot,*)
                                         ! shoot.out
  
   end if
@@ -1266,7 +1266,7 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
   !   print*, 'in crop before call to growth, daysim = ', daysim
  
 !          ! calculate plant growth state variables
-  call growth(ctrl, bnslay,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,b_fr,  &
+  call growth(ctrl, bnslay,bio,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,b_fr,  &
             & bcxrow,bc0diammax,bczmrt,bctmin,bctopt,bc0bceff,bc0alf,bc0blf,    &
             & bc0clf,bc0dlf,bc0arp,bc0brp,bc0crp,bc0drp,bc0aht,bc0bht,bc0ssa,   &
             & bc0ssb,bc0sla,bcxstm,bhtsmn,clidat%awtdmx,clidat%awtdmn,clidat%aweirr,bhfwsf,hui,huiy, &

@@ -1,9 +1,10 @@
-subroutine cpout
+subroutine cpout(bio)
 !
+    use biomaterial
 implicit none
 !
 include 'file.fi'
-include 'm1flag.inc'
+    type(biomatter) :: bio
 !     author : a. retta - 11/19/96
 !     + + + purpose + + +
 !     prints headers for the crop submodel output files
@@ -16,7 +17,7 @@ write (luoseason,1500)
 write (luoseason,1600)
 write (luoseason,1700)
  
-if (am0cfl>0) then
+if (bio%growth%am0cfl>0) then
  
          ! crop.out headers
   write (luocrop,1000)
