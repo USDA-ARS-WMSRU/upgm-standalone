@@ -54,8 +54,7 @@
 		<File RelativePath="..\Source Code\m1dbug.inc"/>
 		<File RelativePath="..\Source Code\m1flag.inc"/>
 		<File RelativePath="..\Source Code\prevstate.inc"/>
-		<File RelativePath="..\Source Code\s1dbc.inc"/>
-		<File RelativePath="..\Source Code\tcrop.inc"/></Filter>
+		<File RelativePath="..\Source Code\s1dbc.inc"/></Filter>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 		<File RelativePath="..\Source Code\file.fi"/></Filter>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">

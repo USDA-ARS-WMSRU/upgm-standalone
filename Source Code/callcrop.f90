@@ -82,7 +82,6 @@ include 'h1hydro.inc'
 include 'h1et.inc'
 include 'h1temp.inc'
 include 'prevstate.inc'
-include 'tcrop.inc'
 include 'decomp.inc'
 include 'cenvr.inc'
 !
@@ -703,9 +702,9 @@ if ((ac0shoot(sr)<=0.0).or.(acdpop(sr)<=0.0)) am0cgf = .false.
 !     only continue if crop is growing
 if (am0cgf) then
  
-  if (am0cdb==1) call cdbug(sr,sppdat%nslay(sr),ctrl,clidat,sppdat )
+  if (am0cdb==1) call cdbug(sr,sppdat%nslay,ctrl,clidat,sppdat )
 !  print*, 'in callcrop just before call to crop seedsw = ', seedsw
-  call crop(ctrl,clidat, sppdat%nslay(sr),sppdat%aszlyt(1,sr),sppdat%aszlyd(1,sr),sppdat%asdblk(1),asfcce(1,sr),      &
+  call crop(ctrl,clidat, sppdat%nslay,sppdat%aszlyt(1,sr),sppdat%aszlyd(1,sr),sppdat%asdblk(1),asfcce(1,sr),      &
           & asfom(1,sr),asfcec(1,sr),asfsmb(1,sr),sppdat%asfcla(1,sr),as0ph(1,sr),     &
           & asftan(1,sr),asftap(1,sr),asmno3(sr),ac0bn1(sr),ac0bn2(sr),         &
           & ac0bn3(sr),ac0bp1(sr),ac0bp2(sr),ac0bp3(sr),ac0ck(sr),acgrf(sr),    &
@@ -734,9 +733,9 @@ if (am0cgf) then
           & prevrootfiberz(1,sr),prevht(sr),prevzshoot(sr),prevstm(sr),         &
           & prevrtd(sr),prevdayap(sr),prevhucum(sr),prevrthucum(sr),            &
           & prevgrainf(sr),prevchillucum(sr),prevliveleaf(sr),daysim,           &
-          & acdayspring(sr),aczloc_regrow(sr),bio%mass%standstem,atmstandleaf(sr),&
-          & atmstandstore(sr),atmflatstem(sr),atmflatleaf(sr),atmflatstore(sr), &
-          & atmbgstemz(1,sr),atzht(sr),atdstm(sr),atxstmrep(sr),atgrainf(sr),   &
+          & acdayspring(sr),aczloc_regrow(sr),bio%mass%standstem,bio%mass%standleaf,&
+          & bio%mass%standstore,bio%mass%flatstem,bio%mass%flatleaf,bio%mass%flatstore, &
+          & bio%mass%stemz(1:1),bio%geometry%zht,bio%geometry%dstm,bio%geometry%xstmrep,bio%geometry%grainf,   &
           & aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,canht,canopyflg,  &
           & cliname,cots,cropname,dayhtinc,dents,doughs,drs,dummy1,dummy2,ears, &
           & ecanht,egdd,emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,fullbs,&
@@ -753,26 +752,26 @@ if (am0cgf) then
 ! canopyflg = 1.
 !debe added growth stage array variables and phenolflg to be passed to crop from main.
  
-  if (am0cdb==1) call cdbug(sr,sppdat%nslay(sr),ctrl, clidat,sppdat)
+  if (am0cdb==1) call cdbug(sr,sppdat%nslay,ctrl, clidat,sppdat)
 end if
  
       ! check for abandoned stems in crop regrowth
-if ((bio%mass%standstem+atmstandleaf(sr)+atmstandstore(sr)+atmflatstem(sr)        &
-  & +atmflatleaf(sr)+atmflatstore(sr))>0.0) then
+if ((bio%mass%standstem+bio%mass%standleaf+bio%mass%standstore+bio%mass%flatstem        &
+  & +bio%mass%flatleaf+bio%mass%flatstore)>0.0) then
           ! zero out residue pools which crop is not transferring
-  atmflatrootstore(sr) = 0.0
-  atmflatrootfiber(sr) = 0.0
-  do lay = 1,sppdat%nslay(sr)
-     atmbgleafz(lay,sr) = 0.0
-     atmbgstorez(lay,sr) = 0.0
-     atmbgrootstorez(lay,sr) = 0.0
-     atmbgrootfiberz(lay,sr) = 0.0
+  bio%mass%flatrootstore = 0.0
+  bio%mass%flatrootfiber = 0.0
+  do lay = 1,sppdat%nslay
+     bio%mass%leafz(lay) = 0.0
+     bio%mass%storez(lay) = 0.0
+     bio%mass%rootstorez(lay) = 0.0
+     bio%mass%rootfiberz(lay) = 0.0
   end do
-  call trans(bio%mass%standstem,atmstandleaf(sr),atmstandstore(sr),atmflatstem(sr)&
-           & ,atmflatleaf(sr),atmflatstore(sr),atmflatrootstore(sr),            &
-           & atmflatrootfiber(sr),atmbgstemz(1,sr),atmbgleafz(1,sr),            &
-           & atmbgstorez(1,sr),atmbgrootstorez(1,sr),atmbgrootfiberz(1,sr),     &
-           & atzht(sr),atdstm(sr),atxstmrep(sr),atgrainf(sr),admstandstem(1,sr),&
+  call trans(bio%mass%standstem,bio%mass%standleaf,bio%mass%standstore,bio%mass%flatstem&
+           & ,bio%mass%flatleaf,bio%mass%flatstore,bio%mass%flatrootstore,            &
+           & bio%mass%flatrootfiber,bio%mass%stemz,bio%mass%leafz,            &
+           & bio%mass%storez,bio%mass%rootstorez,bio%mass%rootfiberz,     &
+           & bio%geometry%zht,bio%geometry%dstm,bio%geometry%xstmrep,bio%geometry%grainf,admstandstem(1,sr),&
            & admstandleaf(1,sr),admstandstore(1,sr),admflatstem(1,sr),          &
            & admflatleaf(1,sr),admflatstore(1,sr),admflatrootstore(1,sr),       &
            & admflatrootfiber(1,sr),admbgstemz(1,1,sr),admbgleafz(1,1,sr),      &
@@ -783,7 +782,7 @@ if ((bio%mass%standstem+atmstandleaf(sr)+atmstandstore(sr)+atmflatstem(sr)      
            & acresevapb(sr),ad0nam(1,sr),adxstm(1,sr),adrbc(1,sr),ad0sla(1,sr), &
            & ad0ck(1,sr),dkrate(1,1,sr),covfact(1,sr),ddsthrsh(1,sr),           &
            & adhyfg(1,sr),adresevapa(1,sr),adresevapb(1,sr),cumdds(1,sr),       &
-           & cumddf(1,sr),cumddg(1,1,sr),sppdat%nslay(sr))
+           & cumddf(1,sr),cumddg(1,1,sr),sppdat%nslay)
 end if
  
 ! update all derived globals for crop global variables
@@ -795,7 +794,7 @@ call cropupdate(acmstandstem(sr),acmstandleaf(sr),acmstandstore(sr),            
               & acm(sr),acmst(sr),acmf(sr),acmrt(sr),acmrtz(1,sr),acrcd(sr),    &
               & sppdat%aszrgh(sr),sppdat%asxrgs(sr),sppdat%asargo(sr),acrsai(sr),acrlai(sr),         &
               & acrsaz(1,sr),acrlaz(1,sr),acffcv(sr),acfscv(sr),acftcv(sr),     &
-              & acfcancov(sr),ac0rg(sr),acxrow(sr),sppdat%nslay(sr),ac0ssa(sr),        &
+              & acfcancov(sr),ac0rg(sr),acxrow(sr),sppdat%nslay,ac0ssa(sr),        &
               & ac0ssb(sr),ac0sla(sr),accovfact(sr),ac0ck(sr),acxstm(sr),       &
               & acdpop(sr))
  

@@ -18,7 +18,7 @@
         real :: aszrgh(4) !used
         real :: asxrgs(4) !used
         real :: asargo(4) !used
-        integer :: nslay(4) ! Number of soil layers being used for each subregion.
+        integer :: nslay ! Number of soil layers being used for each subregion.
         real :: aszlyt(100+1, 4) ! Number of soil layers being used for each subregion.
         real :: aszlyd(100, 4) ! Depth to bottom of each soil layer for each subregion (mm)
         real :: asfcla(0:100, 4) !used

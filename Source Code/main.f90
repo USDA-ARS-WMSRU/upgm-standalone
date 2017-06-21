@@ -651,32 +651,6 @@ call fopenk(soilprofile, 'upgm_soil_profile.dat', 'old') ! open soil profile fil
 ! which method of calculating canopy height will be used. added dayhtinc to get
 ! the daily increase in height when using the phenologymms method of calculating
 ! canopy height. debe added the CO2 variables to be initialized.
-call cropinit(bio,1,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,canopyflg,    &
-            & cliname,cots,cropname,dayhtinc,dents,doughs,drs,dummy1,dummy2,    &
-            & ears,ecanht,egdd,emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,&
-            & fullbs,gddtbg,germgdd,germs,ggdd,gmethod,gpds,growth_stress,      &
-            & halfbs,heads,hrs,ies,ies2,infls,joints,lf1s,lf12s,lf2s,lf3s,lf4s, &
-            & lf8s,mats,maxht,mffls,milks,mpods,mseeds,opens,pchron,phenolflg,  &
-            & seedsw,silks,soilwat,srs,tbase,tis,toptlo,toptup,tsints,tss,      &
-            & tupper,wfpslo,wfpsup,yelows,co2atmos,co2x,co2y)
- 
-!debe added growth_stress because it is now read in. debe added temperature
-! variables, cropname and gmethod to be initialized in cropinit.
-!
-! not previously called jcaii  7/28/08 
-!
-sr = 1
-!
-growcrop_flg = .false.
-am0cif = .false.       ! flag to initialize crop initialization routines (set to true on planting date)
-am0cfl = 1             ! flag to specify if detailed (submodel) output file should be generated
-am0cgf = .false.       ! supposed to indicate a growing crop
-!am0hrvfl = 0          ! harvest flag (default is off)
-am0hrvfl = 0
-            !debe turned it on
-acxrow(1) = 0.2286       ! row spacing (m)
-ahfwsf(1) = 1.0        ! water stress factor
-
 !Rmarquez 2.10.17 -> Added read code for the new soil layer profile file.
 !       intent: provide actual profile layer data (depth, thickness) for the weps/upgm code    
 !
@@ -710,7 +684,38 @@ enddo
 !
 ! number of soil layers
 !
- spp_data%nslay(1) = max_depth - 1 !Overshoot by 1 in read soil profile loop
+ spp_data%nslay = max_depth - 1 !Overshoot by 1 in read soil profile loop
+ 
+    bio = create_biomatter(spp_data%nslay, mncz)
+
+
+call cropinit(spp_data,bio,1,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,canopyflg,    &
+            & cliname,cots,cropname,dayhtinc,dents,doughs,drs,dummy1,dummy2,    &
+            & ears,ecanht,egdd,emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,&
+            & fullbs,gddtbg,germgdd,germs,ggdd,gmethod,gpds,growth_stress,      &
+            & halfbs,heads,hrs,ies,ies2,infls,joints,lf1s,lf12s,lf2s,lf3s,lf4s, &
+            & lf8s,mats,maxht,mffls,milks,mpods,mseeds,opens,pchron,phenolflg,  &
+            & seedsw,silks,soilwat,srs,tbase,tis,toptlo,toptup,tsints,tss,      &
+            & tupper,wfpslo,wfpsup,yelows,co2atmos,co2x,co2y)
+ 
+!debe added growth_stress because it is now read in. debe added temperature
+! variables, cropname and gmethod to be initialized in cropinit.
+!
+! not previously called jcaii  7/28/08 
+!
+sr = 1
+!
+growcrop_flg = .false.
+am0cif = .false.       ! flag to initialize crop initialization routines (set to true on planting date)
+am0cfl = 1             ! flag to specify if detailed (submodel) output file should be generated
+am0cgf = .false.       ! supposed to indicate a growing crop
+!am0hrvfl = 0          ! harvest flag (default is off)
+am0hrvfl = 0
+            !debe turned it on
+acxrow(1) = 0.2286       ! row spacing (m)
+ahfwsf(1) = 1.0        ! water stress factor
+
+
 !nslay(1) = 1
 
 !
@@ -947,5 +952,8 @@ call upgm_driver(upgm_ctrls,cli_data,spp_data,bio,sr,start_jday,end_jday,plant_j
                & phenolflg,pm,py,hd,hm,hy,seedsw,silks,soilwat,srs,tbase,tis,   &
                & toptlo,toptup,tsints,tss,tupper,wfpslo,wfpsup,yelows,seedbed,  &
                & swtype,growcrop_flg,am0hrvfl,co2x,co2y,co2atmos)
+
+    ! RMarquez 6.21.2017 -> need to free all allocated memory.
+    call destroy_biomatter(bio)
  
 end program main

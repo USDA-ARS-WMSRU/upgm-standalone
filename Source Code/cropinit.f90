@@ -1,4 +1,4 @@
-subroutine cropinit(bio,isr,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,      &
+subroutine cropinit(sppdat,bio,isr,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,      &
                   & canopyflg,cliname,cots,cropname,dayhtinc,dents,doughs,drs,  &
                   & dummy1,dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,    &
                   & ergdd,eseeds,first7,fps,fullbs,gddtbg,germgdd,germs,ggdd,   &
@@ -40,6 +40,7 @@ subroutine cropinit(bio,isr,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,  
 !debe added CO2 variables to be initialized here.
     use constants, only : mnsub,mnsz, mncz,mndk
     use biomaterial, only : biomatter
+    use soil, only : soil_phys_props
 implicit none
 !
 include 'c1info.inc'
@@ -47,11 +48,11 @@ include 'c1gen.inc'
 include 'c1db1.inc'
 include 'c1db2.inc'
 include 'c1glob.inc'
-include 'tcrop.inc'
 !
 ! Dummy arguments
 !
     type(biomatter) :: bio
+    type(soil_phys_props) :: sppdat
 real :: aepa,dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,tupper,    &
       & co2atmos
 logical :: callgdd
@@ -507,27 +508,27 @@ acddsthrsh(isr) = 0.0
  
       ! temporary crop
 bio%mass%standstem = 0.0
-atmstandleaf(isr) = 0.0
-atmstandstore(isr) = 0.0
-atmflatstem(isr) = 0.0
-atmflatleaf(isr) = 0.0
-atmflatstore(isr) = 0.0
-atmflatrootstore(isr) = 0.0
-atmflatrootfiber(isr) = 0.0
+bio%mass%standleaf = 0.0
+bio%mass%standstore = 0.0
+bio%mass%flatstem = 0.0
+bio%mass%flatleaf = 0.0
+bio%mass%flatstore = 0.0
+bio%mass%flatrootstore = 0.0
+bio%mass%flatrootfiber = 0.0
  
-do idx = 1,mnsz
-  atmbgstemz(idx,isr) = 0.0
-  atmbgleafz(idx,isr) = 0.0
-  atmbgstorez(idx,isr) = 0.0
-  atmbgrootstorez(idx,isr) = 0.0
-  atmbgrootfiberz(idx,isr) = 0.0
+do idx = 1, sppdat%nslay
+  bio%mass%stemz(idx) = 0.0
+  bio%mass%leafz(idx) = 0.0
+  bio%mass%storez(idx) = 0.0
+  bio%mass%rootstorez(idx) = 0.0
+  bio%mass%rootfiberz(idx) = 0.0
 end do
  
-atzht(isr) = 0.0
-atdstm(isr) = 0.0
-atxstmrep(isr) = 0.0
-atzrtd(isr) = 0.0
-atgrainf(isr) = 0.0
+bio%geometry%zht = 0.0
+bio%geometry%dstm = 0.0
+bio%geometry%xstmrep = 0.0
+bio%geometry%zrtd = 0.0
+bio%geometry%grainf = 0.0
  
       ! values that need initialization for cdbug calls (before initial crop entry)
 actdtm(isr) = 0
@@ -772,10 +773,13 @@ do i = 1,4
 end do
 
 !initialize CO2 arrays and variable
-do k = 1,10
-  co2x(k) = 0.0
-  co2y(k) = 0.0
-end do
+co2x = 0
+co2y = 0
 co2atmos = 0.0
+!do k = 1,10
+!  co2x(k) = 0.0
+!  co2y(k) = 0.0
+!end do
+
 
 end subroutine cropinit

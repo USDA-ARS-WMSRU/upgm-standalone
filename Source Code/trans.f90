@@ -21,8 +21,11 @@ real :: bc0ck,bc0sla,bccovfact,bcddsthrsh,bcdstm,bcgrainf,bcmflatleaf,          
 character(80) :: bc0nam
 integer :: bchyfg,bcrbc,nslay
 real,dimension(mndk) :: bcdkrate
-real,dimension(mnsz) :: bcmbgleafz,bcmbgrootfiberz,bcmbgrootstorez,bcmbgstemz,  &
+real,dimension(mnsz) :: bcmbgleafz,bcmbgrootfiberz,bcmbgrootstorez,  &
                       & bcmbgstorez
+
+real, dimension(*) :: bcmbgstemz
+
 real,dimension(mnbpls) :: bcovfact,bcumddf,bcumdds,bd0ck,bd0sla,bddsthrsh,      &
                         & bddstm,bdgrainf,bdmflatleaf,bdmflatrootfiber,         &
                         & bdmflatrootstore,bdmflatstem,bdmflatstore,            &
