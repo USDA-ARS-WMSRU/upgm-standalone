@@ -78,7 +78,6 @@ include 'd1gen.inc'
 include 's1dbc.inc'
 include 'h1hydro.inc'
 include 'h1et.inc'
-include 'h1temp.inc'
 include 'prevstate.inc'
 include 'decomp.inc'
 include 'cenvr.inc'
@@ -711,7 +710,7 @@ if (bio%growth%am0cgf) then
           & ac0fd1(2,sr),ac0fd2(2,sr),ac0bceff(sr),admbgz(1,1,sr),ac0alf(sr),   &
           & ac0blf(sr),ac0clf(sr),ac0dlf(sr),ac0arp(sr),ac0brp(sr),ac0crp(sr),  &
           & ac0drp(sr),ac0aht(sr),ac0bht(sr),ac0sla(sr),ac0hue(sr),             &
-          & actverndel(sr),ahtsmx(1,sr),ahtsmn(1,sr)&
+          & actverndel(sr),sppdat%ahtsmn,sppdat%ahtsmn&
           & ,ahzpta,ahzeta,ahzptp,ahfwsf(sr),bio%growth%am0cif,bio%growth%am0cgf,acthudf(sr),         &
           & acbaflg(sr),acbaf(sr),acyraf(sr),achyfg(sr),acthum(sr),acdpop(sr),  &
           & acdmaxshoot(sr),ac0transf(sr),ac0storeinit(sr),acfshoot(sr),        &

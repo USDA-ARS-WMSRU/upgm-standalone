@@ -22,6 +22,7 @@
         real :: aszlyt(100+1, 4) ! Number of soil layers being used for each subregion.
         real :: aszlyd(100, 4) ! Depth to bottom of each soil layer for each subregion (mm)
         real :: asfcla(0:100, 4) !used
+        real :: ahtsmn(100) 
     end type soil_phys_props
 
 

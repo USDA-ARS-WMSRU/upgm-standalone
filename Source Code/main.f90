@@ -12,7 +12,6 @@ include 's1dbc.inc'
 include 'd1glob.inc'
 include 'c1gen.inc'
 include 'h1hydro.inc'
-include 'h1temp.inc'
 include 'c1info.inc'
 include 'c1db1.inc'
 include 'c1db2.inc'
@@ -729,8 +728,7 @@ spp_data%asfcla(1,1) = 20.0
 admbgz(1,1,1) = 0.0
 spp_data%asdblk(1) = 1.0
 !
-ahtsmx(1,1) = 24.0
-ahtsmn(1,1) = 22.0
+spp_data%ahtsmn(1) = 22.0
 !
 !amzele = 100.0    ! default simulation site elevation (m) !RMarquez 06.09.2017 -> this variable is not used
 upgm_ctrls%sim%amalat = -38.0

@@ -14,7 +14,6 @@ include 'c1db2.inc'
 include 'c1glob.inc'
 include 'h1et.inc'
 include 'h1hydro.inc'
-include 'h1temp.inc'
 !
 ! Dummy arguments
 !
@@ -108,7 +107,7 @@ write (cdbugfile,2000)
  
 do l = 1,slay
   write (cdbugfile,2100) l,sppdat%aszlyt(l,isr),      &
-                & ahtsmx(l,isr),ahtsmn(l,isr)
+                & sppdat%ahtsmn(l)
 end do
 write (cdbugfile,2200)
  
@@ -143,8 +142,8 @@ ctrl%sim%tyr = cy
  1800 format ('      ahzptp ',' actmin(',i2,') actopt(',i2,')')
 !1900 format (2f10.2,2f10.3,3f12.2)
  1900 format (2F10.2,2F10.3,1F12.2)
- 2000 format ('layer aszlyt ahtsmx ahtsmn')
- 2100 format (i4,1x,f7.2,1x,2F7.2)
+ 2000 format ('layer aszlyt ahtsmn')
+ 2100 format (i4,1x,f7.2,1x,1F7.2)
  2200 format (' layer  asfcla asfom asdblk')
  2300 format (i4,2x,1F7.2,f7.3,F7.2)
  
