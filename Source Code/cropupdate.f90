@@ -10,8 +10,6 @@ subroutine cropupdate(bcmstandstem,bcmstandleaf,bcmstandstore,bcmflatstem,      
     use constants, only : mncz,mnsub,mnsz
 implicit none
 !
-include 'c1glob.inc' !added to have access to variable 'acmrt'
-!
 ! Dummy arguments
 !
 real :: bc0ck,bc0sla,bc0ssa,bc0ssb,bcdpop,bcdstm,bcfcancov,bcffcv,bcfscv,bcftcv,&
@@ -82,6 +80,6 @@ temp_store = 0.0
   bcmrootstore = temp_store
   bcmrootfiber = temp_fiber
   bcmbgstem = temp_stem
-  acmrt = bcmrootstore + bcmrootfiber
+  bcmrt = bcmrootstore + bcmrootfiber
   
 end subroutine cropupdate

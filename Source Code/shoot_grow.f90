@@ -50,7 +50,7 @@ real,parameter :: shoot_exp = 2.0,be_stor = 0.7,rootf = 0.4
 !
     type(controls) :: ctrl
     type(climate_data) :: clidat
-    type(biomatter) :: bio   
+    type(biomatter) :: bio
 real :: bc0diammax,bc0growdepth,bc0ssa,bc0ssb,bcdpop,bcdstm,bcfleafstem,        &
       & bcfliveleaf,bcfshoot,bcgrf,bcmflatleaf,bcmflatstem,bcmflatstore,        &
       & bcmshoot,bcmstandleaf,bcmstandstem,bcmstandstore,bcmtotshoot,           &
@@ -289,7 +289,7 @@ character(80) :: seedbed
  
 !     + + + end of specifications + + +
  
-call caldat(ctrl%sim%julday, day,mo,yr)
+call caldat(ctrl%sim%juldate, day,mo,yr)
 doy = dayear(day,mo,yr)
  
    ! fraction of shoot growth from stored reserves (today and yesterday)

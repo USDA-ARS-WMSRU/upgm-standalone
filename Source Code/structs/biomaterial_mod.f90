@@ -310,6 +310,9 @@ module biomaterial
        
       real,dimension(30) :: dummy2 ! an array to hold the gdd values, both under stressed and non- stressed conditions,
                                    ! required to reach each growth stage of the current crop.
+      
+      real :: trad_lai     ! leaf area index based on whole field area (traditional)
+      
   end type crop_upgm    
   
   type biomatter

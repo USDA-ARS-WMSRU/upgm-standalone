@@ -39,19 +39,11 @@
 		<File RelativePath="..\Source Code\c1db2.inc"/>
 		<File RelativePath="..\Source Code\c1db3.inc"/>
 		<File RelativePath="..\Source Code\c1gen.inc"/>
-		<File RelativePath="..\Source Code\c1glob.inc"/>
-		<File RelativePath="..\Source Code\c1info.inc"/>
-		<File RelativePath="..\Source Code\cenvr.inc"/>
 		<File RelativePath="..\Source Code\cfert.inc"/>
 		<File RelativePath="..\Source Code\cgrow.inc"/>
 		<File RelativePath="..\Source Code\chumus.inc"/>
-		<File RelativePath="..\Source Code\clai.inc"/>
 		<File RelativePath="..\Source Code\cparm.inc"/>
-		<File RelativePath="..\Source Code\csoil.inc"/>
-		<File RelativePath="..\Source Code\h1et.inc"/>
-		<File RelativePath="..\Source Code\h1hydro.inc"/>
-		<File RelativePath="..\Source Code\prevstate.inc"/>
-		<File RelativePath="..\Source Code\s1dbc.inc"/></Filter>
+		<File RelativePath="..\Source Code\csoil.inc"/></Filter>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 		<File RelativePath="..\Source Code\file.fi"/></Filter>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
@@ -60,6 +52,8 @@
 		<Filter Name="nutrients"/>
 		<Filter Name="soil">
 		<File RelativePath="..\Source Code\soil\soil_mod.f90"/></Filter>
+		<Filter Name="stress">
+		<File RelativePath="..\Source Code\stress\stress_mod.f90"/></Filter>
 		<Filter Name="structs">
 		<File RelativePath="..\Source Code\structs\biomaterial_mod.f90"/>
 		<File RelativePath="..\Source Code\structs\constants_mod.f90"/>

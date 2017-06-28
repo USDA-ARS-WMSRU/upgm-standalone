@@ -154,7 +154,7 @@ integer :: dd,lay,mm,yy
   !phenolflg1 = 0
   !mats1 = 170
   !
-call caldat(ctrl%sim%julday, dd,mm,yy)
+call caldat(ctrl%sim%juldate, dd,mm,yy)
  
       ! end of season print statements when crop submodel output flag set
       ! added initialization flag to prevent printing if crop not yet initialized

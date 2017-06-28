@@ -1,10 +1,10 @@
-subroutine crop(ctrl,clidat, bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,bsfsmb,bsfcla,  &
+subroutine crop(ctrl,clidat, bio,tempbio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,bsfsmb,bsfcla,  &
               & bs0ph,bsftan,bsftap,bsmno3,bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,  &
               & bc0bp3,bc0ck,bcgrf,bcehu0,bczmxc,bc0nam,bc0idc,bcxrow,bctdtm,   &
               & bczmrt,bctmin,bctopt,bc0fd1,bc0fd2,cc0fd1,cc0fd2,bc0bceff,bdmb, &
               & bc0alf,bc0blf,bc0clf,bc0dlf,bc0arp,bc0brp,bc0crp,bc0drp,bc0aht, &
               & bc0bht,bc0sla,bc0hue,bctverndel,    &
-              & bhtsmx,bhtsmn,bhzpta,bhzeta,bhzptp,bhfwsf,bm0cif,bm0cgf,bcthudf,&
+              & bhtsmx,bhtsmn,bhfwsf,bm0cif,bm0cgf,bcthudf,&
               & bcbaflg,bcbaf,bcyraf,bchyfg,bcthum,bcdpop,bcdmaxshoot,bc0transf,&
               & bc0storeinit,bcfshoot,bc0growdepth,bcfleafstem,bc0shoot,        &
               & bc0diammax,bc0ssa,bc0ssb,bcfleaf2stor,bcfstem2stor,bcfstor2stor,&
@@ -100,7 +100,6 @@ subroutine crop(ctrl,clidat, bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec
 implicit none
 !
 include 'file.fi'
-include 'cenvr.inc'
 include 'cparm.inc'
 include 'chumus.inc'
 include 'cfert.inc'
@@ -109,7 +108,7 @@ include 'cfert.inc'
 !
     type(controls) :: ctrl
     type(climate_data) :: clidat
-    type(biomatter) :: bio    
+    type(biomatter) :: bio, tempbio
 real,parameter :: chilluv = 50.0,shoot_delay = 7.0,verndelmax = 0.04,           &
                 & dev_floor = 0.01,spring_trig = 0.29
 !
@@ -125,9 +124,10 @@ real :: aepa,bc0aht,bc0alf,bc0arp,bc0bceff,bc0bht,bc0blf,bc0bn1,bc0bn2,bc0bn3,  
       & bctchillucum,bcthucum,bcthum,bcthu_shoot_beg,bcthu_shoot_end,bctmin,    &
       & bctopt,bctrthucum,bctverndel,bcxrow,bcxstm,bcxstmrep,bcyld_coef,bcyraf, &
       & bczgrowpt,bczht,bczloc_regrow,bczmrt,bczmxc,bczrtd,bczshoot,bhfwsf,     &
-      & bhzeta,bhzpta,bhzptp,bprevchillucum,bprevflatleaf,bprevflatstem
+      & bhzeta,bhzpta,bhzptp,bprevchillucum,bprevflatleaf,bprevflatstem,        &
+      & bctwarmdays
 integer :: bc0idc,bc0transf,bcbaflg,bcdayam,bcdayap,bcdayspring,bchyfg,bctdtm,  &
-         & bcthudf,bctwarmdays,bnslay,bprevdayap,canopyflg,daysim,emrgflg,      &
+         & bcthudf,bnslay,bprevdayap,canopyflg,daysim,emrgflg,      &
          & first7,gmethod,growth_stress,icli,pd,phenolflg,pm,py,seedsw
 character(80) :: bc0nam,cropname
 logical :: bm0cgf,bm0cif,callgdd
@@ -171,7 +171,7 @@ integer,dimension(20),save :: ddae,ddap,ddav
 real,dimension(20),save :: dgdde,dgdds,dgddv
 logical,save :: endphenol,jan1
 real,dimension(15,5),save :: gddwsf
-
+    integer :: jd
 !
 !debe added canhty so it can be initialized in cinit
 !
@@ -861,7 +861,7 @@ cname = cropname   ! debe added for phenol subroutine call
 !phenolflg = 1 !this is now passed from main on through to crop and is global
 !
 !     day of year
-call caldat(ctrl%sim%julday, dd,mm,yy)
+call caldat(ctrl%sim%juldate, dd,mm,yy)
 jd = dayear(dd,mm,yy)
 !
 !debe set daynum = jd here at the top of the subroutine
@@ -949,8 +949,8 @@ if (bm0cif) then
   bm0cif = .false.          !turn off after initialization is complete
 else
           ! calculate day length
-  hrlty = hrlt
-  hrlt = daylen(xlat,jd,civilrise)
+  clidat%hrlty = clidat%hrlt
+  clidat%hrlt = daylen(clidat%xlat,jd,civilrise)
  
           ! set trend direction for living leaf area from external forces
   trend = (bcfliveleaf*bcmstandleaf) - (bprevliveleaf*bprevstandleaf)
@@ -1015,7 +1015,7 @@ if ((bcfleaf2stor>0.0).or.(bcfstem2stor>0.0).or.(bcfstor2stor>0.0)) then
           ! check winter annuals for completion of vernalization,
           ! warming and spring day length
      if ((bczgrowpt>0.0).and.(bctchillucum>=chilluv).and.                       &
-       & (bctwarmdays>=shoot_delay*bctverndel/verndelmax).and.(huiy>spring_trig)&
+       & (bctwarmdays>=shoot_delay*bctverndel/verndelmax).and.(clidat%huiy>spring_trig)&
        & ) then
               ! vernalized and ready to grow in spring
         bcthu_shoot_beg = bcthucum/bcthum
@@ -1124,17 +1124,17 @@ end if
 hu_delay = 1.0
 if (bcthum<=0.0) then
           ! always keep this invalid plant in first stage growth
-  huiy = 0.0
-  hui = 0.0
+  clidat%huiy = 0.0
+  clidat%hui = 0.0
 else
           ! previous day heat unit index
-  huiy = bcthucum/bcthum
-  huirty = bctrthucum/bcthum
+  clidat%huiy = bcthucum/bcthum
+  clidat%huirty = bctrthucum/bcthum
           ! check for growth completion
-  if (huiy<1.0) then
+  if (clidat%huiy<1.0) then
               ! accumulate additional for today
               ! check for emergence status
-     if ((huiy>=bc0hue).and.(huiy<spring_trig)) then
+     if ((clidat%huiy>=bc0hue).and.(clidat%huiy<spring_trig)) then
                   ! emergence completed, account for vernalization and
                   ! photo period by delaying development rate until chill
                   ! units completed and spring trigger reached
@@ -1162,8 +1162,8 @@ else
               ! in growth.for
               ! bctrthucum = min(bctrthucum, bcthum)
               ! calculate heat unit index
-     hui = bcthucum/bcthum
-     huirt = bctrthucum/bcthum
+     clidat%hui = bcthucum/bcthum
+     clidat%huirt = bctrthucum/bcthum
  
   end if
  
@@ -1178,7 +1178,7 @@ end if
 ! equal to 1.0, maturity has been reached. this allows the possibility of using either
 ! approach to determine maturity.
  
-if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
+if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(clidat%huiy<1.0))) then
  
           ! crop growth not yet complete
           ! increment day after planting counter since growth happens
@@ -1209,7 +1209,7 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
 ! try #3, if using phenologymms emergence code (emrgflg=1), emergence
 ! has not occurred yet (ems(1)=999), and hui.gt.bcthu_shoot_beg) call
 ! shoot_grow:
-  if ((emrgflg==1).and.(ems(1)==999).and.(hui>bcthu_shoot_beg)) then
+  if ((emrgflg==1).and.(ems(1)==999).and.(clidat%hui>bcthu_shoot_beg)) then
 !      if ((daysim .eq. 7) .or. (daysim .eq. 8)) then
 !          bcthu_shoot_end = 0.06
 !      else
@@ -1222,9 +1222,9 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
 ! the following "fix" will also need to reset bcthu_shoot_end back to
 ! original value once emergence occurs. to avoid the problem where huiy
 ! = bcthu_shoot_end in the call to shoot_grow, add 0.00001 to huiy below:
-     if (huiy>=bcthu_shoot_end) bcthu_shoot_end = huiy + 0.00001      !should 'then' be here?
-     call shoot_grow(ctrl,clidat, bio,bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
-                   & bc0ssa,bc0ssb,bc0diammax,hui,huiy,bcthu_shoot_beg,         &
+     if (clidat%huiy>=bcthu_shoot_end) bcthu_shoot_end = clidat%huiy + 0.00001      !should 'then' be here?
+     call shoot_grow(ctrl,clidat, bio, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
+                   & bc0ssa,bc0ssb,bc0diammax,clidat%hui,clidat%huiy,bcthu_shoot_beg,         &
                    & bcthu_shoot_end,bcmstandstem,bcmstandleaf,bcmstandstore,   &
                    & bcmflatstem,bcmflatleaf,bcmflatstore,bcmshoot,bcmtotshoot, &
                    & bcmbgstemz,bcmrootstorez,bcmrootfiberz,bczht,bczshoot,     &
@@ -1233,9 +1233,9 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
                    & seedsw,cropname,soilwat,wfpslo,wfpsup,germgdd,ergdd,gddtbg,&
                    & ddap,dgdds,elong,ems,germs,gddday,yy,emrgflg,icli,pd,pm,py,&
                    & yr,cliname,egdd,ggdd,tempsw)                          !used dap in place of bcdayap
-  else if ((huiy<bcthu_shoot_end).and.(hui>bcthu_shoot_beg)) then
+  else if ((clidat%huiy<bcthu_shoot_end).and.(clidat%hui>bcthu_shoot_beg)) then
      call shoot_grow(ctrl,clidat, bio, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfleafstem,bcfshoot,   &
-                   & bc0ssa,bc0ssb,bc0diammax,hui,huiy,bcthu_shoot_beg,         &
+                   & bc0ssa,bc0ssb,bc0diammax,clidat%hui,clidat%huiy,bcthu_shoot_beg,         &
                    & bcthu_shoot_end,bcmstandstem,bcmstandleaf,bcmstandstore,   &
                    & bcmflatstem,bcmflatleaf,bcmflatstore,bcmshoot,bcmtotshoot, &
                    & bcmbgstemz,bcmrootstorez,bcmrootfiberz,bczht,bczshoot,     &
@@ -1250,7 +1250,7 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
 !debe added the new arrays egdd, ggdd to the calls above to shoot_grow to be
 ! passed on to emerge where they are used. added tempsw as the array index of these arrays.
  
-  if ((huiy<bcthu_shoot_end).and.(hui>=bcthu_shoot_end)) then
+  if ((clidat%huiy<bcthu_shoot_end).and.(clidat%hui>=bcthu_shoot_end)) then
               ! shoot growth completed on this day
               ! move growing point to regrowth depth after shoot growth
               ! complete
@@ -1266,17 +1266,17 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(huiy<1.0))) then
   !   print*, 'in crop before call to growth, daysim = ', daysim
  
 !          ! calculate plant growth state variables
-  call growth(ctrl, bnslay,bio,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,b_fr,  &
+  call growth(ctrl, bnslay,bio, bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,b_fr,  &
             & bcxrow,bc0diammax,bczmrt,bctmin,bctopt,bc0bceff,bc0alf,bc0blf,    &
             & bc0clf,bc0dlf,bc0arp,bc0brp,bc0crp,bc0drp,bc0aht,bc0bht,bc0ssa,   &
-            & bc0ssb,bc0sla,bcxstm,bhtsmn,clidat%awtdmx,clidat%awtdmn,clidat%aweirr,bhfwsf,hui,huiy, &
-            & huirt,huirty,hu_delay,bcthu_shoot_end,bcbaflg,bcbaf,bcyraf,bchyfg,&
+            & bc0ssb,bc0sla,bcxstm,bhtsmn,clidat%awtdmx,clidat%awtdmn,clidat%aweirr,bhfwsf,clidat%hui,clidat%huiy, &
+            & clidat%huirt,clidat%huirty,hu_delay,bcthu_shoot_end,bcbaflg,bcbaf,bcyraf,bchyfg,&
             & bcfleaf2stor,bcfstem2stor,bcfstor2stor,bcyld_coef,bcresid_int,    &
             & bcmstandstem,bcmstandleaf,bcmstandstore,bcmflatstem,bcmflatleaf,  &
             & bcmflatstore,bcmrootstorez,bcmrootfiberz,bcmbgstemz,bczht,bcdstm, &
             & bczrtd,bcfliveleaf,bcdayap,bcgrainf,bcdpop,dayhtinc,daysim,gddday,&
             & growth_stress,canht,canhty,canopyflg,antss,phenolflg,boots,heads, &
-            & joints,mats,ln,co2x,co2y,co2atmos,co2eff,ts)
+            & joints,mats,ln,co2x,co2y,co2atmos,co2eff,clidat%ts)
   
 ! debe added joints, heads and mats to send to growth. 
  

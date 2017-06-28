@@ -9,6 +9,7 @@
 !------------------------------------------------------------------------------
     
     module upgm_simdata
+    use stress, only : crop_stress
     implicit none
 
     ! simulation data
@@ -16,7 +17,8 @@
         integer :: plant_day    ! planting day
         integer :: plant_mon    ! planting month
         integer :: plant_year   ! planting year.  currently, not the calendar year.
-        integer :: julday       ! julian day
+        integer :: juldate       ! julian date
+        
         
         integer :: tisr         ! The last accessed day of simulation month.
         integer :: tday         ! The last accessed month of simulation year.
@@ -38,10 +40,14 @@
         !winter_ann_root = 0                                    ! root depth grows at same rate as height
         !winter_ann_root = 1                                    ! root depth grows with fall heat units
         integer :: am0cdb  ! flag to print CROP variables before and after call to CROP
+        
+        character(len=80) :: ac0nam
+        integer :: ac0idc
     end type simulation
     
     type controls
         type(simulation) :: sim
+        type(crop_stress) :: cropstress
     end type controls
     
     type(controls) :: upgm_ctrls

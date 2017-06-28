@@ -1,4 +1,4 @@
-subroutine cropinit(sppdat,bio,isr,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,      &
+subroutine cropinit(ctrl, soils,bio,tempbio,biotot,isr,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,      &
                   & canopyflg,cliname,cots,cropname,dayhtinc,dents,doughs,drs,  &
                   & dummy1,dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,    &
                   & ergdd,eseeds,first7,fps,fullbs,gddtbg,germgdd,germs,ggdd,   &
@@ -39,20 +39,21 @@ subroutine cropinit(sppdat,bio,isr,aepa,aifs,antes,antss,blstrs,boots,browns,cal
 !debe added all growth stage variables and phenolflg to be initialized here.
 !debe added CO2 variables to be initialized here.
     use constants, only : mnsub,mnsz, mncz,mndk
-    use biomaterial, only : biomatter
-    use soil, only : soil_phys_props
+    use biomaterial, only : biomatter, biototal
+    use soil, only : soildata
+    use upgm_simdata, only : upgm_ctrls, controls
 implicit none
 !
-include 'c1info.inc'
 include 'c1gen.inc'
 include 'c1db1.inc'
 include 'c1db2.inc'
-include 'c1glob.inc'
 !
 ! Dummy arguments
 !
-    type(biomatter) :: bio
-    type(soil_phys_props) :: sppdat
+    type(controls) :: ctrl
+    type(biomatter) :: bio, tempbio
+    type(biototal) :: biotot
+    type(soildata) :: soils
 real :: aepa,dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,tupper,    &
       & co2atmos
 logical :: callgdd
@@ -430,51 +431,51 @@ integer :: d,dn,i,idx,mo,newrow,row,y,k
 !              includes daynum, year, month and day of when this stage was
 !              reached.
  
-acmstandstem(isr) = 0.0
-acmstandleaf(isr) = 0.0
-acmstandstore(isr) = 0.0
-acmflatstem(isr) = 0.0
-acmflatleaf(isr) = 0.0
-acmflatstore(isr) = 0.0
+bio%mass%standstem = 0.0
+bio%mass%standleaf = 0.0
+bio%mass%standstore = 0.0
+bio%mass%flatstem = 0.0
+bio%mass%flatleaf = 0.0
+bio%mass%flatstore = 0.0
  
-do idx = 1,mnsz
-  acmrootstorez(idx,isr) = 0.0
-  acmrootfiberz(idx,isr) = 0.0
-  acmbgstemz(idx,isr) = 0.0
+do idx = 1, size(bio%mass%rootstorez)
+  bio%mass%rootstorez(idx) = 0.0
+  bio%mass%rootfiberz(idx) = 0.0
+  bio%mass%stemz(idx) = 0.0
 end do
  
-aczht(isr) = 0.0
-acdstm(isr) = 0.0
-aczrtd(isr) = 0.0
-acdayap(isr) = 0
-acthucum(isr) = 0.0
-actrthucum(isr) = 0.0
-acgrainf(isr) = 0.0
-acmrootstore(isr) = 0.0
-acmrootfiber(isr) = 0.0
-acxstmrep(isr) = 0.0
-acfliveleaf(isr) = 0.0
+bio%geometry%zht = 0.0
+bio%geometry%dstm = 0.0
+bio%geometry%zrtd = 0.0
+bio%growth%dayap = 0
+bio%growth%thucum = 0.0
+bio%growth%trthucum = 0.0
+bio%geometry%grainf = 0.0
+bio%deriv%mbgrootstore = 0.0
+bio%deriv%mbgrootfiber = 0.0
+biotot%xstmrep = 0.0
+bio%growth%fliveleaf = 0.0
  
-acm(isr) = 0.0
-acmst(isr) = 0.0
-acmf(isr) = 0.0
-acmrt(isr) = 0.0
+bio%deriv%m = 0.0
+bio%deriv%mst = 0.0
+bio%deriv%mf = 0.0
+bio%deriv%mrt = 0.0
  
-do idx = 1,mnsz
-  acmrtz(idx,isr) = 0.0
+do idx = 1,size(bio%deriv%mrtz)
+  bio%deriv%mrtz(idx) = 0.0
 end do
  
-acrsai(isr) = 0.0
-acrlai(isr) = 0.0
+bio%deriv%rsai = 0.0
+bio%deriv%rlai = 0.0
  
-do idx = 1,mncz
-  acrsaz(idx,isr) = 0.0
-  acrlaz(idx,isr) = 0.0
+do idx = 1,size(bio%deriv%rsaz)
+  bio%deriv%rsaz(idx) = 0.0
+  bio%deriv%rlaz(idx) = 0.0
 end do
  
-acffcv(isr) = 0.0
-acfscv(isr) = 0.0
-acftcv(isr) = 0.0
+bio%deriv%ffcv = 0.0
+bio%deriv%fscv = 0.0
+bio%deriv%ftcv = 0.0
  
 acxstm(isr) = 0.0
 acrbc(isr) = 1
@@ -482,17 +483,17 @@ accovfact(isr) = 0.0
 ac0ck(isr) = 0.0
  
       ! initialize some derived globals for crop global variables
-acfcancov(isr) = 0.0
-acrcd(isr) = 0.0
+bio%deriv%fcancov = 0.0
+bio%deriv%rcd = 0.0
  
 !     initialize crop yield reporting parameters in case harvest call before planting
-ac0nam(isr) = ''
+ctrl%sim%ac0nam = ''
 acynmu(isr) = ''
 acycon(isr) = 1.0
 acywct(isr) = 0.0
  
 !     initialize crop type id to 0 indicating no crop type is growing
-ac0idc(isr) = 0
+ctrl%sim%ac0idc = 0
 ac0sla(isr) = 0.0
 acdpop(isr) = 0.0
  
@@ -507,28 +508,28 @@ end do
 acddsthrsh(isr) = 0.0
  
       ! temporary crop
-bio%mass%standstem = 0.0
-bio%mass%standleaf = 0.0
-bio%mass%standstore = 0.0
-bio%mass%flatstem = 0.0
-bio%mass%flatleaf = 0.0
-bio%mass%flatstore = 0.0
-bio%mass%flatrootstore = 0.0
-bio%mass%flatrootfiber = 0.0
+tempbio%mass%standstem = 0.0
+tempbio%mass%standleaf = 0.0
+tempbio%mass%standstore = 0.0
+tempbio%mass%flatstem = 0.0
+tempbio%mass%flatleaf = 0.0
+tempbio%mass%flatstore = 0.0
+tempbio%mass%flatrootstore = 0.0
+tempbio%mass%flatrootfiber = 0.0
  
-do idx = 1, sppdat%nslay
-  bio%mass%stemz(idx) = 0.0
-  bio%mass%leafz(idx) = 0.0
-  bio%mass%storez(idx) = 0.0
-  bio%mass%rootstorez(idx) = 0.0
-  bio%mass%rootfiberz(idx) = 0.0
+do idx = 1, soils%spp%nslay
+  tempbio%mass%stemz(idx) = 0.0
+  tempbio%mass%leafz(idx) = 0.0
+  tempbio%mass%storez(idx) = 0.0
+  tempbio%mass%rootstorez(idx) = 0.0
+  tempbio%mass%rootfiberz(idx) = 0.0
 end do
  
-bio%geometry%zht = 0.0
-bio%geometry%dstm = 0.0
-bio%geometry%xstmrep = 0.0
-bio%geometry%zrtd = 0.0
-bio%geometry%grainf = 0.0
+tempbio%geometry%zht = 0.0
+tempbio%geometry%dstm = 0.0
+tempbio%geometry%xstmrep = 0.0
+tempbio%geometry%zrtd = 0.0
+tempbio%geometry%grainf = 0.0
  
       ! values that need initialization for cdbug calls (before initial crop entry)
 actdtm(isr) = 0

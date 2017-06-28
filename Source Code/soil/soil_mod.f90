@@ -19,17 +19,30 @@
         real :: asxrgs(4) !used
         real :: asargo(4) !used
         integer :: nslay ! Number of soil layers being used for each subregion.
-        real :: aszlyt(100+1, 4) ! Number of soil layers being used for each subregion.
-        real :: aszlyd(100, 4) ! Depth to bottom of each soil layer for each subregion (mm)
-        real :: asfcla(0:100, 4) !used
+        real :: aszlyt(100+1) ! Number of soil layers being used for each subregion.
+        real :: aszlyd(100) ! Depth to bottom of each soil layer for each subregion (mm)
+        real :: asfcla(0:100) !used
         real :: ahtsmn(100) 
     end type soil_phys_props
+    
+    type soil_chem_props
+        real :: as0ph(100) !used
+        real :: asfcce(100) !used
+        real :: asfcec(100) !used
+        real :: asfom(0:100) !used
+        real :: asfsmb(100) !used
+        real :: asftap(100) !used
+        real :: asftan(100) !used
+        real :: asmno3      !used
+            
+    end type soil_chem_props
+    
 
-
-    type(soil_phys_props) :: spp_data
-
-
-
+    type soildata
+        type(soil_phys_props) :: spp
+        type(soil_chem_props) :: scp
+    end type soildata
+    
     end module soil
     
 !------------------------------------------------------------------------------  

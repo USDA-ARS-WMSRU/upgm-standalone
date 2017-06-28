@@ -1,4 +1,4 @@
-subroutine upgm_driver(ctrl,clidat,sppdat,bio,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,&
+subroutine upgm_driver(ctrl,clidat,soils,bio, tempbio,biotot,prevbio,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,&
                      & antes,antss,blstrs,boots,browns,callgdd,canht,canopyflg, &
                      & cliname,cots,cropname,dayhtinc,dents,doughs,drs,dummy1,  &
                      & dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,ergdd,  &
@@ -13,28 +13,23 @@ subroutine upgm_driver(ctrl,clidat,sppdat,bio,sr,start_jday,end_jday,plant_jday,
     use constants, only : mnsz, mnsub, mnbpls, mncz, mndk, mnhhrs
     use upgm_simdata, only : controls
     use climate, only : climate_data
-    use soil, only : soil_phys_props
+    use soil, only : soildata
     use biomaterial
 implicit none
 !
 include 'file.fi'
-include 's1dbc.inc'
 include 'd1glob.inc'
 include 'c1gen.inc'
-include 'h1hydro.inc'
-include 'c1info.inc'
 include 'c1db1.inc'
 include 'c1db2.inc'
-include 'c1glob.inc'
-include 'h1et.inc'
-include 'prevstate.inc'
 !
 ! Dummy arguments
 !
     type(controls) :: ctrl
     type(climate_data) :: clidat
-    type(soil_phys_props) :: sppdat
-    type(biomatter) :: bio
+    type(soildata) :: soils
+    type(biomatter) :: bio, tempbio, prevbio
+    type(biototal) :: biotot
 real :: aepa,canht,dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,     &
       & tupper,co2atmos
 integer :: am0hrvfl,canopyflg,emrgflg,end_jday,first7,gmethod,growth_stress,    &
@@ -72,9 +67,9 @@ real :: elrate,germd,wlow,wup
 
 do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/31
 !
-  ctrl%sim%julday = day_iter
+  ctrl%sim%juldate = day_iter
  
-  call caldat(ctrl%sim%julday,id,im,iy)
+  call caldat(ctrl%sim%juldate,id,im,iy)
 !  if ((im.lt.4).and.(iy.eq.1)) then
 !      print*, 'in main id = ', id,'im = ', im, 'iy = ', iy !, 'wwtdmx = ', wwtdmx(dayidx)
 !  end if
@@ -93,7 +88,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
 !  if ((id.ne.29).or.(im.ne.2)) then !check if leap year
     !
     ! read in daily water stress
-  read (upgmstress,*) chkid,chkim,chkiy,ahfwsf(1)     !upgm_stress.dat
+  read (upgmstress,*) chkid,chkim,chkiy,ctrl%cropstress%ahfwsf     !upgm_stress.dat
   if ((chkid/=id).or.(chkim/=im).or.(chkiy/=iy)) then
      write (*,*) 'error in dates in water stress file - stop'
      call exit(1)
@@ -110,7 +105,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
   
 !  if ((id.ne.29).or.(im.ne.2)) then !check if leap year
     !
-  if (ctrl%sim%julday==plant_jday) then
+  if (ctrl%sim%juldate==plant_jday) then
      write (*,*) 'planting date: ',pd,'/',pm,'/',py
      growcrop_flg = .true.
      bio%growth%am0cif = .true.
@@ -123,7 +118,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
     ! debe added new method of determining when harvest day occurs utilizing the
     ! phenolflg and writing out the value in season.out
   if (((phenolflg==1).and.(hrs(1)/=999).and.am0hrvfl==0).or.                    &
-    & ((phenolflg==0).and.( ctrl%sim%julday==harvest_jday))) then
+    & ((phenolflg==0).and.( ctrl%sim%juldate==harvest_jday))) then
  
      if (phenolflg==1) then
         write (*,*) 'harvest date: ',hrs(1),hrs(2),hrs(3),hrs(4)
@@ -134,14 +129,14 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
      am0hrvfl = 1     ! debe uncommented this line because it is now needed to prevent crop_endseason
                       ! being called after harvest every day until the end date of simulation.
     !
-     call crop_endseason(ctrl,ac0nam(sr),bio%growth%am0cfl,sppdat%nslay,ac0idc(sr),acdayam(sr),    &
-                       & acthum(sr),acxstmrep(sr),prevstandstem(sr),            &
-                       & prevstandleaf(sr),prevstandstore(sr),prevflatstem(sr), &
-                       & prevflatleaf(sr),prevflatstore(sr),prevbgstemz(1,sr),  &
-                       & prevrootstorez(1,sr),prevrootfiberz(1,sr),prevht(sr),  &
-                       & prevstm(sr),prevrtd(sr),prevdayap(sr),prevhucum(sr),   &
-                       & prevrthucum(sr),prevgrainf(sr),prevchillucum(sr),      &
-                       & prevliveleaf(sr),acdayspring(sr),mature_warn_flg,      &
+     call crop_endseason(ctrl,ctrl%sim%ac0nam,bio%growth%am0cfl,soils%spp%nslay,ctrl%sim%ac0idc,bio%growth%dayam,    &
+                       & acthum(sr),biotot%xstmrep,prevbio%mass%standstem,            &
+                       & prevbio%mass%standleaf,prevbio%mass%standstore,prevbio%mass%flatstem, &
+                       & prevbio%mass%flatleaf,prevbio%mass%flatstore,prevbio%mass%stemz,  &
+                       & prevbio%mass%rootstorez,prevbio%mass%rootfiberz,prevbio%geometry%zht,  &
+                       & prevbio%geometry%dstm,prevbio%geometry%zrtd,prevbio%growth%dayap,prevbio%growth%thucum,   &
+                       & prevbio%growth%trthucum,prevbio%geometry%grainf,prevbio%growth%tchillucum,      &
+                       & prevbio%growth%fliveleaf,bio%growth%dayspring,mature_warn_flg,      &
                        & acycon(sr),acynmu(sr),ies,joints,boots,heads,antss,mats,hrs,   &
                        & phenolflg)
     !debe added acycon to the passing arguments to crop_endseason to allow calculation
@@ -169,7 +164,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
     ! debe added passing the new variable 'phenolflg' which is read in from upgm_crop.dat
     ! and the phenological growth stages variables to callcrop which will pass
     ! them on to crop.
-     call callcrop(ctrl,clidat,sppdat,bio,aepa,aifs,ctrl%sim%julday-plant_jday+1,1,antes,antss,blstrs,boots,     &
+     call callcrop(ctrl,clidat,soils,bio,tempbio,biotot,prevbio,aepa,aifs,ctrl%sim%juldate-plant_jday+1,1,antes,antss,blstrs,boots,     &
                  & browns,callgdd,canht,canopyflg,cliname,cots,cropname,        &
                  & dayhtinc,dents,doughs,drs,dummy1,dummy2,ears,ecanht,egdd,    &
                  & emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,fullbs,     &
@@ -185,7 +180,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
          ! reached before hrs(1) has a value .ne. to 999 when using phenolflg = 1,
          ! simulation will continue until it does reach a harvest date.
      if (((phenolflg==1).and.(hrs(1)/=999)).or.                                 &
-       & ((phenolflg==0).and.(ctrl%sim%julday==harvest_jday))) growcrop_flg = .false.
+       & ((phenolflg==0).and.(ctrl%sim%juldate==harvest_jday))) growcrop_flg = .false.
  
   end if
   

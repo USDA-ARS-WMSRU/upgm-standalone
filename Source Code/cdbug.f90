@@ -1,25 +1,21 @@
-subroutine cdbug(isr,slay, ctrl, clidat, sppdat, bio)
+subroutine cdbug(isr, slay, ctrl, clidat, soils, bio)
 !
     use upgm_simdata, only : controls
     use climate, only : climate_data
-    use soil, only : soil_phys_props
+    use soil, only : soildata
     use constants, only : mnsz, mnsub, mnhhrs, mncz,mndk
     use biomaterial
 implicit none
 !
 include 'file.fi'
-include 's1dbc.inc'
 include 'c1db1.inc'
 include 'c1db2.inc'
-include 'c1glob.inc'
-include 'h1et.inc'
-include 'h1hydro.inc'
 !
 ! Dummy arguments
 !
     type(controls) :: ctrl
     type(climate_data) :: clidat
-    type(soil_phys_props) :: sppdat
+    type(soildata) :: soils
     type(biomatter) :: bio
 integer :: isr,slay
 integer :: julday
@@ -76,7 +72,7 @@ if (bio%growth%am0cif.eqv..true.) then
   ctrl%sim%tyr = -1
   ctrl%sim%tisr = -1
 end if
-call caldat(0,cd,cm,cy)
+call caldat(ctrl%sim%juldate,cd,cm,cy)
  
 !     + + + end specifications + + +
  
@@ -97,23 +93,23 @@ write (cdbugfile,1400) isr,isr,isr,isr,isr,isr,isr
 !      write(27,2051) amrslp(isr), acftcv(isr), acrlai(isr), aczrtd(isr),
 !     &               admf(isr), ahfwsf(isr), ac0nam(isr)
 write (cdbugfile,1600) isr,isr,isr,isr
-write (cdbugfile,1700) actdtm(isr),acthucum(isr),acmst(isr),acmrt(isr)
+write (cdbugfile,1700) actdtm(isr),bio%growth%thucum,bio%deriv%mst,bio%deriv%mrt
 ! write (cdbugfile,1800) isr,isr,isr,isr
 write (cdbugfile,1800) isr,isr
 !write (cdbugfile,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr),as0rrk(isr),         &
 !              & aslrr(isr)
-write (cdbugfile,1900) ahzptp,actmin(isr),actopt(isr)
+write (cdbugfile,1900) actmin(isr),actopt(isr)
 write (cdbugfile,2000)
  
 do l = 1,slay
-  write (cdbugfile,2100) l,sppdat%aszlyt(l,isr),      &
-                & sppdat%ahtsmn(l)
+  write (cdbugfile,2100) l,soils%spp%aszlyt(l),      &
+                & soils%spp%ahtsmn(l)
 end do
 write (cdbugfile,2200)
  
 do l = 1,slay
-  write (cdbugfile,2300) l,sppdat%asfcla(l,isr),asfom(l,isr),     &
-                & sppdat%asdblk(l)
+  write (cdbugfile,2300) l,soils%spp%asfcla(l),soils%scp%asfom(l),     &
+                & soils%spp%asdblk(l)
 end do
  
 ctrl%sim%tisr = isr
@@ -139,9 +135,9 @@ ctrl%sim%tyr = cy
  1700 format (i10,4F10.2,2F12.2)
 !1800 format ('      ahzea     ahzep    ahzptp ',' actmin(',i2,') actopt(',i2,  &
 !            &') as0rrk(',i2,')',' aslrr(',i2,')')
- 1800 format ('      ahzptp ',' actmin(',i2,') actopt(',i2,')')
+ 1800 format (' actmin(',i2,') actopt(',i2,')')
 !1900 format (2f10.2,2f10.3,3f12.2)
- 1900 format (2F10.2,2F10.3,1F12.2)
+ 1900 format (2F10.2)
  2000 format ('layer aszlyt ahtsmn')
  2100 format (i4,1x,f7.2,1x,1F7.2)
  2200 format (' layer  asfcla asfom asdblk')

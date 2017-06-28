@@ -1,17 +1,18 @@
-subroutine nuse(bn1,bn2,bn3,bp1,bp2,bp4)
+subroutine nuse(clidat, bn1,bn2,bn3,bp1,bp2,bp4)
 !
     use constants, only : mnsz
+    use climate
 implicit none
 !
 include 'cgrow.inc'
 include 'csoil.inc'
 include 'cfert.inc'
 include 'cparm.inc'
-include 'cenvr.inc'
 include 'chumus.inc'
 !
 ! Dummy arguments
 !
+    type(climate_data) :: clidat
 real :: bn1,bn2,bn3,bp1,bp2,bp4
 !
 ! Local variables
@@ -76,7 +77,7 @@ un1 = un2
 sup = 0.
 !     calculate optimal n concentration for a crop using a modified version of
 !     eq. 2.215 in the next 2 lines.
-cnt = bn1 + bn2*exp(-bn3*hui)
+cnt = bn1 + bn2*exp(-bn3*clidat%hui)
 un2 = cnt*dm*1000.
 !      if (un2.lt.un1) un2=un1
 !     allow positive n demand late in the season ?
@@ -86,7 +87,7 @@ if (uno3<=0.) uno3 = 0.
 vt = uno3
 !     this section is the epic subroutine npup
 !     calculate p concentration for a crop using a modified form of eq.2.229.
-cpt = bp2 + bp1*exp(-bp4*hui)
+cpt = bp2 + bp1*exp(-bp4*clidat%hui)
 up2 = cpt*dm*1000.
 if (up2<up1) up2 = up1
 upp = up2 - up1

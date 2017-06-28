@@ -1,4 +1,4 @@
-subroutine growth(ctrl, bnslay,bio,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,   &
+subroutine growth(ctrl,bnslay,bio,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,   &
                 & b_fr,bcxrow,bc0diammax,bczmrt,bctmin,bctopt,cc0be,bc0alf,     &
                 & bc0blf,bc0clf,bc0dlf,bc0arp,bc0brp,bc0crp,bc0drp,bc0aht,      &
                 & bc0bht,bc0ssa,bc0ssb,bc0sla,bcxstm,bhtsmn,bwtdmx,bwtdmn,      &
@@ -30,14 +30,13 @@ subroutine growth(ctrl, bnslay,bio,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0na
 implicit none
 !
 include 'file.fi'
-include 'clai.inc'
 !DE added
 include 'cgrow.inc'
 !
 ! Dummy arguments
 !
     type(controls) :: ctrl
-    type(biomatter) :: bio 
+    type(biomatter) :: bio
 real :: a_fr,bc0aht,bc0alf,bc0arp,bc0bht,bc0blf,bc0brp,bc0ck,bc0clf,bc0crp,     &
       & bc0diammax,bc0dlf,bc0drp,bc0sla,bc0ssa,bc0ssb,bcbaf,bcdpop,bcdstm,      &
       & bcehu0,bcfleaf2stor,bcfliveleaf,bcfstem2stor,bcfstor2stor,bcgrainf,     &
@@ -361,7 +360,7 @@ real,dimension(mnsz) :: wfl,za
 !     + + + end of specifications + + +
 
 
-call caldat(ctrl%sim%julday, day,mo,yr)
+call caldat(ctrl%sim%juldate, day,mo,yr)
               !function
           !  and weight fraction by layer used to distribute root mass
           !  into the soil layers
@@ -446,7 +445,7 @@ else
 end if
  
       !traditional lai calculation for reporting puposes
-trad_lai = clfarea*bcdpop
+bio%upgm%trad_lai = clfarea*bcdpop
  
 !     start biomass calculations
 !     bweirr is total shortwave radiation and a factor of .5 is assumed
@@ -876,7 +875,7 @@ if (bio%growth%am0cfl>=1) then
                      & bcmstandstore,bcmflatstem,bcmflatleaf,bcmflatstore,      &
                      & temp_store,temp_fiber,temp_stem,                     &
                      & bcmstandleaf + bcmflatleaf,bcmstandstem + bcmflatstem +  &
-                     & temp_stem,bczht,bcdstm,trad_lai,eff_lai,bczrtd,bcgrainf, &
+                     & temp_stem,bczht,bcdstm,bio%upgm%trad_lai,eff_lai,bczrtd,bcgrainf, &
                      & ts,bhfwsf,frst,ffa,ffw,par,apar,pddm,p_rw,p_st,p_lf,p_rp,&
                      & stem_propor,pdiam,parea,pdiam/bc0diammax,parea*bcdpop,   &
                      & hu_delay,temp_sai,temp_stmrep,bc0nam,gddday,ln

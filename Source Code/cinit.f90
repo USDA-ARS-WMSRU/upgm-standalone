@@ -50,7 +50,6 @@ include 'csoil.inc'
 include 'chumus.inc'
 include 'cfert.inc'
 include 'cgrow.inc'
-include 'cenvr.inc'
 include 'cparm.inc'
 !
 ! Dummy arguments
@@ -65,8 +64,8 @@ real :: bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,bc0bp3,bc0fd1,bc0fd2,bc0growdepth,   
       & bcmtotshoot,bctchillucum,bcthucum,bcthum,bcthu_shoot_beg,               &
       & bcthu_shoot_end,bctmin,bctopt,bctrthucum,bczgrowpt,bczht,bczrtd,        &
       & bczshoot,bsmno3,canht,canhty,cc0fd1,cc0fd2,elong,gdda,gddday,gdde,gdds, &
-      & gddv,todayln,yestln,ln,co2eff
-integer :: bc0idc,bcdayam,bcdayap,bcdayspring,bctdtm,bcthudf,bctwarmdays,bnslay,&
+      & gddv,todayln,yestln,ln,co2eff, bctwarmdays
+integer :: bc0idc,bcdayam,bcdayap,bcdayspring,bctdtm,bcthudf,bnslay,&
          & daa,dae,dap,dav,dd,lncntr,mm,pdate,rowcntr,seedsw,tempsw,verns,yr,yy
 logical :: endphenol,jan1
 real,dimension(*) :: bcmbgstemz,bcmrootfiberz,bcmrootstorez,bs0ph,bsdblk,bsfcce,&
@@ -488,9 +487,9 @@ end if
  
       ! all types initialized with no stem, leaves or roots, just root storage mass
       ! transplants start with a very short time to "sprout"
-bcmstandleaf = 0.0
-bcmstandstem = 0.0
-bcmstandstore = 0.0
+bio%mass%standleaf = 0.0
+bio%mass%standstem = 0.0
+bio%mass%standstore = 0.0
 bcmflatstem = 0.0
 bcmflatleaf = 0.0
 bcmflatstore = 0.0
@@ -541,7 +540,7 @@ do i = 2,bnslay
   end if
 end do
  
-bctwarmdays = 0
+bctwarmdays = 0.0
 bctchillucum = 0.0
       ! set initial emergence (shoot growth) values
 bcthu_shoot_beg = 0.0
@@ -549,7 +548,7 @@ bcthu_shoot_end = bc0hue
  
  
 !     set variable in local include file
-xlat = ctrl%sim%amalat
+clidat%xlat = ctrl%sim%amalat
  
 !     minimum and maximum daylength for a location
 if (ctrl%sim%amalat>0.) then
@@ -566,11 +565,11 @@ end if
 !     hlmx = daylen(amalat, sdmx, civilrise)
  
 !     planting day of year
-call caldat(ctrl%sim%julday, dd,mm,yy)
+call caldat(ctrl%sim%juldate, dd,mm,yy)
 pdate = dayear(dd,mm,yy)
 !     initial daylength calculations
-hrlt = daylen(ctrl%sim%amalat,pdate,civilrise)
-hrlty = daylen(ctrl%sim%amalat,pdate-1,civilrise)
+clidat%hrlt = daylen(ctrl%sim%amalat,pdate,civilrise)
+clidat%hrlty = daylen(ctrl%sim%amalat,pdate-1,civilrise)
  
 !     start calculation of seasonal heat unit requirement
 sphu = 0.
@@ -617,9 +616,9 @@ do j = 1,730
 end do
 if (bcthudf==1) then
          ! use heat unit calculations to find dtm
-  phu = bcthum
+  clidat%phu = bcthum
   do j = 1,730
-     if (d2(j,3)<=bphu+phu) dtm = d2(j,1) - pdate
+     if (d2(j,3)<=bphu+clidat%phu) dtm = d2(j,1) - pdate
   end do
   hdate = pdate + dtm !hdate = harvest date
 else
@@ -629,27 +628,27 @@ else
   if (hdate>d2(730,1)) then
             ! this crop grows longer than one year
      ephu = d2(730,3)
-     phu = ephu - bphu
+     clidat%phu = ephu - bphu
             ! cap this at two years
      dxx = min(730,hdate-int(d2(730,1)))
-     ehu = d2(dxx,3)
-     phu = phu + ehu
+     clidat%ehu = d2(dxx,3)
+     clidat%phu = clidat%phu + clidat%ehu
   else
      do j = 1,730
         if (d2(j,1)==hdate) ephu = d2(j,3)
      end do
-     phu = ephu - bphu
+     clidat%phu = ephu - bphu
   end if
 end if
  
       ! print out heat average heat unit and days to maturity
-if (bio%growth%am0cfl>0) write (luoinpt,1100) pdate,hdate,bcthudf,dtm,bctdtm,phu,bcthum
+if (bio%growth%am0cfl>0) write (luoinpt,1100) pdate,hdate,bcthudf,dtm,bctdtm,clidat%phu,bcthum
  
       ! after printing the value, set the global parameter for maximum
       ! heat units to the new calculated value (this database value is
       ! read from management file every time crop is planted, so changing
       ! it here does not corrupt it)
-bcthum = phu
+bcthum = clidat%phu
  
 !     calculate s-curve parameters
 call scrv1(bc0fd1,cc0fd1,bc0fd2,cc0fd2,a_fr,b_fr)         ! frost damage
