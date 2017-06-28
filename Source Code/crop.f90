@@ -100,7 +100,6 @@ subroutine crop(ctrl,clidat, bio,tempbio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfo
 implicit none
 !
 include 'file.fi'
-include 'cparm.inc'
 include 'chumus.inc'
 include 'cfert.inc'
 !
@@ -171,6 +170,9 @@ integer,dimension(20),save :: ddae,ddap,ddav
 real,dimension(20),save :: dgdde,dgdds,dgddv
 logical,save :: endphenol,jan1
 real,dimension(15,5),save :: gddwsf
+
+    real :: a_fr
+    real :: b_fr
     integer :: jd
 !
 !debe added canhty so it can be initialized in cinit

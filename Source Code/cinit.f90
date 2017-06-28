@@ -50,7 +50,6 @@ include 'csoil.inc'
 include 'chumus.inc'
 include 'cfert.inc'
 include 'cgrow.inc'
-include 'cparm.inc'
 !
 ! Dummy arguments
 !
@@ -651,7 +650,7 @@ if (bio%growth%am0cfl>0) write (luoinpt,1100) pdate,hdate,bcthudf,dtm,bctdtm,cli
 bcthum = clidat%phu
  
 !     calculate s-curve parameters
-call scrv1(bc0fd1,cc0fd1,bc0fd2,cc0fd2,a_fr,b_fr)         ! frost damage
+!call scrv1(bc0fd1,cc0fd1,bc0fd2,cc0fd2,a_fr,b_fr)         ! frost damage
 !      call scrv1(s11x1,s11y1,s11x2,s11y2,a_s11,b_s11)    ! p uptake stress parameters
 !      call scrv1(s8x1,s8y1,s8x2,s8y2,a_s8,b_s8)          ! n and p availability stress
 !      if (am0cfl .gt. 0) write (60,2110)a_co,b_co,a_fr,b_fr

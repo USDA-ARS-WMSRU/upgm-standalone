@@ -42,14 +42,16 @@
 		<File RelativePath="..\Source Code\cfert.inc"/>
 		<File RelativePath="..\Source Code\cgrow.inc"/>
 		<File RelativePath="..\Source Code\chumus.inc"/>
-		<File RelativePath="..\Source Code\cparm.inc"/>
 		<File RelativePath="..\Source Code\csoil.inc"/></Filter>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 		<File RelativePath="..\Source Code\file.fi"/></Filter>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<Filter Name="climate">
 		<File RelativePath="..\Source Code\climate\climate_mod.f90"/></Filter>
-		<Filter Name="nutrients"/>
+		<Filter Name="nutrients">
+		<File RelativePath="..\Source Code\nutrients\nitrogen_mod.f90"/>
+		<File RelativePath="..\Source Code\nutrients\nitrogen_nuse_mod.f90"/>
+		<File RelativePath="..\Source Code\nutrients\nitrogen_nuts_mod.f90"/></Filter>
 		<Filter Name="soil">
 		<File RelativePath="..\Source Code\soil\soil_mod.f90"/></Filter>
 		<Filter Name="stress">
@@ -98,8 +100,6 @@
 		<File RelativePath="..\Source Code\nmnim.f90"/>
 		<File RelativePath="..\Source Code\npcy.f90"/>
 		<File RelativePath="..\Source Code\npmin.f90"/>
-		<File RelativePath="..\Source Code\nuse.f90"/>
-		<File RelativePath="..\Source Code\nuts.f90"/>
 		<File RelativePath="..\Source Code\output_phenol.f90"/>
 		<File RelativePath="..\Source Code\phenol.f90"/>
 		<File RelativePath="..\Source Code\phenolbn.f90"/>

@@ -59,7 +59,6 @@ real :: apar,arg_exp,bhfwsf_adj,ddm_rem,dht,dlfwt,drfwt,drpwt,drswt,dstwt,      
       & pdiam,pdrd,p_lf,p_lf_rp,p_rp,p_rw,p_st,stem_propor,strsdayhtinc,        &
       & temp_sai,temp_stmrep,wcg,wffiber,wfstore,wmaxd,xw,temp_fiber,           &
       & temp_stem,temp_store
-
 !      trad_lai,pddm, DE moved these out of the real declaration above.
 
 !these are in the common block cgrow.inc, that is now included so DE moved 
