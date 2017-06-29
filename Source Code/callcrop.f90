@@ -67,7 +67,6 @@ subroutine callcrop(ctrl,clidat,soils,bio,tempbio,biotot,prevbio,aepa,aifs,daysi
 !
 implicit none
 !
-include 'c1db3.inc'
 include 'c1gen.inc'
 include 'd1glob.inc'
 include 'd1gen.inc'
@@ -695,8 +694,8 @@ if (bio%growth%am0cgf) then
 !  print*, 'in callcrop just before call to crop seedsw = ', seedsw
   call crop(ctrl,clidat,bio,tempbio, soils%spp%nslay,soils%spp%aszlyt(1),soils%spp%aszlyd(1),soils%spp%asdblk(1),soils%scp%asfcce(1),      &
           & soils%scp%asfom(1),soils%scp%asfcec(1),soils%scp%asfsmb(1),soils%spp%asfcla(1),soils%scp%as0ph(1),     &
-          & soils%scp%asftan(1),soils%scp%asftap(1),soils%scp%asmno3,ac0bn1(sr),ac0bn2(sr),         &
-          & ac0bn3(sr),ac0bp1(sr),ac0bp2(sr),ac0bp3(sr),bio%database%ck,bio%database%grf,    &
+          & soils%scp%asftan(1),soils%scp%asftap(1),soils%scp%asmno3,bio%database%bn1,bio%database%bn2,         &
+          & bio%database%bn3,bio%database%bp1,bio%database%bp2,bio%database%bp3,bio%database%ck,bio%database%grf,    &
           & bio%database%ehu0,bio%database%zmxc,ctrl%sim%ac0nam,bio%database%idc,acxrow(sr),bio%database%tdtm,  &
           & bio%database%zmrt,bio%database%tmin,bio%database%topt,bio%database%fd1(1),bio%database%fd2(1),         &
           & bio%database%fd1(2),bio%database%fd2(2),bio%database%bceff,admbgz(1,1,sr),bio%database%alf,   &

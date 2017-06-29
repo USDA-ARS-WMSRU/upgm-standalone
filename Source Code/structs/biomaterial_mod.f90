@@ -199,6 +199,17 @@ module biomaterial
                           ! 3   o Non fragile-med (corn) residue
                           ! 4   o Woody-large residue
                           ! 5   o Gravel-rock
+     ! nitrogen params
+     
+     real :: bn1        ! Crop nitrogen uptake parm (N fraction at emergence)
+     real :: bn2        ! Crop nitrogen uptake parm (N fraction @ 1/2 maturity)
+     real :: bn3        ! Crop nitrogen uptake parm (N fraction at maturity)
+     real :: bp1        ! Crop phosphorous uptake parm (N fraction at emergence)
+     real :: bp2        ! Crop phosphorous uptake parm (N fraction @ 1/2 maturity)
+     real :: bp3        ! Crop phosphorous uptake parm (N fraction at maturity)
+     real :: fny        ! Fraction of nitrogen in yield (?)
+     real :: fnp        ! Fraction of phosphorous in yield (?)
+     real :: fnw        ! Fraction of water in yield (?)
   end type biodatabase
   
 
@@ -384,6 +395,7 @@ module biomaterial
       
       real :: trad_lai     ! leaf area index based on whole field area (traditional)
       
+
   end type crop_upgm    
   
   type biomatter
