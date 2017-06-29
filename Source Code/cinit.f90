@@ -43,11 +43,10 @@ subroutine cinit(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsm
     use upgm_simdata, only : upgm_ctrls, controls
     use climate, only : climate_data
     use biomaterial
+    use nitrogen
 implicit none
 !
 include 'file.fi'
-include 'csoil.inc'
-include 'chumus.inc'
 include 'cfert.inc'
 include 'cgrow.inc'
 !
@@ -667,16 +666,16 @@ bcthum = clidat%phu
 !      write (33,2992) (bszlyd(i),bsdblk(i),bsfcla(i),wp(i),bs0ph(i),    &
 !     &bsfsmb(i),bsfom(i),bsfcce(i),bsfcec(i),wno3(i),ap(i),rsd(i),      &
 !     &psp(i),wn(i),i=1,10)
-trsd = 0.0
-tfon = 0.0
-tfop = 0.0
-tmp = 0.0
-top = 0.0
-twn = 0.0
-twmn = 0.0
-tp = 0.0
-tap = 0.0
-tno3 = 0.0
+ctrl%ndat%trsd = 0.0
+ctrl%ndat%tfon = 0.0
+ctrl%ndat%tfop = 0.0
+ctrl%ndat%tmp = 0.0
+ctrl%ndat%top = 0.0
+ctrl%ndat%twn = 0.0
+ctrl%ndat%twmn = 0.0
+ctrl%ndat%tp = 0.0
+ctrl%ndat%tap = 0.0
+ctrl%ndat%tno3 = 0.0
 do i = 1,bnslay
 !          x1=bsdblk(i)
           ! dg=soil layer thickness in mm; xx=bszlyd(i-1); wt(i)=wt of soil(t/ha-mm)
@@ -687,21 +686,21 @@ do i = 1,bnslay
           ! to the now included weps global layer thickness variable here.
           ! dg=1000.*(bszlyd(i)-xx)
   dg = bszlyt(i)
-  wt(i) = bsdblk(i)*dg*10.
-  wt1 = wt(i)/1000.
+  ctrl%ndat%wt(i) = bsdblk(i)*dg*10.
+  wt1 = ctrl%ndat%wt(i)/1000.
           ! estimate initial values of: rsd(residue:t/ha);ap(labile p conc.:g/t);
           ! wno3 (no3 conc.:g/t). dg1=previous value of dg.
           ! call sdst (rsd,dg,dg1,i)
   call sdst(ap,dg,dg1,i)
   call sdst(wno3,dg,dg1,i)
-  trsd = trsd + rsd(i)
+  ctrl%ndat%trsd = ctrl%ndat%trsd + ctrl%ndat%rsd(i)
   dg1 = dg
           ! calculate ratio (rtn) of active(wmn) to total(wn) n pools associated
           ! with humus. yc=years of cultivation.
           ! yc was set to 150. as suggested by a. retta - jt 1/10/94
-  yc = 150.
-  if (i==1) rtn(1) = 0.4*exp(-0.0277*yc) + 0.1
-  if (i>1) rtn(i) = rtn(1)*.4
+  ctrl%ndat%yc = 150.
+  if (i==1) ctrl%ndat%rtn(1) = 0.4*exp(-0.0277*ctrl%ndat%yc) + 0.1
+  if (i>1) ctrl%ndat%rtn(i) = ctrl%ndat%rtn(1)*.4
  
           ! estimate bsfcec, bsa
           ! there are some very questionable things done here - jt  1/10/94
@@ -716,14 +715,14 @@ do i = 1,bnslay
  
           ! calculate amounts of n & p (kg/ha) from fresh organic matter(rsd),
           ! assuming that n content of residue is 0.8%; fon & fop are in kg/ha.
-  fon(i) = rsd(i)*8.
-  fop(i) = rsd(i)*1.1
-  tfon = tfon + fon(i)
-  tfop = tfop + fop(i)
+  ctrl%ndat%fon(i) = ctrl%ndat%rsd(i)*8.
+  ctrl%ndat%fop(i) = ctrl%ndat%rsd(i)*1.1
+  ctrl%ndat%tfon = ctrl%ndat%tfon + ctrl%ndat%fon(i)
+  ctrl%ndat%tfop = ctrl%ndat%tfop + ctrl%ndat%fop(i)
  
           ! initial organic(humus) n & p concentrations (g/t) in the soil
-  if (wn(i)==0.) wn(i) = 1000.*bsfom(i)
-  if (wp(i)==0.) wp(i) = 0.125*wn(i)
+  if (ctrl%ndat%wn(i)==0.) ctrl%ndat%wn(i) = 1000.*bsfom(i)
+  if (ctrl%ndat%wp(i)==0.) ctrl%ndat%wp(i) = 0.125*ctrl%ndat%wn(i)
  
           ! estimate psp(p sorption ratio), which is the fraction of fertilizer p that
           ! remains in the labile form after incubation for different soil conditions.
@@ -735,54 +734,54 @@ do i = 1,bnslay
           ! ids=5: input value of psp
           ! finally estimate the flow coefficient bk between the active and stable
           ! p pools (1/d)
-  ids = 1
-  if (ids==1) then
-     psp(i) = 0.5
-     if (bsfcce(i)>0.) psp(i) = 0.58 - 0.0061*bsfcce(i)
+  ctrl%ndat%ids = 1
+  if (ctrl%ndat%ids==1) then
+     ctrl%ndat%psp(i) = 0.5
+     if (bsfcce(i)>0.) ctrl%ndat%psp(i) = 0.58 - 0.0061*bsfcce(i)
   end if
-  if (ids==2) psp(i) = 0.02 + 0.0104*ap(i)
-  if (ids==3) psp(i) = 0.0054*bsa + 0.116*bs0ph(i) - 0.73
-  if (ids==4) psp(i) = 0.46 - 0.0916*alog(bsfcla(i))
-  if (psp(i)<0.05) psp(i) = 0.05
-  if (psp(i)>0.75) psp(i) = 0.75
+  if (ctrl%ndat%ids==2) ctrl%ndat%psp(i) = 0.02 + 0.0104*ap(i)
+  if (ctrl%ndat%ids==3) ctrl%ndat%psp(i) = 0.0054*bsa + 0.116*bs0ph(i) - 0.73
+  if (ctrl%ndat%ids==4) ctrl%ndat%psp(i) = 0.46 - 0.0916*alog(bsfcla(i))
+  if (ctrl%ndat%psp(i)<0.05) ctrl%ndat%psp(i) = 0.05
+  if (ctrl%ndat%psp(i)>0.75) ctrl%ndat%psp(i) = 0.75
   bk(i) = 0.0076
-  if (bsfcce(i)>0.) bk(i) = exp(-1.77*psp(i)-7.05)
+  if (bsfcce(i)>0.) bk(i) = exp(-1.77*ctrl%ndat%psp(i)-7.05)
  
           ! calculate initial amount of active(pmn) and stable(op) mineral p pools
           ! ap=initial amount of labile p(g/t);wt1=conversion factor to kg/ha
-  pmn(i) = ap(i)*(1.-psp(i))/psp(i)*wt1
-  tmp = tmp + pmn(i)
+  pmn(i) = ap(i)*(1.-ctrl%ndat%psp(i))/ctrl%ndat%psp(i)*wt1
+  ctrl%ndat%tmp = ctrl%ndat%tmp + pmn(i)
   op(i) = 4.*pmn(i)
-  top = top + op(i)
+  ctrl%ndat%top = ctrl%ndat%top + op(i)
  
           ! calculate amount of active(readily mineralizable) humus n pool(wmn)
           ! and total(active+stable) humus n pool(wn)
-  wmn(i) = rtn(i)*wn(i)
-  wn(i) = wn(i) - wmn(i)
-  wn(i) = wn(i)*wt1
-  twn = twn + wn(i)
-  wmn(i) = wmn(i)*wt1
-  twmn = twmn + wmn(i)
+  ctrl%ndat%wmn(i) = ctrl%ndat%rtn(i)*ctrl%ndat%wn(i)
+  ctrl%ndat%wn(i) = ctrl%ndat%wn(i) - ctrl%ndat%wmn(i)
+  ctrl%ndat%wn(i) = ctrl%ndat%wn(i)*wt1
+  ctrl%ndat%twn = ctrl%ndat%twn + ctrl%ndat%wn(i)
+  ctrl%ndat%wmn(i) = ctrl%ndat%wmn(i)*wt1
+  ctrl%ndat%twmn = ctrl%ndat%twmn + ctrl%ndat%wmn(i)
  
           ! convert total(active+stable) humus p pool to kg/ha
-  wp(i) = wp(i)*wt1
-  tp = tp + wp(i)
+  ctrl%ndat%wp(i) = ctrl%ndat%wp(i)*wt1
+  ctrl%ndat%tp = ctrl%ndat%tp + ctrl%ndat%wp(i)
  
           ! convert initial no3 & labile p in the soil to kg/ha
   ap(i) = ap(i)*wt1
-  tap = tap + ap(i)
+  ctrl%ndat%tap = ctrl%ndat%tap + ap(i)
   wno3(i) = wno3(i)*wt1
-  tno3 = tno3 + wno3(i)
+  ctrl%ndat%tno3 = ctrl%ndat%tno3 + wno3(i)
  
           ! calculate amount of humus in a layer (t/ha)
           ! moved from original location
   xz = bsfom(i)*.0172
-  hum(i) = xz*wt(i)
+  ctrl%ndat%hum(i) = xz*ctrl%ndat%wt(i)
 end do
  
       ! add applied fertilizer to the top layer
 wno3(1) = wno3(1) + bsmno3
-tno3 = tno3 + bsmno3
+ctrl%ndat%tno3 = ctrl%ndat%tno3 + bsmno3
  
 !debe added initialization of emergence variables
 yr = 0

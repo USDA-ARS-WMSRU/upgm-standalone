@@ -1,14 +1,14 @@
-subroutine nmnim(k)
+subroutine nmnim(k, ndat)
 !
     use constants, only : mnsz
+    use nitrogen
 implicit none
 !
-include 'chumus.inc'
 include 'cfert.inc'
-include 'csoil.inc'
 !
 ! Dummy arguments
 !
+    type(nitrogen_data) :: ndat
 integer :: k
 !
 ! Local variables
@@ -37,26 +37,26 @@ real :: ca,cnr,cnrf,cpr,cprf,cs,decr,hmp,r4,rdc,rm2,rmn,rmp,rwn,tkg,xx
 !     + + + end of specifications + + +
 !
 !     convert residue to kg/ha.
-cmn = 0.0003
-tkg = rsd(k)*1000.
+ndat%cmn = 0.0003
+tkg = ndat%rsd(k)*1000.
 !     calculate parts of eq. 2.153
-cs = sqrt(cdg*sut)
+cs = sqrt(ndat%cdg*ndat%sut)
 !     this section of code calculates amount of n&p mineralized from humus.
 !     calculate n that becomes part of the stable n pool using eq. 2.159.
 !     this eq. is not the same as in the manual--->(-1.0) added.
-rwn = .1E-4*(wmn(k)*(1./rtn(k)-1.)-wn(k))
+rwn = .1E-4*(ndat%wmn(k)*(1./ndat%rtn(k)-1.)-ndat%wn(k))
 !     add rwn to the stable organic n pool (wn(k)).
-wn(k) = wn(k) + rwn
-wim = 0.
-wip = 0.
+ndat%wn(k) = ndat%wn(k) + rwn
+ndat%wim = 0.
+ndat%wip = 0.
 !     calculate amount of n mineralized from the active n pool. this eq is
 !     not the same as in the manual--->bd*bd left out.
 !     next line replaced by the line following it
 !     hmn=cmn*cs*wmn(k)/(bdp(k)*bdp(k))
-hmn = cmn*cs*wmn(k)
+ndat%hmn = ndat%cmn*cs*ndat%wmn(k)
 !     calculate mineralized p (hmp) in the following 2 lines.
-xx = wn(k) + wmn(k)
-hmp = 1.4*hmn*wp(k)/xx
+xx = ndat%wn(k) + ndat%wmn(k)
+hmp = 1.4*ndat%hmn*ndat%wp(k)/xx
  
 !     calculate n&p mineralization from humus when there is not enough residue
 !      if (tkg.le.1.) then
@@ -79,9 +79,9 @@ hmp = 1.4*hmn*wp(k)/xx
 !        numerator of eq 2.155
 r4 = .58*tkg
 !        calculate c:n ratio
-cnr = r4/(fon(k)+wno3(k))
+cnr = r4/(ndat%fon(k)+wno3(k))
 !        calculate c:p ratio
-cpr = r4/(fop(k)+ap(k))
+cpr = r4/(ndat%fop(k)+ap(k))
 !        calculate cnp (c:n and c:p ratio factor)--eq 2.154
 cnrf = 1.
 if (cnr>25.) cnrf = exp(-.693*(cnr-25.)/25.)
@@ -96,29 +96,29 @@ ca = amin1(cnrf,cprf)
 !         if (rfom.ge.0.8) rc=0.8
 !         if (rfom.lt.0.8) rc=0.05
 !         if (rfom.lt.0.1) rc=0.0095
-rc = 0.05
+ndat%rc = 0.05
 !        end of new code additions
-decr = rc*ca*cs
+decr = ndat%rc*ca*cs
 !        calculate n mineralization rate using eq. 2.152
-rmn = decr*fon(k)
+rmn = decr*ndat%fon(k)
 !        calculate p mineralization rate using eq. 2.152
-rmp = decr*fop(k)
+rmp = decr*ndat%fop(k)
 !        calculate 20% of fresh om n
 rm2 = .2*rmn
 !        calculate amount of remaining humus
-hum(k) = hum(k)*(1.+(rm2-hmn)/xx)
+ndat%hum(k) = ndat%hum(k)*(1.+(rm2-ndat%hmn)/xx)
 !        update amount of active humus n pool
-wmn(k) = wmn(k) + rm2 - hmn - rwn
+ndat%wmn(k) = ndat%wmn(k) + rm2 - ndat%hmn - rwn
 !        update amount of stable organic n pool
-wp(k) = wp(k) - hmp + .2*rmp
+ndat%wp(k) = ndat%wp(k) - hmp + .2*rmp
 !        calulate amount of decayed residue
 rdc = decr*tkg
 !        update amount of residue and convert to t/ha
-rsd(k) = .001*(tkg-rdc)
+ndat%rsd(k) = .001*(tkg-rdc)
 !        calculate net minerlized n
-rmnr = .8*rmn + hmn
+ndat%rmnr = .8*rmn + ndat%hmn
 !        calculate net mineralized p
-wmp = .8*rmp + hmp
+ndat%wmp = .8*rmp + hmp
  
 !        wim=amax1(.0232*rdc-rmn,0.)
 !        wim=amin1(rmnr+wno3(k),wim)
@@ -126,19 +126,19 @@ wmp = .8*rmp + hmp
 !        wip=amin1(wmp+ap(k),wip)
  
 !        add immobilized p and subtract mineralized p to fresh organic p pool
-fop(k) = fop(k) + wip - rmp
+ndat%fop(k) = ndat%fop(k) + ndat%wip - rmp
 !        add immobilized n and subtract mineralized n to fresh organic n pool
-fon(k) = fon(k) + wim - rmn
+ndat%fon(k) = ndat%fon(k) + ndat%wim - rmn
 !        update total no3_n in soil layer
-wno3(k) = wno3(k) - wim + rmnr
+wno3(k) = wno3(k) - ndat%wim + ndat%rmnr
 !        update total labile p in soil layer
-ap(k) = ap(k) - wip + wmp
+ap(k) = ap(k) - ndat%wip + ndat%wmp
 !        keep running totals of mineralized n & p from fresh residue(rmn*.8,
 !        rmp*.8) and humus(hmn,hmp)
-trmn = trmn + .8*rmn
-trmp = trmp + .8*rmp
-thmn = thmn + hmn
-thmp = thmp + hmp
+ndat%trmn = ndat%trmn + .8*rmn
+ndat%trmp = ndat%trmp + .8*rmp
+ndat%thmn = ndat%thmn + ndat%hmn
+ndat%thmp = ndat%thmp + hmp
  
 !
 !     + + + local variable definitions + + +

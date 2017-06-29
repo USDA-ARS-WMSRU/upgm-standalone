@@ -1,11 +1,11 @@
-subroutine npcy
+subroutine npcy (ndat)
 !
     use constants, only : mnsz
+    use nitrogen
 implicit none
 !
 include 'cgrow.inc'
-include 'csoil.inc'
-include 'chumus.inc'
+    type(nitrogen_data) :: ndat
 !
 ! Local variables
 !
@@ -49,23 +49,23 @@ real :: xx
 !
 !     + + + end of specifications + + +
 !
-smr = 0.
-shm = 0.
-sim = 0.
-sdn = 0.
-smp = 0.
-sip = 0.
-tsfn = 0.
+ndat%smr = 0.
+ndat%shm = 0.
+ndat%sim = 0.
+ndat%sdn = 0.
+ndat%smp = 0.
+ndat%sip = 0.
+ndat%tsfn = 0.
 xx = 0.
 do j = 1,ir
 !        j1=lid(j)
 !        j2=j1
 !     calculate relative moisture content of each layer
 !        sut=st(j)/(fc(j)+1.e-10)
-  sut = .8
-  if (sut>1.) sut = 1.
+  ndat%sut = .8
+  if (ndat%sut>1.) ndat%sut = 1.
 !     calculate mineral p transformations
-  call npmin(j)
+  call npmin(j, ndat)
 !        if (j1.ne.ld1) go to 2
 !        calculate leaching from the top layer
 !        call nynit (rq)
@@ -76,16 +76,16 @@ do j = 1,ir
 !         if (t(j).le.0.) go to 5
 !     calculate soil temperature factor for each layer
 !         cdg=t(j)/(t(j)+20551.*exp(-.312*t(j)))
-  cdg = 1.
+  ndat%cdg = 1.
 !        if (rz.lt.xx) go to 4
 !         if (rz.gt.xx) then
 !      calculate organic n & p transformations in layers where there are roots
-  call nmnim(j)
-  shm = shm + hmn
-  smr = smr + rmnr
-  sim = sim + wim
-  smp = smp + wmp
-  sip = sip + wip
+  call nmnim(j, ndat)
+  ndat%shm = ndat%shm + ndat%hmn
+  ndat%smr = ndat%smr + ndat%rmnr
+  ndat%sim = ndat%sim + ndat%wim
+  ndat%smp = ndat%smp + ndat%wmp
+  ndat%sip = ndat%sip + ndat%wip
 !         endif
 !     calculate n denitrification
 !   4    if (st(j1)/po(j1).lt..9) go to 5

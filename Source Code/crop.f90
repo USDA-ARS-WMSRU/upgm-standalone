@@ -100,7 +100,6 @@ subroutine crop(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,
 implicit none
 !
 include 'file.fi'
-include 'chumus.inc'
 include 'cfert.inc'
 !
 ! PARAMETER definitions
@@ -829,9 +828,7 @@ real,dimension(15,5),save :: gddwsf
 !     + + + global common blocks + + +
  
 !     + + + common blocks + + +
-!     include 'cgrow.inc'
-!     include 'csoil.inc'
- 
+    
 !     + + + subroutines called + + +
 !     caldatw
 !     canopyht
@@ -874,8 +871,8 @@ do lay = 1,bnslay
   bsfom(lay) = bsfom(lay)*100.
   bsfcla(lay) = bsfcla(lay)*100.
  
-  wn(lay) = 0.0
-  wp(lay) = 0.0
+  ctrl%ndat%wn(lay) = 0.0
+  ctrl%ndat%wp(lay) = 0.0
   wno3(lay) = bsftan(lay)
   ap(lay) = bsftap(lay)
 !    residue is now passed from main and converted here from kg/m^2 to
@@ -885,14 +882,14 @@ do lay = 1,bnslay
 !      i think this (rsd) is being used in the nutrient cycling.
 !      thus, it probably should be the sum of admbgz and admrtz
 !      (all pools) for each layer.  lew 4/23/99
-  rsd(lay) = bdmb(lay)*10.0
+  ctrl%ndat%rsd(lay) = bdmb(lay)*10.0
 end do
  
 !     initialize growth and nutrient variables when crop is planted
 !     bm0cif is flag to initialize crop at start of planting
  
 if (bm0cif) then
-  call cinit(ctrl, clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla,     &
+  call cinit(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla,     &
            & bs0ph,bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,bc0bp3,bsmno3,bc0fd1,     &
            & bc0fd2,bctopt,bctmin,cc0fd1,cc0fd2,bc0sla,bc0idc,dd,mm,yy,bcthudf, &
            & bctdtm,bcthum,bc0hue,bcdmaxshoot,bc0shoot,bc0growdepth,            &

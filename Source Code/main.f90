@@ -4,12 +4,11 @@ program main
     use climate
     use soil
     use biomaterial
+    use nitrogen
 !
 implicit none
 !
 include 'file.fi'
-include 'd1glob.inc'
-
 !
 ! Local variables
 !
@@ -682,11 +681,11 @@ enddo
     do k=1, mnbpls
         residue(k) = create_biomatter(soils%spp%nslay, mncz)
     end do
-        
+    k = 0
     prevbio = create_biomatter(soils%spp%nslay, mncz)
     biotot = create_biototal(soils%spp%nslay, mncz)
 
-call cropinit(upgm_ctrls,soils,bio,biotot,1,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,canopyflg,    &
+call cropinit(upgm_ctrls,soils,bio,1,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,canopyflg,    &
             & cliname,cots,cropname,dayhtinc,dents,doughs,drs,dummy1,dummy2,    &
             & ears,ecanht,egdd,emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,&
             & fullbs,gddtbg,germgdd,germs,ggdd,gmethod,gpds,growth_stress,      &
@@ -725,7 +724,7 @@ soils%scp%asftan(1) = 0.0
 soils%scp%asftap(1) = 0.0
 soils%scp%asmno3 = 0.0
 soils%spp%asfcla(1) = 20.0
-admbgz(1,1,1) = 0.0
+bio%deriv%mbgz = 0.0
 soils%spp%asdblk(1) = 1.0
 !
 soils%spp%ahtsmn(1) = 22.0

@@ -1,10 +1,11 @@
-subroutine npmin(j)
+subroutine npmin(j,ndat)
 !
     use constants, only : mnsz
+    use nitrogen
 implicit none
 !
-include 'csoil.inc'
 include 'cfert.inc'
+    type(nitrogen_data) :: ndat
 !
 ! Dummy arguments
 !
@@ -40,7 +41,7 @@ real :: rmn,roc,rto
 !     calculate amount of p flowing from labile to active(rmn>0) or from active
 !     to labile(rmn<0) mineral p pools. modified eqn. 2.171. pmn(j)=amount of
 !     active mineral p pool.
-rto = psp(j)/(1.-psp(j))
+rto = ndat%psp(j)/(1.-ndat%psp(j))
 rmn = (ap(j)-pmn(j)*rto)
 if (rmn<0.) rmn = rmn*.1
 !

@@ -1,4 +1,4 @@
-subroutine cropinit(ctrl, soils,bio,biotot,isr,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,      &
+subroutine cropinit(ctrl,soils,bio,isr,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,      &
                   & canopyflg,cliname,cots,cropname,dayhtinc,dents,doughs,drs,  &
                   & dummy1,dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,    &
                   & ergdd,eseeds,first7,fps,fullbs,gddtbg,germgdd,germs,ggdd,   &

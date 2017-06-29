@@ -6,9 +6,7 @@
         implicit none
         !
         include '..\cgrow.inc'
-        include '..\csoil.inc'
         include '..\cfert.inc'
-        include '..\chumus.inc'
         !
         ! Local variables
         !
@@ -72,8 +70,8 @@
         sup = 0.
         !     calculate optimal n concentration for a crop using a modified version of
         !     eq. 2.215 in the next 2 lines.
-        cnt = bn1 + bn2*exp(-bn3*clidat%hui)
-        un2 = cnt*dm*1000.
+        ndat%cnt = bn1 + bn2*exp(-bn3*clidat%hui)
+        un2 = ndat%cnt*dm*1000.
         !      if (un2.lt.un1) un2=un1
         !     allow positive n demand late in the season ?
         !      uno3=amin1(4000.*.0023*ddm,un2-un1)
@@ -82,8 +80,8 @@
         vt = uno3
         !     this section is the epic subroutine npup
         !     calculate p concentration for a crop using a modified form of eq.2.229.
-        cpt = bp2 + bp1*exp(-bp4*clidat%hui)
-        up2 = cpt*dm*1000.
+        ndat%cpt = bp2 + bp1*exp(-bp4*clidat%hui)
+        up2 = ndat%cpt*dm*1000.
         if (up2<up1) up2 = up1
         upp = up2 - up1
         !
@@ -121,7 +119,7 @@
                 !         wno3(j)=wno3(j)-un(j)
                 !        compute soil supply of p in the next 8 lines
                 !        f in the next line replaced by clp
-                clp = 1000.*ap(j)/wt(j)
+                clp = 1000.*ap(j)/ndat%wt(j)
                 !        f in the next and subsequent lines replaced by flu --- eq 2.232
                 !        *********** re-arranged to avoid the goto statement **************
                 flu = clp/(clp+exp(ndat%a_s11-ndat%b_s11*clp))
@@ -159,7 +157,7 @@
             !      un1=un1+sunn
             up1 = up1 + sup
             !     a new variable un3 added for debugging purposes
-            suno3 = suno3 + uno3
+            ndat%suno3 = ndat%suno3 + uno3
             !     update remaining no3 and labile p in the soil and ouput for debugging
             do k = 1,ir
                 !         wno3(k)=wno3(k)-un(k)
@@ -167,8 +165,8 @@
                 !        write(310,2133) jd,k,ap(k),rwt(k),wno3(k),un(k),up(k)
                 !2133 format (i3,1x,i3,1x,5(f8.4,1x))
             end do
-            tno3 = tno3 - sunn + rmnr
-            tap = tap - sup + wmp
+            ndat%tno3 = ndat%tno3 - sunn + ndat%rmnr
+            ndat%tap = ndat%tap - sup + ndat%wmp
             j = j - 1
         end if
         !     write(39,2000)jd,cnt,un1,un2,uno3,suno3,sunn,vt,dm,ddm

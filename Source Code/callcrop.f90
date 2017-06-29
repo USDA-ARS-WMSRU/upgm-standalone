@@ -8,12 +8,12 @@
         & seedsw,silks,soilwat,srs,tbase,tis,toptlo,toptup,tsints,tss,&
         & tupper,wfpslo,wfpsup,yelows,co2x,co2y,co2atmos)
 
-    use upgm_simdata, only : upgm_ctrls, controls
+    use upgm_simdata, only : controls
     use climate, only : climate_data
     use soil, only : soildata
     use constants, only : mnsz, mnsub,mnbpls,mncz,mndk
     use biomaterial
-    use crop_data_struct_defs, only: am0cdb, crop_residue, create_crop_residue, destroy_crop_residue
+    use crop_data_struct_defs, only: crop_residue, create_crop_residue, destroy_crop_residue
     !debe 082508 removed sram0jd-plant_jday+1 from the subroutine argument list
     ! because this caused many errors. i think a mistake was made in copying in
     ! the passing arguments from main. the first two arguments are (daysim, sr)
@@ -67,9 +67,6 @@
     !debe added co2x, co2y for the co2 arrays and co2atmos for the atmospheric co2 level.
     !
     implicit none
-    !
-    include 'd1glob.inc'
-    include 'decomp.inc'
     !
     ! Dummy arguments
     !
@@ -703,7 +700,7 @@
             & bio%database%bn3,bio%database%bp1,bio%database%bp2,bio%database%bp3,bio%database%ck,bio%database%grf,    &
             & bio%database%ehu0,bio%database%zmxc,bio%bname,bio%database%idc,bio%geometry%xrow,bio%database%tdtm,  &
             & bio%database%zmrt,bio%database%tmin,bio%database%topt,bio%database%fd1(1),bio%database%fd2(1),         &
-            & bio%database%fd1(2),bio%database%fd2(2),bio%database%bceff,admbgz(1,1,sr),bio%database%alf,   &
+            & bio%database%fd1(2),bio%database%fd2(2),bio%database%bceff,bio%deriv%mbgz,bio%database%alf,   &
             & bio%database%blf,bio%database%clf,bio%database%dlf,bio%database%arp,bio%database%brp,bio%database%crp,  &
             & bio%database%drp,bio%database%aht,bio%database%bht,bio%database%sla,bio%database%hue,             &
             & bio%database%tverndel,soils%spp%ahtsmn,soils%spp%ahtsmn&

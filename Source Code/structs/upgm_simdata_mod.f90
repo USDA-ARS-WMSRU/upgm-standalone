@@ -10,6 +10,7 @@
     
     module upgm_simdata
     use stress, only : crop_stress
+    use nitrogen
     implicit none
 
     ! simulation data
@@ -46,6 +47,7 @@
     type controls
         type(simulation) :: sim
         type(crop_stress) :: cropstress
+        type(nitrogen_data) :: ndat
     end type controls
     
     type(controls) :: upgm_ctrls

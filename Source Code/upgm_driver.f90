@@ -18,7 +18,6 @@ subroutine upgm_driver(ctrl,clidat,soils,bio, residue,biotot,prevbio,sr,start_jd
 implicit none
 !
 include 'file.fi'
-include 'd1glob.inc'
 !
 ! Dummy arguments
 !
