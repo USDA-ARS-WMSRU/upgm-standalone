@@ -31,7 +31,6 @@ implicit none
 !
 include 'file.fi'
 !DE added
-include 'cgrow.inc'
 !
 ! Dummy arguments
 !
@@ -69,6 +68,16 @@ integer :: day,doy,i,irfiber,irstore,mo,yr,j,k
 integer :: dayear
 real :: temps
 real,dimension(mnsz) :: wfl,za
+    real :: clfarea
+    real :: clfwt
+    real :: parea
+    real :: pddm
+    real :: ddm
+    real :: pcht
+    real :: pchty
+    real :: prd
+    real :: prdy
+    real :: strs
 !
 !debe 061009 removed variables that were to be used for canopyht because canopyht
 !  is now called from crop: antss(4), canht, cropname, dummy2, ems, gdde,

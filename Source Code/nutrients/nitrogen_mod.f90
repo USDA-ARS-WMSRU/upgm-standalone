@@ -53,6 +53,15 @@
         real :: smp     ! sum of mineralized P from humus and fresh residue (kg/ha)
         real :: sip     ! sum of immobilized P (kg/ha)
         real :: tsfn    ! sum of N leached from all layers (kg/ha)
+        real :: un1     ! actual crop N concentration (kg/ha/d)
+        real :: un2     ! optimal crop N concentration (kg/ha/d)
+        real :: uno3    ! N demand rate by the crop (kg/ha/d)
+        real :: sup     ! sum of soil supplied P from all rooted layers (kg/ha/d)
+        real :: up1     ! actual crop P concentration (kg/ha/d)
+        real :: up2     ! optimal crop P concentration (kg/ha/d)
+        real :: upp     ! N demand rate by the crop (kg/ha/d)
+        real :: sunn    ! sum of soil supplied N from all rooted layers (kg/ha/d)
+
         
         
         
@@ -64,17 +73,27 @@
         real :: wp(mnsz)    ! organic P concentration of humus (g/t)
         real :: wmn(mnsz)   ! active humus n pool (kg/ha)
         real :: hum(mnsz)   ! amount of humus (t/ha)
+        real :: ap(mnsz)    ! total available P in a layer from all sources (kg/ha)
+        real :: wno3(mnsz)  ! total available N in a layer from all sources (kg/ha)
+        real :: bk(mnsz)    ! flow coefficient between active and stable P pools (1/d)
+        real :: pmn(mnsz)   ! amount of active mineral P pool (kg/ha)
+        real :: op(mnsz)    ! amount of stable mineral P pool (kg/ha)
+        real :: up(mnsz)    ! amount of P supplied by a rooted soil layer (kg/ha/d)
+        real :: un(mnsz)    !
     end type nitrogen_data
 
   
     interface
     
-        module subroutine nuse(clidat, ndat, bn1, bn2, bn3, bp1, bp2, bp4)
+        module subroutine nuse(clidat, ndat, bn1, bn2, bn3, bp1, bp2, bp4, dm, rw, ir, rwt)
         ! Argument Defs
         type (nitrogen_data), intent(inout) :: ndat
         type (climate_data), intent(in) :: clidat
         real, intent(in) :: bn1, bn2, bn3
         real, intent(in) :: bp1, bp2, bp4
+        real, intent(in) :: dm, rw
+        integer, intent(in) :: ir
+        real, intent(in), dimension(*) :: rwt
         end subroutine nuse
     
         module subroutine nuts(ndat, y1, y2, uu)

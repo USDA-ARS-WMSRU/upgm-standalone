@@ -1,11 +1,11 @@
-subroutine npcy (ndat)
+subroutine npcy (ndat, ir)
 !
     use constants, only : mnsz
     use nitrogen
 implicit none
 !
-include 'cgrow.inc'
     type(nitrogen_data) :: ndat
+    integer, intent(in) :: ir
 !
 ! Local variables
 !

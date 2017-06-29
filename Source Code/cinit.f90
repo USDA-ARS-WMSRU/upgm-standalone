@@ -47,8 +47,6 @@ subroutine cinit(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsm
 implicit none
 !
 include 'file.fi'
-include 'cfert.inc'
-include 'cgrow.inc'
 !
 ! Dummy arguments
 !
@@ -85,6 +83,7 @@ real :: daylen,huc1
 integer :: dxx,hdate,i,j,m,n,sdmn,sdmx
 real,dimension(14) :: dy_mon,mn_air_temp,mn_air_temp2,mx_air_temp,mx_air_temp2
 integer :: int
+    integer :: dtm
 !
 ! subroutine arguments
 !
@@ -691,8 +690,8 @@ do i = 1,bnslay
           ! estimate initial values of: rsd(residue:t/ha);ap(labile p conc.:g/t);
           ! wno3 (no3 conc.:g/t). dg1=previous value of dg.
           ! call sdst (rsd,dg,dg1,i)
-  call sdst(ap,dg,dg1,i)
-  call sdst(wno3,dg,dg1,i)
+  call sdst(ctrl%ndat%ap,dg,dg1,i)
+  call sdst(ctrl%ndat%wno3,dg,dg1,i)
   ctrl%ndat%trsd = ctrl%ndat%trsd + ctrl%ndat%rsd(i)
   dg1 = dg
           ! calculate ratio (rtn) of active(wmn) to total(wn) n pools associated
@@ -739,20 +738,20 @@ do i = 1,bnslay
      ctrl%ndat%psp(i) = 0.5
      if (bsfcce(i)>0.) ctrl%ndat%psp(i) = 0.58 - 0.0061*bsfcce(i)
   end if
-  if (ctrl%ndat%ids==2) ctrl%ndat%psp(i) = 0.02 + 0.0104*ap(i)
+  if (ctrl%ndat%ids==2) ctrl%ndat%psp(i) = 0.02 + 0.0104*ctrl%ndat%ap(i)
   if (ctrl%ndat%ids==3) ctrl%ndat%psp(i) = 0.0054*bsa + 0.116*bs0ph(i) - 0.73
   if (ctrl%ndat%ids==4) ctrl%ndat%psp(i) = 0.46 - 0.0916*alog(bsfcla(i))
   if (ctrl%ndat%psp(i)<0.05) ctrl%ndat%psp(i) = 0.05
   if (ctrl%ndat%psp(i)>0.75) ctrl%ndat%psp(i) = 0.75
-  bk(i) = 0.0076
-  if (bsfcce(i)>0.) bk(i) = exp(-1.77*ctrl%ndat%psp(i)-7.05)
+  ctrl%ndat%bk(i) = 0.0076
+  if (bsfcce(i)>0.) ctrl%ndat%bk(i) = exp(-1.77*ctrl%ndat%psp(i)-7.05)
  
           ! calculate initial amount of active(pmn) and stable(op) mineral p pools
           ! ap=initial amount of labile p(g/t);wt1=conversion factor to kg/ha
-  pmn(i) = ap(i)*(1.-ctrl%ndat%psp(i))/ctrl%ndat%psp(i)*wt1
-  ctrl%ndat%tmp = ctrl%ndat%tmp + pmn(i)
-  op(i) = 4.*pmn(i)
-  ctrl%ndat%top = ctrl%ndat%top + op(i)
+  ctrl%ndat%pmn(i) = ctrl%ndat%ap(i)*(1.-ctrl%ndat%psp(i))/ctrl%ndat%psp(i)*wt1
+  ctrl%ndat%tmp = ctrl%ndat%tmp + ctrl%ndat%pmn(i)
+  ctrl%ndat%op(i) = 4.*ctrl%ndat%pmn(i)
+  ctrl%ndat%top = ctrl%ndat%top + ctrl%ndat%op(i)
  
           ! calculate amount of active(readily mineralizable) humus n pool(wmn)
           ! and total(active+stable) humus n pool(wn)
@@ -768,10 +767,10 @@ do i = 1,bnslay
   ctrl%ndat%tp = ctrl%ndat%tp + ctrl%ndat%wp(i)
  
           ! convert initial no3 & labile p in the soil to kg/ha
-  ap(i) = ap(i)*wt1
-  ctrl%ndat%tap = ctrl%ndat%tap + ap(i)
-  wno3(i) = wno3(i)*wt1
-  ctrl%ndat%tno3 = ctrl%ndat%tno3 + wno3(i)
+  ctrl%ndat%ap(i) = ctrl%ndat%ap(i)*wt1
+  ctrl%ndat%tap = ctrl%ndat%tap + ctrl%ndat%ap(i)
+  ctrl%ndat%wno3(i) = ctrl%ndat%wno3(i)*wt1
+  ctrl%ndat%tno3 = ctrl%ndat%tno3 + ctrl%ndat%wno3(i)
  
           ! calculate amount of humus in a layer (t/ha)
           ! moved from original location
@@ -780,7 +779,7 @@ do i = 1,bnslay
 end do
  
       ! add applied fertilizer to the top layer
-wno3(1) = wno3(1) + bsmno3
+ctrl%ndat%wno3(1) = ctrl%ndat%wno3(1) + bsmno3
 ctrl%ndat%tno3 = ctrl%ndat%tno3 + bsmno3
  
 !debe added initialization of emergence variables

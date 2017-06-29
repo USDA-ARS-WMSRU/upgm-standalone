@@ -5,8 +5,6 @@
         use climate
         implicit none
         !
-        include '..\cgrow.inc'
-        include '..\cfert.inc'
         !
         ! Local variables
         !
@@ -65,30 +63,30 @@
         !     + + + end of specifications + + +
         !     this section is the epic subroutine nup
         !      dimension fr(10)
-        un1 = un2
+        ndat%un1 = ndat%un2
         !      sunn=0.
-        sup = 0.
+        ndat%sup = 0.
         !     calculate optimal n concentration for a crop using a modified version of
         !     eq. 2.215 in the next 2 lines.
         ndat%cnt = bn1 + bn2*exp(-bn3*clidat%hui)
-        un2 = ndat%cnt*dm*1000.
+        ndat%un2 = ndat%cnt*dm*1000.
         !      if (un2.lt.un1) un2=un1
         !     allow positive n demand late in the season ?
         !      uno3=amin1(4000.*.0023*ddm,un2-un1)
-        uno3 = un2 - un1
-        if (uno3<=0.) uno3 = 0.
-        vt = uno3
+        ndat%uno3 = ndat%un2 - ndat%un1
+        if (ndat%uno3<=0.) ndat%uno3 = 0.
+        vt = ndat%uno3
         !     this section is the epic subroutine npup
         !     calculate p concentration for a crop using a modified form of eq.2.229.
         ndat%cpt = bp2 + bp1*exp(-bp4*clidat%hui)
-        up2 = ndat%cpt*dm*1000.
-        if (up2<up1) up2 = up1
-        upp = up2 - up1
+        ndat%up2 = ndat%cpt*dm*1000.
+        if (ndat%up2<ndat%up1) ndat%up2 = ndat%up1
+        ndat%upp = ndat%up2 - ndat%up1
         !
         !     this section is the epic subroutine nuse
         !     calculate parts of eq. 2.231 --- p demand rate
         if (rw/=0.) then
-            xx = 1.5*upp/rw
+            xx = 1.5*ndat%upp/rw
             !     loop for computing soil supply of n and p from each layer
             do j = 1,ir
                 !        compute soil supply of n in the next 2 lines
@@ -99,17 +97,17 @@
                 !        above 3 lines replaced by the following 5 lines
                 !         un(j)=uno3*rwt(j)/rw
                 if (vt>0.) then
-                    if (wno3(j)/=0.) then
-                        xy = wno3(j) - vt
+                    if (ndat%wno3(j)/=0.) then
+                        xy = ndat%wno3(j) - vt
                         if (xy>=0.) then
-                            wno3(j) = wno3(j) - vt
-                            sunn = sunn + vt
+                            ndat%wno3(j) = ndat%wno3(j) - vt
+                            ndat%sunn = ndat%sunn + vt
                             vt = 0.
                         end if
                         if (xy<0.) then
-                            sunn = sunn + wno3(j)
-                            vt = vt - wno3(j)
-                            wno3(j) = 0.
+                            ndat%sunn = ndat%sunn + ndat%wno3(j)
+                            vt = vt - ndat%wno3(j)
+                            ndat%wno3(j) = 0.
                         end if
                     end if
                 end if
@@ -119,7 +117,7 @@
                 !         wno3(j)=wno3(j)-un(j)
                 !        compute soil supply of p in the next 8 lines
                 !        f in the next line replaced by clp
-                clp = 1000.*ap(j)/ndat%wt(j)
+                clp = 1000.*ndat%ap(j)/ndat%wt(j)
                 !        f in the next and subsequent lines replaced by flu --- eq 2.232
                 !        *********** re-arranged to avoid the goto statement **************
                 flu = clp/(clp+exp(ndat%a_s11-ndat%b_s11*clp))
@@ -127,9 +125,9 @@
                 !!       use equation 2.231
                 !         rwt(j) = ???  if this is root mass by layer - change to bcmbgr(j)
                 !         bcmbgr should also be passed as an argument
-                up(j) = xx*flu*rwt(j)
-                if (up(j)>=ap(j)) up(j) = .9*ap(j)
-                sup = sup + up(j)
+                ndat%up(j) = xx*flu*rwt(j)
+                if (ndat%up(j)>=ndat%ap(j)) ndat%up(j) = .9*ndat%ap(j)
+                ndat%sup = ndat%sup + ndat%up(j)
             end do
             !     the following algorithms may be temporary depending whether subroutine
             !     najn & najp are eliminated.
@@ -155,18 +153,18 @@
             !      endif
             !     acummulate plant uptake of n and p
             !      un1=un1+sunn
-            up1 = up1 + sup
+            ndat%up1 = ndat%up1 + ndat%sup
             !     a new variable un3 added for debugging purposes
-            ndat%suno3 = ndat%suno3 + uno3
+            ndat%suno3 = ndat%suno3 + ndat%uno3
             !     update remaining no3 and labile p in the soil and ouput for debugging
             do k = 1,ir
                 !         wno3(k)=wno3(k)-un(k)
-                ap(k) = ap(k) - un(k)
+                ndat%ap(k) = ndat%ap(k) - ndat%un(k)
                 !        write(310,2133) jd,k,ap(k),rwt(k),wno3(k),un(k),up(k)
                 !2133 format (i3,1x,i3,1x,5(f8.4,1x))
             end do
-            ndat%tno3 = ndat%tno3 - sunn + ndat%rmnr
-            ndat%tap = ndat%tap - sup + ndat%wmp
+            ndat%tno3 = ndat%tno3 - ndat%sunn + ndat%rmnr
+            ndat%tap = ndat%tap - ndat%sup + ndat%wmp
             j = j - 1
         end if
         !     write(39,2000)jd,cnt,un1,un2,uno3,suno3,sunn,vt,dm,ddm

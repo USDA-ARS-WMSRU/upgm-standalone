@@ -4,7 +4,6 @@ subroutine nmnim(k, ndat)
     use nitrogen
 implicit none
 !
-include 'cfert.inc'
 !
 ! Dummy arguments
 !
@@ -79,9 +78,9 @@ hmp = 1.4*ndat%hmn*ndat%wp(k)/xx
 !        numerator of eq 2.155
 r4 = .58*tkg
 !        calculate c:n ratio
-cnr = r4/(ndat%fon(k)+wno3(k))
+cnr = r4/(ndat%fon(k)+ndat%wno3(k))
 !        calculate c:p ratio
-cpr = r4/(ndat%fop(k)+ap(k))
+cpr = r4/(ndat%fop(k)+ndat%ap(k))
 !        calculate cnp (c:n and c:p ratio factor)--eq 2.154
 cnrf = 1.
 if (cnr>25.) cnrf = exp(-.693*(cnr-25.)/25.)
@@ -130,9 +129,9 @@ ndat%fop(k) = ndat%fop(k) + ndat%wip - rmp
 !        add immobilized n and subtract mineralized n to fresh organic n pool
 ndat%fon(k) = ndat%fon(k) + ndat%wim - rmn
 !        update total no3_n in soil layer
-wno3(k) = wno3(k) - ndat%wim + ndat%rmnr
+ndat%wno3(k) = ndat%wno3(k) - ndat%wim + ndat%rmnr
 !        update total labile p in soil layer
-ap(k) = ap(k) - ndat%wip + ndat%wmp
+ndat%ap(k) = ndat%ap(k) - ndat%wip + ndat%wmp
 !        keep running totals of mineralized n & p from fresh residue(rmn*.8,
 !        rmp*.8) and humus(hmn,hmp)
 ndat%trmn = ndat%trmn + .8*rmn

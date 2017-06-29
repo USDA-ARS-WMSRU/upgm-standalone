@@ -3,8 +3,7 @@ subroutine npmin(j,ndat)
     use constants, only : mnsz
     use nitrogen
 implicit none
-!
-include 'cfert.inc'
+
     type(nitrogen_data) :: ndat
 !
 ! Dummy arguments
@@ -42,18 +41,18 @@ real :: rmn,roc,rto
 !     to labile(rmn<0) mineral p pools. modified eqn. 2.171. pmn(j)=amount of
 !     active mineral p pool.
 rto = ndat%psp(j)/(1.-ndat%psp(j))
-rmn = (ap(j)-pmn(j)*rto)
+rmn = (ndat%ap(j)-ndat%pmn(j)*rto)
 if (rmn<0.) rmn = rmn*.1
 !
 !     calculate amount of p flowing from stable to active(roc>0) or from active
 !     to stable(roc<0) mineral p pools.  eqn. 2.176. op(j)=amount of stable
 !     mineral p pool.
  
-roc = bk(j)*(4.*pmn(j)-op(j))
+roc = ndat%bk(j)*(4.*ndat%pmn(j)-ndat%op(j))
 if (roc<0.) roc = roc*.1
-op(j) = op(j) + roc
-pmn(j) = pmn(j) - roc + rmn
-ap(j) = ap(j) - rmn
+ndat%op(j) = ndat%op(j) + roc
+ndat%pmn(j) = ndat%pmn(j) - roc + rmn
+ndat%ap(j) = ndat%ap(j) - rmn
 !     write (38,3017)jd,psp(j),pmn(j),op(j),ap(j),rmn
 !3017 format (1x,i3,1x,5(f9.4,1x))
 !

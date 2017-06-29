@@ -100,7 +100,6 @@ subroutine crop(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,
 implicit none
 !
 include 'file.fi'
-include 'cfert.inc'
 !
 ! PARAMETER definitions
 !
@@ -873,8 +872,8 @@ do lay = 1,bnslay
  
   ctrl%ndat%wn(lay) = 0.0
   ctrl%ndat%wp(lay) = 0.0
-  wno3(lay) = bsftan(lay)
-  ap(lay) = bsftap(lay)
+  ctrl%ndat%wno3(lay) = bsftan(lay)
+  ctrl%ndat%ap(lay) = bsftap(lay)
 !    residue is now passed from main and converted here from kg/m^2 to
 !    t/ha residue was previously estimated in subroutine sdst
 !    the validity of this needs to be checked since type of residue (rsd)
