@@ -1,4 +1,4 @@
-subroutine cropinit(ctrl, soils,bio,tempbio,biotot,isr,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,      &
+subroutine cropinit(ctrl, soils,bio,biotot,isr,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,      &
                   & canopyflg,cliname,cots,cropname,dayhtinc,dents,doughs,drs,  &
                   & dummy1,dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,    &
                   & ergdd,eseeds,first7,fps,fullbs,gddtbg,germgdd,germs,ggdd,   &
@@ -44,12 +44,10 @@ subroutine cropinit(ctrl, soils,bio,tempbio,biotot,isr,aepa,aifs,antes,antss,bls
     use upgm_simdata, only : upgm_ctrls, controls
 implicit none
 !
-include 'c1gen.inc'
-!
 ! Dummy arguments
 !
     type(controls) :: ctrl
-    type(biomatter) :: bio, tempbio
+    type(biomatter) :: bio
     type(biototal) :: biotot
     type(soildata) :: soils
 real :: aepa,dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,tupper,    &
@@ -485,19 +483,19 @@ bio%deriv%fcancov = 0.0
 bio%deriv%rcd = 0.0
  
 !     initialize crop yield reporting parameters in case harvest call before planting
-ctrl%sim%ac0nam = ''
-acynmu(isr) = ''
-acycon(isr) = 1.0
-acywct(isr) = 0.0
+bio%bname = ''
+bio%database%ynmu = ''
+bio%database%ycon = 1.0
+bio%database%ywct = 0.0
  
 !     initialize crop type id to 0 indicating no crop type is growing
 bio%database%idc = 0
 bio%database%sla= 0.0
-acdpop(isr) = 0.0
+bio%geometry%dpop = 0.0
  
  
 !     initialize row placement to be on the ridge
-ac0rg = 1
+bio%geometry%rg = 1
  
       ! initialize decomp parameters since they are used before a crop is growing
 do idx = 1,mndk
@@ -505,30 +503,30 @@ do idx = 1,mndk
 end do
 bio%database%ddsthrsh = 0.0
  
-      ! temporary crop
-tempbio%mass%standstem = 0.0
-tempbio%mass%standleaf = 0.0
-tempbio%mass%standstore = 0.0
-tempbio%mass%flatstem = 0.0
-tempbio%mass%flatleaf = 0.0
-tempbio%mass%flatstore = 0.0
-tempbio%mass%flatrootstore = 0.0
-tempbio%mass%flatrootfiber = 0.0
- 
-do idx = 1, soils%spp%nslay
-  tempbio%mass%stemz(idx) = 0.0
-  tempbio%mass%leafz(idx) = 0.0
-  tempbio%mass%storez(idx) = 0.0
-  tempbio%mass%rootstorez(idx) = 0.0
-  tempbio%mass%rootfiberz(idx) = 0.0
-end do
- 
-tempbio%geometry%zht = 0.0
-tempbio%geometry%dstm = 0.0
-tempbio%geometry%xstmrep = 0.0
-tempbio%geometry%zrtd = 0.0
-tempbio%geometry%grainf = 0.0
- 
+!      ! temporary crop
+!tempbio%mass%standstem = 0.0
+!tempbio%mass%standleaf = 0.0
+!tempbio%mass%standstore = 0.0
+!tempbio%mass%flatstem = 0.0
+!tempbio%mass%flatleaf = 0.0
+!tempbio%mass%flatstore = 0.0
+!tempbio%mass%flatrootstore = 0.0
+!tempbio%mass%flatrootfiber = 0.0
+! 
+!do idx = 1, soils%spp%nslay
+!  tempbio%mass%stemz(idx) = 0.0
+!  tempbio%mass%leafz(idx) = 0.0
+!  tempbio%mass%storez(idx) = 0.0
+!  tempbio%mass%rootstorez(idx) = 0.0
+!  tempbio%mass%rootfiberz(idx) = 0.0
+!end do
+! 
+!tempbio%geometry%zht = 0.0
+!tempbio%geometry%dstm = 0.0
+!tempbio%geometry%xstmrep = 0.0
+!tempbio%geometry%zrtd = 0.0
+!tempbio%geometry%grainf = 0.0
+! 
       ! values that need initialization for cdbug calls (before initial crop entry)
 bio%database%tdtm = 0
  

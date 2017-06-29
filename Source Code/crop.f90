@@ -1,4 +1,4 @@
-subroutine crop(ctrl,clidat, bio,tempbio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,bsfsmb,bsfcla,  &
+subroutine crop(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,bsfsmb,bsfcla,  &
               & bs0ph,bsftan,bsftap,bsmno3,bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,  &
               & bc0bp3,bc0ck,bcgrf,bcehu0,bczmxc,bc0nam,bc0idc,bcxrow,bctdtm,   &
               & bczmrt,bctmin,bctopt,bc0fd1,bc0fd2,cc0fd1,cc0fd2,bc0bceff,bdmb, &
@@ -107,7 +107,7 @@ include 'cfert.inc'
 !
     type(controls) :: ctrl
     type(climate_data) :: clidat
-    type(biomatter) :: bio, tempbio
+    type(biomatter) :: bio
 real,parameter :: chilluv = 50.0,shoot_delay = 7.0,verndelmax = 0.04,           &
                 & dev_floor = 0.01,spring_trig = 0.29
 !

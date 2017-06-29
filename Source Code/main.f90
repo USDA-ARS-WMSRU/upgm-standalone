@@ -9,12 +9,12 @@ implicit none
 !
 include 'file.fi'
 include 'd1glob.inc'
-include 'c1gen.inc'
 
 !
 ! Local variables
 !
-    type(biomatter) :: bio, tempbio, prevbio
+    type(biomatter) :: bio,prevbio
+    type(biomatter), dimension(mnbpls) ::  residue
     type(biototal) :: biotot
     type(soildata) :: soils
     type(climate_data) :: clidat
@@ -679,11 +679,14 @@ enddo
  soils%spp%nslay = max_depth - 1 !Overshoot by 1 in read soil profile loop
  
     bio = create_biomatter(soils%spp%nslay, mncz)
-    tempbio = create_biomatter(soils%spp%nslay, mncz)
+    do k=1, mnbpls
+        residue(k) = create_biomatter(soils%spp%nslay, mncz)
+    end do
+        
     prevbio = create_biomatter(soils%spp%nslay, mncz)
     biotot = create_biototal(soils%spp%nslay, mncz)
 
-call cropinit(upgm_ctrls,soils,bio,tempbio,biotot,1,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,canopyflg,    &
+call cropinit(upgm_ctrls,soils,bio,biotot,1,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,canopyflg,    &
             & cliname,cots,cropname,dayhtinc,dents,doughs,drs,dummy1,dummy2,    &
             & ears,ecanht,egdd,emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,&
             & fullbs,gddtbg,germgdd,germs,ggdd,gmethod,gpds,growth_stress,      &
@@ -706,7 +709,7 @@ bio%growth%am0cgf = .false.       ! supposed to indicate a growing crop
 !am0hrvfl = 0          ! harvest flag (default is off)
 am0hrvfl = 0
             !debe turned it on
-acxrow(1) = 0.2286       ! row spacing (m)
+bio%geometry%xrow = 0.2286       ! row spacing (m)
 upgm_ctrls%cropstress%ahfwsf = 1.0        ! water stress factor
 
 
@@ -740,44 +743,44 @@ biotot%xstmrep = 0.0   ! initialize repesentative stem dia.
 ! aslrrc(1) = 0.0 ! initialize random roughness parms
 ! aslrr(1) = 0.0  ! these are not used and are commented out jcaii 4/30/2013
 !
-!
+!upgm_bio%bname
 ! read in plant parameters from cropxml.dat
 !
-read (cropxml,' (a80) ') upgm_ctrls%sim%ac0nam
+read (cropxml,' (a80) ') bio%bname
 !debe set cropname to the proper form so it can be used in the phenol and
 ! canopyht subroutines and not need to be changed in either one.
  
-if (upgm_ctrls%sim%ac0nam=='corn') then
-  upgm_ctrls%sim%ac0nam = 'corn'
-else if (upgm_ctrls%sim%ac0nam=='drybeans') then
-  upgm_ctrls%sim%ac0nam = 'dry beans'
+if (bio%bname=='corn') then
+  bio%bname = 'corn'
+else if (bio%bname=='drybeans') then
+  bio%bname = 'dry beans'
 !debe added the following for hay millet.  the crop parameters are for
 ! pearl millet, forage.  this is the only forage millet in the crop
 ! parameters file.
-else if (upgm_ctrls%sim%ac0nam=='milletpearlforage') then
-  upgm_ctrls%sim%ac0nam = 'hay millet'
-else if (upgm_ctrls%sim%ac0nam=='milletfoxtailseed') then
-  upgm_ctrls%sim%ac0nam = 'hay millet'
-else if (upgm_ctrls%sim%ac0nam=='milletprosograin') then
-  upgm_ctrls%sim%ac0nam = 'proso millet'
-else if (upgm_ctrls%sim%ac0nam=='sorghum') then
-  upgm_ctrls%sim%ac0nam = 'sorghum'
-else if (upgm_ctrls%sim%ac0nam=='barleyspring') then
-  upgm_ctrls%sim%ac0nam = 'spring barley'
-else if (upgm_ctrls%sim%ac0nam=='wheatspring') then
-  upgm_ctrls%sim%ac0nam = 'spring wheat'
-else if (upgm_ctrls%sim%ac0nam=='sunflower') then
-  upgm_ctrls%sim%ac0nam = 'sunflower'
-else if (upgm_ctrls%sim%ac0nam=='barleywinter') then
-  upgm_ctrls%sim%ac0nam = 'winter barley'
-else if (upgm_ctrls%sim%ac0nam=='wheatwinter') then
-  upgm_ctrls%sim%ac0nam = 'winter wheat'
+else if (bio%bname=='milletpearlforage') then
+  bio%bname = 'hay millet'
+else if (bio%bname=='milletfoxtailseed') then
+  bio%bname = 'hay millet'
+else if (bio%bname=='milletprosograin') then
+  bio%bname = 'proso millet'
+else if (bio%bname=='sorghum') then
+  bio%bname = 'sorghum'
+else if (bio%bname=='barleyspring') then
+  bio%bname = 'spring barley'
+else if (bio%bname=='wheatspring') then
+  bio%bname = 'spring wheat'
+else if (bio%bname=='sunflower') then
+  bio%bname = 'sunflower'
+else if (bio%bname=='barleywinter') then
+  bio%bname = 'winter barley'
+else if (bio%bname=='wheatwinter') then
+  bio%bname = 'winter wheat'
 end if
-read (cropxml,*) acdpop(1),bio%database%dmaxshoot,bio%database%baflg,acytgt(1),bio%database%baf,bio%database%yraf,    &
-         & achyfg(1),acynmu(1)
-read (cropxml,*) acywct(1),acycon(1),bio%database%idc,bio%database%grf,bio%database%ck,bio%database%ehu0,bio%database%zmxc, &
+read (cropxml,*) bio%geometry%dpop,bio%database%dmaxshoot,bio%database%baflg,bio%database%ytgt,bio%database%baf,bio%database%yraf,    &
+         & bio%geometry%hyfg,bio%database%ynmu
+read (cropxml,*) bio%database%ywct,bio%database%ycon,bio%database%idc,bio%database%grf,bio%database%ck,bio%database%ehu0,bio%database%zmxc, &
          & bio%database%growdepth
-read (cropxml,*) bio%database%zmrt,bio%database%tmin,bio%database%topt,acthudf(1),bio%database%tdtm,bio%database%thum,        &
+read (cropxml,*) bio%database%zmrt,bio%database%tmin,bio%database%topt,bio%database%thudf,bio%database%tdtm,bio%database%thum,        &
          & bio%database%fd1(1),bio%database%fd2(1)
 read (cropxml,*) bio%database%fd1(2),bio%database%fd2(2),bio%database%tverndel,bio%database%bceff,bio%database%alf,bio%database%blf&
          & ,bio%database%clf,bio%database%dlf
@@ -804,7 +807,7 @@ plant_jday = julday(pd,pm,py)
 harvest_jday = julday(hd,hm,hy)
  
 !set cropname equal to ac0nam and pass it on through to emerge
-cropname = upgm_ctrls%sim%ac0nam
+cropname = bio%bname
 print *,'crop=',cropname
  
 ! ***** emergence *****
@@ -932,7 +935,7 @@ end if
 if (bio%growth%am0cfl>1) call fopenk(luoallcrop,'allcrop.prn','unknown')     ! main crop debug output file
 if (upgm_ctrls%sim%am0cdb>0) call fopenk(cdbugfile,'cdbug.out','unknown')       ! crop submodel debug output file
 !
-call upgm_driver(upgm_ctrls,clidat,soils,bio,tempbio,biotot,prevbio,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,antes,&
+call upgm_driver(upgm_ctrls,clidat,soils,bio,residue,biotot,prevbio,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,antes,&
                & antss,blstrs,boots,browns,callgdd,canht,canopyflg,cliname,cots,&
                & cropname,dayhtinc,dents,doughs,drs,dummy1,dummy2,ears,ecanht,  &
                & egdd,emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,fullbs,  &
@@ -945,7 +948,9 @@ call upgm_driver(upgm_ctrls,clidat,soils,bio,tempbio,biotot,prevbio,sr,start_jda
 
     ! RMarquez 6.21.2017 -> need to free all allocated memory.
     call destroy_biomatter(bio)
-    call destroy_biomatter(tempbio)
+    do k=1, mnbpls
+        call destroy_biomatter(residue(k))
+    end do
     call destroy_biomatter(prevbio)
     call destroy_biototal(biotot)
 end program main

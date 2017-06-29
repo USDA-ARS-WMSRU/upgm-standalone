@@ -1,4 +1,4 @@
-subroutine upgm_driver(ctrl,clidat,soils,bio, tempbio,biotot,prevbio,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,&
+subroutine upgm_driver(ctrl,clidat,soils,bio, residue,biotot,prevbio,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,&
                      & antes,antss,blstrs,boots,browns,callgdd,canht,canopyflg, &
                      & cliname,cots,cropname,dayhtinc,dents,doughs,drs,dummy1,  &
                      & dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,ergdd,  &
@@ -19,15 +19,16 @@ implicit none
 !
 include 'file.fi'
 include 'd1glob.inc'
-include 'c1gen.inc'
 !
 ! Dummy arguments
 !
     type(controls) :: ctrl
     type(climate_data) :: clidat
     type(soildata) :: soils
-    type(biomatter) :: bio, tempbio, prevbio
+    type(biomatter) :: bio, prevbio
+    type(biomatter), dimension(*) ::  residue
     type(biototal) :: biotot
+
 real :: aepa,canht,dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,     &
       & tupper,co2atmos
 integer :: am0hrvfl,canopyflg,emrgflg,end_jday,first7,gmethod,growth_stress,    &
@@ -127,7 +128,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
      am0hrvfl = 1     ! debe uncommented this line because it is now needed to prevent crop_endseason
                       ! being called after harvest every day until the end date of simulation.
     !
-     call crop_endseason(ctrl,ctrl%sim%ac0nam,bio%growth%am0cfl,soils%spp%nslay,bio%database%idc,bio%growth%dayam,    &
+     call crop_endseason(ctrl,bio%bname,bio%growth%am0cfl,soils%spp%nslay,bio%database%idc,bio%growth%dayam,    &
                        & bio%database%thum,biotot%xstmrep,prevbio%mass%standstem,   &
                        & prevbio%mass%standleaf,prevbio%mass%standstore,prevbio%mass%flatstem, &
                        & prevbio%mass%flatleaf,prevbio%mass%flatstore,prevbio%mass%stemz,  &
@@ -135,7 +136,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
                        & prevbio%geometry%dstm,prevbio%geometry%zrtd,prevbio%growth%dayap,prevbio%growth%thucum,   &
                        & prevbio%growth%trthucum,prevbio%geometry%grainf,prevbio%growth%tchillucum,      &
                        & prevbio%growth%fliveleaf,bio%growth%dayspring,mature_warn_flg,      &
-                       & acycon(sr),acynmu(sr),ies,joints,boots,heads,antss,mats,hrs,   &
+                       & bio%database%ycon,bio%database%ynmu,ies,joints,boots,heads,antss,mats,hrs,   &
                        & phenolflg)
     !debe added acycon to the passing arguments to crop_endseason to allow calculation
     ! of the yield in crop_endseason.
@@ -162,7 +163,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
     ! debe added passing the new variable 'phenolflg' which is read in from upgm_crop.dat
     ! and the phenological growth stages variables to callcrop which will pass
     ! them on to crop.
-     call callcrop(ctrl,clidat,soils,bio,tempbio,biotot,prevbio,aepa,aifs,ctrl%sim%juldate-plant_jday+1,1,antes,antss,blstrs,boots,     &
+     call callcrop(ctrl,clidat,soils,bio,residue,biotot,prevbio,aepa,aifs,ctrl%sim%juldate-plant_jday+1,1,antes,antss,blstrs,boots,     &
                  & browns,callgdd,canht,canopyflg,cliname,cots,cropname,        &
                  & dayhtinc,dents,doughs,drs,dummy1,dummy2,ears,ecanht,egdd,    &
                  & emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,fullbs,     &

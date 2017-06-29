@@ -36,6 +36,14 @@ module biomaterial
                             ! 5     GRF applied to below ground storage mass (potatoes, peanuts)
      real :: zshoot         ! length of actively growing shoot from root biomass (m)
      real :: zrtd           ! root depth (m)
+     
+     integer :: rg      ! seeding location in relation to ridge, 0 - plant in furrow, 1 - plant on ridge
+     integer :: rsfg    ! row spacing flag
+                        ! 0      o Broadcast Planting
+                        ! 1      o Use Specified Row Spacing
+                        ! 2      o Use Existing Ridge Spacing
+     real :: xrow       ! row spacing (m)
+     real :: dpop       ! Crop seeding density (#/m^2)
   end type biostate_geometry
 
   type biostate_growth
