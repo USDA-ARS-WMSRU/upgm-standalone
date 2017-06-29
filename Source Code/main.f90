@@ -10,7 +10,6 @@ implicit none
 include 'file.fi'
 include 'd1glob.inc'
 include 'c1gen.inc'
-include 'c1db2.inc'
 
 !
 ! Local variables
@@ -776,11 +775,11 @@ else if (upgm_ctrls%sim%ac0nam=='wheatwinter') then
 end if
 read (cropxml,*) acdpop(1),bio%database%dmaxshoot,bio%database%baflg,acytgt(1),bio%database%baf,bio%database%yraf,    &
          & achyfg(1),acynmu(1)
-read (cropxml,*) acywct(1),acycon(1),bio%database%idc,bio%database%grf,ac0ck(1),bio%database%ehu0,bio%database%zmxc, &
+read (cropxml,*) acywct(1),acycon(1),bio%database%idc,bio%database%grf,bio%database%ck,bio%database%ehu0,bio%database%zmxc, &
          & bio%database%growdepth
-read (cropxml,*) bio%database%zmrt,actmin(1),actopt(1),acthudf(1),bio%database%tdtm,bio%database%thum,        &
-         & ac0fd1(1,1),ac0fd2(1,1)
-read (cropxml,*) ac0fd1(2,1),ac0fd2(2,1),bio%database%tverndel,bio%database%bceff,bio%database%alf,bio%database%blf&
+read (cropxml,*) bio%database%zmrt,bio%database%tmin,bio%database%topt,acthudf(1),bio%database%tdtm,bio%database%thum,        &
+         & bio%database%fd1(1),bio%database%fd2(1)
+read (cropxml,*) bio%database%fd1(2),bio%database%fd2(2),bio%database%tverndel,bio%database%bceff,bio%database%alf,bio%database%blf&
          & ,bio%database%clf,bio%database%dlf
 read (cropxml,*) bio%database%arp,bio%database%brp,bio%database%crp,bio%database%drp,bio%database%aht,bio%database%bht,bio%database%ssa&
          & ,bio%database%ssb

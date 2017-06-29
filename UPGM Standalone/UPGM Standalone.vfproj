@@ -35,7 +35,7 @@
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
 	<Files>
 		<Filter Name="Header Files" Filter="fi;fd">
-		<File RelativePath="..\Source Code\c1db2.inc"/>
+		<File RelativePath="..\Source Code\c1db2-2.inc"/>
 		<File RelativePath="..\Source Code\c1db3.inc"/>
 		<File RelativePath="..\Source Code\c1gen.inc"/>
 		<File RelativePath="..\Source Code\cfert.inc"/>

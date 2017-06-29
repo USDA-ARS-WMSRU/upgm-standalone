@@ -8,7 +8,6 @@ subroutine cdbug(isr, slay, ctrl, clidat, soils, bio)
 implicit none
 !
 include 'file.fi'
-include 'c1db2.inc'
 !
 ! Dummy arguments
 !
@@ -97,7 +96,7 @@ write (cdbugfile,1700) bio%database%tdtm,bio%growth%thucum,bio%deriv%mst,bio%der
 write (cdbugfile,1800) isr,isr
 !write (cdbugfile,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr),as0rrk(isr),         &
 !              & aslrr(isr)
-write (cdbugfile,1900) actmin(isr),actopt(isr)
+write (cdbugfile,1900) bio%database%tmin,bio%database%topt
 write (cdbugfile,2000)
  
 do l = 1,slay

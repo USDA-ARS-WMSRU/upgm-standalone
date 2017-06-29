@@ -45,7 +45,6 @@ subroutine cropinit(ctrl, soils,bio,tempbio,biotot,isr,aepa,aifs,antes,antss,bls
 implicit none
 !
 include 'c1gen.inc'
-include 'c1db2.inc'
 !
 ! Dummy arguments
 !
@@ -479,7 +478,7 @@ bio%deriv%ftcv = 0.0
 bio%database%xstm = 0.0
 bio%database%rbc = 1
 bio%database%covfact = 0.0
-ac0ck(isr) = 0.0
+bio%database%ck = 0.0
  
       ! initialize some derived globals for crop global variables
 bio%deriv%fcancov = 0.0

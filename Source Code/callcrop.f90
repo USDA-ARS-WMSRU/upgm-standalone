@@ -67,7 +67,6 @@ subroutine callcrop(ctrl,clidat,soils,bio,tempbio,biotot,prevbio,aepa,aifs,daysi
 !
 implicit none
 !
-include 'c1db2.inc'
 include 'c1db3.inc'
 include 'c1gen.inc'
 include 'd1glob.inc'
@@ -697,10 +696,10 @@ if (bio%growth%am0cgf) then
   call crop(ctrl,clidat,bio,tempbio, soils%spp%nslay,soils%spp%aszlyt(1),soils%spp%aszlyd(1),soils%spp%asdblk(1),soils%scp%asfcce(1),      &
           & soils%scp%asfom(1),soils%scp%asfcec(1),soils%scp%asfsmb(1),soils%spp%asfcla(1),soils%scp%as0ph(1),     &
           & soils%scp%asftan(1),soils%scp%asftap(1),soils%scp%asmno3,ac0bn1(sr),ac0bn2(sr),         &
-          & ac0bn3(sr),ac0bp1(sr),ac0bp2(sr),ac0bp3(sr),ac0ck(sr),bio%database%grf,    &
+          & ac0bn3(sr),ac0bp1(sr),ac0bp2(sr),ac0bp3(sr),bio%database%ck,bio%database%grf,    &
           & bio%database%ehu0,bio%database%zmxc,ctrl%sim%ac0nam,bio%database%idc,acxrow(sr),bio%database%tdtm,  &
-          & bio%database%zmrt,actmin(sr),actopt(sr),ac0fd1(1,sr),ac0fd2(1,sr),         &
-          & ac0fd1(2,sr),ac0fd2(2,sr),bio%database%bceff,admbgz(1,1,sr),bio%database%alf,   &
+          & bio%database%zmrt,bio%database%tmin,bio%database%topt,bio%database%fd1(1),bio%database%fd2(1),         &
+          & bio%database%fd1(2),bio%database%fd2(2),bio%database%bceff,admbgz(1,1,sr),bio%database%alf,   &
           & bio%database%blf,bio%database%clf,bio%database%dlf,bio%database%arp,bio%database%brp,bio%database%crp,  &
           & bio%database%drp,bio%database%aht,bio%database%bht,bio%database%sla,bio%database%hue,             &
           & bio%database%tverndel,soils%spp%ahtsmn,soils%spp%ahtsmn&
@@ -767,7 +766,7 @@ if ((tempbio%mass%standstem+tempbio%mass%standleaf+tempbio%mass%standstore+tempb
            & admflatrootfiber(1,sr),admbgstemz(1,1,sr),admbgleafz(1,1,sr),      &
            & admbgstorez(1,1,sr),admbgrootstorez(1,1,sr),admbgrootfiberz(1,1,sr)&
            & ,adzht(1,sr),addstm(1,sr),adxstmrep(1,sr),adgrainf(1,sr),ctrl%sim%ac0nam&
-           & ,bio%database%xstm,bio%database%rbc,bio%database%sla,ac0ck(sr),bio%database%dkrate,         &
+           & ,bio%database%xstm,bio%database%rbc,bio%database%sla,bio%database%ck,bio%database%dkrate,         &
            & bio%database%covfact,bio%database%ddsthrsh,achyfg(sr),bio%database%resevapa,            &
            & bio%database%resevapb,ad0nam(1,sr),adxstm(1,sr),adrbc(1,sr),ad0sla(1,sr), &
            & ad0ck(1,sr),dkrate(1,1,sr),covfact(1,sr),ddsthrsh(1,sr),           &
@@ -785,7 +784,7 @@ call cropupdate(bio%mass%standstem,bio%mass%standleaf,bio%mass%standstore,      
               & soils%spp%aszrgh(sr),soils%spp%asxrgs(sr),soils%spp%asargo(sr),bio%deriv%rsai,bio%deriv%rlai,         &
               & bio%deriv%rsaz,bio%deriv%rlaz,bio%deriv%ffcv,bio%deriv%fscv,bio%deriv%ftcv,     &
               & bio%deriv%fcancov,ac0rg(sr),acxrow(sr),soils%spp%nslay,bio%database%ssa,        &
-              & bio%database%ssb,bio%database%sla,bio%database%covfact,ac0ck(sr),bio%database%xstm,       &
+              & bio%database%ssb,bio%database%sla,bio%database%covfact,bio%database%ck,bio%database%xstm,       &
               & acdpop(sr))
  
 !
