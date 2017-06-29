@@ -20,7 +20,6 @@ implicit none
 include 'file.fi'
 include 'd1glob.inc'
 include 'c1gen.inc'
-include 'c1db1.inc'
 include 'c1db2.inc'
 !
 ! Dummy arguments
@@ -129,8 +128,8 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
      am0hrvfl = 1     ! debe uncommented this line because it is now needed to prevent crop_endseason
                       ! being called after harvest every day until the end date of simulation.
     !
-     call crop_endseason(ctrl,ctrl%sim%ac0nam,bio%growth%am0cfl,soils%spp%nslay,ctrl%sim%ac0idc,bio%growth%dayam,    &
-                       & acthum(sr),biotot%xstmrep,prevbio%mass%standstem,            &
+     call crop_endseason(ctrl,ctrl%sim%ac0nam,bio%growth%am0cfl,soils%spp%nslay,bio%database%idc,bio%growth%dayam,    &
+                       & bio%database%thum,biotot%xstmrep,prevbio%mass%standstem,            &
                        & prevbio%mass%standleaf,prevbio%mass%standstore,prevbio%mass%flatstem, &
                        & prevbio%mass%flatleaf,prevbio%mass%flatstore,prevbio%mass%stemz,  &
                        & prevbio%mass%rootstorez,prevbio%mass%rootfiberz,prevbio%geometry%zht,  &

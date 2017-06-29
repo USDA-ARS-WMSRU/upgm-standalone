@@ -42,7 +42,6 @@
         integer :: am0cdb  ! flag to print CROP variables before and after call to CROP
         
         character(len=80) :: ac0nam
-        integer :: ac0idc
     end type simulation
     
     type controls

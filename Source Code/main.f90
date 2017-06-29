@@ -10,7 +10,6 @@ implicit none
 include 'file.fi'
 include 'd1glob.inc'
 include 'c1gen.inc'
-include 'c1db1.inc'
 include 'c1db2.inc'
 
 !
@@ -775,22 +774,22 @@ else if (upgm_ctrls%sim%ac0nam=='barleywinter') then
 else if (upgm_ctrls%sim%ac0nam=='wheatwinter') then
   upgm_ctrls%sim%ac0nam = 'winter wheat'
 end if
-read (cropxml,*) acdpop(1),acdmaxshoot(1),acbaflg(1),acytgt(1),acbaf(1),acyraf(1),    &
+read (cropxml,*) acdpop(1),bio%database%dmaxshoot,bio%database%baflg,acytgt(1),bio%database%baf,bio%database%yraf,    &
          & achyfg(1),acynmu(1)
-read (cropxml,*) acywct(1),acycon(1),upgm_ctrls%sim%ac0idc,acgrf(1),ac0ck(1),acehu0(1),aczmxc(1), &
-         & ac0growdepth(1)
-read (cropxml,*) aczmrt(1),actmin(1),actopt(1),acthudf(1),actdtm(1),acthum(1),        &
+read (cropxml,*) acywct(1),acycon(1),bio%database%idc,bio%database%grf,ac0ck(1),bio%database%ehu0,bio%database%zmxc, &
+         & bio%database%growdepth
+read (cropxml,*) bio%database%zmrt,actmin(1),actopt(1),acthudf(1),bio%database%tdtm,bio%database%thum,        &
          & ac0fd1(1,1),ac0fd2(1,1)
-read (cropxml,*) ac0fd1(2,1),ac0fd2(2,1),actverndel(1),ac0bceff(1),ac0alf(1),ac0blf(1)&
-         & ,ac0clf(1),ac0dlf(1)
-read (cropxml,*) ac0arp(1),ac0brp(1),ac0crp(1),ac0drp(1),ac0aht(1),ac0bht(1),ac0ssa(1)&
-         & ,ac0ssb(1)
-read (cropxml,*) ac0sla(1),ac0hue(1),ac0transf(1),ac0diammax(1),ac0storeinit(1),      &
-         & ac0shoot(1),acfleafstem(1),acfshoot(1)
-read (cropxml,*) acfleaf2stor(1),acfstem2stor(1),acfstor2stor(1),acrbc(1),            &
-         & acdkrate(1,1),acdkrate(2,1),acdkrate(3,1),acdkrate(4,1)
-read (cropxml,*) acdkrate(5,1),acxstm(1),acddsthrsh(1),accovfact(1),acresevapa(1),    &
-         & acresevapb(1),acyld_coef(1),acresid_int(1)
+read (cropxml,*) ac0fd1(2,1),ac0fd2(2,1),bio%database%tverndel,bio%database%bceff,bio%database%alf,bio%database%blf&
+         & ,bio%database%clf,bio%database%dlf
+read (cropxml,*) bio%database%arp,bio%database%brp,bio%database%crp,bio%database%drp,bio%database%aht,bio%database%bht,bio%database%ssa&
+         & ,bio%database%ssb
+read (cropxml,*) bio%database%sla,bio%database%hue,bio%database%transf,bio%database%diammax,bio%database%storeinit,      &
+         & bio%database%shoot,bio%database%fleafstem,bio%database%fshoot
+read (cropxml,*) bio%database%fleaf2stor,bio%database%fstem2stor,bio%database%fstor2stor,bio%database%rbc,            &
+         & bio%database%dkrate(1),bio%database%dkrate(2),bio%database%dkrate(3),bio%database%dkrate(4)
+read (cropxml,*) bio%database%dkrate(5),bio%database%xstm,bio%database%ddsthrsh,bio%database%covfact,bio%database%resevapa,    &
+         & bio%database%resevapb,bio%database%yld_coef,bio%database%resid_int
 !
 !read management information from upgm_mgmt.dat. currently it includes
 ! starting and ending day, month, and year for planting and harvest.

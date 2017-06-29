@@ -8,7 +8,6 @@ subroutine cdbug(isr, slay, ctrl, clidat, soils, bio)
 implicit none
 !
 include 'file.fi'
-include 'c1db1.inc'
 include 'c1db2.inc'
 !
 ! Dummy arguments
@@ -93,7 +92,7 @@ write (cdbugfile,1400) isr,isr,isr,isr,isr,isr,isr
 !      write(27,2051) amrslp(isr), acftcv(isr), acrlai(isr), aczrtd(isr),
 !     &               admf(isr), ahfwsf(isr), ac0nam(isr)
 write (cdbugfile,1600) isr,isr,isr,isr
-write (cdbugfile,1700) actdtm(isr),bio%growth%thucum,bio%deriv%mst,bio%deriv%mrt
+write (cdbugfile,1700) bio%database%tdtm,bio%growth%thucum,bio%deriv%mst,bio%deriv%mrt
 ! write (cdbugfile,1800) isr,isr,isr,isr
 write (cdbugfile,1800) isr,isr
 !write (cdbugfile,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr),as0rrk(isr),         &

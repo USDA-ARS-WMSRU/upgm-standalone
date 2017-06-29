@@ -45,7 +45,6 @@ subroutine cropinit(ctrl, soils,bio,tempbio,biotot,isr,aepa,aifs,antes,antss,bls
 implicit none
 !
 include 'c1gen.inc'
-include 'c1db1.inc'
 include 'c1db2.inc'
 !
 ! Dummy arguments
@@ -477,9 +476,9 @@ bio%deriv%ffcv = 0.0
 bio%deriv%fscv = 0.0
 bio%deriv%ftcv = 0.0
  
-acxstm(isr) = 0.0
-acrbc(isr) = 1
-accovfact(isr) = 0.0
+bio%database%xstm = 0.0
+bio%database%rbc = 1
+bio%database%covfact = 0.0
 ac0ck(isr) = 0.0
  
       ! initialize some derived globals for crop global variables
@@ -493,8 +492,8 @@ acycon(isr) = 1.0
 acywct(isr) = 0.0
  
 !     initialize crop type id to 0 indicating no crop type is growing
-ctrl%sim%ac0idc = 0
-ac0sla(isr) = 0.0
+bio%database%idc = 0
+bio%database%sla= 0.0
 acdpop(isr) = 0.0
  
  
@@ -503,9 +502,9 @@ ac0rg = 1
  
       ! initialize decomp parameters since they are used before a crop is growing
 do idx = 1,mndk
-  acdkrate(idx,isr) = 0.0
+  bio%database%dkrate(idx) = 0.0
 end do
-acddsthrsh(isr) = 0.0
+bio%database%ddsthrsh = 0.0
  
       ! temporary crop
 tempbio%mass%standstem = 0.0
@@ -532,7 +531,7 @@ tempbio%geometry%zrtd = 0.0
 tempbio%geometry%grainf = 0.0
  
       ! values that need initialization for cdbug calls (before initial crop entry)
-actdtm(isr) = 0
+bio%database%tdtm = 0
  
 !debe initialize emergence and phenology variables.
 row = 4

@@ -14,17 +14,17 @@
 !     Parameter include files:  p1werm.inc
 
 !     + + + VARIABLE DECLARATIONS + + +
-      real cnt,cpt,cdg,cn,cp,fc,gsw !used
-      real po,psp,rq,rz,st,suno3,sut,sws,t,wt,za
+      real cnt,cpt,cdg,cn,cp,fc !used
+      real po,psp,rq,rz,st,suno3,sut,t,wt,za
 
       integer ids
 
       common / csoil /                                                  &
      &                cnt, cpt, cdg,                                    &
      &                cn(mnsz), cp(mnsz), fc(mnsz),                     &
-     &                gsw, ids, po,                               &
+     &                ids, po,                               &
      &                psp(mnsz), rq, rz, st(mnsz),                      &
-     &                suno3, sut, sws, t(mnsz),                         &
+     &                suno3, sut,  t(mnsz),                         &
      &                wt(mnsz), za(mnsz)
 
 

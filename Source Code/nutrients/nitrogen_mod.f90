@@ -11,10 +11,10 @@
     use climate
     implicit none
     type nitrogen_data
-        real :: a_s11
-        real :: b_s11
-        real :: a_s8
-        real :: b_s8
+        real :: a_s11   !parameter in P uptake eqn. (corresponding to scrp(11,1) in epic)
+        real :: b_s11   !parameter in P uptake eqn. (corresponding to scrp(11,2) in epic)
+        real :: a_s8    !parameter in N or P stress eqn. (corresponds to scrp(8,1) in epic)
+        real :: b_s8    !parameter in N or P stress eqn. (corresponds to scrp(8,2) in epic)
     end type nitrogen_data
 
   

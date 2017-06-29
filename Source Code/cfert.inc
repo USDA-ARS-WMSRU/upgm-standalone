@@ -13,14 +13,12 @@
 !     + + + VARIABLE DECLARATIONS + + +
 
       real      ap(mnsz), bk(mnsz)
-!     real      bn1, bn2, bn3, bp1, bp2,  bp4
       real      op(mnsz), pmn(mnsz), sn, sp,                    &
      &          sunn, sup, un(mnsz), un1, un2, uno3,                    &
      &          up1, up2, upp, up(mnsz), wno3(mnsz)
 
       common /fert/ ap,                                                 &
      &              bk,                                                 &
-!    &              bn1, bn2, bn3, bp1, bp2, bp4,             &
      &              op,                                                 &
      &              pmn,                                                &
      &              sn,                                                 &

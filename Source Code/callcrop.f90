@@ -67,7 +67,6 @@ subroutine callcrop(ctrl,clidat,soils,bio,tempbio,biotot,prevbio,aepa,aifs,daysi
 !
 implicit none
 !
-include 'c1db1.inc'
 include 'c1db2.inc'
 include 'c1db3.inc'
 include 'c1gen.inc'
@@ -688,7 +687,7 @@ integer :: lay
 ! to be disabled, we won't worry about it right now.  lew - 04/23/99
 !
 ! check for a valid growing crop
-if ((ac0shoot(sr)<=0.0).or.(acdpop(sr)<=0.0)) bio%growth%am0cgf = .false.
+if ((bio%database%shoot<=0.0).or.(acdpop(sr)<=0.0)) bio%growth%am0cgf = .false.
 !
 !     only continue if crop is growing
 if (bio%growth%am0cgf) then
@@ -698,19 +697,19 @@ if (bio%growth%am0cgf) then
   call crop(ctrl,clidat,bio,tempbio, soils%spp%nslay,soils%spp%aszlyt(1),soils%spp%aszlyd(1),soils%spp%asdblk(1),soils%scp%asfcce(1),      &
           & soils%scp%asfom(1),soils%scp%asfcec(1),soils%scp%asfsmb(1),soils%spp%asfcla(1),soils%scp%as0ph(1),     &
           & soils%scp%asftan(1),soils%scp%asftap(1),soils%scp%asmno3,ac0bn1(sr),ac0bn2(sr),         &
-          & ac0bn3(sr),ac0bp1(sr),ac0bp2(sr),ac0bp3(sr),ac0ck(sr),acgrf(sr),    &
-          & acehu0(sr),aczmxc(sr),ctrl%sim%ac0nam,ctrl%sim%ac0idc,acxrow(sr),actdtm(sr),  &
-          & aczmrt(sr),actmin(sr),actopt(sr),ac0fd1(1,sr),ac0fd2(1,sr),         &
-          & ac0fd1(2,sr),ac0fd2(2,sr),ac0bceff(sr),admbgz(1,1,sr),ac0alf(sr),   &
-          & ac0blf(sr),ac0clf(sr),ac0dlf(sr),ac0arp(sr),ac0brp(sr),ac0crp(sr),  &
-          & ac0drp(sr),ac0aht(sr),ac0bht(sr),ac0sla(sr),ac0hue(sr),             &
-          & actverndel(sr),soils%spp%ahtsmn,soils%spp%ahtsmn&
+          & ac0bn3(sr),ac0bp1(sr),ac0bp2(sr),ac0bp3(sr),ac0ck(sr),bio%database%grf,    &
+          & bio%database%ehu0,bio%database%zmxc,ctrl%sim%ac0nam,bio%database%idc,acxrow(sr),bio%database%tdtm,  &
+          & bio%database%zmrt,actmin(sr),actopt(sr),ac0fd1(1,sr),ac0fd2(1,sr),         &
+          & ac0fd1(2,sr),ac0fd2(2,sr),bio%database%bceff,admbgz(1,1,sr),bio%database%alf,   &
+          & bio%database%blf,bio%database%clf,bio%database%dlf,bio%database%arp,bio%database%brp,bio%database%crp,  &
+          & bio%database%drp,bio%database%aht,bio%database%bht,bio%database%sla,bio%database%hue,             &
+          & bio%database%tverndel,soils%spp%ahtsmn,soils%spp%ahtsmn&
           & ,ctrl%cropstress%ahfwsf,bio%growth%am0cif,bio%growth%am0cgf,acthudf(sr),         &
-          & acbaflg(sr),acbaf(sr),acyraf(sr),achyfg(sr),acthum(sr),acdpop(sr),  &
-          & acdmaxshoot(sr),ac0transf(sr),ac0storeinit(sr),acfshoot(sr),        &
-          & ac0growdepth(sr),acfleafstem(sr),ac0shoot(sr),ac0diammax(sr),       &
-          & ac0ssa(sr),ac0ssb(sr),acfleaf2stor(sr),acfstem2stor(sr),            &
-          & acfstor2stor(sr),acyld_coef(sr),acresid_int(sr),acxstm(sr),         &
+          & bio%database%baflg,bio%database%baf,bio%database%yraf,achyfg(sr),bio%database%thum,acdpop(sr),  &
+          & bio%database%dmaxshoot,bio%database%transf,bio%database%storeinit,bio%database%fshoot,        &
+          & bio%database%growdepth,bio%database%fleafstem,bio%database%shoot,bio%database%diammax,       &
+          & bio%database%ssa,bio%database%ssb,bio%database%fleaf2stor,bio%database%fstem2stor,            &
+          & bio%database%fstor2stor,bio%database%yld_coef,bio%database%resid_int,bio%database%xstm,         &
           & bio%mass%standstem,bio%mass%standleaf,bio%mass%standstore,bio%mass%flatstem,&
           & bio%mass%flatleaf,bio%mass%flatstore,bio%growth%mshoot,bio%growth%mtotshoot,      &
           & bio%mass%stemz,bio%mass%rootstorez,bio%mass%rootfiberz,bio%geometry%zht, &
@@ -724,7 +723,7 @@ if (bio%growth%am0cgf) then
           & prevbio%mass%rootfiberz,prevbio%geometry%zht,prevbio%geometry%zshoot,prevbio%geometry%dstm,         &
           & prevbio%geometry%zrtd,prevbio%growth%dayap,prevbio%growth%thucum,prevbio%growth%trthucum,            &
           & prevbio%geometry%grainf,prevbio%growth%tchillucum,prevbio%growth%fliveleaf,daysim,           &
-          & bio%growth%dayspring,aczloc_regrow(sr),tempbio%mass%standstem,tempbio%mass%standleaf,&
+          & bio%growth%dayspring,bio%database%zloc_regrow,tempbio%mass%standstem,tempbio%mass%standleaf,&
           & tempbio%mass%standstore,tempbio%mass%flatstem,tempbio%mass%flatleaf,tempbio%mass%flatstore, &
           & tempbio%mass%stemz(1:1),tempbio%geometry%zht,tempbio%geometry%dstm,tempbio%geometry%xstmrep,tempbio%geometry%grainf,   &
           & aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,canht,canopyflg,  &
@@ -768,9 +767,9 @@ if ((tempbio%mass%standstem+tempbio%mass%standleaf+tempbio%mass%standstore+tempb
            & admflatrootfiber(1,sr),admbgstemz(1,1,sr),admbgleafz(1,1,sr),      &
            & admbgstorez(1,1,sr),admbgrootstorez(1,1,sr),admbgrootfiberz(1,1,sr)&
            & ,adzht(1,sr),addstm(1,sr),adxstmrep(1,sr),adgrainf(1,sr),ctrl%sim%ac0nam&
-           & ,acxstm(sr),acrbc(sr),ac0sla(sr),ac0ck(sr),acdkrate(1,sr),         &
-           & accovfact(sr),acddsthrsh(sr),achyfg(sr),acresevapa(sr),            &
-           & acresevapb(sr),ad0nam(1,sr),adxstm(1,sr),adrbc(1,sr),ad0sla(1,sr), &
+           & ,bio%database%xstm,bio%database%rbc,bio%database%sla,ac0ck(sr),bio%database%dkrate,         &
+           & bio%database%covfact,bio%database%ddsthrsh,achyfg(sr),bio%database%resevapa,            &
+           & bio%database%resevapb,ad0nam(1,sr),adxstm(1,sr),adrbc(1,sr),ad0sla(1,sr), &
            & ad0ck(1,sr),dkrate(1,1,sr),covfact(1,sr),ddsthrsh(1,sr),           &
            & adhyfg(1,sr),adresevapa(1,sr),adresevapb(1,sr),cumdds(1,sr),       &
            & cumddf(1,sr),cumddg(1,1,sr),soils%spp%nslay)
@@ -785,8 +784,8 @@ call cropupdate(bio%mass%standstem,bio%mass%standleaf,bio%mass%standstore,      
               & bio%deriv%m,bio%deriv%mst,bio%deriv%mf,bio%deriv%mrt,bio%deriv%mrtz,bio%deriv%rcd,    &
               & soils%spp%aszrgh(sr),soils%spp%asxrgs(sr),soils%spp%asargo(sr),bio%deriv%rsai,bio%deriv%rlai,         &
               & bio%deriv%rsaz,bio%deriv%rlaz,bio%deriv%ffcv,bio%deriv%fscv,bio%deriv%ftcv,     &
-              & bio%deriv%fcancov,ac0rg(sr),acxrow(sr),soils%spp%nslay,ac0ssa(sr),        &
-              & ac0ssb(sr),ac0sla(sr),accovfact(sr),ac0ck(sr),acxstm(sr),       &
+              & bio%deriv%fcancov,ac0rg(sr),acxrow(sr),soils%spp%nslay,bio%database%ssa,        &
+              & bio%database%ssb,bio%database%sla,bio%database%covfact,ac0ck(sr),bio%database%xstm,       &
               & acdpop(sr))
  
 !
