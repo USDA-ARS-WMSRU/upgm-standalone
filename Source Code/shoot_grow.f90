@@ -35,8 +35,9 @@ subroutine shoot_grow(ctrl, clidat, bio, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfl
 ! later added tempsw, the array index for these new arrays. it needed to be
 ! initialized in cinit and passed through. 5122011
     use constants, only : mgtokg, mmtom
-    use upgm_simdata, only : upgm_ctrls, controls
+    use upgm_simdata, only : controls
     use climate, only: climate_data
+    use datetime, only : dayear
     use biomaterial
 implicit none
 !
@@ -74,7 +75,6 @@ real :: ag_stem,bg_stem,diff_mass,dlfwt,drpwt,drswt,dstwt,d_leaf_mass,          
       & fexp_huiy,flat_stem,f_root_sum,lost_mass,red_mass_rat,shoot_hui,        &
       & shoot_huiy,stand_stem,stem_propor,s_root_sum,tot_mass_req,yesterday_len
 integer :: day,doy,lay,mo
-integer :: dayear
 real :: frac_lay
 character(80) :: seedbed
 !

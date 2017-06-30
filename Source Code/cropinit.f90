@@ -1,16 +1,372 @@
-subroutine cropinit(ctrl,soils,bio,isr,aepa,aifs,antes,antss,blstrs,boots,browns,callgdd,      &
-                  & canopyflg,cliname,cots,cropname,dayhtinc,dents,doughs,drs,  &
-                  & dummy1,dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,    &
-                  & ergdd,eseeds,first7,fps,fullbs,gddtbg,germgdd,germs,ggdd,   &
-                  & gmethod,gpds,growth_stress,halfbs,heads,hrs,ies,ies2,infls, &
-                  & joints,lf1s,lf12s,lf2s,lf3s,lf4s,lf8s,mats,maxht,mffls,     &
-                  & milks,mpods,mseeds,opens,pchron,phenolflg,seedsw,silks,     &
-                  & soilwat,srs,tbase,tis,toptlo,toptup,tsints,tss,tupper,      &
-                  & wfpslo,wfpsup,yelows,co2atmos,co2x,co2y)
+subroutine cropinit(ctrl,soils,bio, biotot)
  
-    !for adding these variables:
+
+    use constants, only : mnsub,mnsz, mncz,mndk
+    use biomaterial, only : biomatter, biototal
+    use soil, only : soildata
+    use upgm_simdata, only : controls
+implicit none
+!
+! Subroutine arguments
+!
+    type(controls) :: ctrl
+    type(biomatter) :: bio
+    type(soildata) :: soils
+    type(biototal) :: biotot
+!
+! Local variables
+!
+integer :: d,dn,i,idx,mo,newrow,row,y,k
+!
+! Start Initialization
+!
+bio%mass%standstem = 0.0
+bio%mass%standleaf = 0.0
+bio%mass%standstore = 0.0
+bio%mass%flatstem = 0.0
+bio%mass%flatleaf = 0.0
+bio%mass%flatstore = 0.0
+ 
+do idx = 1, size(bio%mass%rootstorez)
+  bio%mass%rootstorez(idx) = 0.0
+  bio%mass%rootfiberz(idx) = 0.0
+  bio%mass%stemz(idx) = 0.0
+end do
+ 
+bio%geometry%zht = 0.0
+bio%geometry%dstm = 0.0
+bio%geometry%zrtd = 0.0
+bio%growth%dayap = 0
+bio%growth%thucum = 0.0
+bio%growth%trthucum = 0.0
+bio%geometry%grainf = 0.0
+bio%deriv%mbgrootstore = 0.0
+bio%deriv%mbgrootfiber = 0.0
+biotot%xstmrep = 0.0
+bio%growth%fliveleaf = 0.0
+ 
+bio%deriv%m = 0.0
+bio%deriv%mst = 0.0
+bio%deriv%mf = 0.0
+bio%deriv%mrt = 0.0
+ 
+do idx = 1,size(bio%deriv%mrtz)
+  bio%deriv%mrtz(idx) = 0.0
+end do
+ 
+bio%deriv%rsai = 0.0
+bio%deriv%rlai = 0.0
+ 
+do idx = 1,size(bio%deriv%rsaz)
+  bio%deriv%rsaz(idx) = 0.0
+  bio%deriv%rlaz(idx) = 0.0
+end do
+ 
+bio%deriv%ffcv = 0.0
+bio%deriv%fscv = 0.0
+bio%deriv%ftcv = 0.0
+ 
+bio%database%xstm = 0.0
+bio%database%rbc = 1
+bio%database%covfact = 0.0
+bio%database%ck = 0.0
+ 
+      ! initialize some derived globals for crop global variables
+bio%deriv%fcancov = 0.0
+bio%deriv%rcd = 0.0
+ 
+!     initialize crop yield reporting parameters in case harvest call before planting
+bio%bname = ''
+bio%database%ynmu = ''
+bio%database%ycon = 1.0
+bio%database%ywct = 0.0
+ 
+!     initialize crop type id to 0 indicating no crop type is growing
+bio%database%idc = 0
+bio%database%sla= 0.0
+bio%geometry%dpop = 0.0
+ 
+ 
+!     initialize row placement to be on the ridge
+bio%geometry%rg = 1
+ 
+      ! initialize decomp parameters since they are used before a crop is growing
+do idx = 1,mndk
+  bio%database%dkrate(idx) = 0.0
+end do
+bio%database%ddsthrsh = 0.0
+ 
+!      ! temporary crop
+!tempbio%mass%standstem = 0.0
+!tempbio%mass%standleaf = 0.0
+!tempbio%mass%standstore = 0.0
+!tempbio%mass%flatstem = 0.0
+!tempbio%mass%flatleaf = 0.0
+!tempbio%mass%flatstore = 0.0
+!tempbio%mass%flatrootstore = 0.0
+!tempbio%mass%flatrootfiber = 0.0
+! 
+!do idx = 1, soils%spp%nslay
+!  tempbio%mass%stemz(idx) = 0.0
+!  tempbio%mass%leafz(idx) = 0.0
+!  tempbio%mass%storez(idx) = 0.0
+!  tempbio%mass%rootstorez(idx) = 0.0
+!  tempbio%mass%rootfiberz(idx) = 0.0
+!end do
+! 
+!tempbio%geometry%zht = 0.0
+!tempbio%geometry%dstm = 0.0
+!tempbio%geometry%xstmrep = 0.0
+!tempbio%geometry%zrtd = 0.0
+!tempbio%geometry%grainf = 0.0
+! 
+      ! values that need initialization for cdbug calls (before initial crop entry)
+bio%database%tdtm = 0
+ 
+!debe initialize emergence and phenology variables.
+row = 4
+newrow = 6
+! emergence variables
+bio%upgm%emrgflg = 0
+bio%upgm%seedsw = 0
+bio%upgm%gddtbg = 0.0
+bio%upgm%ergdd = 0.0
+bio%upgm%germgdd = 0.0
+bio%upgm%wfpslo = 0.0
+bio%upgm%wfpsup = 0.0
+bio%upgm%soilwat = ''
+bio%upgm%egdd = 0.0
+bio%upgm%ggdd = 0.0
+! phenology variables
+bio%upgm%pchron = 0.0
+bio%upgm%phenolflg = 0
+!
+
+bio%upgm%dummy1 = ''
+bio%upgm%dummy2 = 0.0
+
+!
+bio%upgm%first7 = 0
+bio%upgm%aepa = 0.0
+!
+! gddcalc variables
+bio%upgm%callgdd = .true.
+ 
+!
+!canopy height
+bio%upgm%ecanht = 0.0
+bio%upgm%maxht = 0.0
+bio%upgm%canopyflg = 0
+bio%upgm%dayhtinc = 0.0
+ 
+!growth_stress
+bio%upgm%growth_stress = 0
+!
+! initialize arrays:
+ 
+! debe added initialization for phenol variables
+dn = 999       !day number of the year (daynum)
+y = 0000       !year
+mo = 0          !month
+d = 0          !day
+ 
+!  growth stages arrays	(daynum, year, mo, day)
+do i = 1,4
+  if (i==1) then
+     bio%upgm%aifs(i) = dn
+     bio%upgm%antes(i) = dn
+     bio%upgm%antss(i) = dn
+     bio%upgm%blstrs(i) = dn
+     bio%upgm%browns(i) = dn
+     bio%upgm%boots(i) = dn
+     bio%upgm%cots(i) = dn
+     bio%upgm%dents(i) = dn
+     bio%upgm%doughs(i) = dn
+     bio%upgm%drs(i) = dn
+     bio%upgm%ears(i) = dn
+     bio%upgm%ems(i) = dn
+     bio%upgm%endlgs(i) = dn
+     bio%upgm%epods(i) = dn
+     bio%upgm%eseeds(i) = dn
+     bio%upgm%fps(i) = dn
+     bio%upgm%fullbs(i) = dn
+     bio%upgm%germs(i) = dn
+     bio%upgm%gpds(i) = dn
+     bio%upgm%halfbs(i) = dn
+     bio%upgm%heads(i) = dn
+     bio%upgm%hrs(i) = dn
+     bio%upgm%ies(i) = dn
+     bio%upgm%ies2(i) = dn
+     bio%upgm%infls(i) = dn
+     bio%upgm%joints(i) = dn
+     bio%upgm%lf1s(i) = dn
+     bio%upgm%lf12s(i) = dn
+     bio%upgm%lf2s(i) = dn
+     bio%upgm%lf3s(i) = dn
+     bio%upgm%lf4s(i) = dn
+     bio%upgm%lf8s(i) = dn
+     bio%upgm%mats(i) = dn
+     bio%upgm%mffls(i) = dn
+     bio%upgm%milks(i) = dn
+     bio%upgm%mpods(i) = dn
+     bio%upgm%mseeds(i) = dn
+     bio%upgm%opens(i) = dn
+     bio%upgm%silks(i) = dn
+     bio%upgm%srs(i) = dn
+     bio%upgm%tis(i) = dn
+     bio%upgm%tsints(i) = dn
+     bio%upgm%tss(i) = dn
+     bio%upgm%yelows(i) = dn
+  else if (i==2) then
+     bio%upgm%aifs(i) = y
+     bio%upgm%antes(i) = y
+     bio%upgm%antss(i) = y
+     bio%upgm%blstrs(i) = y
+     bio%upgm%browns(i) = y
+     bio%upgm%boots(i) = y
+     bio%upgm%cots(i) = y
+     bio%upgm%dents(i) = y
+     bio%upgm%doughs(i) = y
+     bio%upgm%drs(i) = y
+     bio%upgm%ears(i) = y
+     bio%upgm%ems(i) = y
+     bio%upgm%endlgs(i) = y
+     bio%upgm%epods(i) = y
+     bio%upgm%eseeds(i) = y
+     bio%upgm%fps(i) = y
+     bio%upgm%fullbs(i) = y
+     bio%upgm%germs(i) = y
+     bio%upgm%gpds(i) = y
+     bio%upgm%halfbs(i) = y
+     bio%upgm%heads(i) = y
+     bio%upgm%hrs(i) = y
+     bio%upgm%ies(i) = y
+     bio%upgm%ies2(i) = y
+     bio%upgm%infls(i) = y
+     bio%upgm%joints(i) = y
+     bio%upgm%lf1s(i) = y
+     bio%upgm%lf12s(i) = y
+     bio%upgm%lf2s(i) = y
+     bio%upgm%lf3s(i) = y
+     bio%upgm%lf4s(i) = y
+     bio%upgm%lf8s(i) = y
+     bio%upgm%mats(i) = y
+     bio%upgm%mffls(i) = y
+     bio%upgm%milks(i) = y
+     bio%upgm%mpods(i) = y
+     bio%upgm%mseeds(i) = y
+     bio%upgm%opens(i) = y
+     bio%upgm%silks(i) = y
+     bio%upgm%srs(i) = y
+     bio%upgm%tis(i) = y
+     bio%upgm%tsints(i) = y
+     bio%upgm%tss(i) = y
+     bio%upgm%yelows(i) = y
+  else if (i==3) then
+     bio%upgm%aifs(i) = mo
+     bio%upgm%antes(i) = mo
+     bio%upgm%antss(i) = mo
+     bio%upgm%blstrs(i) = mo
+     bio%upgm%browns(i) = mo
+     bio%upgm%boots(i) = mo
+     bio%upgm%cots(i) = mo
+     bio%upgm%dents(i) = mo
+     bio%upgm%doughs(i) = mo
+     bio%upgm%drs(i) = mo
+     bio%upgm%ears(i) = mo
+     bio%upgm%ems(i) = mo
+     bio%upgm%endlgs(i) = mo
+     bio%upgm%epods(i) = mo
+     bio%upgm%eseeds(i) = mo
+     bio%upgm%fps(i) = mo
+     bio%upgm%fullbs(i) = mo
+     bio%upgm%germs(i) = mo
+     bio%upgm%gpds(i) = mo
+     bio%upgm%halfbs(i) = mo
+     bio%upgm%heads(i) = mo
+     bio%upgm%hrs(i) = mo
+     bio%upgm%ies(i) = mo
+     bio%upgm%ies2(i) = mo
+     bio%upgm%infls(i) = mo
+     bio%upgm%joints(i) = mo
+     bio%upgm%lf1s(i) = mo
+     bio%upgm%lf12s(i) = mo
+     bio%upgm%lf2s(i) = mo
+     bio%upgm%lf3s(i) = mo
+     bio%upgm%lf4s(i) = mo
+     bio%upgm%lf8s(i) = mo
+     bio%upgm%mats(i) = mo
+     bio%upgm%milks(i) = mo
+     bio%upgm%mffls(i) = mo
+     bio%upgm%mpods(i) = mo
+     bio%upgm%mseeds(i) = mo
+     bio%upgm%opens(i) = mo
+     bio%upgm%silks(i) = mo
+     bio%upgm%srs(i) = mo
+     bio%upgm%tis(i) = mo
+     bio%upgm%tsints(i) = mo
+     bio%upgm%tss(i) = mo
+     bio%upgm%yelows(i) = mo
+  else if (i==4) then
+     bio%upgm%aifs(i) = d
+     bio%upgm%antes(i) = d
+     bio%upgm%antss(i) = d
+     bio%upgm%blstrs(i) = d
+     bio%upgm%browns(i) = d
+     bio%upgm%boots(i) = d
+     bio%upgm%cots(i) = d
+     bio%upgm%dents(i) = d
+     bio%upgm%doughs(i) = d
+     bio%upgm%drs(i) = d
+     bio%upgm%ears(i) = d
+     bio%upgm%ems(i) = d
+     bio%upgm%endlgs(i) = d
+     bio%upgm%epods(i) = d
+     bio%upgm%eseeds(i) = d
+     bio%upgm%fps(i) = d
+     bio%upgm%fullbs(i) = d
+     bio%upgm%germs(i) = d
+     bio%upgm%gpds(i) = d
+     bio%upgm%halfbs(i) = d
+     bio%upgm%heads(i) = d
+     bio%upgm%hrs(i) = d
+     bio%upgm%ies(i) = d
+     bio%upgm%ies2(i) = d
+     bio%upgm%infls(i) = d
+     bio%upgm%joints(i) = d
+     bio%upgm%lf1s(i) = d
+     bio%upgm%lf12s(i) = d
+     bio%upgm%lf2s(i) = d
+     bio%upgm%lf3s(i) = d
+     bio%upgm%lf4s(i) = d
+     bio%upgm%lf8s(i) = d
+     bio%upgm%mats(i) = d
+     bio%upgm%milks(i) = d
+     bio%upgm%mffls(i) = d
+     bio%upgm%mpods(i) = d
+     bio%upgm%mseeds(i) = d
+     bio%upgm%opens(i) = d
+     bio%upgm%silks(i) = d
+     bio%upgm%srs(i) = d
+     bio%upgm%tis(i) = d
+     bio%upgm%tsints(i) = d
+     bio%upgm%tss(i) = d
+     bio%upgm%yelows(i) = d
+  end if
+end do
+
+!initialize CO2 arrays and variable
+bio%upgm%co2x = 0
+bio%upgm%co2y = 0
+
+
+
+    end subroutine cropinit
+
+    
+        !for adding these variables:
 !call cropinit(aifs,antes,antss,blstrs,boots,browns,callgdd,canopyflg,    &
-!            & cliname,cots,cropname,dayhtinc,dents,doughs,drs,dummy1,dummy2,    &
+!            & cots,dayhtinc,dents,doughs,drs,dummy1,dummy2,    &
 !            & ears,ecanht,egdd,emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,    &
 !            & fps,fullbs,gddtbg,germgdd,ggdd,gmethod,gpds,growth_stress,halfbs, &
 !            & heads,hrs,ies,ies2,infls,joints,lf1s,lf12s,lf2s,lf3s,lf4s,lf8s,   &
@@ -38,40 +394,6 @@ subroutine cropinit(ctrl,soils,bio,isr,aepa,aifs,antes,antss,blstrs,boots,browns
 !debe added ecanht so that it can be read in instead of set in the code for each crop.
 !debe added all growth stage variables and phenolflg to be initialized here.
 !debe added CO2 variables to be initialized here.
-    use constants, only : mnsub,mnsz, mncz,mndk
-    use biomaterial, only : biomatter, biototal
-    use soil, only : soildata
-    use upgm_simdata, only : upgm_ctrls, controls
-implicit none
-!
-! Dummy arguments
-!
-    type(controls) :: ctrl
-    type(biomatter) :: bio
-    type(biototal) :: biotot
-    type(soildata) :: soils
-real :: aepa,dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,tupper,    &
-      & co2atmos
-logical :: callgdd
-integer :: canopyflg,emrgflg,first7,gmethod,growth_stress,isr,phenolflg,seedsw
-character(80) :: cliname
-character(80) :: cropname
-integer,dimension(4) :: aifs,antes,antss,blstrs,boots,browns,cots,dents,doughs, &
-                      & drs,ears,ems,endlgs,epods,eseeds,fps,fullbs,germs,gpds, &
-                      & halfbs,heads,hrs,ies,ies2,infls,joints,lf12s,lf1s,lf2s, &
-                      & lf3s,lf4s,lf8s,mats,mffls,milks,mpods,mseeds,opens,     &
-                      & silks,srs,tis,tsints,tss,yelows
-character(5),dimension(30) :: dummy1
-real,dimension(30) :: dummy2
-real,dimension(6) :: egdd,ggdd
-real,dimension(4) :: ergdd,germgdd,wfpslo,wfpsup
-character(80),dimension(4) :: soilwat
-real,dimension(10) :: co2x,co2y
-!
-! Local variables
-!
-integer :: d,dn,i,idx,mo,newrow,row,y,k
-!
 ! debe declare variables that to be initialized for emergence, phenology
 ! or canopy height
 !
@@ -258,7 +580,6 @@ integer :: d,dn,i,idx,mo,newrow,row,y,k
 !   canopyflg - a flag to determine whether the old upgm/weps method of
 !               determining canopy height will be used (canopyflg=0) or the
 !               method brought in from phenologymms will be used (canopyflg=1).
-!   cliname - the name of the location for the climate data
 !   co2atmos - the atmospheric level of CO2.
 !   co2x - the CO2 levels in ppm. The x axis on the relationship curve.
 !   co2y - the relative effect at different levels of CO2, i.e. co2x.
@@ -427,356 +748,3 @@ integer :: d,dn,i,idx,mo,newrow,row,y,k
 !              includes daynum, year, month and day of when this stage was
 !              reached.
  
-bio%mass%standstem = 0.0
-bio%mass%standleaf = 0.0
-bio%mass%standstore = 0.0
-bio%mass%flatstem = 0.0
-bio%mass%flatleaf = 0.0
-bio%mass%flatstore = 0.0
- 
-do idx = 1, size(bio%mass%rootstorez)
-  bio%mass%rootstorez(idx) = 0.0
-  bio%mass%rootfiberz(idx) = 0.0
-  bio%mass%stemz(idx) = 0.0
-end do
- 
-bio%geometry%zht = 0.0
-bio%geometry%dstm = 0.0
-bio%geometry%zrtd = 0.0
-bio%growth%dayap = 0
-bio%growth%thucum = 0.0
-bio%growth%trthucum = 0.0
-bio%geometry%grainf = 0.0
-bio%deriv%mbgrootstore = 0.0
-bio%deriv%mbgrootfiber = 0.0
-biotot%xstmrep = 0.0
-bio%growth%fliveleaf = 0.0
- 
-bio%deriv%m = 0.0
-bio%deriv%mst = 0.0
-bio%deriv%mf = 0.0
-bio%deriv%mrt = 0.0
- 
-do idx = 1,size(bio%deriv%mrtz)
-  bio%deriv%mrtz(idx) = 0.0
-end do
- 
-bio%deriv%rsai = 0.0
-bio%deriv%rlai = 0.0
- 
-do idx = 1,size(bio%deriv%rsaz)
-  bio%deriv%rsaz(idx) = 0.0
-  bio%deriv%rlaz(idx) = 0.0
-end do
- 
-bio%deriv%ffcv = 0.0
-bio%deriv%fscv = 0.0
-bio%deriv%ftcv = 0.0
- 
-bio%database%xstm = 0.0
-bio%database%rbc = 1
-bio%database%covfact = 0.0
-bio%database%ck = 0.0
- 
-      ! initialize some derived globals for crop global variables
-bio%deriv%fcancov = 0.0
-bio%deriv%rcd = 0.0
- 
-!     initialize crop yield reporting parameters in case harvest call before planting
-bio%bname = ''
-bio%database%ynmu = ''
-bio%database%ycon = 1.0
-bio%database%ywct = 0.0
- 
-!     initialize crop type id to 0 indicating no crop type is growing
-bio%database%idc = 0
-bio%database%sla= 0.0
-bio%geometry%dpop = 0.0
- 
- 
-!     initialize row placement to be on the ridge
-bio%geometry%rg = 1
- 
-      ! initialize decomp parameters since they are used before a crop is growing
-do idx = 1,mndk
-  bio%database%dkrate(idx) = 0.0
-end do
-bio%database%ddsthrsh = 0.0
- 
-!      ! temporary crop
-!tempbio%mass%standstem = 0.0
-!tempbio%mass%standleaf = 0.0
-!tempbio%mass%standstore = 0.0
-!tempbio%mass%flatstem = 0.0
-!tempbio%mass%flatleaf = 0.0
-!tempbio%mass%flatstore = 0.0
-!tempbio%mass%flatrootstore = 0.0
-!tempbio%mass%flatrootfiber = 0.0
-! 
-!do idx = 1, soils%spp%nslay
-!  tempbio%mass%stemz(idx) = 0.0
-!  tempbio%mass%leafz(idx) = 0.0
-!  tempbio%mass%storez(idx) = 0.0
-!  tempbio%mass%rootstorez(idx) = 0.0
-!  tempbio%mass%rootfiberz(idx) = 0.0
-!end do
-! 
-!tempbio%geometry%zht = 0.0
-!tempbio%geometry%dstm = 0.0
-!tempbio%geometry%xstmrep = 0.0
-!tempbio%geometry%zrtd = 0.0
-!tempbio%geometry%grainf = 0.0
-! 
-      ! values that need initialization for cdbug calls (before initial crop entry)
-bio%database%tdtm = 0
- 
-!debe initialize emergence and phenology variables.
-row = 4
-newrow = 6
-! emergence variables
-emrgflg = 0
-seedsw = 0
-gddtbg = 0.0
-do idx = 1,row
-  ergdd(idx) = 0.0
-  germgdd(idx) = 0.0
-  wfpslo(idx) = 0.0
-  wfpsup(idx) = 0.0
-  soilwat(idx) = ''
-end do
-do idx = 1,newrow
-  egdd(idx) = 0.0
-  ggdd(idx) = 0.0
-end do
-! phenology variables
-pchron = 0.0
-phenolflg = 0
-!
-do i = 1,30
-  dummy1(i) = ''
-  dummy2(i) = 0.0
-end do
-!
-first7 = 0
-aepa = 0.0
-!
-! gddcalc variables
-callgdd = .true.
-!
-!climate file name
-cliname = ' '
- 
-!
-!canopy height
-ecanht = 0.0
-maxht = 0.0
-canopyflg = 0
-dayhtinc = 0.0
- 
-!growth_stress
-growth_stress = 0
-!
-! initialize arrays:
- 
-! debe added initialization for phenol variables
-dn = 999       !day number of the year (daynum)
-y = 0000       !year
-mo = 0          !month
-d = 0          !day
- 
-!  growth stages arrays	(daynum, year, mo, day)
-do i = 1,4
-  if (i==1) then
-     aifs(i) = dn
-     antes(i) = dn
-     antss(i) = dn
-     blstrs(i) = dn
-     browns(i) = dn
-     boots(i) = dn
-     cots(i) = dn
-     dents(i) = dn
-     doughs(i) = dn
-     drs(i) = dn
-     ears(i) = dn
-     ems(i) = dn
-     endlgs(i) = dn
-     epods(i) = dn
-     eseeds(i) = dn
-     fps(i) = dn
-     fullbs(i) = dn
-     germs(i) = dn
-     gpds(i) = dn
-     halfbs(i) = dn
-     heads(i) = dn
-     hrs(i) = dn
-     ies(i) = dn
-     ies2(i) = dn
-     infls(i) = dn
-     joints(i) = dn
-     lf1s(i) = dn
-     lf12s(i) = dn
-     lf2s(i) = dn
-     lf3s(i) = dn
-     lf4s(i) = dn
-     lf8s(i) = dn
-     mats(i) = dn
-     mffls(i) = dn
-     milks(i) = dn
-     mpods(i) = dn
-     mseeds(i) = dn
-     opens(i) = dn
-     silks(i) = dn
-     srs(i) = dn
-     tis(i) = dn
-     tsints(i) = dn
-     tss(i) = dn
-     yelows(i) = dn
-  else if (i==2) then
-     aifs(i) = y
-     antes(i) = y
-     antss(i) = y
-     blstrs(i) = y
-     browns(i) = y
-     boots(i) = y
-     cots(i) = y
-     dents(i) = y
-     doughs(i) = y
-     drs(i) = y
-     ears(i) = y
-     ems(i) = y
-     endlgs(i) = y
-     epods(i) = y
-     eseeds(i) = y
-     fps(i) = y
-     fullbs(i) = y
-     germs(i) = y
-     gpds(i) = y
-     halfbs(i) = y
-     heads(i) = y
-     hrs(i) = y
-     ies(i) = y
-     ies2(i) = y
-     infls(i) = y
-     joints(i) = y
-     lf1s(i) = y
-     lf12s(i) = y
-     lf2s(i) = y
-     lf3s(i) = y
-     lf4s(i) = y
-     lf8s(i) = y
-     mats(i) = y
-     mffls(i) = y
-     milks(i) = y
-     mpods(i) = y
-     mseeds(i) = y
-     opens(i) = y
-     silks(i) = y
-     srs(i) = y
-     tis(i) = y
-     tsints(i) = y
-     tss(i) = y
-     yelows(i) = y
-  else if (i==3) then
-     aifs(i) = mo
-     antes(i) = mo
-     antss(i) = mo
-     blstrs(i) = mo
-     browns(i) = mo
-     boots(i) = mo
-     cots(i) = mo
-     dents(i) = mo
-     doughs(i) = mo
-     drs(i) = mo
-     ears(i) = mo
-     ems(i) = mo
-     endlgs(i) = mo
-     epods(i) = mo
-     eseeds(i) = mo
-     fps(i) = mo
-     fullbs(i) = mo
-     germs(i) = mo
-     gpds(i) = mo
-     halfbs(i) = mo
-     heads(i) = mo
-     hrs(i) = mo
-     ies(i) = mo
-     ies2(i) = mo
-     infls(i) = mo
-     joints(i) = mo
-     lf1s(i) = mo
-     lf12s(i) = mo
-     lf2s(i) = mo
-     lf3s(i) = mo
-     lf4s(i) = mo
-     lf8s(i) = mo
-     mats(i) = mo
-     milks(i) = mo
-     mffls(i) = mo
-     mpods(i) = mo
-     mseeds(i) = mo
-     opens(i) = mo
-     silks(i) = mo
-     srs(i) = mo
-     tis(i) = mo
-     tsints(i) = mo
-     tss(i) = mo
-     yelows(i) = mo
-  else if (i==4) then
-     aifs(i) = d
-     antes(i) = d
-     antss(i) = d
-     blstrs(i) = d
-     browns(i) = d
-     boots(i) = d
-     cots(i) = d
-     dents(i) = d
-     doughs(i) = d
-     drs(i) = d
-     ears(i) = d
-     ems(i) = d
-     endlgs(i) = d
-     epods(i) = d
-     eseeds(i) = d
-     fps(i) = d
-     fullbs(i) = d
-     germs(i) = d
-     gpds(i) = d
-     halfbs(i) = d
-     heads(i) = d
-     hrs(i) = d
-     ies(i) = d
-     ies2(i) = d
-     infls(i) = d
-     joints(i) = d
-     lf1s(i) = d
-     lf12s(i) = d
-     lf2s(i) = d
-     lf3s(i) = d
-     lf4s(i) = d
-     lf8s(i) = d
-     mats(i) = d
-     milks(i) = d
-     mffls(i) = d
-     mpods(i) = d
-     mseeds(i) = d
-     opens(i) = d
-     silks(i) = d
-     srs(i) = d
-     tis(i) = d
-     tsints(i) = d
-     tss(i) = d
-     yelows(i) = d
-  end if
-end do
-
-!initialize CO2 arrays and variable
-co2x = 0
-co2y = 0
-co2atmos = 0.0
-!do k = 1,10
-!  co2x(k) = 0.0
-!  co2y(k) = 0.0
-!end do
-
-
-end subroutine cropinit

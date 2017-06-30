@@ -30,7 +30,7 @@ subroutine crop(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,
               & maxht,mffls,milks,mpods,mseeds,opens,pchron,pd,phenolflg,pm,py, &
               & seedsw,silks,soilwat,srs,tbase,tis,toptlo,toptup,tsints,tss,    &
               & tupper,wfpslo,wfpsup,yelows,co2x,co2y,co2atmos)
-    use upgm_simdata, only : upgm_ctrls, controls
+    use upgm_simdata, only : controls
 !
 !debe dummy1 is not currently used here or passed on but left it here in
 ! case it is used in the future. ! verns is also not currently used.
@@ -96,6 +96,7 @@ subroutine crop(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,
 !
     use constants, only : mgtokg, civilrise, mnsz
     use climate, only : climate_data
+    use datetime, only : dayear
     use biomaterial
 implicit none
 !
@@ -160,7 +161,6 @@ real,save :: canhty,elong,gdda,gddday,gdde,gdds,gddv,hu_delay,photo_delay,      
 character(80) :: cname
 integer,save :: daa,dae,dap,dav,daynum,dd,lay,lncntr,mm,pdate,rowcntr,tempsw,   &
               & verns,yr,yy
-integer :: dayear
 real :: daylen,huc1
 integer,dimension(20),save :: ddae,ddap,ddav
 real,dimension(20),save :: dgdde,dgdds,dgddv

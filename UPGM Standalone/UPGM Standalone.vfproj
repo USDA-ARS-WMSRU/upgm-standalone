@@ -54,6 +54,7 @@
 		<File RelativePath="..\Source Code\structs\cropstruct.f90"/>
 		<File RelativePath="..\Source Code\structs\upgm_simdata_mod.f90"/></Filter>
 		<Filter Name="support">
+		<File RelativePath="..\Source Code\support\datetime_mod.f90"/>
 		<File RelativePath="..\Source Code\support\support_mod.f90"/></Filter>
 		<Filter Name="upgm">
 		<File RelativePath="..\Source Code\upgm\upgm_mod.f90"/></Filter>
@@ -72,10 +73,8 @@
 		<File RelativePath="..\Source Code\cropinit.f90"/>
 		<File RelativePath="..\Source Code\cropupdate.f90"/>
 		<File RelativePath="..\Source Code\date1.f90"/>
-		<File RelativePath="..\Source Code\dayear.f90"/>
 		<File RelativePath="..\Source Code\daylen.f90"/>
 		<File RelativePath="..\Source Code\declination.f90"/>
-		<File RelativePath="..\Source Code\difdat.f90"/>
 		<File RelativePath="..\Source Code\emerge.f90"/>
 		<File RelativePath="..\Source Code\fopenk.f90"/>
 		<File RelativePath="..\Source Code\frac_lay.f90"/>
@@ -85,7 +84,6 @@
 		<File RelativePath="..\Source Code\hourangle.f90"/>
 		<File RelativePath="..\Source Code\ht_dia_sai.f90"/>
 		<File RelativePath="..\Source Code\huc1.f90"/>
-		<File RelativePath="..\Source Code\julday.f90"/>
 		<File RelativePath="..\Source Code\leafno.f90"/>
 		<File RelativePath="..\Source Code\main.f90"/>
 		<File RelativePath="..\Source Code\nconc.f90"/>

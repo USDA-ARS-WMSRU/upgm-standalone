@@ -38,6 +38,7 @@
         real :: ts      !temperature stress factor
         real :: xlat    !latitude of a location (deg.)
         real :: phu     !potential heat units for crop maturity (deg. c)
+        real :: co2atmos             ! the atmospheric level of CO2.
     end type climate_data
     
     end module climate

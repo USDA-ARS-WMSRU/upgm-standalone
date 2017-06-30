@@ -25,7 +25,8 @@ subroutine growth(ctrl,bnslay,bio,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam
 !debe added co2x, co2y, co2atmos, co2eff for use in affecting plant growth by co2.
 !    
     use constants, only : hatom2, mmtom, max_arg_exp, max_real, pi, mnsz
-    use upgm_simdata, only : upgm_ctrls, controls
+    use upgm_simdata, only : controls
+    use datetime, only : dayear
     use biomaterial
 implicit none
 !DE added
@@ -63,7 +64,6 @@ real :: apar,arg_exp,bhfwsf_adj,ddm_rem,dht,dlfwt,drfwt,drpwt,drswt,dstwt,      
     !clfarea,clfwt,ddm,parea,pcht,pchty,prd,prdy,strs,
 
 integer :: day,doy,i,irfiber,irstore,mo,yr,j,k
-integer :: dayear
 real :: temps
 real,dimension(mnsz) :: wfl,za
     real :: clfarea

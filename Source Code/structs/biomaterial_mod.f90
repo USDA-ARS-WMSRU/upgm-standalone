@@ -227,7 +227,6 @@ module biomaterial
   end type bio_output_units
 
   type crop_upgm
-      character(80) :: cliname              ! the name of the location for the climate data
       character(80) :: cropname             ! name of the crop
       character(5),dimension(30) :: dummy1  ! in determining the next phenological growth stage, this
                                             ! holds whether the condition is gn or gs, that is when gdd
@@ -393,8 +392,6 @@ module biomaterial
                                    ! soil moisture level values in elements 2 and 4.
       real,dimension(6) :: ggdd    ! a 6 element array that holds the germgdd values plus calculated values for two intermediate 
                                    ! soil moisture level values in elements 2 and 4.
-      
-      real :: co2atmos             ! the atmospheric level of CO2.
       real,dimension(10) :: co2x   ! the CO2 levels in ppm. The x axis on the relationship curve.
       real,dimension(10) :: co2y   ! the relative effect at different levels of CO2, i.e. co2x.
        

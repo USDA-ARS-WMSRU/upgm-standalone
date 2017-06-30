@@ -8,6 +8,10 @@
 !
 !------------------------------------------------------------------------------
     module support
+    use constants, only : dp
+    implicit none
+    
+ 
     
     
     

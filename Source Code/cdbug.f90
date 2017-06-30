@@ -14,7 +14,6 @@ implicit none
     type(soildata) :: soils
     type(biomatter) :: bio
 integer :: isr,slay
-integer :: julday
 !
 ! Local variables
 !

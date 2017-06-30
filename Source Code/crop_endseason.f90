@@ -13,7 +13,7 @@ subroutine crop_endseason(ctrl, bc0nam,bm0cfl,bnslay,bc0idc,bcdayam,bcthum,bcxst
 ! stage arrays for anthesis, harvest ready, internode elongation, jointing and
 ! maturity. other growth stage arrays will need to be added for other crops.
 !
-        use upgm_simdata, only : upgm_ctrls, controls
+        use upgm_simdata, only : controls
 implicit none
 !
 ! Dummy arguments

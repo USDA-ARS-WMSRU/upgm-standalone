@@ -1,14 +1,6 @@
-subroutine upgm_driver(ctrl,clidat,soils,bio, residue,biotot,prevbio,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,&
-                     & antes,antss,blstrs,boots,browns,callgdd,canht,canopyflg, &
-                     & cliname,cots,cropname,dayhtinc,dents,doughs,drs,dummy1,  &
-                     & dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods,ergdd,  &
-                     & eseeds,first7,fps,fullbs,gddtbg,germgdd,germs,ggdd,      &
-                     & gmethod,gpds,growth_stress,halfbs,heads,hrs,icli,ies,    &
-                     & ies2,infls,joints,lf12s,lf1s,lf2s,lf3s,lf4s,lf8s,mats,   &
-                     & maxht,mffls,milks,mpods,mseeds,opens,pchron,pd,phenolflg,&
-                     & pm,py,hd,hm,hy,seedsw,silks,soilwat,srs,tbase,tis,toptlo,&
-                     & toptup,tsints,tss,tupper,wfpslo,wfpsup,yelows,seedbed,   &
-                     & swtype,growcrop_flg,am0hrvfl,co2x,co2y,co2atmos)
+subroutine upgm_driver(                                         &
+        &       ctrl,clidat,soils,bio,residue,biotot,prevbio,   &
+        &       icli,pd,pm,py,hd,hm,hy, am0hrvfl)
 !
     use constants, only : mnsz, mnsub, mnbpls, mncz, mndk, mnhhrs
     use upgm_simdata, only : controls
@@ -27,26 +19,8 @@ implicit none
     type(biomatter), dimension(*) ::  residue
     type(biototal) :: biotot
 
-real :: aepa,canht,dayhtinc,ecanht,gddtbg,maxht,pchron,tbase,toptlo,toptup,     &
-      & tupper,co2atmos
-integer :: am0hrvfl,canopyflg,emrgflg,end_jday,first7,gmethod,growth_stress,    &
-         & harvest_jday,icli,pd,phenolflg,plant_jday,pm,py,hd,hm,hy,seedsw,sr,  &
-         & start_jday 
-logical :: callgdd,growcrop_flg
-character(80) :: cliname
-character(80) :: cropname
-character(40) :: seedbed,swtype
-integer,dimension(4) :: aifs,antes,antss,blstrs,boots,browns,cots,dents,doughs, &
-                      & drs,ears,ems,endlgs,epods,eseeds,fps,fullbs,germs,gpds, &
-                      & halfbs,heads,hrs,ies,ies2,infls,joints,lf12s,lf1s,lf2s, &
-                      & lf3s,lf4s,lf8s,mats,mffls,milks,mpods,mseeds,opens,     &
-                      & silks,srs,tis,tsints,tss,yelows
-character(5),dimension(30) :: dummy1
-real,dimension(30) :: dummy2
-real,dimension(6) :: egdd,ggdd
-real,dimension(4) :: ergdd,germgdd,wfpslo,wfpsup
-character(80),dimension(4) :: soilwat
-real,dimension(10) :: co2x,co2y
+integer :: am0hrvfl,    &
+         & icli,pd,pm,py,hd,hm, hy
 integer(kind=4) :: day_iter
 !
 ! Local variables
@@ -62,7 +36,7 @@ real :: elrate,germd,wlow,wup
 ! start of time loop - does this work correctly across multiple years and crops?
 !
 
-do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/31
+do day_iter = ctrl%sim%start_jday,ctrl%sim%end_jday   ! currently must start on 1/1 and end on 12/31
 !
   ctrl%sim%juldate = day_iter
  
@@ -94,7 +68,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
 !read in daily atmospheric co2 values.
   !co2dy = day; co2mn = month; co2yr = year
   !co2atmos = atmospheric co2 value for the day.
-  read (ctrl%handles%upgmco2atmos,*) co2dy, co2mn, co2yr, co2atmos  !upgm_co2atmos.dat
+  read (ctrl%handles%upgmco2atmos,*) co2dy, co2mn, co2yr, clidat%co2atmos  !upgm_co2atmos.dat
 
 !************************************************************************************
   !start of "crop growth" -> same for all models. 
@@ -102,9 +76,9 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
   
 !  if ((id.ne.29).or.(im.ne.2)) then !check if leap year
     !
-  if (ctrl%sim%juldate==plant_jday) then
+  if (ctrl%sim%juldate==ctrl%sim%plant_jday) then
      write (*,*) 'planting date: ',pd,'/',pm,'/',py
-     growcrop_flg = .true.
+     ctrl%sim%growcrop_flg = .true.
      bio%growth%am0cif = .true.
      bio%growth%am0cgf = .true.
   end if
@@ -114,12 +88,12 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
  
     ! debe added new method of determining when harvest day occurs utilizing the
     ! phenolflg and writing out the value in season.out
-  if (((phenolflg==1).and.(hrs(1)/=999).and.am0hrvfl==0).or.                    &
-    & ((phenolflg==0).and.( ctrl%sim%juldate==harvest_jday))) then
+  if (((bio%upgm%phenolflg==1).and.(bio%upgm%hrs(1)/=999).and.am0hrvfl==0).or.                    &
+    & ((bio%upgm%phenolflg==0).and.( ctrl%sim%juldate==ctrl%sim%harvest_jday))) then
  
-     if (phenolflg==1) then
-        write (*,*) 'harvest date: ',hrs(1),hrs(2),hrs(3),hrs(4)
-     else if (phenolflg==0) then
+     if (bio%upgm%phenolflg==1) then
+        write (*,*) 'harvest date: ',bio%upgm%hrs(1),bio%upgm%hrs(2),bio%upgm%hrs(3),bio%upgm%hrs(4)
+     else if (bio%upgm%phenolflg==0) then
         write (*,*) 'harvest date: ',hd,'/',hm,'/',hy
      end if
      bio%growth%am0cgf = .false.
@@ -134,8 +108,8 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
                        & prevbio%geometry%dstm,prevbio%geometry%zrtd,prevbio%growth%dayap,prevbio%growth%thucum,   &
                        & prevbio%growth%trthucum,prevbio%geometry%grainf,prevbio%growth%tchillucum,      &
                        & prevbio%growth%fliveleaf,bio%growth%dayspring,mature_warn_flg,      &
-                       & bio%database%ycon,bio%database%ynmu,ies,joints,boots,heads,antss,mats,hrs,   &
-                       & phenolflg)
+                       & bio%database%ycon,bio%database%ynmu,bio%upgm%ies,bio%upgm%joints,bio%upgm%boots,bio%upgm%heads,bio%upgm%antss,bio%upgm%mats,bio%upgm%hrs,   &
+                       & bio%upgm%phenolflg)
     !debe added acycon to the passing arguments to crop_endseason to allow calculation
     ! of the yield in crop_endseason.
     !debe added phenolflg and several growth stage arrays to be passed to crop_endseason
@@ -143,7 +117,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
     ! appropriate to each crop may need to be passed to crop_endseason.
   end if
     !
-  if (growcrop_flg.eqv..true.) then
+  if (ctrl%sim%growcrop_flg.eqv..true.) then
     !debe added the following variables for the emerge subroutine to the call to
     ! the callcrop subroutine: seedsw, soilwat, wfpslo, wfpsup, germgdd, ergdd,
     ! cropname, ddap, dgdds, elong, gddday.
@@ -161,23 +135,23 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
     ! debe added passing the new variable 'phenolflg' which is read in from upgm_crop.dat
     ! and the phenological growth stages variables to callcrop which will pass
     ! them on to crop.
-     call callcrop(ctrl,clidat,soils,bio,residue,biotot,prevbio,aepa,aifs,ctrl%sim%juldate-plant_jday+1,1,antes,antss,blstrs,boots,     &
-                 & browns,callgdd,canht,canopyflg,cliname,cots,cropname,        &
-                 & dayhtinc,dents,doughs,drs,dummy1,dummy2,ears,ecanht,egdd,    &
-                 & emrgflg,ems,endlgs,epods,ergdd,eseeds,first7,fps,fullbs,     &
-                 & gddtbg,germgdd,germs,ggdd,gmethod,gpds,growth_stress,halfbs, &
-                 & heads,hrs,icli,ies,ies2,infls,joints,lf12s,lf1s,lf2s,lf3s,   &
-                 & lf4s,lf8s,mats,maxht,mffls,milks,mpods,mseeds,opens,pchron,  &
-                 & pd,phenolflg,pm,py,seedsw,silks,soilwat,srs,tbase,tis,toptlo,&
-                 & toptup,tsints,tss,tupper,wfpslo,wfpsup,yelows,co2x,co2y,     &
-                 & co2atmos)
+     call callcrop(ctrl,clidat,soils,bio,residue,biotot,prevbio,bio%upgm%aepa,bio%upgm%aifs,ctrl%sim%juldate-ctrl%sim%plant_jday+1,1,bio%upgm%antes,bio%upgm%antss,bio%upgm%blstrs,bio%upgm%boots,     &
+                 & bio%upgm%browns,bio%upgm%callgdd,bio%upgm%canht,bio%upgm%canopyflg,ctrl%sim%cliname,bio%upgm%cots,bio%bname,        &
+                 & bio%upgm%dayhtinc,bio%upgm%dents,bio%upgm%doughs,bio%upgm%drs,bio%upgm%dummy1,bio%upgm%dummy2,bio%upgm%ears,bio%upgm%ecanht,bio%upgm%egdd,    &
+                 & bio%upgm%emrgflg,bio%upgm%ems,bio%upgm%endlgs,bio%upgm%epods,bio%upgm%ergdd,bio%upgm%eseeds,bio%upgm%first7,bio%upgm%fps,bio%upgm%fullbs,     &
+                 & bio%upgm%gddtbg,bio%upgm%germgdd,bio%upgm%germs,bio%upgm%ggdd,bio%upgm%gmethod,bio%upgm%gpds,bio%upgm%growth_stress,bio%upgm%halfbs, &
+                 & bio%upgm%heads,bio%upgm%hrs,icli,bio%upgm%ies,bio%upgm%ies2,bio%upgm%infls,bio%upgm%joints,bio%upgm%lf12s,bio%upgm%lf1s,bio%upgm%lf2s,bio%upgm%lf3s,   &
+                 & bio%upgm%lf4s,bio%upgm%lf8s,bio%upgm%mats,bio%upgm%maxht,bio%upgm%mffls,bio%upgm%milks,bio%upgm%mpods,bio%upgm%mseeds,bio%upgm%opens,bio%upgm%pchron,  &
+                 & pd,bio%upgm%phenolflg,pm,py,bio%upgm%seedsw,bio%upgm%silks,bio%upgm%soilwat,bio%upgm%srs,bio%upgm%tbase,bio%upgm%tis,bio%upgm%toptlo,&
+                 & bio%upgm%toptup,bio%upgm%tsints,bio%upgm%tss,bio%upgm%tupper,bio%upgm%wfpslo,bio%upgm%wfpsup,bio%upgm%yelows,bio%upgm%co2x,bio%upgm%co2y,     &
+                 & clidat%co2atmos)
  
          !if (am0jd.eq.harvest_jday) growcrop_flg = .false.
          !de and gm changed the above code so that if the input harvest date is
          ! reached before hrs(1) has a value .ne. to 999 when using phenolflg = 1,
          ! simulation will continue until it does reach a harvest date.
-     if (((phenolflg==1).and.(hrs(1)/=999)).or.                                 &
-       & ((phenolflg==0).and.(ctrl%sim%juldate==harvest_jday))) growcrop_flg = .false.
+     if (((bio%upgm%phenolflg==1).and.(bio%upgm%hrs(1)/=999)).or.                                 &
+       & ((bio%upgm%phenolflg==0).and.(ctrl%sim%juldate==ctrl%sim%harvest_jday))) ctrl%sim%growcrop_flg = .false.
  
   end if
   
@@ -187,7 +161,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
 ! end if !end leap year check
 end do ! end do loop for current day
     ! debe print out canopy height and the canopyflg at the end of the run
-write (ctrl%handles%luophenol,1000) canht,canopyflg
+write (ctrl%handles%luophenol,1000) bio%upgm%canht,bio%upgm%canopyflg
     !
  1000 format ('canopy height =',2x,f5.1,'(cm) ','canopyflg = ',2x,i1)
  
