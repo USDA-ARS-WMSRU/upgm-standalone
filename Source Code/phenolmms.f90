@@ -1,4 +1,4 @@
-subroutine phenolmms(aepa,aifs,antes,antss,bc0growdepth,bctmin,bhfwsf,blstrs,   &
+subroutine phenolmms(ctrl, aepa,aifs,antes,antss,bc0growdepth,bctmin,bhfwsf,blstrs,   &
                    & boots,browns,bwtdmn,bwtdmx,canht,cliname,cname,cots,       &
                    & cropname,daa,dae,dap,dav,dayhtinc,daynum,dd,ddae,ddap,ddav,&
                    & dents,dgdde,dgdds,dgddv,doughs,drs,dummy2,ears,ecanht,     &
@@ -15,10 +15,12 @@ subroutine phenolmms(aepa,aifs,antes,antss,bc0growdepth,bctmin,bhfwsf,blstrs,   
 !phenolmms will then call the appropriate subroutines brought in from
 !phenologymms.
 !
+    use upgm_simdata, only : controls
 implicit none
 !
 ! Dummy arguments
 !
+    type(controls) :: ctrl
 real :: aepa,bc0growdepth,bctmin,bhfwsf,bwtdmn,bwtdmx,canht,dayhtinc,ecanht,    &
       & gdda,gddday,gdde,gdds,gddv,maxht,pchron,tbase,todayln,toptlo,           & 
       & toptup,tupper,yestln,ln
@@ -460,7 +462,7 @@ if (ems(1)/=999) then       ! emergence has occurred
 !debe added canht to pass to phenol to be written in phenol.out from
 !phenol_cropname. debe added variables for dry beans.
  
-  call phenol(aepa,aifs,antes,antss,bc0growdepth,bhfwsf,blstrs,boots,browns,    &
+  call phenol(ctrl, aepa,aifs,antes,antss,bc0growdepth,bhfwsf,blstrs,boots,browns,    &
             & cliname,cname,cots,daa,dae,dap,dav,daynum,ddae,ddap,ddav,dgdde,   &
             & dgdds,dgddv,doughs,drs,dummy2,ears,emrgflg,ems,endlgs,endphenol,  &
             & dents,epods,eseeds,first7,fps,fullbs,gdda,gdde,gdds,gddv,gddwsf,  &

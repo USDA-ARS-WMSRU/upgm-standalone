@@ -8,8 +8,6 @@ program main
 !
 implicit none
 !
-include 'file.fi'
-!
 ! Local variables
 !
     type(biomatter) :: bio,prevbio
@@ -607,36 +605,36 @@ data icli/0/
 !
 ! open required input files
 !
-cropxml = 170000 + offsetforfiles
-upgmmgt = 10000 + offsetforfiles
-upgmstress = 20000 + offsetforfiles
-upgmcli = 30000 + offsetforfiles
-upgmcrop = 40000 + offsetforfiles
-upgmco2 = 50000 + offsetforfiles
-upgmco2atmos = 60000 + offsetforfiles
-luicli = 70000 + offsetforfiles
-luocrop = 80000 + offsetforfiles
-luoshoot = 90000 + offsetforfiles
-luoseason = 100000 + offsetforfiles
-luoinpt = 110000 + offsetforfiles
-luoemerge = 120000 + offsetforfiles
-luophenol = 130000 + offsetforfiles
-luocanopyht = 140000 + offsetforfiles
-luoallcrop = 150000 + offsetforfiles
-cdbugfile = 160000 + offsetforfiles
+upgm_ctrls%handles%cropxml = 170000 + offsetforfiles
+upgm_ctrls%handles%upgmmgt = 10000 + offsetforfiles
+upgm_ctrls%handles%upgmstress = 20000 + offsetforfiles
+upgm_ctrls%handles%upgmcli = 30000 + offsetforfiles
+upgm_ctrls%handles%upgmcrop = 40000 + offsetforfiles
+upgm_ctrls%handles%upgmco2 = 50000 + offsetforfiles
+upgm_ctrls%handles%upgmco2atmos = 60000 + offsetforfiles
+upgm_ctrls%handles%luicli = 70000 + offsetforfiles
+upgm_ctrls%handles%luocrop = 80000 + offsetforfiles
+upgm_ctrls%handles%luoshoot = 90000 + offsetforfiles
+upgm_ctrls%handles%luoseason = 100000 + offsetforfiles
+upgm_ctrls%handles%luoinpt = 110000 + offsetforfiles
+upgm_ctrls%handles%luoemerge = 120000 + offsetforfiles
+upgm_ctrls%handles%luophenol = 130000 + offsetforfiles
+upgm_ctrls%handles%luocanopyht = 140000 + offsetforfiles
+upgm_ctrls%handles%luoallcrop = 150000 + offsetforfiles
+upgm_ctrls%handles%cdbugfile = 160000 + offsetforfiles
 !Rmarquez 2.10.17 -> added new offset value
-soilprofile = 180000 + offsetforfiles
+upgm_ctrls%handles%soilprofile = 180000 + offsetforfiles
 
-call fopenk(cropxml,'cropxml.dat','old')      ! open weps crop parameter file
+call fopenk(upgm_ctrls%handles%cropxml,'cropxml.dat','old')      ! open weps crop parameter file
 ! call fopenk(luicli,'cligen.cli','old')  ! open cligen climate 
-call fopenk(upgmmgt,'upgm_mgmt.dat','old')    ! open management file
-call fopenk(upgmstress,'upgm_stress.dat','old')  ! open water stress file
-call fopenk(upgmcli,'upgm_cli.dat','old')     ! open historical climate file
-call fopenk(upgmcrop,'upgm_crop.dat','old')    ! open upgm crop file
-call fopenk(upgmco2,'upgm_co2.dat','old')     ! open upgm co2 file. DE added for co2 effects
-call fopenk(upgmco2atmos,'upgm_co2atmos.dat','old') ! open upgm daily atmospheric co2 file.
+call fopenk(upgm_ctrls%handles%upgmmgt,'upgm_mgmt.dat','old')    ! open management file
+call fopenk(upgm_ctrls%handles%upgmstress,'upgm_stress.dat','old')  ! open water stress file
+call fopenk(upgm_ctrls%handles%upgmcli,'upgm_cli.dat','old')     ! open historical climate file
+call fopenk(upgm_ctrls%handles%upgmcrop,'upgm_crop.dat','old')    ! open upgm crop file
+call fopenk(upgm_ctrls%handles%upgmco2,'upgm_co2.dat','old')     ! open upgm co2 file. DE added for co2 effects
+call fopenk(upgm_ctrls%handles%upgmco2atmos,'upgm_co2atmos.dat','old') ! open upgm daily atmospheric co2 file.
 !Rmarquez 2.10.17 -> added new profile file
-call fopenk(soilprofile, 'upgm_soil_profile.dat', 'old') ! open soil profile file to initialize profile
+call fopenk(upgm_ctrls%handles%soilprofile, 'upgm_soil_profile.dat', 'old') ! open soil profile file to initialize profile
 !
 !debe added these variables to be initialized. added canopyflg for determining
 ! which method of calculating canopy height will be used. added dayhtinc to get
@@ -652,7 +650,7 @@ max_depth = 0
 do
     ! start max depth at 1
     max_depth = max_depth + 1
-    read (soilprofile, *, IOSTAT=io) soils%spp%aszlyt(max_depth)
+    read (upgm_ctrls%handles%soilprofile, *, IOSTAT=io) soils%spp%aszlyt(max_depth)
     if (io > 0) then
         ! error, exit
         exit
@@ -745,7 +743,7 @@ biotot%xstmrep = 0.0   ! initialize repesentative stem dia.
 !upgm_bio%bname
 ! read in plant parameters from cropxml.dat
 !
-read (cropxml,' (a80) ') bio%bname
+read (upgm_ctrls%handles%cropxml,' (a80) ') bio%bname
 !debe set cropname to the proper form so it can be used in the phenol and
 ! canopyht subroutines and not need to be changed in either one.
  
@@ -775,28 +773,28 @@ else if (bio%bname=='barleywinter') then
 else if (bio%bname=='wheatwinter') then
   bio%bname = 'winter wheat'
 end if
-read (cropxml,*) bio%geometry%dpop,bio%database%dmaxshoot,bio%database%baflg,bio%database%ytgt,bio%database%baf,bio%database%yraf,    &
+read (upgm_ctrls%handles%cropxml,*) bio%geometry%dpop,bio%database%dmaxshoot,bio%database%baflg,bio%database%ytgt,bio%database%baf,bio%database%yraf,    &
          & bio%geometry%hyfg,bio%database%ynmu
-read (cropxml,*) bio%database%ywct,bio%database%ycon,bio%database%idc,bio%database%grf,bio%database%ck,bio%database%ehu0,bio%database%zmxc, &
+read (upgm_ctrls%handles%cropxml,*) bio%database%ywct,bio%database%ycon,bio%database%idc,bio%database%grf,bio%database%ck,bio%database%ehu0,bio%database%zmxc, &
          & bio%database%growdepth
-read (cropxml,*) bio%database%zmrt,bio%database%tmin,bio%database%topt,bio%database%thudf,bio%database%tdtm,bio%database%thum,        &
+read (upgm_ctrls%handles%cropxml,*) bio%database%zmrt,bio%database%tmin,bio%database%topt,bio%database%thudf,bio%database%tdtm,bio%database%thum,        &
          & bio%database%fd1(1),bio%database%fd2(1)
-read (cropxml,*) bio%database%fd1(2),bio%database%fd2(2),bio%database%tverndel,bio%database%bceff,bio%database%alf,bio%database%blf&
+read (upgm_ctrls%handles%cropxml,*) bio%database%fd1(2),bio%database%fd2(2),bio%database%tverndel,bio%database%bceff,bio%database%alf,bio%database%blf&
          & ,bio%database%clf,bio%database%dlf
-read (cropxml,*) bio%database%arp,bio%database%brp,bio%database%crp,bio%database%drp,bio%database%aht,bio%database%bht,bio%database%ssa&
+read (upgm_ctrls%handles%cropxml,*) bio%database%arp,bio%database%brp,bio%database%crp,bio%database%drp,bio%database%aht,bio%database%bht,bio%database%ssa&
          & ,bio%database%ssb
-read (cropxml,*) bio%database%sla,bio%database%hue,bio%database%transf,bio%database%diammax,bio%database%storeinit,      &
+read (upgm_ctrls%handles%cropxml,*) bio%database%sla,bio%database%hue,bio%database%transf,bio%database%diammax,bio%database%storeinit,      &
          & bio%database%shoot,bio%database%fleafstem,bio%database%fshoot
-read (cropxml,*) bio%database%fleaf2stor,bio%database%fstem2stor,bio%database%fstor2stor,bio%database%rbc,            &
+read (upgm_ctrls%handles%cropxml,*) bio%database%fleaf2stor,bio%database%fstem2stor,bio%database%fstor2stor,bio%database%rbc,            &
          & bio%database%dkrate(1),bio%database%dkrate(2),bio%database%dkrate(3),bio%database%dkrate(4)
-read (cropxml,*) bio%database%dkrate(5),bio%database%xstm,bio%database%ddsthrsh,bio%database%covfact,bio%database%resevapa,    &
+read (upgm_ctrls%handles%cropxml,*) bio%database%dkrate(5),bio%database%xstm,bio%database%ddsthrsh,bio%database%covfact,bio%database%resevapa,    &
          & bio%database%resevapb,bio%database%yld_coef,bio%database%resid_int
 !
 !read management information from upgm_mgmt.dat. currently it includes
 ! starting and ending day, month, and year for planting and harvest.
 !
-read (upgmmgt,*) sd,sm,sy,ed,em,ey
-read (upgmmgt,*) pd,pm,py,hd,hm,hy
+read (upgm_ctrls%handles%upgmmgt,*) sd,sm,sy,ed,em,ey
+read (upgm_ctrls%handles%upgmmgt,*) pd,pm,py,hd,hm,hy
  
 start_jday = julday(sd,sm,sy)
  
@@ -815,9 +813,9 @@ print *,'crop=',cropname
 !read in canopyflg and emergence data for the crop from upgm_crop.dat.
 !debe added reading in phenolflg from upgm_crop.dat
  
-read (upgmcrop,*) canopyflg,emrgflg,phenolflg
+read (upgm_ctrls%handles%upgmcrop,*) canopyflg,emrgflg,phenolflg
   if ((canopyflg .EQ. 1) .OR. (emrgflg .EQ. 1) .OR. (phenolflg .EQ. 1)) then
-    read (upgmcrop,*) seedbed
+    read (upgm_ctrls%handles%upgmcrop,*) seedbed
     if (seedbed=='Optimum') then
       seedsw = 1          !set seedsw = to a real number. changed back to integer 2/23/11
     else if (seedbed=='Medium') then
@@ -855,15 +853,15 @@ read (upgmcrop,*) canopyflg,emrgflg,phenolflg
     !
     ! put these values into 5 one dimensional arrays.
     do i = 1,row
-      read (upgmcrop,*) swtype          !swtype = soil moisture condition.
+      read (upgm_ctrls%handles%upgmcrop,*) swtype          !swtype = soil moisture condition.
       soilwat(i) = swtype
-      read (upgmcrop,*) wlow            !wlow = lower range of soil moisture
+      read (upgm_ctrls%handles%upgmcrop,*) wlow            !wlow = lower range of soil moisture
       wfpslo(i) = wlow
-      read (upgmcrop,*) wup             !wup = upper range of soil moisture
+      read (upgm_ctrls%handles%upgmcrop,*) wup             !wup = upper range of soil moisture
       wfpsup(i) = wup
-      read (upgmcrop,*) germd           !germd = gdd's for germination at soil moisture
+      read (upgm_ctrls%handles%upgmcrop,*) germd           !germd = gdd's for germination at soil moisture
       germgdd(i) = germd
-      read (upgmcrop,*) elrate          !elrate = elongation for emergence
+      read (upgm_ctrls%handles%upgmcrop,*) elrate          !elrate = elongation for emergence
       ergdd(i) = elrate
  
     end do
@@ -875,64 +873,64 @@ read (upgmcrop,*) canopyflg,emrgflg,phenolflg
     !
     !the following is read in whether leaf number or gdd is used.
     ! read in phenology parameters and 4 temperature values from upgm_crop.dat.
-    read (upgmcrop,*) pchron
-    read (upgmcrop,*) tbase
-    read (upgmcrop,*) toptlo
-    read (upgmcrop,*) toptup
-    read (upgmcrop,*) tupper
+    read (upgm_ctrls%handles%upgmcrop,*) pchron
+    read (upgm_ctrls%handles%upgmcrop,*) tbase
+    read (upgm_ctrls%handles%upgmcrop,*) toptlo
+    read (upgm_ctrls%handles%upgmcrop,*) toptup
+    read (upgm_ctrls%handles%upgmcrop,*) tupper
  
     ! read in method of calculating gdd (gmethod) from upgm_crop.dat
-    read (upgmcrop,*) gmethod
+    read (upgm_ctrls%handles%upgmcrop,*) gmethod
  
     !debe added reading in maxht value for canopy height subroutine.
     !debe added ecanht for height in phase 1 of canopy height.
-    read (upgmcrop,*) maxht,ecanht
+    read (upgm_ctrls%handles%upgmcrop,*) maxht,ecanht
     print *,'maxht = ',maxht,'ecanht = ',ecanht
  
     !debe added reading in growth_stress to set which kind of stress is to be used:
     ! 0=no stress, 1=water stress only, 2=temp stress only,
     ! 3=min of water and temp stress.
-    read (upgmcrop,*) growth_stress
+    read (upgm_ctrls%handles%upgmcrop,*) growth_stress
     print *,'growth_stress = ',growth_stress
     !debe changed dimensions of dummy1 and dummy2 to allow both non-stresseed
     ! and stressed values to be read in.
     do i = 1,30
-      read (upgmcrop,*) dummy1(i),dummy2(i)
+      read (upgm_ctrls%handles%upgmcrop,*) dummy1(i),dummy2(i)
       if (dummy1(i)=='ln'.or.dummy1(i)=='ls') dummy2(i) = dummy2(i)*pchron
     end do
   end if
 
 !debe added for CO2 table
 do k = 1, 10
-    read (upgmco2,*) co2x(k),co2y(k)
+    read (upgm_ctrls%handles%upgmco2,*) co2x(k),co2y(k)
     !print *, 'co2x = ', co2x, 'co2y = ', co2y 
 end do
 
-call climate_init(clidat,icli,cliname)    ! reads monthly and yearly climate variables
+call climate_init(upgm_ctrls,clidat,icli,cliname)    ! reads monthly and yearly climate variables
  
 if (bio%growth%am0cfl>0) then
-luocrop = 80000 + offsetforfiles
-luoshoot = 90000 + offsetforfiles
-luoseason = 100000 + offsetforfiles
-luoinpt = 110000 + offsetforfiles
-luoemerge = 120000 + offsetforfiles
-luophenol = 130000 + offsetforfiles
-luocanopyht = 140000 + offsetforfiles
-luoallcrop = 150000 + offsetforfiles
-cdbugfile = 160000 + offsetforfiles
-  call fopenk(luocrop,'crop.out','unknown')    ! daily crop output of most state variables
-  call fopenk(luoseason,'season.out','unknown')  ! seasonal summaries of yield and biomass
-  call fopenk(luoinpt,'inpt.out','unknown')    ! echo crop input data
-  call fopenk(luoshoot,'shoot.out','unknown')   ! crop shoot output
-  call fopenk(luoemerge,'emerge.out','unknown')  ! debe added for emergence output
-  call fopenk(luophenol,'phenol.out','unknown')  ! debe added for phenology output
-  call fopenk(luocanopyht,'canopyht.out','unknown')
+upgm_ctrls%handles%luocrop = 80000 + offsetforfiles
+upgm_ctrls%handles%luoshoot = 90000 + offsetforfiles
+upgm_ctrls%handles%luoseason = 100000 + offsetforfiles
+upgm_ctrls%handles%luoinpt = 110000 + offsetforfiles
+upgm_ctrls%handles%luoemerge = 120000 + offsetforfiles
+upgm_ctrls%handles%luophenol = 130000 + offsetforfiles
+upgm_ctrls%handles%luocanopyht = 140000 + offsetforfiles
+upgm_ctrls%handles%luoallcrop = 150000 + offsetforfiles
+upgm_ctrls%handles%cdbugfile = 160000 + offsetforfiles
+  call fopenk(upgm_ctrls%handles%luocrop,'crop.out','unknown')    ! daily crop output of most state variables
+  call fopenk(upgm_ctrls%handles%luoseason,'season.out','unknown')  ! seasonal summaries of yield and biomass
+  call fopenk(upgm_ctrls%handles%luoinpt,'inpt.out','unknown')    ! echo crop input data
+  call fopenk(upgm_ctrls%handles%luoshoot,'shoot.out','unknown')   ! crop shoot output
+  call fopenk(upgm_ctrls%handles%luoemerge,'emerge.out','unknown')  ! debe added for emergence output
+  call fopenk(upgm_ctrls%handles%luophenol,'phenol.out','unknown')  ! debe added for phenology output
+  call fopenk(upgm_ctrls%handles%luocanopyht,'canopyht.out','unknown')
                                           !debe added for canopy height output
-  call cpout(bio)                              ! print headings for crop output files
+  call cpout(upgm_ctrls, bio)                              ! print headings for crop output files
 end if
 !
-if (bio%growth%am0cfl>1) call fopenk(luoallcrop,'allcrop.prn','unknown')     ! main crop debug output file
-if (upgm_ctrls%sim%am0cdb>0) call fopenk(cdbugfile,'cdbug.out','unknown')       ! crop submodel debug output file
+if (bio%growth%am0cfl>1) call fopenk(upgm_ctrls%handles%luoallcrop,'allcrop.prn','unknown')     ! main crop debug output file
+if (upgm_ctrls%sim%am0cdb>0) call fopenk(upgm_ctrls%handles%cdbugfile,'cdbug.out','unknown')       ! crop submodel debug output file
 !
 call upgm_driver(upgm_ctrls,clidat,soils,bio,residue,biotot,prevbio,sr,start_jday,end_jday,plant_jday,harvest_jday,aepa,aifs,antes,&
                & antss,blstrs,boots,browns,callgdd,canht,canopyflg,cliname,cots,&

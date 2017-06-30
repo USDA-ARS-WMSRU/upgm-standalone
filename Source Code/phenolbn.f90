@@ -1,4 +1,4 @@
-subroutine phenolbn(aepa,antss,pdepth,bhfwsf,cots,cliname,cname,daa,dae,dap,    &
+subroutine phenolbn(ctrl, aepa,antss,pdepth,bhfwsf,cots,cliname,cname,daa,dae,dap,    &
                   & daynum,ddae,ddap,dgdde,dgdds,dummy2,emrgflg,ems,endphenol,  &
                   & epods,eseeds,first7,gdda,gdde,gdds,gddwsf,gmethod,hrs,lf1s, &
                   & lf2s,lf3s,lf4s,lnpout,mats,mffls,mpods,mseeds,pchron,pdate, &
@@ -21,12 +21,12 @@ subroutine phenolbn(aepa,antss,pdepth,bhfwsf,cots,cliname,cname,daa,dae,dap,    
 !          ies(c,r), joints(c,r), mats(c,r), srs(c,r), tis(c,r),
 !          tss(c,r)
 !
+    use upgm_simdata, only : controls
 implicit none
-!
-include 'file.fi'
 !
 ! Dummy arguments
 !
+    type(controls) :: ctrl
 real :: aepa,bhfwsf,gdda,gdde,gdds,pchron,pdepth
 character(80) :: cliname
 character(80) :: cname,seedbed
@@ -452,7 +452,7 @@ if (hrs(1)/=999) then
   call date1(pdatearr)
  
 !  heading for leaf number table
-  write (luophenol,1000) cname
+  write (ctrl%handles%luophenol,1000) cname
   
 ! The following is the old way of writing out the leaf numbers which allowed &
 ! the discrepancy in the maximum leaf number in the leaf number table versus &
@@ -462,25 +462,25 @@ if (hrs(1)/=999) then
 !  do j = 1,60
 !!  write only the integer values that are greater than 0 
 !     if ((lnpout(j,2)<dgdde(9)/pchron).and.(lnpout(j,2)>0.0))                 &                
-!       & write (luophenol,1100) lnpout(j,1),lnpout(j,2)
+!       & write (ctrl%handles%luophenol,1100) lnpout(j,1),lnpout(j,2)
 !  end do
   
       do while (lnpout(j,2) .le. dgdde(9)/pchron)
-        write (luophenol,1100) lnpout(j,1),lnpout(j,2)
+        write (ctrl%handles%luophenol,1100) lnpout(j,1),lnpout(j,2)
         j = j + 1
       end do 
       
 !! convert integer epods(1) to a real number
-      write(luophenol,1100) real (epods(1)), dgdde(9)/pchron
+      write(ctrl%handles%luophenol,1100) real (epods(1)), dgdde(9)/pchron
 
-      write (luophenol,1200)
+      write (ctrl%handles%luophenol,1200)
                    ! leaf number table
 !
 !debe add items to print to the output file phenol.out
-  write (luophenol,1300) cname,cliname,pdepth,pdatearr(1),pdatearr(3),          &
+  write (ctrl%handles%luophenol,1300) cname,cliname,pdepth,pdatearr(1),pdatearr(3),          &
                        & pdatearr(4),gmethod,emrgflg,seedbed,bhfwsf
  
-  write (luophenol,1400) pdatearr(1),pdatearr(3),pdatearr(4),ems(1),ems(3),     &
+  write (ctrl%handles%luophenol,1400) pdatearr(1),pdatearr(3),pdatearr(4),ems(1),ems(3),     &
                        & ems(4),ddap(1),dgdds(1),cots(1),cots(3),cots(4),ddap(2)&
                        & ,ddae(2),dgdds(2),dgdde(2),dgdde(2)/pchron,lf1s(1),    &
                        & lf1s(3),lf1s(4),ddap(3),ddae(3),dgdds(3),dgdde(3),     &
@@ -503,7 +503,7 @@ if (hrs(1)/=999) then
                        & dgdds(14),dgdde(14),dgdde(9)/pchron
  
 ! debe added writing out and formatting of the gddwsf array
-  write (luophenol,1500) gddwsf(1,1),gddwsf(1,2),gddwsf(1,3),gddwsf(1,4),       &
+  write (ctrl%handles%luophenol,1500) gddwsf(1,1),gddwsf(1,2),gddwsf(1,3),gddwsf(1,4),       &
                        & gddwsf(1,5),gddwsf(2,1),gddwsf(2,2),gddwsf(2,3),       &
                        & gddwsf(2,4),gddwsf(2,5),gddwsf(3,1),gddwsf(3,2),       &
                        & gddwsf(3,3),gddwsf(3,4),gddwsf(3,5),gddwsf(4,1),       &

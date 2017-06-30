@@ -1,4 +1,4 @@
-subroutine phenol(aepa,aifs,antes,antss,pdepth,bhfwsf,blstrs,boots,browns,      &
+subroutine phenol(ctrl,aepa,aifs,antes,antss,pdepth,bhfwsf,blstrs,boots,browns,      &
                 & cliname,cname,cots,daa,dae,dap,dav,daynum,ddae,ddap,ddav,     &
                 & dgdde,dgdds,dgddv,doughs,drs,dummy2,ears,emrgflg,ems,endlgs,  &
                 & endphenol,dents,epods,eseeds,first7,fps,fullbs,gdda,gdde,gdds,&
@@ -36,10 +36,12 @@ subroutine phenol(aepa,aifs,antes,antss,pdepth,bhfwsf,blstrs,boots,browns,      
 !water_stress subroutine which is not a phenologymms subroutine but one that we
 !added to upgm. will leave bhfwsf as is.
 !
+    use upgm_simdata, only : controls
 implicit none
 !
 ! Dummy arguments
 !
+    type(controls) :: ctrl
 real :: aepa,bhfwsf,gdda,gdde,gdds,gddv,pchron,pdepth 
 character(80) :: cliname
 character(80) :: cname
@@ -301,7 +303,7 @@ end if
 ! be adjusted to read only 'corn'.
 if ((cname=='corn').and.(endphenol.neqv..true.)) then
 !print*, 'in call to phenolcn in phenol. dummy2(5) = ', dummy2(5)
-  call phenolcn(aepa,antss,pdepth,bhfwsf,blstrs,cliname,cname,daa,dae,dap,      &
+  call phenolcn(ctrl,aepa,antss,pdepth,bhfwsf,blstrs,cliname,cname,daa,dae,dap,      &
               & daynum,ddae,ddap,dents,dgdde,dgdds,doughs,dummy2,ears,emrgflg,  &
               & ems,first7,gdda,gdde,gdds,gddwsf,gmethod,hrs,ies,lf12s,lf4s,    &
               & lnpout,mats,milks,pchron,pdate,seedbed,silks,tsints,year,       &
@@ -309,28 +311,28 @@ if ((cname=='corn').and.(endphenol.neqv..true.)) then
  
 ! if dry beans (crop name in cropxml.dat needs to read drybeans)
 else if ((cname=='dry beans').and.(endphenol.neqv..true.)) then
-  call phenolbn(aepa,antss,pdepth,bhfwsf,cots,cliname,cname,daa,dae,dap,daynum, &
+  call phenolbn(ctrl,aepa,antss,pdepth,bhfwsf,cots,cliname,cname,daa,dae,dap,daynum, &
               & ddae,ddap,dgdde,dgdds,dummy2,emrgflg,ems,endphenol,epods,eseeds,&
               & first7,gdda,gdde,gdds,gddwsf,gmethod,hrs,lf1s,lf2s,lf3s,lf4s,   &
               & lnpout,mats,mffls,mpods,mseeds,pchron,pdate,seedbed,year)
  
 ! if hay millet:
 else if ((cname=='hay millet').and.(endphenol.neqv..true.)) then
-  call phenolhm(aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae,dap, &
+  call phenolhm(ctrl,aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae,dap, &
               & daynum,ddae,ddap,dgdde,dgdds,drs,dummy2,emrgflg,ems,endphenol,  &
               & first7,fps,gdda,gdde,gdds,gddwsf,gmethod,heads,hrs,ies,joints,  &
               & lnpout,mats,pchron,pdate,seedbed,srs,tis,tss,year)
  
 ! if proso millet:
 else if ((cname=='proso millet').and.(endphenol.neqv..true.)) then
-  call phenolpm(aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae,dap, &
+  call phenolpm(ctrl,aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae,dap, &
               & daynum,ddae,ddap,dgdde,dgdds,drs,dummy2,emrgflg,ems,endphenol,  &
               & first7,fps,gdda,gdde,gdds,gddwsf,gmethod,heads,hrs,ies,joints,  &
               & lnpout,mats,pchron,pdate,seedbed,srs,tis,tss,year)
  
 ! if sorghum:
 else if ((cname=='sorghum').and.(endphenol.neqv..true.)) then
-  call phenolsg(aepa,antes,antss,pdepth,bhfwsf,cliname,cname,daa,dae,dap,   &
+  call phenolsg(ctrl,aepa,antes,antss,pdepth,bhfwsf,cliname,cname,daa,dae,dap,   &
                   & daynum,ddae,ddap,dgdde,dgdds,dummy2,emrgflg,ems,endlgs,     &
                   & endphenol,first7,fullbs,gdda,gdde,gdds,gddwsf,gpds,gmethod, &
                   & halfbs,hrs,ies,joints,lnpout,mats,pchron,pdate,seedbed,tis, &
@@ -338,28 +340,28 @@ else if ((cname=='sorghum').and.(endphenol.neqv..true.)) then
 
 ! if spring barley:
 else if ((cname=='spring barley').and.(endphenol.neqv..true.)) then
-  call phenolsb(aepa,aifs,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae,&
+  call phenolsb(ctrl,aepa,aifs,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae,&
               & dap,daynum,ddae,ddap,dgdde,dgdds,drs,dummy2,emrgflg,ems,        &
               & endphenol,first7,fps,gdda,gdde,gdds,gddwsf,gmethod,heads,hrs,   &
               & ies,joints,lnpout,mats,pchron,pdate,seedbed,srs,tis,year)
  
 ! if spring wheat:
 else if ((cname=='spring wheat').and.(endphenol.neqv..true.)) then
-  call phenolsw(aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae,dap, &
+  call phenolsw(ctrl,aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae,dap, &
               & daynum,ddae,ddap,dgdde,dgdds,drs,dummy2,emrgflg,ems,endphenol,  &
               & first7,fps,gdda,gdde,gdds,gddwsf,gmethod,heads,hrs,ies,joints,  &
               & lnpout,mats,pchron,pdate,seedbed,srs,tis,tss,year)
  !
 ! if sunflower:
 else if ((cname=='sunflower').and.(endphenol.neqv..true.)) then
-  call phenolsf(aepa,antes,antss,pdepth,bhfwsf,browns,cliname,cname,daa,dae,dap,&
+  call phenolsf(ctrl,aepa,antes,antss,pdepth,bhfwsf,browns,cliname,cname,daa,dae,dap,&
               & daynum,ddae,ddap,dgdde,dgdds,dummy2,emrgflg,ems,endphenol,      &
               & first7,gdda,gdde,gdds,gddwsf,gmethod,hrs,ies,ies2,infls,lf12s,  &
               & lf4s,lf8s,lnpout,mats,opens,pchron,pdate,seedbed,year,yelows)
  
 ! if winter barley:
 else if ((cname=='winter barley').and.(endphenol.neqv..true.)) then
-  call phenolwb(aepa,aifs,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae,&
+  call phenolwb(ctrl,aepa,aifs,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae,&
               & dap,dav,daynum,ddae,ddap,ddav,dgdde,dgdds,dgddv,drs,dummy2,ems, &
               & emrgflg,endphenol,first7,fps,gdda,gdde,gdds,gddv,gddwsf,gmethod,&
               & heads,hrs,ies,joints,lnpout,mats,pchron,pdate,seedbed,srs,tis,  &
@@ -367,7 +369,7 @@ else if ((cname=='winter barley').and.(endphenol.neqv..true.)) then
  
 ! if winter wheat:
 else if ((cname=='winter wheat').and.(endphenol.neqv..true.)) then
-  call phenolww(aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae,dap, &
+  call phenolww(ctrl,aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae,dap, &
               & dav,daynum,ddae,ddap,ddav,dgdde,dgdds,dgddv,dummy2,drs,emrgflg, &
               & ems,first7,fps,gdda,gdde,gdds,gddv,gddwsf,gmethod,heads,hrs,ies,&
               & joints,lnpout,mats,pchron,pdate,seedbed,srs,tis,tss,year,       &

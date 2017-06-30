@@ -1,13 +1,13 @@
-subroutine climate_init(clidat,icli,cliname)
+subroutine climate_init(ctrl,clidat,icli,cliname)
 !
     use climate, only : climate_data
+    use upgm_simdata, only : controls
 implicit none
-!
-include 'file.fi'
 !
 ! Dummy arguments
 !
     type(climate_data) :: clidat
+    type(controls) :: ctrl
 character(80) :: cliname
 integer :: icli
 real :: empty_value
@@ -42,61 +42,61 @@ integer :: idx
 !
 if (icli==1) then    ! read from cligen data file
 !
-  rewind luicli
+  rewind ctrl%handles%luicli
 !debe add reading in the location climate name
-  read (luicli,'(a128)') cliname
+  read (ctrl%handles%luicli,'(a128)') cliname
 !
   do idx = 1,6          ! skip first six lines
-     read (luicli,'(a128)') header
+     read (ctrl%handles%luicli,'(a128)') header
 !   write(6,*) 'header: ', header,':'
   end do
 !
 ! read monthy average of daily maximum temperature
 !
-  read (luicli,*) (clidat%awtmxav(idx),idx=1,12)
+  read (ctrl%handles%luicli,*) (clidat%awtmxav(idx),idx=1,12)
 ! write(6,*)  (awtmxav(idx), idx = 1,12)
 !
-  read (luicli,'(a128)') header
+  read (ctrl%handles%luicli,'(a128)') header
 ! write(6,*) 'header: ', header
 !
 ! read monthy average of daily minimum temperature
 !
-  read (luicli,*) (clidat%awtmnav(idx),idx=1,12)
+  read (ctrl%handles%luicli,*) (clidat%awtmnav(idx),idx=1,12)
 ! write(6,*)  (awtmnav(idx), idx = 1,12)
 !
 !
 ! read three lines to get to precipitation values
 !
   do idx = 1,3
-     read (luicli,'(a128)') header
+     read (ctrl%handles%luicli,'(a128)') header
 !   write(6,*) 'header: ', header,':'
   end do
 !
 ! read average monthy total precipitation
 !
-  read (luicli,*) (empty_value,idx=1,12)
+  read (ctrl%handles%luicli,*) (empty_value,idx=1,12)
 ! write(6,*)  (awzmpt(idx), idx = 1,12)
 !
-  rewind luicli
+  rewind ctrl%handles%luicli
 !
 else   ! read in historical data
 !debe add reading in climate file name
-  read (upgmcli,*) cliname
+  read (ctrl%handles%upgmcli,*) cliname
 !
 ! read monthy average of daily maximum temperature
 !
-  read (upgmcli,*) (clidat%awtmxav(idx),idx=1,12)
+  read (ctrl%handles%upgmcli,*) (clidat%awtmxav(idx),idx=1,12)
 !
 ! read monthy average of daily minimum temperature
 !
-  read (upgmcli,*) (clidat%awtmnav(idx),idx=1,12)
+  read (ctrl%handles%upgmcli,*) (clidat%awtmnav(idx),idx=1,12)
 
 !
 ! read monthy average of daily minimum temperature
 !debe i think the above comment should read: "read average monthly
 !       total precipitation"
 !
-  read (upgmcli,*) (empty_value,idx=1,12)
+  read (ctrl%handles%upgmcli,*) (empty_value,idx=1,12)
 !
 end if
 !

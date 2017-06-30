@@ -16,8 +16,7 @@ subroutine upgm_driver(ctrl,clidat,soils,bio, residue,biotot,prevbio,sr,start_jd
     use soil, only : soildata
     use biomaterial
 implicit none
-!
-include 'file.fi'
+
 !
 ! Dummy arguments
 !
@@ -82,11 +81,11 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
  
 !  if ((id.ne.29).or.(im.ne.2)) then !check if leap year
     ! this reads in one day of climate data
-  call climate_input(clidat, id,im,iy,icli)
+  call climate_input(ctrl, clidat, id,im,iy,icli)
 !  if ((id.ne.29).or.(im.ne.2)) then !check if leap year
     !
     ! read in daily water stress
-  read (upgmstress,*) chkid,chkim,chkiy,ctrl%cropstress%ahfwsf     !upgm_stress.dat
+  read (ctrl%handles%upgmstress,*) chkid,chkim,chkiy,ctrl%cropstress%ahfwsf     !upgm_stress.dat
   if ((chkid/=id).or.(chkim/=im).or.(chkiy/=iy)) then
      write (*,*) 'error in dates in water stress file - stop'
      call exit(1)
@@ -95,7 +94,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
 !read in daily atmospheric co2 values.
   !co2dy = day; co2mn = month; co2yr = year
   !co2atmos = atmospheric co2 value for the day.
-  read (upgmco2atmos,*) co2dy, co2mn, co2yr, co2atmos  !upgm_co2atmos.dat
+  read (ctrl%handles%upgmco2atmos,*) co2dy, co2mn, co2yr, co2atmos  !upgm_co2atmos.dat
 
 !************************************************************************************
   !start of "crop growth" -> same for all models. 
@@ -188,7 +187,7 @@ do day_iter = start_jday,end_jday   ! currently must start on 1/1 and end on 12/
 ! end if !end leap year check
 end do ! end do loop for current day
     ! debe print out canopy height and the canopyflg at the end of the run
-write (luophenol,1000) canht,canopyflg
+write (ctrl%handles%luophenol,1000) canht,canopyflg
     !
  1000 format ('canopy height =',2x,f5.1,'(cm) ','canopyflg = ',2x,i1)
  

@@ -28,8 +28,6 @@ subroutine growth(ctrl,bnslay,bio,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam
     use upgm_simdata, only : upgm_ctrls, controls
     use biomaterial
 implicit none
-!
-include 'file.fi'
 !DE added
 !
 ! Dummy arguments
@@ -879,7 +877,7 @@ if (bio%growth%am0cfl>=1) then
      temp_stem = temp_stem + bcmbgstemz(i)
   end do
   
-  write (luocrop,1000) daysim,doy,yr,bcdayap,hui,bcmstandstem,bcmstandleaf,     &
+  write (ctrl%handles%luocrop,1000) daysim,doy,yr,bcdayap,hui,bcmstandstem,bcmstandleaf,     &
                      & bcmstandstore,bcmflatstem,bcmflatleaf,bcmflatstore,      &
                      & temp_store,temp_fiber,temp_stem,                     &
                      & bcmstandleaf + bcmflatleaf,bcmstandstem + bcmflatstem +  &
@@ -896,7 +894,7 @@ if (bio%growth%am0cfl>=1) then
                        
   end if 
 
-write (luocanopyht,1100) daysim,doy,day,'/',mo,'/',yr,canopyflg,dht,strs,bczht, &
+write (ctrl%handles%luocanopyht,1100) daysim,doy,day,'/',mo,'/',yr,canopyflg,dht,strs,bczht, &
                        & dayhtinc,strsdayhtinc,canhty,canht,antss(1)
 !
  1000 format (1x,i5,1x,i3,1x,i4,1x,i4,1x,f6.3,12(1x,f7.4),1x,f7.2,3(1x,f7.4),   &

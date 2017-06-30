@@ -44,7 +44,30 @@
 
     end type simulation
     
+    type files
+        integer luicli
+        integer luocrop
+        integer luoshoot
+        integer luoseason
+        integer luoinpt
+        integer luoallcrop
+        integer luoemerge
+        integer luophenol
+        integer luocanopyht
+        integer cropxml
+        integer upgmmgt
+        integer upgmstress
+        integer upgmcli
+        integer upgmcrop
+        integer upgmco2
+        integer upgmco2atmos
+        integer cdbugfile
+        integer soilprofile
+    end type files
+    
+    
     type controls
+        type(files) :: handles
         type(simulation) :: sim
         type(crop_stress) :: cropstress
         type(nitrogen_data) :: ndat

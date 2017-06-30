@@ -1,4 +1,4 @@
-subroutine phenolsf(aepa,antes,antss,pdepth,bhfwsf,browns,cliname,cname,daa,dae,&
+subroutine phenolsf(ctrl, aepa,antes,antss,pdepth,bhfwsf,browns,cliname,cname,daa,dae,&
                   & dap,daynum,ddae,ddap,dgdde,dgdds,dummy2,emrgflg,ems,        &
                   & endphenol,first7,gdda,gdde,gdds,gddwsf,gmethod,hrs,ies,ies2,&
                   & infls,lf12s,lf4s,lf8s,lnpout,mats,opens,pchron,pdate,       &
@@ -28,12 +28,13 @@ subroutine phenolsf(aepa,antes,antss,pdepth,bhfwsf,browns,cliname,cname,daa,dae,
 !          ies(c,r), mats(c,r),
 !          tss(c,r)
 !
-implicit none
 !
-include 'file.fi'
+    use upgm_simdata, only : controls
+implicit none
 !
 ! Dummy arguments
 !
+    type(controls) :: ctrl
 real :: aepa,bhfwsf,gdda,gdde,gdds,pchron,pdepth
 character(80) :: cliname
 character(80) :: cname,seedbed
@@ -434,24 +435,24 @@ if (hrs(1)/=999) then
   call date1(pdatearr)
 !
 !  heading for leaf number table
-  write (luophenol,1000) cname
+  write (ctrl%handles%luophenol,1000) cname
  
 !  write out a table with leaf numbers by doy
   do j = 1,60
 !
 !  write only the integer values that are greater than 0
      if ((lnpout(j,2)<dgdde(9)/pchron).and.(lnpout(j,2)>0.0))                   &
-       & write (luophenol,1100) lnpout(j,1),lnpout(j,2)
+       & write (ctrl%handles%luophenol,1100) lnpout(j,1),lnpout(j,2)
   end do
  
 ! convert integer antss(1) to a real number
-  write (luophenol,1100) real(antss(1)),dgdde(9)/pchron
+  write (ctrl%handles%luophenol,1100) real(antss(1)),dgdde(9)/pchron
  
 !debe add items to print to the output file phenol.out
-  write (luophenol,1200) cname,cliname,pdepth,pdatearr(1),pdatearr(3),          &
+  write (ctrl%handles%luophenol,1200) cname,cliname,pdepth,pdatearr(1),pdatearr(3),          &
                        & pdatearr(4),gmethod,emrgflg,seedbed,bhfwsf
  
-  write (luophenol,1300) pdatearr(1),pdatearr(3),pdatearr(4),ems(1),ems(3),     &
+  write (ctrl%handles%luophenol,1300) pdatearr(1),pdatearr(3),pdatearr(4),ems(1),ems(3),     &
                        & ems(4),ddap(1),dgdds(1),lf4s(1),lf4s(3),lf4s(4),ddap(2)&
                        & ,ddae(2),dgdds(2),dgdde(2),dgdde(2)/pchron,lf8s(1),    &
                        & lf8s(3),lf8s(4),ddap(3),ddae(3),dgdds(3),dgdde(3),     &
@@ -474,7 +475,7 @@ if (hrs(1)/=999) then
                        & dgdds(14),dgdde(14),dgdde(9)/pchron
  
 ! debe added writing out and formatting of the gddwsf array
-  write (luophenol,1400) gddwsf(1,1),gddwsf(1,2),gddwsf(1,3),gddwsf(1,4),       &
+  write (ctrl%handles%luophenol,1400) gddwsf(1,1),gddwsf(1,2),gddwsf(1,3),gddwsf(1,4),       &
                        & gddwsf(1,5),gddwsf(2,1),gddwsf(2,2),gddwsf(2,3),       &
                        & gddwsf(2,4),gddwsf(2,5),gddwsf(3,1),gddwsf(3,2),       &
                        & gddwsf(3,3),gddwsf(3,4),gddwsf(3,5),gddwsf(4,1),       &

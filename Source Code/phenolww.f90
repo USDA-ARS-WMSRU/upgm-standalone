@@ -1,4 +1,4 @@
-subroutine phenolww(aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae, &
+subroutine phenolww(ctrl, aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae, &
                   & dap,dav,daynum,ddae,ddap,ddav,dgdde,dgdds,dgddv,dummy2,drs, &
                   & emrgflg,ems,first7,fps,gdda,gdde,gdds,gddv,gddwsf,gmethod,  &
                   & heads,hrs,ies,joints,lnpout,mats,pchron,pdate,seedbed,srs,  &
@@ -27,12 +27,13 @@ subroutine phenolww(aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae, 
 !          ies(c,r), joints(c,r), mats(c,r), nolvs(c), srs(c,r),
 !          tis(c,r), tss(c,r)
 !
-implicit none
 !
-include 'file.fi'
+    use upgm_simdata, only : controls
+implicit none
 !
 ! Dummy arguments
 !
+    type(controls) :: ctrl
 real :: aepa,bhfwsf,gdda,gdde,gdds,gddv,pchron,pdepth
 character(80) :: cliname
 character(80) :: cname,seedbed
@@ -498,28 +499,28 @@ if (hrs(1)/=999) then
   call date1(pdatearr)
  
 !  heading for leaf number table
-  write (luophenol,1000) cname
+  write (ctrl%handles%luophenol,1000) cname
  
 !  write out a table with leaf numbers by doy
   do j = 1,100     !debe change do loop to j=1,100
 !  write only the integer values that are greater than 0.
 !  number of leaves at the booting stage is dgdde(9)/pchron.
      if ((lnpout(j,2)<dgdde(9)/pchron).and.(lnpout(j,2)>0.0))                   &
-       & write (luophenol,1100) lnpout(j,1),lnpout(j,2)
+       & write (ctrl%handles%luophenol,1100) lnpout(j,1),lnpout(j,2)
   end do
  
 !
 ! convert integer boots(1) to a real number
-  write (luophenol,1100) real(boots(1)),dgdde(9)/pchron
+  write (ctrl%handles%luophenol,1100) real(boots(1)),dgdde(9)/pchron
  
-  write (luophenol,1200)
+  write (ctrl%handles%luophenol,1200)
                    ! leaf number table
  
 !debe added items to print to the output file phenol.out
-  write (luophenol,1300) cname,cliname,pdepth,pdatearr(1),pdatearr(3),          &
+  write (ctrl%handles%luophenol,1300) cname,cliname,pdepth,pdatearr(1),pdatearr(3),          &
                        & pdatearr(4),gmethod,emrgflg,seedbed,bhfwsf
  
-  write (luophenol,1400) pdatearr(1),pdatearr(3),pdatearr(4),ems(1),ems(3),     &
+  write (ctrl%handles%luophenol,1400) pdatearr(1),pdatearr(3),pdatearr(4),ems(1),ems(3),     &
                        & ems(4),ddap(1),dgdds(1),tis(1),tis(3),tis(4),ddap(2),  &
                        & ddae(2),dgdds(2),dgdde(2),dgdde(2)/pchron,srs(1),srs(3)&
                        & ,srs(4),ddap(3),ddae(3),ddav(3),dgdds(3),dgdde(3),     &
@@ -546,7 +547,7 @@ if (hrs(1)/=999) then
                        & dgdde(9)/pchron
  
 ! debe added writing out and formatting of the gddwsf array
-  write (luophenol,1500) gddwsf(1,1),gddwsf(1,2),gddwsf(1,3),gddwsf(1,4),       &
+  write (ctrl%handles%luophenol,1500) gddwsf(1,1),gddwsf(1,2),gddwsf(1,3),gddwsf(1,4),       &
                        & gddwsf(1,5),gddwsf(2,1),gddwsf(2,2),gddwsf(2,3),       &
                        & gddwsf(2,4),gddwsf(2,5),gddwsf(3,1),gddwsf(3,2),       &
                        & gddwsf(3,3),gddwsf(3,4),gddwsf(3,5),gddwsf(4,1),       &

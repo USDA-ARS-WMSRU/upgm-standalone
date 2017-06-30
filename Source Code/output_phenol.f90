@@ -1,4 +1,4 @@
-subroutine output_phenol(aifs,antes,antss,blstrs,boots,browns,cname,daa,dae,dap,&
+subroutine output_phenol(ctrl, aifs,antes,antss,blstrs,boots,browns,cname,daa,dae,dap,&
                        & dav,ddae,ddap,ddav,dents,dgdde,dgdds,dgddv,doughs,drs, &
                        & ears,ems,endlgs,fps,fullbs,gdda,gdde,gdds,gddv,gpds,   &
                        & halfbs,heads,hrs,ies,ies2,infls,joints,lf12s,lf4s,lf8s,&
@@ -22,12 +22,13 @@ subroutine output_phenol(aifs,antes,antss,blstrs,boots,browns,cname,daa,dae,dap,
 !           gpds(r), halfbs(r), heads(r), hrs(r), ies(r), joints(r),
 !           mats(r), outf(c), pdate(r), srs(r), tis(r), tss(r)
 !
-implicit none
 !
-include 'file.fi'
+    use upgm_simdata, only : controls
+implicit none
 !
 ! Dummy arguments
 !
+    type(controls) :: ctrl
 character(22) :: cname,outf
 integer :: daa,dae,dap,dav,pdate,pyear,year
 real :: gdda,gdde,gdds,gddv,pchron 
@@ -95,7 +96,7 @@ call date1(pdatearr)
 ! results in a harvest date outside of the weather years in the
 ! selected location '999' will display in the output.
 !debe 091508 put the followingin commented out section in cpout.
-!      write (luophenol, 145)
+!      write (ctrl%handles%luophenol, 145)
 ! 145  format ('note: if 999 is displayed in the output, the planting',
 !     . /1x,'date may be outside of the weather years in the selected',
 !     . /1x, 'weather file. also, the selected planting date might',
@@ -126,7 +127,7 @@ if (cname=='winter wheat') then
 ! 150	format (' phenological event', 7x, 'day of year', 2x, 'date', 2x,
 !     .  'dap', 5x, 'dae', 5x, 'dav', 5x, 'gdd ap', 5x, 'gdd ae', 5x,
 !     .  'gdd av', 5x, 'nolvs', /1x
-  write (luophenol,1200) pdatearr(1),pdatearr(3),pdatearr(4),ems(1),ems(3),     &
+  write (ctrl%handles%luophenol,1200) pdatearr(1),pdatearr(3),pdatearr(4),ems(1),ems(3),     &
                        & ems(4),ddap(1),dgdds(1),tis(1),tis(3),tis(4),ddap(2),  &
                        & ddae(2),dgdds(2),dgdde(2),dgdde(2)/pchron,srs(1),srs(3)&
                        & ,srs(4),ddap(3),ddae(3),ddav(3),dgdds(3),dgdde(3),     &

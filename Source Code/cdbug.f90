@@ -7,8 +7,6 @@ subroutine cdbug(isr, slay, ctrl, clidat, soils, bio)
     use biomaterial
 implicit none
 !
-include 'file.fi'
-!
 ! Dummy arguments
 !
     type(controls) :: ctrl
@@ -76,37 +74,37 @@ call caldat(ctrl%sim%juldate,cd,cm,cy)
  
 !          write weather cligen and windgen variables
 if ((cd==ctrl%sim%tday).and.(cm==ctrl%sim%tmo).and.(cy==ctrl%sim%tyr).and.(isr==ctrl%sim%tisr)) then
-  write (cdbugfile,1000) cd,cm,cy,isr
+  write (ctrl%handles%cdbugfile,1000) cd,cm,cy,isr
 else
-  write (cdbugfile,1100) cd,cm,cy,isr
+  write (ctrl%handles%cdbugfile,1100) cd,cm,cy,isr
 end if
-write (cdbugfile,1200)
-write (cdbugfile,1300) clidat%awzdpt, clidat%awtdmx, clidat%awtdmn, clidat%aweirr
+write (ctrl%handles%cdbugfile,1200)
+write (ctrl%handles%cdbugfile,1300) clidat%awzdpt, clidat%awtdmx, clidat%awtdmn, clidat%aweirr
  
 !      write(27,2045) isr
  
-write (cdbugfile,1400) isr,isr,isr,isr,isr,isr,isr
+write (ctrl%handles%cdbugfile,1400) isr,isr,isr,isr,isr,isr,isr
 ! admf(isr) is not dimensioned correctly anymore - lew 04/23/99
 ! just commenting it out for now since it is a debug routine
 !      write(27,2051) amrslp(isr), acftcv(isr), acrlai(isr), aczrtd(isr),
 !     &               admf(isr), ahfwsf(isr), ac0nam(isr)
-write (cdbugfile,1600) isr,isr,isr,isr
-write (cdbugfile,1700) bio%database%tdtm,bio%growth%thucum,bio%deriv%mst,bio%deriv%mrt
-! write (cdbugfile,1800) isr,isr,isr,isr
-write (cdbugfile,1800) isr,isr
-!write (cdbugfile,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr),as0rrk(isr),         &
+write (ctrl%handles%cdbugfile,1600) isr,isr,isr,isr
+write (ctrl%handles%cdbugfile,1700) bio%database%tdtm,bio%growth%thucum,bio%deriv%mst,bio%deriv%mrt
+! write (ctrl%handles%cdbugfile,1800) isr,isr,isr,isr
+write (ctrl%handles%cdbugfile,1800) isr,isr
+!write (ctrl%handles%cdbugfile,1900) ahzea,ahzep,ahzptp,actmin(isr),actopt(isr),as0rrk(isr),         &
 !              & aslrr(isr)
-write (cdbugfile,1900) bio%database%tmin,bio%database%topt
-write (cdbugfile,2000)
+write (ctrl%handles%cdbugfile,1900) bio%database%tmin,bio%database%topt
+write (ctrl%handles%cdbugfile,2000)
  
 do l = 1,slay
-  write (cdbugfile,2100) l,soils%spp%aszlyt(l),      &
+  write (ctrl%handles%cdbugfile,2100) l,soils%spp%aszlyt(l),      &
                 & soils%spp%ahtsmn(l)
 end do
-write (cdbugfile,2200)
+write (ctrl%handles%cdbugfile,2200)
  
 do l = 1,slay
-  write (cdbugfile,2300) l,soils%spp%asfcla(l),soils%scp%asfom(l),     &
+  write (ctrl%handles%cdbugfile,2300) l,soils%spp%asfcla(l),soils%scp%asfom(l),     &
                 & soils%spp%asdblk(l)
 end do
  

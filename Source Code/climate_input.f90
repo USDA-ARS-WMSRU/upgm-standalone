@@ -1,16 +1,16 @@
-Subroutine climate_input(clidat, ccd,ccm,ccy,icli)
+Subroutine climate_input(ctrl, clidat, ccd,ccm,ccy,icli)
 !
     use constants, only : langleydaytomj
     use climate, only : n_header, climate_data
+    use upgm_simdata, only : controls
 implicit none
-!
-include 'file.fi'
 !include 'w1clig.inc'
 !include 'w1cli.inc'
 !
 ! Dummy arguments
 !
     type(climate_data) :: clidat
+    type(controls) :: ctrl
 integer :: ccd,ccm,ccy,icli
 !
 ! Local variables
@@ -102,11 +102,11 @@ if (icli==0) then    ! read in historical precip, tmax, tmin, and solar radiatio
  
   dayidx = ccd
 !
-  read (upgmcli,*) clidat%wcd(dayidx),clidat%wcm(dayidx),clidat%wcy(dayidx),clidat%wwzdpt(dayidx),clidat%wwtdmx(dayidx), &
+  read (ctrl%handles%upgmcli,*) clidat%wcd(dayidx),clidat%wcm(dayidx),clidat%wcy(dayidx),clidat%wwzdpt(dayidx),clidat%wwtdmx(dayidx), &
            & clidat%wwtdmn(dayidx),clidat%wgrad(dayidx)
  
 !   print*, ' in if statement checking for leap year'
-  if ((clidat%wcd(dayidx)==29).and.(clidat%wcm(dayidx)==2)) read (upgmcli,*) clidat%wcd(dayidx),clidat%wcm(dayidx)&
+  if ((clidat%wcd(dayidx)==29).and.(clidat%wcm(dayidx)==2)) read (ctrl%handles%upgmcli,*) clidat%wcd(dayidx),clidat%wcm(dayidx)&
     & ,clidat%wcy(dayidx),clidat%wwzdpt(dayidx),clidat%wwtdmx(dayidx),clidat%wwtdmn(dayidx),clidat%wgrad(dayidx)
  
 ! if ((wcm(dayidx).lt.4).and.(wcy(dayidx).eq.2)) then
@@ -128,13 +128,13 @@ end if
 if (icli==1) then    ! read from standard cligen climate file
   if (dayidx==0) then
 !
-     rewind luicli
+     rewind ctrl%handles%luicli
 !debe 031309 changed above to header = 16 to allow for climate file name
 ! entered in the first row of the header.
 !
      do i = 1,n_header
 !   read (luicli,1000,err=30) header
-        read (luicli,1000) header
+        read (ctrl%handles%luicli,1000) header
      end do
   end if
 !
@@ -148,7 +148,7 @@ if (icli==1) then    ! read from standard cligen climate file
   dayidx = ccd
 !
 !    read (luicli,*,iostat=ioc) wcd(dayidx),wcm(dayidx),wcy(dayidx),            &
-  read (luicli,*) clidat%wcd(dayidx),clidat%wcm(dayidx),clidat%wcy(dayidx),clidat%wwzdpt(dayidx),           &
+  read (ctrl%handles%luicli,*) clidat%wcd(dayidx),clidat%wcm(dayidx),clidat%wcy(dayidx),clidat%wwzdpt(dayidx),           &
                 & dummy,dummy,dummy,          &
                 & clidat%wwtdmx(dayidx),clidat%wwtdmn(dayidx),clidat%wgrad(dayidx),dummy,dummy,      &
                 & dummy

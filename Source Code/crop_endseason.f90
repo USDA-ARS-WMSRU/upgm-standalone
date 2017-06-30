@@ -16,8 +16,6 @@ subroutine crop_endseason(ctrl, bc0nam,bm0cfl,bnslay,bc0idc,bcdayam,bcthum,bcxst
         use upgm_simdata, only : upgm_ctrls, controls
 implicit none
 !
-include 'file.fi'
-!
 ! Dummy arguments
 !
     type(controls) :: ctrl
@@ -204,7 +202,7 @@ if ((bm0cfl>=0)) then            ! always print this one now - lew
  
   hi = yield/(totbiomass*acycon)
  
-  write (luoseason,1000) yy,bprevstandstem,bprevstandleaf,bprevstandstore,      &
+  write (ctrl%handles%luoseason,1000) yy,bprevstandstem,bprevstandleaf,bprevstandstore,      &
                        & bprevflatstem,bprevflatleaf,bprevflatstore,bg_stem_sum,&
                        & root_store_sum,root_fiber_sum,bprevht,bprevstm,        &
                        & bprevrtd,bprevgrainf,bcxstmrep,bprevdayap,             &

@@ -46,8 +46,6 @@ subroutine cinit(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsm
     use nitrogen
 implicit none
 !
-include 'file.fi'
-!
 ! Dummy arguments
 !
     type(controls) :: ctrl
@@ -639,7 +637,7 @@ else
 end if
  
       ! print out heat average heat unit and days to maturity
-if (bio%growth%am0cfl>0) write (luoinpt,1100) pdate,hdate,bcthudf,dtm,bctdtm,clidat%phu,bcthum
+if (bio%growth%am0cfl>0) write (ctrl%handles%luoinpt,1100) pdate,hdate,bcthudf,dtm,bctdtm,clidat%phu,bcthum
  
       ! after printing the value, set the global parameter for maximum
       ! heat units to the new calculated value (this database value is

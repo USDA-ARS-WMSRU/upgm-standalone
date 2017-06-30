@@ -99,8 +99,6 @@ subroutine crop(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfom,bsfcec,
     use biomaterial
 implicit none
 !
-include 'file.fi'
-!
 ! PARAMETER definitions
 !
     type(controls) :: ctrl
@@ -934,14 +932,14 @@ if (bm0cif) then
  
   if (bio%growth%am0cfl>=1) then
           ! put double blank lines in daily files to create growth blocks
-     write (luocrop,*)           ! crop.out
-     write (luocrop,*)           ! crop.out
-     write (luoshoot,*)          ! shoot.out
-     write (luoshoot,*)          ! shoot.out
-     write (luocanopyht,*)       ! canopyht.out debe added phenol and emerge.out lines
-     write (luocanopyht,*)       ! canopyht.out
-     write (luoemerge,*)         ! emerge.out
-     write (luoemerge,*)         ! emerge.out
+     write (ctrl%handles%luocrop,*)           ! crop.out
+     write (ctrl%handles%luocrop,*)           ! crop.out
+     write (ctrl%handles%luoshoot,*)          ! shoot.out
+     write (ctrl%handles%luoshoot,*)          ! shoot.out
+     write (ctrl%handles%luocanopyht,*)       ! canopyht.out debe added phenol and emerge.out lines
+     write (ctrl%handles%luocanopyht,*)       ! canopyht.out
+     write (ctrl%handles%luoemerge,*)         ! emerge.out
+     write (ctrl%handles%luoemerge,*)         ! emerge.out
   end if
  
   bm0cif = .false.          !turn off after initialization is complete
@@ -962,7 +960,7 @@ end if
  
 !debe added call to phenolmms. call it after call to cinit to insure that
 !variables are initialized.
-call phenolmms(aepa,aifs,antes,antss,bc0growdepth,bctmin,bhfwsf,blstrs,boots,   &
+call phenolmms(ctrl,aepa,aifs,antes,antss,bc0growdepth,bctmin,bhfwsf,blstrs,boots,   &
              & browns,clidat%awtdmn,clidat%awtdmx,canht,cliname,cname,cots,cropname,daa,dae,  &
              & dap,dav,dayhtinc,daynum,dd,ddae,ddap,ddav,dents,dgdde,dgdds,     &
              & dgddv,doughs,drs,dummy2,ears,ecanht,emrgflg,ems,endlgs,endphenol,&
@@ -1254,7 +1252,7 @@ if (((phenolflg==1).and.(mats(1)==999)).or.((phenolflg==0).and.(clidat%huiy<1.0)
               ! complete
      bczgrowpt = (-bczloc_regrow)
                   ! single blank line to separate shoot growth periods
-     if (bio%growth%am0cfl>=1) write (luoshoot,*)
+     if (bio%growth%am0cfl>=1) write (ctrl%handles%luoshoot,*)
                                         ! shoot.out
  
   end if

@@ -1,4 +1,4 @@
-subroutine emerge(clidat, cliname, cropname,dap,daynum,ddap,dgdds,egdd,elong,emrgflg,ems,&
+subroutine emerge(ctrl, clidat, cliname, cropname,dap,daynum,ddap,dgdds,egdd,elong,emrgflg,ems,&
                 & ergdd,gddday,gddtbg,germgdd,germs,ggdd,pd,pdepth,pm,py,seedsw,&
                 & soilwat,tempsw,year)
 !
@@ -53,13 +53,13 @@ subroutine emerge(clidat, cliname, cropname,dap,daynum,ddap,dgdds,egdd,elong,emr
 !     + + + purpose + + +
 !     to calculate the day of emergence based on soil moisture and accumulated thermal time.
     use climate, only : climate_data
+    use upgm_simdata, only : controls
 implicit none
-!
-include 'file.fi'
 !
 ! Dummy arguments
 !
     type(climate_data) :: clidat
+    type(controls) :: ctrl
 character(80) :: cliname
 character(80) :: cropname
 integer :: dap,daynum,emrgflg,pd,pm,py,seedsw,tempsw,year
@@ -256,7 +256,7 @@ if ((germs(1)/=999).and.(ems(1)==999)) then
 end if
  
  ! this gets written from the day of planting until emergence occurs.
-write (luoemerge,1000) cropname,daynum,dap,pd,pm,py,pdepth,ems(1),ems(4),ems(3),&
+write (ctrl%handles%luoemerge,1000) cropname,daynum,dap,pd,pm,py,pdepth,ems(1),ems(4),ems(3),&
                      & ems(2),seedbed,emrgflg,gddday,gddtbg,cliname 
  
 !from shoot_grow

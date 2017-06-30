@@ -1,10 +1,11 @@
-subroutine cpout(bio)
+subroutine cpout(ctrl,bio)
 !
     use biomaterial
+    use upgm_simdata, only : controls
 implicit none
 !
-include 'file.fi'
     type(biomatter) :: bio
+    type(controls) :: ctrl
 !     author : a. retta - 11/19/96
 !     + + + purpose + + +
 !     prints headers for the crop submodel output files
@@ -13,37 +14,37 @@ include 'file.fi'
 !     am0cfl - flag to print crop output
  
       ! season.out headers
-write (luoseason,1500)
-write (luoseason,1600)
-write (luoseason,1700)
+write (ctrl%handles%luoseason,1500)
+write (ctrl%handles%luoseason,1600)
+write (ctrl%handles%luoseason,1700)
  
 if (bio%growth%am0cfl>0) then
  
          ! crop.out headers
-  write (luocrop,1000)
-  write (luocrop,1100)
-  write (luocrop,1200)
+  write (ctrl%handles%luocrop,1000)
+  write (ctrl%handles%luocrop,1100)
+  write (ctrl%handles%luocrop,1200)
  
          ! shoot.out headers
-  write (luoshoot,1300)
-  write (luoshoot,1400)
+  write (ctrl%handles%luoshoot,1300)
+  write (ctrl%handles%luoshoot,1400)
  
          ! inpt.out headers
-  write (luoinpt,1800)
-  write (luoinpt,1900)
+  write (ctrl%handles%luoinpt,1800)
+  write (ctrl%handles%luoinpt,1900)
  
          ! debe added for emergence output headers
-  write (luoemerge,2000)
-  write (luoemerge,2100)
-  write (luoemerge,2200)
+  write (ctrl%handles%luoemerge,2000)
+  write (ctrl%handles%luoemerge,2100)
+  write (ctrl%handles%luoemerge,2200)
  
          ! debe added for phenology output headers
-  write (luophenol,2300)
-  write (luophenol,2400)
+  write (ctrl%handles%luophenol,2300)
+  write (ctrl%handles%luophenol,2400)
  
         ! debe added for canopy height output
-  write (luocanopyht,2500)
-  write (luocanopyht,2600)
+  write (ctrl%handles%luocanopyht,2500)
+  write (ctrl%handles%luocanopyht,2600)
  
 end if
  

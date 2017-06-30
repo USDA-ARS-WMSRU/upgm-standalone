@@ -40,8 +40,6 @@ subroutine shoot_grow(ctrl, clidat, bio, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfl
     use biomaterial
 implicit none
 !
-include 'file.fi'
-!
 ! PARAMETER definitions
 !
 real,parameter :: shoot_exp = 2.0,be_stor = 0.7,rootf = 0.4
@@ -441,7 +439,7 @@ else
 !! de changed writing bcdayap to dap because in crop dap is passed to
 !! shoot_grow in place of bcdayap.
 !end of moved section
-  if (emrgflg==0) write (luoemerge,1000) cropname,doy,dap,pd,pm,py,bc0growdepth,&
+  if (emrgflg==0) write (ctrl%handles%luoemerge,1000) cropname,doy,dap,pd,pm,py,bc0growdepth,&
                        & ems(1),ems(4),ems(3),ems(2),seedbed,emrgflg,gddday,    &
                        & gddtbg,cliname,'in shoot_grow'
  
@@ -483,7 +481,7 @@ end if
 if (emrgflg==1) then
       ! not used: wfpslo,wfpsup
   !debe added this to prevent emerge being called after emergence has occurred
-  if (ems(1)==999) call emerge(clidat, cliname,cropname,dap,doy,ddap,dgdds,egdd,elong,  &
+  if (ems(1)==999) call emerge(ctrl, clidat, cliname,cropname,dap,doy,ddap,dgdds,egdd,elong,  &
                              & emrgflg,ems,ergdd,gddday,gddtbg,germgdd,germs,   &
                              & ggdd,pd,bc0growdepth,pm,py,seedsw,soilwat,tempsw,&
                              & yy)
@@ -594,7 +592,7 @@ end do
 ! debe took bcdayap out of the list to write out. bcdayap was not passed
 ! into shoot_grow and so when trying to print bcdayap it was not
 ! initialized and it held garbage. put in dap instead.
-if (bio%growth%am0cfl>=1) write (luoshoot,1100) daysim,doy,yr,dap,shoot_hui,s_root_sum,    &
+if (bio%growth%am0cfl>=1) write (ctrl%handles%luoshoot,1100) daysim,doy,yr,dap,shoot_hui,s_root_sum,    &
                                    & f_root_sum,tot_mass_req,end_shoot_mass,    &
                                    & end_root_mass,d_root_mass,d_shoot_mass,    &
                                    & d_s_root_mass,end_stem_mass,end_stem_area, &
