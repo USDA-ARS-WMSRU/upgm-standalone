@@ -1,9 +1,17 @@
     submodule (nitrogen) nitrogen_nuse
     contains
-        module procedure nuse
+        module subroutine nuse(clidat, ndat, bn1, bn2, bn3, bp1, bp2, bp4, dm, rw, ir, rwt)
         use constants, only : mnsz
         use climate
+        ! Argument Defs
         implicit none
+        type (nitrogen_data), intent(inout) :: ndat
+        type (climate_data), intent(in) :: clidat
+        real, intent(in) :: bn1, bn2, bn3
+        real, intent(in) :: bp1, bp2, bp4
+        real, intent(in) :: dm, rw
+        integer, intent(in) :: ir
+        real, intent(in), dimension(*) :: rwt
         !
         !
         ! Local variables
@@ -169,6 +177,6 @@
         end if
         !     write(39,2000)jd,cnt,un1,un2,uno3,suno3,sunn,vt,dm,ddm
         !
-        end procedure 
+        end subroutine 
     end submodule
     

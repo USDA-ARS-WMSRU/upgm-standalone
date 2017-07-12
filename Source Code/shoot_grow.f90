@@ -37,7 +37,7 @@ subroutine shoot_grow(ctrl, clidat, bio, bnslay,bszlyd,bcdpop,bczmxc,bczmrt,bcfl
     use constants, only : mgtokg, mmtom
     use upgm_simdata, only : controls
     use climate, only: climate_data
-    use datetime, only : dayear
+    use datetime, only : dayear, caldat
     use biomaterial
 implicit none
 !

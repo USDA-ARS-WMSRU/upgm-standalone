@@ -5,6 +5,7 @@ subroutine cdbug(isr, slay, ctrl, clidat, soils, bio)
     use soil, only : soildata
     use constants, only : mnsz, mnsub, mnhhrs, mncz,mndk
     use biomaterial
+    use datetime, only : caldat
 implicit none
 !
 ! Dummy arguments

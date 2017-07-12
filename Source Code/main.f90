@@ -18,11 +18,8 @@
     type(climate_data) :: clidat
     type(controls) :: ctrl
 
-    integer :: am0hrvfl
     integer :: sd, sm, sy
     integer :: ed, em, ey
-    integer :: hd, hm, hy
-    integer :: pd, pm, py
     !
     ! Locals for reading in setup files and so on.    
     !
@@ -82,7 +79,7 @@
     bio%growth%am0cif = .false.         ! flag to initialize crop initialization routines (set to true on planting date)
     bio%growth%am0cfl = 1               ! flag to specify if detailed (submodel) output file should be generated
     bio%growth%am0cgf = .false.         ! supposed to indicate a growing crop
-    am0hrvfl = 0                        ! harvest flag (default is off)
+    ctrl%sim%am0hrvfl = 0                        ! harvest flag (default is off)
     bio%geometry%xrow = 0.2286          ! row spacing (m)
     ctrl%cropstress%ahfwsf = 1.0        ! water stress factor
     !
@@ -161,14 +158,14 @@
     ! starting and ending day, month, and year for planting and harvest.
     !
     read (ctrl%handles%upgmmgt,*) sd,sm,sy,ed,em,ey
-    read (ctrl%handles%upgmmgt,*) pd,pm,py,hd,hm,hy
+    read (ctrl%handles%upgmmgt,*) ctrl%mngt%pd,ctrl%mngt%pm,ctrl%mngt%py,ctrl%mngt%hd,ctrl%mngt%hm,ctrl%mngt%hy
 
     ctrl%sim%start_jday = julday(sd,sm,sy)
 
     ctrl%sim%end_jday = julday(ed,em,ey)
 
-    ctrl%sim%plant_jday = julday(pd,pm,py)
-    ctrl%sim%harvest_jday = julday(hd,hm,hy)
+    ctrl%sim%plant_jday = julday(ctrl%mngt%pd,ctrl%mngt%pm,ctrl%mngt%py)
+    ctrl%sim%harvest_jday = julday(ctrl%mngt%hd,ctrl%mngt%hm,ctrl%mngt%hy)
 
     print *,'crop=',bio%bname
 
@@ -277,7 +274,7 @@
     !
    call upgm_driver(                                            &
         &       ctrl,clidat,soils,bio,residue,biotot,prevbio,   &
-        &       icli,pd,pm,py,hd,hm,hy, am0hrvfl)
+        &       icli)
 
     ! RMarquez 6.21.2017 -> need to free all allocated memory.
     call destroy_biomatter(bio)

@@ -42,9 +42,10 @@ subroutine cinit(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsm
     use constants, only : mgtokg, mmtom, civilrise, mnsz
     use upgm_simdata, only : controls
     use climate, only : climate_data
-    use datetime, only : dayear
+    use datetime, only : dayear, caldat
     use biomaterial
     use nitrogen
+    use support, only : daylen
 implicit none
 !
 ! Dummy arguments
@@ -77,7 +78,7 @@ real :: alog
 real :: bphu,bsa,dg,dg1,ephu,heat_unit,jreal,max_air,min_air,sphu,wt1,xz,yp1,ypn
 real,dimension(365,3) :: d1
 real,dimension(730,3) :: d2
-real :: daylen,huc1
+real :: huc1
 integer :: dxx,hdate,i,j,m,n,sdmn,sdmx
 real,dimension(14) :: dy_mon,mn_air_temp,mn_air_temp2,mx_air_temp,mx_air_temp2
 integer :: int

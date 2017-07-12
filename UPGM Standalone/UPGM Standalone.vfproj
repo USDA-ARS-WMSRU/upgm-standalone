@@ -58,7 +58,6 @@
 		<File RelativePath="..\Source Code\support\support_mod.f90"/></Filter>
 		<Filter Name="upgm">
 		<File RelativePath="..\Source Code\upgm\upgm_mod.f90"/></Filter>
-		<File RelativePath="..\Source Code\caldat.f90"/>
 		<File RelativePath="..\Source Code\callcrop.f90"/>
 		<File RelativePath="..\Source Code\canopyht.f90"/>
 		<File RelativePath="..\Source Code\cdbug.f90"/>
@@ -73,7 +72,6 @@
 		<File RelativePath="..\Source Code\cropinit.f90"/>
 		<File RelativePath="..\Source Code\cropupdate.f90"/>
 		<File RelativePath="..\Source Code\date1.f90"/>
-		<File RelativePath="..\Source Code\daylen.f90"/>
 		<File RelativePath="..\Source Code\declination.f90"/>
 		<File RelativePath="..\Source Code\emerge.f90"/>
 		<File RelativePath="..\Source Code\fopenk.f90"/>

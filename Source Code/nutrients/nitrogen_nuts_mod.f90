@@ -1,8 +1,11 @@
     submodule (nitrogen) nitrogen_nuts
     contains
-        module procedure nuts
-        !
+        module subroutine nuts(ndat, y1, y2, uu)
+        ! Argument Defs
         implicit none
+        type (nitrogen_data), intent(inout) :: ndat
+        real, intent(in) :: y1, y2
+        real, intent(out) :: uu
         !
         ! Local variables
         !
@@ -39,5 +42,5 @@
             end if
         end if
         !
-        end procedure nuts
+        end subroutine nuts
     end submodule
