@@ -1,7 +1,7 @@
     program main
     use upgm_simdata
-    use constants, only : mnsz, mnsub, mnbpls,mncz, mnhhrs,mndk
-    use datetime, only : julday
+    use constants, only : int32, dp, mnbpls, mncz
+    use datetime, only : julday, date
     use climate
     use soil
     use biomaterial
@@ -17,21 +17,19 @@
     type(soildata) :: soils
     type(climate_data) :: clidat
     type(controls) :: ctrl
-
-    integer :: sd, sm, sy
-    integer :: ed, em, ey
     !
-    ! Locals for reading in setup files and so on.    
+    ! Locals to MAIN for reading in setup files and so on.    
     !
-    integer :: i  = 0
-    integer :: row = 4
-    integer :: icli = 0
-    character(40) :: seedbed = ''
-    integer :: offsetforfiles = 0
-    double precision :: current_depth = 0
-    integer :: max_depth = 1
-    integer :: io = 0
-    integer(kind=4) :: upgmflg
+    type(date) :: startdate
+    type(date) :: enddate
+    integer(int32) :: i  = 0
+    integer(int32) :: row = 4
+    character(len=40) :: seedbed = ''
+    integer(int32)  :: offsetforfiles = 0
+    real(dp)       :: current_depth = 0
+    integer(int32) :: max_depth = 1
+    integer(int32) :: io = 0
+    integer(int32) :: upgmflg
     !
     ! Start Main
     !
@@ -157,12 +155,12 @@
     !read management information from upgm_mgmt.dat. currently it includes
     ! starting and ending day, month, and year for planting and harvest.
     !
-    read (ctrl%handles%upgmmgt,*) sd,sm,sy,ed,em,ey
+    read (ctrl%handles%upgmmgt,*) startdate%day,startdate%mon,startdate%year,enddate%day,enddate%mon,enddate%year
     read (ctrl%handles%upgmmgt,*) ctrl%mngt%pd,ctrl%mngt%pm,ctrl%mngt%py,ctrl%mngt%hd,ctrl%mngt%hm,ctrl%mngt%hy
 
-    ctrl%sim%start_jday = julday(sd,sm,sy)
+    ctrl%sim%start_jday = julday(startdate%day,startdate%mon,startdate%year)
 
-    ctrl%sim%end_jday = julday(ed,em,ey)
+    ctrl%sim%end_jday = julday(enddate%day,enddate%mon,enddate%year)
 
     ctrl%sim%plant_jday = julday(ctrl%mngt%pd,ctrl%mngt%pm,ctrl%mngt%py)
     ctrl%sim%harvest_jday = julday(ctrl%mngt%hd,ctrl%mngt%hm,ctrl%mngt%hy)
@@ -261,7 +259,7 @@
         read (ctrl%handles%upgmco2,*) bio%upgm%co2x(i),bio%upgm%co2y(i)
     end do
 
-    call climate_init(ctrl,clidat,icli,ctrl%sim%cliname)    ! reads monthly and yearly climate variables
+    call climate_init(ctrl,clidat,ctrl%sim%icli,ctrl%sim%cliname)    ! reads monthly and yearly climate variables
 
     if (bio%growth%am0cfl>0) then
         call open_outputfiles(ctrl)
@@ -272,9 +270,7 @@
     if (bio%growth%am0cfl>1) call fopenk(ctrl%handles%luoallcrop,'allcrop.prn','unknown')     ! main crop debug output file
     if (ctrl%sim%am0cdb>0) call fopenk(ctrl%handles%cdbugfile,'cdbug.out','unknown')       ! crop submodel debug output file
     !
-   call upgm_driver(                                            &
-        &       ctrl,clidat,soils,bio,residue,biotot,prevbio,   &
-        &       icli)
+   call upgm_driver(ctrl, clidat, soils, bio, residue, biotot, prevbio)
 
     ! RMarquez 6.21.2017 -> need to free all allocated memory.
     call destroy_biomatter(bio)

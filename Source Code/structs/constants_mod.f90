@@ -12,7 +12,6 @@
     implicit none
     
     ! general constants
-    integer, parameter :: DP = KIND(0.0D0)          ! double precision for use with kind and real
     real, parameter :: pi = 4 * atan (1.0)          ! value of pi in radians
     integer, parameter :: juliantogreg = 2299161
     integer, parameter :: gregtojulian = 15 + 31*(10+12*1582)
@@ -44,6 +43,10 @@
     integer, parameter :: mndayr = 366
     
     
+    integer, parameter :: int32 = kind(4)
+    integer, parameter :: int64 = kind(8)
+    integer, parameter :: sp = kind(4)
+    integer, parameter :: dp = kind(8)          ! double precision for use with kind and real
     
     end module constants
     

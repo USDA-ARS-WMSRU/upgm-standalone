@@ -1,7 +1,8 @@
-Subroutine climate_input(ctrl, clidat, ccd,ccm,ccy,icli)
+Subroutine climate_input(ctrl, clidat, currdate)
 !
     use constants, only : langleydaytomj
     use climate, only : n_header, climate_data
+    use datetime, only : date
     use upgm_simdata, only : controls
 implicit none
 !include 'w1clig.inc'
@@ -11,7 +12,7 @@ implicit none
 !
     type(climate_data) :: clidat
     type(controls) :: ctrl
-integer :: ccd,ccm,ccy,icli
+    type(date) :: currdate
 !
 ! Local variables
 !
@@ -89,7 +90,7 @@ character(80) :: header
 !  return
 !end if
 !
-if (icli==0) then    ! read in historical precip, tmax, tmin, and solar radiation
+if (ctrl%sim%icli==0) then    ! read in historical precip, tmax, tmin, and solar radiation
 !  if ((ccd.eq.29).and.(ccm.eq.2)) then
 !    dayidx = ccd
 !    read (upgmcli,*) wcd(dayidx),wcm(dayidx),wcy(dayidx),wwzdpt(dayidx),wwtdmx(dayidx), &
@@ -100,7 +101,7 @@ if (icli==0) then    ! read in historical precip, tmax, tmin, and solar radiatio
 !
 !  end if
  
-  dayidx = ccd
+  dayidx = currdate%day
 !
   read (ctrl%handles%upgmcli,*) clidat%wcd(dayidx),clidat%wcm(dayidx),clidat%wcy(dayidx),clidat%wwzdpt(dayidx),clidat%wwtdmx(dayidx), &
            & clidat%wwtdmn(dayidx),clidat%wgrad(dayidx)
@@ -118,14 +119,14 @@ if (icli==0) then    ! read in historical precip, tmax, tmin, and solar radiatio
 !         &  ,wwpeakipt(dayidx),wwtdmx(dayidx),wwtdmn(dayidx)                   &
 !         &  ,wgrad(dayidx),dummy,dummy,wwtdpt(dayidx)
 !
-  if ((clidat%wcd(dayidx)/=ccd).or.(clidat%wcm(dayidx)/=ccm).or.(clidat%wcy(dayidx)/=ccy)) then
+  if ((clidat%wcd(dayidx)/=currdate%day).or.(clidat%wcm(dayidx)/=currdate%mon).or.(clidat%wcy(dayidx)/=currdate%year)) then
      write (*,*) 'error in dates in historical climate file - stop'
      call exit(1)
   end if
 !
 end if
 !
-if (icli==1) then    ! read from standard cligen climate file
+if (ctrl%sim%icli==1) then    ! read from standard cligen climate file
   if (dayidx==0) then
 !
      rewind ctrl%handles%luicli
@@ -145,7 +146,7 @@ if (icli==1) then    ! read from standard cligen climate file
 ! do dayidx = 1,maxday
 !    ioc = 0
 !
-  dayidx = ccd
+  dayidx = currdate%day
 !
 !    read (luicli,*,iostat=ioc) wcd(dayidx),wcm(dayidx),wcy(dayidx),            &
   read (ctrl%handles%luicli,*) clidat%wcd(dayidx),clidat%wcm(dayidx),clidat%wcy(dayidx),clidat%wwzdpt(dayidx),           &

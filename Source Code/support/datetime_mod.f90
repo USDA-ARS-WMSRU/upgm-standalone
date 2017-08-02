@@ -1,5 +1,13 @@
     module datetime
+    use constants, only : int32
     implicit none
+    
+    type date
+        integer(int32) :: day
+        integer(int32) :: mon
+        integer(int32) :: year
+    end type
+    
 
     interface
     !     + + + julday(...) + + +

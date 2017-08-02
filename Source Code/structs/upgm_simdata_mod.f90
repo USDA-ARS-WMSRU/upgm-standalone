@@ -39,12 +39,13 @@
         !     water_stress_max - Cap water stress at some maximum value
         !                  (note maximum stress occurs at 0.0 and minimum stress at 1.0)
         !                   water_stress_max = x.xx   ! specified stress limit
-        integer :: winter_ann_root = 1 ! RMarquez 06/13/2017 -> changed this to 1, has some impact on wheat.
+        integer :: winter_ann_root = 0 ! RMarquez 06/13/2017 -> changed this to 1, has some impact on wheat.
         !select root growth option for winter annuals
         !winter_ann_root = 0                                    ! root depth grows at same rate as height
         !winter_ann_root = 1                                    ! root depth grows with fall heat units
         integer :: am0cdb  ! flag to print CROP variables before and after call to CROP
         character(80) :: cliname              ! the name of the location for the climate data
+        integer :: icli = 0
     end type simulation
 
     type files
