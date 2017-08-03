@@ -1,14 +1,4 @@
     subroutine callcrop(ctrl,clidat,soils,bio,residue,biotot,prevbio,daysim)
-    !,sr,antes,antss,blstrs,boots,browns,callgdd, &
-    !    & canht,canopyflg,cliname,cots,cropname,dayhtinc,dents,doughs, &
-    !    & drs,dummy1,dummy2,ears,ecanht,egdd,emrgflg,ems,endlgs,epods, &
-    !    & ergdd,eseeds,first7,fps,fullbs,gddtbg,germgdd,germs,ggdd,    &
-    !    & gmethod,gpds,growth_stress,halfbs,heads,hrs,icli,ies,ies2,   &
-    !    & infls,joints,lf12s,lf1s,lf2s,lf3s,lf4s,lf8s,mats,maxht,      &
-    !    & mffls,milks,mpods,mseeds,opens,pchron,pd,phenolflg,pm,py,    &
-    !    & seedsw,silks,soilwat,srs,tbase,tis,toptlo,toptup,tsints,tss, &
-    !    & tupper,wfpslo,wfpsup,yelows,co2x,co2y,clidat%co2atmos)
-
     use upgm_simdata, only : controls
     use climate, only : climate_data
     use soil, only : soildata
@@ -31,8 +21,10 @@
     !
     type(crop_residue) :: cropres
     integer :: lay
+    !
+    ! Start of callcrop
+    ! 
     
-    ! Start of Code
     if ((bio%database%shoot<=0.0).or.(bio%geometry%dpop<=0.0)) bio%growth%am0cgf = .false.
     !
     !     only continue if crop is growing
@@ -42,54 +34,7 @@
         cropres = create_crop_residue(soils%spp%nslay)
 
         if (ctrl%sim%am0cdb==1) call cdbug(1,soils%spp%nslay,ctrl,clidat,soils,bio )
-        !  print*, 'in callcrop just before call to crop seedsw = ', seedsw
-        call crop(ctrl,clidat,bio,soils%spp%nslay,soils%spp%aszlyt(1),soils%spp%aszlyd(1),soils%spp%asdblk(1),soils%scp%asfcce(1),      &
-            & soils%scp%asfom(1),soils%scp%asfcec(1),soils%scp%asfsmb(1),soils%spp%asfcla(1),soils%scp%as0ph(1),     &
-            & soils%scp%asftan(1),soils%scp%asftap(1),soils%scp%asmno3,bio%database%bn1,bio%database%bn2,         &
-            & bio%database%bn3,bio%database%bp1,bio%database%bp2,bio%database%bp3,bio%database%ck,bio%database%grf,    &
-            & bio%database%ehu0,bio%database%zmxc,bio%bname,bio%database%idc,bio%geometry%xrow,bio%database%tdtm,  &
-            & bio%database%zmrt,bio%database%tmin,bio%database%topt,bio%database%fd1(1),bio%database%fd2(1),         &
-            & bio%database%fd1(2),bio%database%fd2(2),bio%database%bceff,bio%deriv%mbgz,bio%database%alf,   &
-            & bio%database%blf,bio%database%clf,bio%database%dlf,bio%database%arp,bio%database%brp,bio%database%crp,  &
-            & bio%database%drp,bio%database%aht,bio%database%bht,bio%database%sla,bio%database%hue,             &
-            & bio%database%tverndel,soils%spp%ahtsmn,soils%spp%ahtsmn&
-            & ,ctrl%cropstress%ahfwsf,bio%growth%am0cif,bio%growth%am0cgf,bio%database%thudf,         &
-            & bio%database%baflg,bio%database%baf,bio%database%yraf,bio%geometry%hyfg,bio%database%thum,bio%geometry%dpop,  &
-            & bio%database%dmaxshoot,bio%database%transf,bio%database%storeinit,bio%database%fshoot,        &
-            & bio%database%growdepth,bio%database%fleafstem,bio%database%shoot,bio%database%diammax,       &
-            & bio%database%ssa,bio%database%ssb,bio%database%fleaf2stor,bio%database%fstem2stor,            &
-            & bio%database%fstor2stor,bio%database%yld_coef,bio%database%resid_int,bio%database%xstm,         &
-            & bio%mass%standstem,bio%mass%standleaf,bio%mass%standstore,bio%mass%flatstem,&
-            & bio%mass%flatleaf,bio%mass%flatstore,bio%growth%mshoot,bio%growth%mtotshoot,      &
-            & bio%mass%stemz,bio%mass%rootstorez,bio%mass%rootfiberz,bio%geometry%zht, &
-            & bio%geometry%zshoot,bio%geometry%dstm,bio%geometry%zrtd,bio%growth%dayap,bio%growth%dayam,         &
-            & bio%growth%thucum,bio%growth%trthucum,bio%geometry%grainf,bio%growth%zgrowpt,             &
-            & bio%growth%fliveleaf,bio%growth%leafareatrend,bio%growth%twarmdays, bio%growth%tchillucum&
-            & ,bio%growth%thu_shoot_beg,bio%growth%thu_shoot_end,biotot%xstmrep,             &
-            & prevbio%mass%standstem,prevbio%mass%standleaf,prevbio%mass%standstore,             &
-            & prevbio%mass%flatstem,prevbio%mass%flatleaf,prevbio%mass%flatstore,prevbio%growth%mshoot, &
-            & prevbio%growth%mtotshoot,prevbio%mass%stemz,prevbio%mass%rootstorez,           &
-            & prevbio%mass%rootfiberz,prevbio%geometry%zht,prevbio%geometry%zshoot,prevbio%geometry%dstm,         &
-            & prevbio%geometry%zrtd,prevbio%growth%dayap,prevbio%growth%thucum,prevbio%growth%trthucum,            &
-            & prevbio%geometry%grainf,prevbio%growth%tchillucum,prevbio%growth%fliveleaf,daysim,           &
-            & bio%growth%dayspring,bio%database%zloc_regrow,cropres%standstem,cropres%standleaf,&
-            & cropres%standstore,cropres%flatstem,cropres%flatleaf,cropres%flatstore, &
-            & cropres%bgstemz,cropres%zht,cropres%dstm,cropres%xstmrep,cropres%grainf,   &
-            & bio%upgm%aepa,bio%upgm%aifs,bio%upgm%antes,bio%upgm%antss,bio%upgm%blstrs,bio%upgm%boots,bio%upgm%browns,bio%upgm%callgdd,bio%upgm%canht,bio%upgm%canopyflg,  &
-            & ctrl%sim%cliname,bio%upgm%cots,bio%bname,bio%upgm%dayhtinc,bio%upgm%dents,bio%upgm%doughs,bio%upgm%drs,bio%upgm%dummy1,bio%upgm%dummy2,bio%upgm%ears, &
-            & bio%upgm%ecanht,bio%upgm%egdd,bio%upgm%emrgflg,bio%upgm%ems,bio%upgm%endlgs,bio%upgm%epods,bio%upgm%ergdd,bio%upgm%eseeds,bio%upgm%first7,bio%upgm%fps,bio%upgm%fullbs,&
-            & bio%upgm%gddtbg,bio%upgm%germgdd,bio%upgm%germs,bio%upgm%ggdd,bio%upgm%gmethod,bio%upgm%gpds,bio%upgm%growth_stress,bio%upgm%halfbs,bio%upgm%heads,  &
-            & bio%upgm%hrs,ctrl%sim%icli,bio%upgm%ies,bio%upgm%ies2,bio%upgm%infls,bio%upgm%joints,bio%upgm%lf12s,bio%upgm%lf1s,bio%upgm%lf2s,bio%upgm%lf3s,bio%upgm%lf4s,bio%upgm%lf8s,bio%upgm%mats, &
-            & bio%upgm%maxht,bio%upgm%mffls,bio%upgm%milks,bio%upgm%mpods,bio%upgm%mseeds,bio%upgm%opens,bio%upgm%pchron,ctrl%mngt%pd,bio%upgm%phenolflg,ctrl%mngt%pm,ctrl%mngt%py,     &
-            & bio%upgm%seedsw,bio%upgm%silks,bio%upgm%soilwat,bio%upgm%srs,bio%upgm%tbase,bio%upgm%tis,bio%upgm%toptlo,bio%upgm%toptup,bio%upgm%tsints,bio%upgm%tss,bio%upgm%tupper, &
-            & bio%upgm%wfpslo,bio%upgm%wfpsup,bio%upgm%yelows,bio%upgm%co2x,bio%upgm%co2y,clidat%co2atmos)
-
-        !debe added growth_stress to pass to crop because growth_stress is now being
-        !read in. debe added toptlo, topup and tbase, canopyflg.
-        !debe added dayhtinc to be able to pass the daily increase in height to growth
-        ! for the ht_dia_sai subroutine in place of the weps/upgm variable dht when
-        ! canopyflg = 1.
-        !debe added growth stage array variables and phenolflg to be passed to crop from main.
+        call crop(ctrl,clidat,soils,bio,prevbio, biotot,cropres,daysim)
 
         if (ctrl%sim%am0cdb==1) call cdbug(1,soils%spp%nslay,ctrl, clidat,soils,bio)
     end if
@@ -98,30 +43,6 @@
     if ((cropres%standstem+cropres%standleaf+cropres%standstore+cropres%flatstem        &
         & +cropres%flatleaf+cropres%flatstore)>0.0) then
     !! zero out residue pools which crop is not transferring
-    !cropres%flatrootstore = 0.0
-    !cropres%flatrootfiber = 0.0
-    !do lay = 1,soils%spp%nslay
-    !    cropres%leafz(lay) = 0.0
-    !    cropres%storez(lay) = 0.0
-    !    cropres%rootstorez(lay) = 0.0
-    !    cropres%rootfiberz(lay) = 0.0
-    !end do
-    !call trans(cropres%standstem,cropres%standleaf,cropres%standstore,cropres%flatstem&
-    !         & ,cropres%flatleaf,cropres%flatstore,cropres%flatrootstore,            &
-    !         & cropres%flatrootfiber,cropres%stemz,cropres%leafz,            &
-    !         & cropres%storez,cropres%rootstorez,cropres%rootfiberz,     &
-    !         & cropres%zht,tempbio%geometry%dstm,tempbio%geometry%xstmrep,tempbio%geometry%grainf,admstandstem(1,sr),&
-    !         & admstandleaf(1,sr),admstandstore(1,sr),admflatstem(1,sr),          &
-    !         & admflatleaf(1,sr),admflatstore(1,sr),admflatrootstore(1,sr),       &
-    !         & admflatrootfiber(1,sr),admbgstemz(1,1,sr),admbgleafz(1,1,sr),      &
-    !         & admbgstorez(1,1,sr),admbgrootstorez(1,1,sr),admbgrootfiberz(1,1,sr)&
-    !         & ,adzht(1,sr),addstm(1,sr),adxstmrep(1,sr),adgrainf(1,sr),ctrl%sim%ac0nam&
-    !         & ,bio%database%xstm,bio%database%rbc,bio%database%sla,bio%database%ck,bio%database%dkrate,         &
-    !         & bio%database%covfact,bio%database%ddsthrsh,bio%geometry%hyfg,bio%database%resevapa,            &
-    !         & bio%database%resevapb,ctrl%sim%ac0nam,bio%database%xstm,bio%database%rbc,bio%database%sla, &
-    !         & bio%database%ck,dkrate(1,1,sr),covfact(1,sr),ddsthrsh(1,sr),   &
-    !         & adhyfg(1,sr),adresevapa(1,sr),adresevapb(1,sr),cumdds(1,sr),   &
-    !         & cumddf(1,sr),cumddg(1,1,sr),soils%spp%nslay)
     call trans( &
         &      cropres%standstem, cropres%standleaf, cropres%standstore, &
         &      cropres%flatstem, cropres%flatleaf, cropres%flatstore, &
@@ -796,3 +717,12 @@
     ! to be disabled, we won't worry about it right now.  lew - 04/23/99
     !
     ! check for a valid growing crop
+    
+    
+    
+        !debe added growth_stress to pass to crop because growth_stress is now being
+        !read in. debe added toptlo, topup and tbase, canopyflg.
+        !debe added dayhtinc to be able to pass the daily increase in height to growth
+        ! for the ht_dia_sai subroutine in place of the weps/upgm variable dht when
+        ! canopyflg = 1.
+        !debe added growth stage array variables and phenolflg to be passed to crop from main.

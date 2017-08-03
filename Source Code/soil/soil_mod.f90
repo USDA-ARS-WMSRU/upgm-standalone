@@ -34,10 +34,8 @@
         real :: asftap(100) !used
         real :: asftan(100) !used
         real :: asmno3      !used
-            
     end type soil_chem_props
     
-
     type soildata
         type(soil_phys_props) :: spp
         type(soil_chem_props) :: scp
