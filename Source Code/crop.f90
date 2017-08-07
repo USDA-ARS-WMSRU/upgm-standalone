@@ -422,27 +422,11 @@
             ! original value once emergence occurs. to avoid the problem where huiy
             ! = bio%growth%thu_shoot_end in the call to shoot_grow, add 0.00001 to huiy below:
             if (clidat%huiy>=bio%growth%thu_shoot_end) bio%growth%thu_shoot_end = clidat%huiy + 0.00001      !should 'then' be here? no, then is above
-            call shoot_grow(ctrl,clidat, bio, soils%spp%nslay,soils%spp%aszlyd(1),bio%geometry%dpop,bio%database%zmxc,bio%database%zmrt,bio%database%fleafstem,bio%database%fshoot,   &
-                & bio%database%ssa,bio%database%ssb,bio%database%diammax,clidat%hui,clidat%huiy,bio%growth%thu_shoot_beg,         &
-                & bio%growth%thu_shoot_end,bio%mass%standstem,bio%mass%standleaf,bio%mass%standstore,   &
-                & bio%mass%flatstem,bio%mass%flatleaf,bio%mass%flatstore,bio%growth%mshoot,bio%growth%mtotshoot, &
-                & bio%mass%stemz,bio%mass%rootstorez,bio%mass%rootfiberz,bio%geometry%zht,bio%geometry%zshoot,     &
-                & bio%geometry%dstm,bio%geometry%zrtd,bio%growth%zgrowpt,bio%growth%fliveleaf,bio%bname,bio%geometry%hyfg,         &
-                & bio%database%yld_coef,bio%database%resid_int,bio%database%grf,daysim,dap,gdds,bio%database%growdepth, &
-                & bio%upgm%seedsw,bio%bname,bio%upgm%soilwat,bio%upgm%wfpslo,bio%upgm%wfpsup,bio%upgm%germgdd,bio%upgm%ergdd,bio%upgm%gddtbg,&
-                & ddap,dgdds,elong,bio%upgm%ems,bio%upgm%germs,gddday,yy,bio%upgm%emrgflg,ctrl%sim%icli,ctrl%mngt%pd,ctrl%mngt%pm,ctrl%mngt%py,&
-                & yr,ctrl%sim%cliname,bio%upgm%egdd,bio%upgm%ggdd,tempsw)                          !used dap in place of bio%growth%dayap
+            call shoot_grow(ctrl,clidat, bio,soils, daysim,dap,gdds, &
+                & ddap,dgdds,elong,gddday,yy,yr,tempsw)
         else if ((clidat%huiy<bio%growth%thu_shoot_end).and.(clidat%hui>bio%growth%thu_shoot_beg)) then
-            call shoot_grow(ctrl,clidat, bio, soils%spp%nslay,soils%spp%aszlyd(1),bio%geometry%dpop,bio%database%zmxc,bio%database%zmrt,bio%database%fleafstem,bio%database%fshoot,   &
-                & bio%database%ssa,bio%database%ssb,bio%database%diammax,clidat%hui,clidat%huiy,bio%growth%thu_shoot_beg,         &
-                & bio%growth%thu_shoot_end,bio%mass%standstem,bio%mass%standleaf,bio%mass%standstore,   &
-                & bio%mass%flatstem,bio%mass%flatleaf,bio%mass%flatstore,bio%growth%mshoot,bio%growth%mtotshoot, &
-                & bio%mass%stemz,bio%mass%rootstorez,bio%mass%rootfiberz,bio%geometry%zht,bio%geometry%zshoot,     &
-                & bio%geometry%dstm,bio%geometry%zrtd,bio%growth%zgrowpt,bio%growth%fliveleaf,bio%bname,bio%geometry%hyfg,         &
-                & bio%database%yld_coef,bio%database%resid_int,bio%database%grf,daysim,dap,gdds,bio%database%growdepth, &
-                & bio%upgm%seedsw,bio%bname,bio%upgm%soilwat,bio%upgm%wfpslo,bio%upgm%wfpsup,bio%upgm%germgdd,bio%upgm%ergdd,bio%upgm%gddtbg,&
-                & ddap,dgdds,elong,bio%upgm%ems,bio%upgm%germs,gddday,yy,bio%upgm%emrgflg,ctrl%sim%icli,ctrl%mngt%pd,ctrl%mngt%pm,ctrl%mngt%py,&
-                & yr,ctrl%sim%cliname,bio%upgm%egdd,bio%upgm%ggdd,tempsw)        !used dap in place of this bio%growth%dayap
+            call shoot_grow(ctrl,clidat, bio,soils, daysim,dap,gdds, &
+                & ddap,dgdds,elong,gddday,yy,yr,tempsw)
         end if
         ! ends the if bio%upgm%emrgflg = 1 if block
 
