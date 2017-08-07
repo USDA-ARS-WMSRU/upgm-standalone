@@ -24,7 +24,7 @@
     type(climate_data), intent(inout) :: clidat
     type(biomatter),    intent(inout) :: bio, prevbio
     type(biototal),     intent(inout) :: biotot
-    type(crop_residue), intent(inout) ::  cropres
+    type(crop_residue), intent(inout) :: cropres
     type(soildata),     intent(inout) :: soils
     integer(int32),     intent(in) :: daysim
     !
@@ -170,17 +170,10 @@
 
     !debe added call to phenolmms. call it after call to cinit to insure that
     !variables are initialized.
-    call phenolmms(ctrl,bio%upgm%aepa,bio%upgm%aifs,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,bio%database%tmin,ctrl%cropstress%ahfwsf,bio%upgm%blstrs,bio%upgm%boots,   &
-        & bio%upgm%browns,clidat%awtdmn,clidat%awtdmx,bio%upgm%canht,ctrl%sim%cliname,bio%bname,bio%upgm%cots,bio%bname,daa,dae,  &
-        & dap,dav,bio%upgm%dayhtinc,daynum,dd,ddae,ddap,ddav,bio%upgm%dents,dgdde,dgdds,     &
-        & dgddv,bio%upgm%doughs,bio%upgm%drs,bio%upgm%dummy2,bio%upgm%ears,bio%upgm%ecanht,bio%upgm%emrgflg,bio%upgm%ems,bio%upgm%endlgs,endphenol,&
-        & bio%upgm%epods,bio%upgm%eseeds,bio%upgm%first7,bio%upgm%fps,bio%upgm%fullbs,gdda,gddday,gdde,gdds,gddv,gddwsf,&
-        & bio%upgm%gmethod,bio%upgm%gpds,bio%upgm%halfbs,bio%upgm%heads,bio%upgm%hrs,bio%upgm%ies,bio%upgm%ies2,bio%upgm%infls,jan1,bio%upgm%joints,bio%upgm%lf1s,   &
-        & bio%upgm%lf12s,bio%upgm%lf2s,bio%upgm%lf3s,bio%upgm%lf4s,bio%upgm%lf8s,lnarray,lncntr,lnpout,bio%upgm%mats,bio%upgm%maxht,bio%upgm%mffls,&
-        & bio%upgm%milks,mm,bio%upgm%mpods,bio%upgm%mseeds,bio%upgm%opens,bio%upgm%pchron,pdate,rowcntr,bio%upgm%seedsw,   &
-        & bio%upgm%silks,bio%upgm%soilwat,bio%upgm%srs,bio%upgm%tbase,bio%upgm%tis,todayln,bio%upgm%toptlo,bio%upgm%toptup,bio%upgm%tsints,bio%upgm%tss,    &
-        & bio%upgm%tupper,bio%upgm%yelows,yestln,yy,ln)
-
+    call phenolmms(ctrl, clidat, bio, daa,dae,  &
+        & dap,dav,daynum,dd,ddae,ddap,ddav,dgdde,dgdds,     &
+        & dgddv,endphenol, gdda,gddday,gdde,gdds,gddv,gddwsf,jan1,   &
+        & lnarray,lncntr,lnpout,mm,pdate,rowcntr,todayln,yestln,yy,ln)
 
     !debe added bio%upgm%dayhtinc to be able to pass the daily increase in height to growth
     ! for the ht_dia_sai subroutine in place of the weps/upgm variable dht when

@@ -1,14 +1,6 @@
-subroutine phenolmms(ctrl, aepa,aifs,antes,antss,bc0growdepth,bctmin,bhfwsf,blstrs,   &
-                   & boots,browns,bwtdmn,bwtdmx,canht,cliname,cname,cots,       &
-                   & cropname,daa,dae,dap,dav,dayhtinc,daynum,dd,ddae,ddap,ddav,&
-                   & dents,dgdde,dgdds,dgddv,doughs,drs,dummy2,ears,ecanht,     &
-                   & emrgflg,ems,endlgs,endphenol,epods,eseeds,first7,fps,      &
-                   & fullbs,gdda,gddday,gdde,gdds,gddv,gddwsf,gmethod,gpds,     &
-                   & halfbs,heads,hrs,ies,ies2,infls,jan1,joints,lf1s,lf12s,    &
-                   & lf2s,lf3s,lf4s,lf8s,lnarray,lncntr,lnpout,mats,maxht,mffls,&
-                   & milks,mm,mpods,mseeds,opens,pchron,pdate,rowcntr,seedsw,   & 
-                   & silks,soilwat,srs,tbase,tis,todayln,toptlo,toptup,tsints,  &
-                   & tss,tupper,yelows,yestln,yy,ln)   
+subroutine phenolmms(ctrl, clidat, bio,daa,dae,dap,dav,daynum,dd,ddae,ddap,ddav,dgdde,dgdds,dgddv,endphenol,    &
+                  & gdda,gddday,gdde,gdds,gddv,gddwsf,jan1,lnarray,lncntr,lnpout,mm,pdate,rowcntr,      &                               
+                  & todayln, yestln, yy, ln)
 
 !debe added this subroutine as a means of keeping the subroutines from
 !phenologymms all together. this subroutine will be called from crop.
@@ -16,45 +8,39 @@ subroutine phenolmms(ctrl, aepa,aifs,antes,antss,bc0growdepth,bctmin,bhfwsf,blst
 !phenologymms.
 !
     use upgm_simdata, only : controls
+    use climate, only : climate_data
+    use biomaterial
 implicit none
 !
 ! Dummy arguments
 !
-    type(controls) :: ctrl
-real :: aepa,bc0growdepth,bctmin,bhfwsf,bwtdmn,bwtdmx,canht,dayhtinc,ecanht,    &
-      & gdda,gddday,gdde,gdds,gddv,maxht,pchron,tbase,todayln,toptlo,           & 
-      & toptup,tupper,yestln,ln
-character(80) :: cliname
-character(80) :: cname,cropname
-integer :: daa,dae,dap,dav,daynum,dd,emrgflg,first7,gmethod,lncntr,mm,pdate,    &
-         & rowcntr,seedsw,yy
+    type(controls),     intent(inout) :: ctrl
+    type(biomatter),    intent(inout) :: bio
+    type(climate_data), intent(inout) :: clidat
+    
+real :: gdda,gddday,gdde,gdds,gddv, todayln,yestln,ln
+integer :: daa,dae,dap,dav,daynum,dd,lncntr,mm,pdate,    &
+         & rowcntr,yy
 logical :: endphenol,jan1
-integer,dimension(4) :: aifs,antes,antss,blstrs,boots,browns,cots,dents,doughs, &
-                      & drs,ears,ems,endlgs,epods,eseeds,fps,fullbs,gpds,halfbs,&
-                      & heads,hrs,ies,ies2,infls,joints,lf12s,lf1s,lf2s,lf3s,   &
-                      & lf4s,lf8s,mats,mffls,milks,mpods,mseeds,opens,silks,srs,&
-                      & tis,tsints,tss,yelows
 integer,dimension(20) :: ddae,ddap,ddav
 real,dimension(20) :: dgdde,dgdds,dgddv
-real,dimension(30) :: dummy2
 real,dimension(15,5) :: gddwsf
 real,dimension(400,2) :: lnarray
 real,dimension(100,2) :: lnpout
-character(80),dimension(4) :: soilwat
 !
-!debe added dayhtinc to be able to pass the daily increase in height to growth
+!debe added bio%upgm%dayhtinc to be able to pass the daily increase in height to growth
 ! for the ht_dia_sai subroutine in place of the weps/upgm variable dht when
 ! canopyflg = 1.
-!debe added ecanht so that it can be read in instead of set in the code for each crop.
+!debe added bio%upgm%ecanht so that it can be read in instead of set in the code for each crop.
 !
  
 !     + + + argument definitions + + +
-!     bc0growdepth - depth of growing point at time of planting (m).
-!     bctmin - base temperature (deg. c).
-!     bhfwsf - water stress factor ratio (0-1).  this is read in daily.
-!     bwtdmn - daily minimum air temperature (deg.c).
-!     bwtdmx - daily maximum air temperature (deg.c).
-!     cname - crop name.
+!     bio%database%growdepth - depth of growing point at time of planting (m).
+!     bio%database%tmin - base temperature (deg. c).
+!     ctrl%cropstress%ahfwsf - water stress factor ratio (0-1).  this is read in daily.
+!     clidat%awtdmn - daily minimum air temperature (deg.c).
+!     clidat%awtdmx - daily maximum air temperature (deg.c).
+!     bio%bname - crop name.
 !     dd - day.
 !     mm - month.
 !     yy - year.
@@ -62,86 +48,85 @@ character(80),dimension(4) :: soilwat
 !     + + + local variable definitions + + +
  
 !     + + + newly added argument definitions + + +
-!     aepa - the parameter for duration of anthesis (i.e., gdd from start
+!     bio%upgm%aepa - the parameter for duration of anthesis (i.e., gdd from start
 !            to end of anthesis.
-!     aifs - awns initials formed growth stage for spring barley and winter
+!     bio%upgm%aifs - awns initials formed growth stage for spring barley and winter
 !            barley. this array includes daynum, year, month and day of when
 !            this stage was reached.
-!     antes - end of anthesis growth stage for hay millet, proso millet,
+!     bio%upgm%antes - end of anthesis growth stage for hay millet, proso millet,
 !             spring barley, spring wheat, sunflower, winter barley and winter
 !             wheat. this array includes daynum, year, month and day of when
 !             this stage was reached.
-!     antss - start of anthesis growth stage for corn, dry beans, hay millet,
+!     bio%upgm%antss - start of anthesis growth stage for corn, dry beans, hay millet,
 !             proso millet, sorghum (first bloom), spring barley, spring
 !             wheat, sunflower, winter barley and winter wheat. in dry beans,
 !             the start of anthesis growth stage and there is one open
 !             flower per plant =100% bloom. this array includes daynum,
 !             year, month and day of when this stage was reached.
-!     blstrs - blister growth stage in corn. this array includes daynum,
+!     bio%upgm%blstrs - blister growth stage in corn. this array includes daynum,
 !              year, month and day of when this stage was reached.
-!     boots - booting growth stage for hay millet, proso millet, spring
+!     bio%upgm%boots - booting growth stage for hay millet, proso millet, spring
 !             barley, spring wheat, winter barley and winter wheat. this array
 !             includes daynum, year, month and day of when this stage was
 !             reached.  booting is defined as flag leaf has completed its
 !             growth.
-!     browns - when the back of the sunflower head is yellow and there may be
+!     bio%upgm%browns - when the back of the sunflower head is yellow and there may be
 !              some brown spotting. this array includes daynum, year, month
 !              and day of when this stage was reached.
-!     canht - the cumulative height of the plant canopy.
-!     cliname - the name of the location for the climate data.
-!     cots - cotyledonary and unifoliolate leaves are visible in dry
+!     bio%upgm%canht - the cumulative height of the plant canopy.
+!     ctrl%sim%cliname - the name of the location for the climate data.
+!     bio%upgm%cots - cotyledonary and unifoliolate leaves are visible in dry
 !            beans. this array includes daynum, year, month and day
 !            of when this stage was reached.
-!     cropname - crop name.
 !     daa - days after anthesis.
 !     dae - days after emergence.
 !     dap - days after planting.
 !     dav - days after vernalization.
-!     dayhtinc - the increase in plant height for today.
+!     bio%upgm%dayhtinc - the increase in plant height for today.
 !     daynum - the current day numbered from jan 1.
 !     ddae - an array holding the dae for each growth stage.
 !     ddap - an array holding the dap for each growth stage.
 !     ddav - an array holding the dav for each growth stage.
-!     dents - the dent growth stage in corn. this array includes daynum,
+!     bio%upgm%dents - the dent growth stage in corn. this array includes daynum,
 !             year, month and day of when this stage was reached.
 !     dgdde - an array holding the gdde for each growth stage.
 !     dgdds - an array holding the gdds for each growth stage.
 !     dgddv -  an array holding the gddv for each growth stage.
-!     doughs - the dough growth stage in corn. this array includes daynum,
+!     bio%upgm%doughs - the dough growth stage in corn. this array includes daynum,
 !              year, month and day of when this stage was reached.
-!     drs - double ridge growth stage for hay millet, proso millet, spring
+!     bio%upgm%drs - double ridge growth stage for hay millet, proso millet, spring
 !           barley, spring wheat, winter barley and winter wheat. this array
 !           includes daynum, year, month and day of when this stage was
 !           reached.
-!     dummy2 - an array to hold the gdd values, both under stressed
+!     bio%upgm%dummy2 - an array to hold the gdd values, both under stressed
 !              and non- stressed conditions,required to reach each growth
 !              stage of the current crop.
-!     ears - the ear initiation stage in corn. this array includes daynum,
+!     bio%upgm%ears - the ear initiation stage in corn. this array includes daynum,
 !            year, month and day of when this stage was reached.
-!     ecanht - this is the maximum canopy height of the crop in phase 1 of
+!     bio%upgm%ecanht - this is the maximum canopy height of the crop in phase 1 of
 !              the canopy height growth.  this is usually from emergence to
 !              when the plant begins elongating stems but this stage varies
 !              among crops. it is an input parameter and is read in from upgm_crop.dat.
-!     emrgflg - a flag to determine if the new emerge subroutine should be
-!               called (emrgflg=1) or to proceed with the weps/upgm method
-!               of achieving emergence (emrgflg=0).
-!     ems - day when emergence occurred in all crops. this array includes
+!     bio%upgm%emrgflg - a flag to determine if the new emerge subroutine should be
+!               called (bio%upgm%emrgflg=1) or to proceed with the weps/upgm method
+!               of achieving emergence (bio%upgm%emrgflg=0).
+!     bio%upgm%ems - day when emergence occurred in all crops. this array includes
 !           daynum, year, month and day of when this event occurred.
-!     endlgs - end of leaf growth stage in sorghum. this array includes
+!     bio%upgm%endlgs - end of leaf growth stage in sorghum. this array includes
 !              daynum, year, month and day of when this stage was reached.
 !     endphenol - a flag to indicate if this subroutine should be called
 !                 again on the next day.
-!     epods - one pod has reached the maximum length in dry beans (early
+!     bio%upgm%epods - one pod has reached the maximum length in dry beans (early
 !             pod set). this array includes daynum,year, month and day of
 !             when this stage was reached.
-!     eseeds - there is one pod with fully developed seeds in dry
+!     bio%upgm%eseeds - there is one pod with fully developed seeds in dry
 !              beans (early seed fill). this array includes daynum, year,
 !              month and day of when this stage was reached.
-!     first7 - used to set the value of aepa the first time the crop's phenol
+!     bio%upgm%first7 - used to set the value of bio%upgm%aepa the first time the crop's phenol
 !              subroutine is called.
-!     fps - flower primordium initiation growth stage. this array includes
+!     bio%upgm%fps - flower primordium initiation growth stage. this array includes
 !           daynum, year, month and day of when this stage was reached.
-!     fullbs - full bloom growth stage in sorghum. this array includes
+!     bio%upgm%fullbs - full bloom growth stage in sorghum. this array includes
 !            daynum, year, month and day of when this stage was reached.
 !     gdda - growing degree days from anthesis.
 !     gddday - the number of gdd with 0°C base temperature for that day.
@@ -158,138 +143,138 @@ character(80),dimension(4) :: soilwat
 !              column three contains wsfhi (high water stress) and is x1.
 !              column four contains wsflo (low water stress) and is x2.
 !              column five contains the adjgdd value for the stage.
-!     gmethod - selects the method whereby gdd will be calculated.  a value
+!     bio%upgm%gmethod - selects the method whereby gdd will be calculated.  a value
 !               of 1 corresponds to method 1 in phenologymms and is used
 !               for crops such as winter wheat, winter barley and proso
 !               millet. a value of 2 corresponds to method 2 in
 !               phenologymms and is used for crops such as corn, dry beans,
 !               sorghum and sunflower.  a value of 3 is the way that weps/upgm
 !               calculated ggd for the day.
-!     gpds - growing point differentiation growth stage in sorghum. this
+!     bio%upgm%gpds - growing point differentiation growth stage in sorghum. this
 !            array includes daynum, year, month and day of when this stage
 !            was reached.
-!     halfbs - half bloom growth stage in sorghum. this array includes
+!     bio%upgm%halfbs - half bloom growth stage in sorghum. this array includes
 !            daynum, year, month and day of when this stage was reached.
-!     heads - heading growth stage for hay millet, proso millet, spring
+!     bio%upgm%heads - heading growth stage for hay millet, proso millet, spring
 !             barley, spring wheat, winter barley and winter wheat. this
 !             array includes daynum, year, month and day of when this stage
 !             was reached.
-!     hrs - time to harvest ripe growth stage for corn, dry beans, hay
+!     bio%upgm%hrs - time to harvest ripe growth stage for corn, dry beans, hay
 !           millet, proso millet, sorghum, spring barley, spring wheat,
 !           sunflower, winter barley and winter wheat. in dry beans, 80%
 !           of pods are at the mature color in dry beans. this array
 !           includes daynum, year, month and day of when this stage was
 !           reached.
-!     ies - start of internode elongation growth stage for corn, hay millet,
+!     bio%upgm%ies - start of internode elongation growth stage for corn, hay millet,
 !           proso millet, sorghum, spring barley, spring wheat, winter barley,
 !           and winter wheat. for sunflower, this stage occurs when the
 !           internode below the inflorescence elongates 0.5 to 2.0 cm above
 !           the nearest leaf on the stem. this array includes daynum, year,
 !           month and day of when this stage was reached.
-!     ies2 - for sunflower, this is when the internode below the inflorescence
+!     bio%upgm%ies2 - for sunflower, this is when the internode below the inflorescence
 !            continues lengthening and lifts the head above the surrounding
 !            leaves more than 2 cm. this array includes daynum, year,
 !            month and day of when this stage was reached.
-!     infls - the sunflower inflorescence becomes visible. this array includes
+!     bio%upgm%infls - the sunflower inflorescence becomes visible. this array includes
 !             daynum, year, month and day of when this stage was reached.
 !     jan1 - a flag to test if january 1 has occurred.  if it has passed,
 !            then the winter annual crop is assumed to have completed
 !            vernalization.
-!     joints - jointing growth stage for hay millet, proso millet, sorghum,
+!     bio%upgm%joints - jointing growth stage for hay millet, proso millet, sorghum,
 !              spring barley, spring wheat, winter barley and winter wheat.
 !              this array includes daynum, year, month and day of when this
 !              stage was reached.
-!     lf1s - stage when the first trifoliolate leaf is unfolded in dry
+!     bio%upgm%lf1s - stage when the first trifoliolate leaf is unfolded in dry
 !            beans. this array includes daynum, year, month and day of
 !            when this stage was reached.
-!     lf12s - the 12 leaf growth stage for corn and sunflower. this array
+!     bio%upgm%lf12s - the 12 leaf growth stage for corn and sunflower. this array
 !             includes daynum, year, month and day of when this stage was
 !             reached.
-!     lf2s - stage when the second trifoliolate leaf is unfolded in dry
+!     bio%upgm%lf2s - stage when the second trifoliolate leaf is unfolded in dry
 !            beans. this array includes daynum, year, month and day of
 !            when this stage was reached.
-!     lf3s - stage when the third trifoliolate leaf is unfolded in dry
+!     bio%upgm%lf3s - stage when the third trifoliolate leaf is unfolded in dry
 !            beans. this array includes daynum, year, month and day of
 !            when this stage was reached.
-!     lf4s - the 4 leaf growth stage for corn and sunflower and the
+!     bio%upgm%lf4s - the 4 leaf growth stage for corn and sunflower and the
 !            stage when the fourth trifoliolate leaf is unfolded in dry
 !            beans. this array includes daynum, year, month and day of
 !            when this stage was reached.
-!     lf8s - the 8 leaf growth stage for sunflower. this array includes
+!     bio%upgm%lf8s - the 8 leaf growth stage for sunflower. this array includes
 !            daynum, year, month and day of when this stage was reached.
 !     lnarray - an array to hold the leaf number calculated for each day
 !     lncntr - counter for the leafno subroutine
 !     lnpout - an array used in writing out daynum and the number of leaves
 !              on that day. the values are written each time a new leaf has
 !              appeared.
-!     mats - physiological maturity growth stage for corn, dry beans,
+!     bio%upgm%mats - physiological maturity growth stage for corn, dry beans,
 !            hay millet, proso millet, sorghum, spring barley, spring
 !            wheat, sunflower, winter barley and winter wheat. in dry beans,
 !            one pod has changed color/striped. this array includes
 !            daynum, year, month and day of when this stage was reached.
-!     maxht - the maximum height of the plant canopy.
-!     mffls - the stage of mid to full flower in dry beans. this array
+!     bio%upgm%maxht - the maximum height of the plant canopy.
+!     bio%upgm%mffls - the stage of mid to full flower in dry beans. this array
 !             includes daynum, year, month and day of when this stage
 !             was reached.
-!     milks - the milk growth stage in corn. this array includes daynum, year,
+!     bio%upgm%milks - the milk growth stage in corn. this array includes daynum, year,
 !             month and day of when this stage was reached.
-!     mpods - the stage when 50% of the pods are at the maximum length.
+!     bio%upgm%mpods - the stage when 50% of the pods are at the maximum length.
 !             this array includes daynum, year, month and day of when
 !             this stage was reached.
-!     mseeds - the stage when 50% of the pods have fully developed seeds
+!     bio%upgm%mseeds - the stage when 50% of the pods have fully developed seeds
 !              in dry beans. this array includes daynum, year, month and
 !              day of when this stage was reached.
-!     opens - the sunflower inflorescence begins to open. this array includes
+!     bio%upgm%opens - the sunflower inflorescence begins to open. this array includes
 !             daynum, year, month and day of when this stage was reached.
-!     pchron - phyllochron value which is the number of gdd per leaf.
+!     bio%upgm%pchron - phyllochron value which is the number of gdd per leaf.
 !     pdate - planting date.
 !     rowcntr - a counter for the rows in an array
-!     seedsw - soil water content at seed depth.  it is read in as
+!     bio%upgm%seedsw - soil water content at seed depth.  it is read in as
 !              optimum, medium, dry or planted in dust and converted
 !              to an integer.	 1 = optimum, 2 = medium, 3 = dry and
 !              4 = planted in dust.
-!     silks - the silking growth stage in corn. this array includes daynum,
+!      bio%upgm%silks - the silking growth stage in corn. this array includes daynum,
 !             year, month and day of when this stage was reached.
-!     soilwat - an array holding the swtype for each soil moisture
+!     bio%upgm%soilwat - an array holding the swtype for each soil moisture
 !               condition.
-!     srs - single ridge growth stage for hay millet, proso millet, spring
+!     bio%upgm%srs - single ridge growth stage for hay millet, proso millet, spring
 !           barley, spring wheat, winter barley and winter wheat. this array
 !           includes daynum, year, month and day of when this stage was
 !           reached.
-!     tbase - lowest temperature below which no growth occurs (deg.c).
-!     tis - start of tillering growth stage for corn, hay millet, proso
+!     bio%upgm%tbase - lowest temperature below which no growth occurs (deg.c).
+!     bio%upgm%tis - start of tillering growth stage for corn, hay millet, proso
 !           millet, sorghum, spring barley, spring wheat, winter barley and
 !           winter wheat. this array includes daynum, year, month and day of
 !           when this stage was reached.
 !     todayln - the value of the current day's leaf number
-!     toptlo - the lower temperature in the optimum range for plant
+!     bio%upgm%toptlo - the lower temperature in the optimum range for plant
 !              growth (deg.c).
-!     toptup - the upper temperature in the optimum range for plant
+!     bio%upgm%toptup - the upper temperature in the optimum range for plant
 !              growth (deg.c).
-!     tsints - tassel initiation growth stage in corn. this array includes
+!     bio%upgm%tsints - tassel initiation growth stage in corn. this array includes
 !              daynum, year, month and day of when this stage was reached.
-!     tss - terminal spikelet growth stage for spring and winter wheat. this
+!     bio%upgm%tss - terminal spikelet growth stage for spring and winter wheat. this
 !           array includes daynum, year, month and day of when this stage was
 !           reached.
-!     tupper - upper/maximum temperature for plant growth (deg.c).
+!     bio%upgm%tupper - upper/maximum temperature for plant growth (deg.c).
 !              no growth with temperatures above this point.
-!     yelows - back of the sunflower head is a light yellow. this array
+!     bio%upgm%yelows - back of the sunflower head is a light yellow. this array
 !              includes daynum, year, month and day of when this stage was
 !              reached.
 !     yestln - the value of yesterday's leaf number
  
 ! ***** calculating gdd *****
 !debe added call to new subroutine gddcalc.
-!debe added variables: tbase, toptlo, toptup. take out sending bctopt to
+!debe added variables: bio%upgm%tbase, bio%upgm%toptlo, bio%upgm%toptup. take out sending bctopt to
 !gddcalc for topt. topt is now being calculated in gddcalc as the average
-! of toptlo and toptup.
-call gddcalc(bctmin,bwtdmn,bwtdmx,gddday,gmethod,tbase,toptlo,toptup,tupper)
+! of bio%upgm%toptlo and bio%upgm%toptup.
+call gddcalc(bio%database%tmin,clidat%awtdmn,clidat%awtdmx,gddday,bio%upgm%gmethod,bio%upgm%tbase,bio%upgm%toptlo,bio%upgm%toptup,bio%upgm%tupper)
  
  
 !debe moved the next two lines of code out of the 'if (huiy.lt.1.0) then'
-! statement so that hrs growth stage will show the amounts for dap and
-! gdds. this is because hrs growth stage occurs after huiy.lt.1.0 and
-! these 2 values will not be incremented for the hrs stage.  the values
+! statement so that bio%upgm%hrs growth stage will show the amounts for dap and
+! gdds. this is because bio%upgm%hrs growth stage occurs after huiy.lt.1.0 and
+! these 2 values will not be incremented for the bio%upgm%hrs stage.  the values
 ! are available for shoot_grow and emerge because they are saved in the
 ! save statement above.
  
@@ -308,11 +293,11 @@ end if
 ! ***** emergence *****
 !  accumulate gdd from emergence (gdde) and days after emergence (dae)
 !  once emergence has occurred:
-if (ems(1)/=999) then       ! emergence has occurred
+if (bio%upgm%ems(1)/=999) then       ! emergence has occurred
 !!debe incrementing dae the day after emergence occurs.
-!  if ((daynum.gt.ems(1)).or.(yy.eq.2)) then
-!  if (ems(1).gt.dap) then the crop doesn't finish because dap becomes
-!                          .gt. ems(1) before hrs is reached if this if statement is used.
+!  if ((daynum.gt.bio%upgm%ems(1)).or.(yy.eq.2)) then
+!  if (bio%upgm%ems(1).gt.dap) then the crop doesn't finish because dap becomes
+!                          .gt. bio%upgm%ems(1) before bio%upgm%hrs is reached if this if statement is used.
  
     gdde = gdde + gddday       !debe moved here so that gdde is increased after
   dae = dae + 1              !day of emergence.
@@ -328,8 +313,8 @@ if (ems(1)/=999) then       ! emergence has occurred
 ! ***** leafno *****
 !  call the leafno subroutine to calculate the number of leaves once
 !  emergence has occurred for the leaf number output table.
-  call leafno(antss,boots,cname,daynum,dgdde,endlgs,epods,gdde,ln,lnarray,     &
-             &lncntr,lnpout,pchron,rowcntr,todayln,yestln)
+  call leafno(bio%upgm%antss,bio%upgm%boots,bio%bname,daynum,dgdde,bio%upgm%endlgs,bio%upgm%epods,gdde,ln,lnarray,     &
+             &lncntr,lnpout,bio%upgm%pchron,rowcntr,todayln,yestln)
 
   !testing values in lnpout coming back from leafno subroutine
   !print *, 'after call to leafno lnpout leaf num = ', lnpout(lncntr,2)
@@ -369,10 +354,10 @@ if (ems(1)/=999) then       ! emergence has occurred
 !!! debe copy the following lines to accumulate gddv up to the section where
 !!! upgm/weps: "check winter annuals for completion of vernalization,
 !!          ! warming and spring day length." about line 712.
-!!        didn't get past tis growth stage up there.
+!!        didn't get past bio%upgm%tis growth stage up there.
 !
 !
-!! !debe with only the next two lines not commented out, hrs occurs 4/29 for
+!! !debe with only the next two lines not commented out, bio%upgm%hrs occurs 4/29 for
 !! ! cimarron weather, wsf 0.9, pdepth 2.5, planting date 9/1
 !!!         gddv = gddv + gddday
 !!!	        dav = dav + 1
@@ -396,46 +381,46 @@ if (ems(1)/=999) then       ! emergence has occurred
 ! ***** anthesis *****
 ! calculate growing degree-days from anthesis (gdda) and number of days
 ! after anthsis has occurred. just need to know that anthesis has started.
-  if (antss(1)/=999) then
+  if (bio%upgm%antss(1)/=999) then
      gdda = gdda + gddday
      daa = daa + 1
   end if
  
-!debe moved call to canopyht above the call to phenol so that dayhtinc will
+!debe moved call to canopyht above the call to phenol so that bio%upgm%dayhtinc will
 ! have the height increase value on the day of anthesis. then on the next day
-! anthesis will have occurred and antss(1) will not equal 999 any more and
+! anthesis will have occurred and bio%upgm%antss(1) will not equal 999 any more and
 ! canopyht will not be called. all other growth stages used in canopyht will
 ! have been passed long before anthesis occurs and will have their own daynum
 ! and date values.
  
 !debe add phenologymms method of determining canopy height.
 !debe took out passing gddwsf; it is not used in canopyht.
-  if (antss(1)==999) then
-     if (cname=='corn') then
-        call canopyht(antss,canht,cname,dayhtinc,dummy2,ecanht,ems,gddday,gdde, &
-                    & ies,maxht)
-     else if (cname=='dry beans') then
-        call canopyht(antss,canht,cname,dayhtinc,dummy2,ecanht,ems,gddday,gdde, &
-                    & cots,maxht)
-     else if (cname=='sorghum') then
-        call canopyht(antss,canht,cname,dayhtinc,dummy2,ecanht,ems,gddday,gdde, &
-                    & ies,maxht)
-     else if (cname=='spring barley') then
-        call canopyht(antss,canht,cname,dayhtinc,dummy2,ecanht,ems,gddday,gdde, &
-                    & aifs,maxht)
-     else if (cname=='sunflower') then
-        call canopyht(antss,canht,cname,dayhtinc,dummy2,ecanht,ems,gddday,gdde, &
-                    & lf4s,maxht)
-     else if (cname=='winter barley') then
-        call canopyht(antss,canht,cname,dayhtinc,dummy2,ecanht,ems,gddday,gdde, &
-                    & aifs,maxht)
+  if (bio%upgm%antss(1)==999) then
+     if (bio%bname=='corn') then
+        call canopyht(bio%upgm%antss,bio%upgm%canht,bio%bname,bio%upgm%dayhtinc,bio%upgm%dummy2,bio%upgm%ecanht,bio%upgm%ems,gddday,gdde, &
+                    & bio%upgm%ies,bio%upgm%maxht)
+     else if (bio%bname=='dry beans') then
+        call canopyht(bio%upgm%antss,bio%upgm%canht,bio%bname,bio%upgm%dayhtinc,bio%upgm%dummy2,bio%upgm%ecanht,bio%upgm%ems,gddday,gdde, &
+                    & bio%upgm%cots,bio%upgm%maxht)
+     else if (bio%bname=='sorghum') then
+        call canopyht(bio%upgm%antss,bio%upgm%canht,bio%bname,bio%upgm%dayhtinc,bio%upgm%dummy2,bio%upgm%ecanht,bio%upgm%ems,gddday,gdde, &
+                    & bio%upgm%ies,bio%upgm%maxht)
+     else if (bio%bname=='spring barley') then
+        call canopyht(bio%upgm%antss,bio%upgm%canht,bio%bname,bio%upgm%dayhtinc,bio%upgm%dummy2,bio%upgm%ecanht,bio%upgm%ems,gddday,gdde, &
+                    & bio%upgm%aifs,bio%upgm%maxht)
+     else if (bio%bname=='sunflower') then
+        call canopyht(bio%upgm%antss,bio%upgm%canht,bio%bname,bio%upgm%dayhtinc,bio%upgm%dummy2,bio%upgm%ecanht,bio%upgm%ems,gddday,gdde, &
+                    & bio%upgm%lf4s,bio%upgm%maxht)
+     else if (bio%bname=='winter barley') then
+        call canopyht(bio%upgm%antss,bio%upgm%canht,bio%bname,bio%upgm%dayhtinc,bio%upgm%dummy2,bio%upgm%ecanht,bio%upgm%ems,gddday,gdde, &
+                    & bio%upgm%aifs,bio%upgm%maxht)
      else   !rest of the crops: hay millet, proso millet, spring wheat, winter wheat
-        call canopyht(antss,canht,cname,dayhtinc,dummy2,ecanht,ems,gddday,gdde, &
-                    & tss,maxht)
+        call canopyht(bio%upgm%antss,bio%upgm%canht,bio%bname,bio%upgm%dayhtinc,bio%upgm%dummy2,bio%upgm%ecanht,bio%upgm%ems,gddday,gdde, &
+                    & bio%upgm%tss,bio%upgm%maxht)
      end if
-          !end if for cname
+          !end if for bio%bname
   end if
-      !end if for antss
+      !end if for bio%upgm%antss
  
 !debe moved call to phenol subroutine after the call to leafno and the gdde,
 ! gdda and gddv variables have been updated for the day. then pass the
@@ -451,24 +436,24 @@ if (ems(1)/=999) then       ! emergence has occurred
 ! has occurred so that if either has the accumulation of gdd and days
 ! after these stages can begin on the same day that it actually occurred.
  
-!debe added bhfwsf (weps/upgm variable)to the call to phenol to implement
+!debe added ctrl%cropstress%ahfwsf (weps/upgm variable)to the call to phenol to implement
 ! daily water stress effect on time of reaching a growth stage.
 !debe added gddwsf array to pass to phenol.  the gddwsf array holds the
 ! number of gdd required to reach each growth stage based on the
 ! water stress factor.
  
 !debe added variables to pass to the phenol_cropname subroutines for
-!printing out information: bc0growdepth, gmethod, emrgflg, cliname
-!debe added canht to pass to phenol to be written in phenol.out from
+!printing out information: bio%database%growdepth, bio%upgm%gmethod, bio%upgm%emrgflg, ctrl%sim%cliname
+!debe added bio%upgm%canht to pass to phenol to be written in phenol.out from
 !phenol_cropname. debe added variables for dry beans.
  
-  call phenol(ctrl, aepa,aifs,antes,antss,bc0growdepth,bhfwsf,blstrs,boots,browns,    &
-            & cliname,cname,cots,daa,dae,dap,dav,daynum,ddae,ddap,ddav,dgdde,   &
-            & dgdds,dgddv,doughs,drs,dummy2,ears,emrgflg,ems,endlgs,endphenol,  &
-            & dents,epods,eseeds,first7,fps,fullbs,gdda,gdde,gdds,gddv,gddwsf,  &
-            & gmethod,gpds,halfbs,heads,hrs,ies,ies2,infls,joints,lf1s,lf12s,   &
-            & lf2s,lf3s,lf4s,lf8s,lnpout,mats,mffls,milks,mpods,mseeds,opens,   & 
-            & pchron,pdate,seedsw,silks,soilwat,srs,tis,tsints,tss,yelows,yy)
+  call phenol(ctrl, bio%upgm%aepa,bio%upgm%aifs,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%blstrs,bio%upgm%boots,bio%upgm%browns,    &
+            & ctrl%sim%cliname,bio%bname,bio%upgm%cots,daa,dae,dap,dav,daynum,ddae,ddap,ddav,dgdde,   &
+            & dgdds,dgddv,bio%upgm%doughs,bio%upgm%drs,bio%upgm%dummy2,bio%upgm%ears,bio%upgm%emrgflg,bio%upgm%ems,bio%upgm%endlgs,endphenol,  &
+            & bio%upgm%dents,bio%upgm%epods,bio%upgm%eseeds,bio%upgm%first7,bio%upgm%fps,bio%upgm%fullbs,gdda,gdde,gdds,gddv,gddwsf,  &
+            & bio%upgm%gmethod,bio%upgm%gpds,bio%upgm%halfbs,bio%upgm%heads,bio%upgm%hrs,bio%upgm%ies,bio%upgm%ies2,bio%upgm%infls,bio%upgm%joints,bio%upgm%lf1s,bio%upgm%lf12s,   &
+            & bio%upgm%lf2s,bio%upgm%lf3s,bio%upgm%lf4s,bio%upgm%lf8s,lnpout,bio%upgm%mats,bio%upgm%mffls,bio%upgm%milks,bio%upgm%mpods,bio%upgm%mseeds,bio%upgm%opens,   & 
+            & bio%upgm%pchron,pdate,bio%upgm%seedsw, bio%upgm%silks,bio%upgm%soilwat,bio%upgm%srs,bio%upgm%tis,bio%upgm%tsints,bio%upgm%tss,bio%upgm%yelows,yy)
 !
 end if
 !
