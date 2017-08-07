@@ -1,21 +1,12 @@
-subroutine cinit(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsmb,bsfom,bsfcla, &
-               & bs0ph,bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,bc0bp3,bsmno3,bc0fd1, &
-               & bc0fd2,bctopt,bctmin,cc0fd1,cc0fd2,bc0sla,bc0idc,dd,mm,yy,     &
-               & bcthudf,bctdtm,bcthum,bc0hue,bcdmaxshoot,bc0shoot,bc0growdepth,&
-               & bc0storeinit,bcmstandstem,bcmstandleaf,bcmstandstore,          &
-               & bcmflatstem,bcmflatleaf,bcmflatstore,bcmshoot,bcmtotshoot,     &
-               & bcmbgstemz,bcmrootstorez,bcmrootfiberz,bczht,bczshoot,bcdstm,  &
-               & bczrtd,bcdayap,bcdayam,bcthucum,bctrthucum,bcgrainf,bczgrowpt, &
-               & bcfliveleaf,bcleafareatrend,bctwarmdays,bctchillucum,          &
-               & bcthu_shoot_beg,bcthu_shoot_end,bcdpop,bcdayspring,canht,      &
+subroutine cinit(ctrl,clidat,bio,soils,dd,mm,yy,                                 &
                & canhty,daa,dae,dap,dav,ddae,ddap,ddav,dgdde,dgdds,dgddv,elong, &
                & endphenol,gddday,gdda,gdde,gdds,gddv,gddwsf,jan1,lnarray,      &
-               & lncntr,lnpout,pdate,rowcntr,seedsw,tempsw,todayln,verns, &
+               & lncntr,lnpout,pdate,rowcntr, tempsw,todayln,verns,              &
                & yestln,yr,ln,co2eff)
 !
 !debe added to the subroutine arguments coming into cinit as follows:
 ! ***** emergence *****
-! variables: dap, ddap, dgdds, elong, ems, gdds, germs, gddday, seedsw, tempsw
+! variables: dap, ddap, dgdds, elong, ems, gdds, germs, gddday, bio%upgm%seedsw, tempsw
 !
 ! ***** phenology *****
 ! variables: aifs, antes, antss, blstrs, boots, browns, daa, dae, dav, ddae,
@@ -32,7 +23,7 @@ subroutine cinit(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsm
 ! variables:ln,lnarray,lncntr,lnpout,rowcntr,todayln,yestln
     
 ! ***** canopy height *****
-! variables: canht, canhty, maxht
+! variables: bio%upgm%canht, canhty, maxht
 !
 !***** CO2 variables *****
 ! debe added co2eff
@@ -43,6 +34,7 @@ subroutine cinit(ctrl,clidat,bio,bnslay,bszlyt,bszlyd,bsdblk,bsfcce,bsfcec,bsfsm
     use upgm_simdata, only : controls
     use climate, only : climate_data
     use datetime, only : dayear, caldat
+    use soil, only : soildata
     use biomaterial
     use nitrogen
     use support, only : daylen
@@ -50,22 +42,14 @@ implicit none
 !
 ! Dummy arguments
 !
-    type(controls) :: ctrl
-    type(climate_data) :: clidat
-    type(biomatter) :: bio
-real :: bc0bn1,bc0bn2,bc0bn3,bc0bp1,bc0bp2,bc0bp3,bc0fd1,bc0fd2,bc0growdepth,   &
-      & bc0hue,bc0shoot,bc0sla,bc0storeinit,bcdmaxshoot,bcdpop,bcdstm,          &
-      & bcfliveleaf,bcgrainf,bcleafareatrend,bcmflatleaf,bcmflatstem,           &
-      & bcmflatstore,bcmshoot,bcmstandleaf,bcmstandstem,bcmstandstore,          &
-      & bcmtotshoot,bctchillucum,bcthucum,bcthum,bcthu_shoot_beg,               &
-      & bcthu_shoot_end,bctmin,bctopt,bctrthucum,bczgrowpt,bczht,bczrtd,        &
-      & bczshoot,bsmno3,canht,canhty,cc0fd1,cc0fd2,elong,gdda,gddday,gdde,gdds, &
-      & gddv,todayln,yestln,ln,co2eff, bctwarmdays
-integer :: bc0idc,bcdayam,bcdayap,bcdayspring,bctdtm,bcthudf,bnslay,&
-         & daa,dae,dap,dav,dd,lncntr,mm,pdate,rowcntr,seedsw,tempsw,verns,yr,yy
+    type(controls), intent(inout) :: ctrl
+    type(climate_data), intent(inout) :: clidat
+    type(biomatter), intent(inout) :: bio
+    type(soildata), intent(inout) :: soils
+real :: canhty,elong,gdda,gddday,gdde,gdds, &
+      & gddv,todayln,yestln,ln,co2eff
+integer :: daa,dae,dap,dav,dd,lncntr,mm,pdate,rowcntr,tempsw,verns,yr,yy
 logical :: endphenol,jan1
-real,dimension(*) :: bcmbgstemz,bcmrootfiberz,bcmrootstorez,bs0ph,bsdblk,bsfcce,&
-                   & bsfcec,bsfcla,bsfom,bsfsmb,bszlyd,bszlyt
 integer,dimension(20) :: ddae,ddap,ddav
 real,dimension(20) :: dgdde,dgdds,dgddv
 real,dimension(15,5) :: gddwsf
@@ -98,8 +82,8 @@ integer :: int
 !debe added endphenol to end the simulation once the end of growth
 ! is reached.
 !
-!     the following subroutine arguments are not used: bc0bn1, bc0bn2, bc0bn3,
-!     bc0bp1, bc0bp2, bc0bp3, bc0idc, bc0sla    jcaii  8/8/08
+!     the following subroutine arguments are not used: bio%database%bn1, bio%database%bn2, bio%database%bn3,
+!     bio%database%bp1, bio%database%bp2, bio%database%bp3, bio%database%idc, bio%database%sla    jcaii  8/8/08
 !
 !     author : amare retta
 !     + + + purpose + + +
@@ -109,107 +93,107 @@ integer :: int
 !     initialization
 !
 !     + + + argument definitions + + +
-!     bc0bn1 - currently not used. normal fraction of n in crop biomass
+!     bio%database%bn1 - currently not used. normal fraction of n in crop biomass
 !              at emergence.
-!     bc0bn2 - currently not used. normal fraction of n in crop biomass
+!     bio%database%bn2 - currently not used. normal fraction of n in crop biomass
 !              at midseason
-!     bc0bn3 - currently not used. normal fraction of n in crop biomass
+!     bio%database%bn3 - currently not used. normal fraction of n in crop biomass
 !              at maturity
-!     bc0bp1 - currently not used. normal fraction of p in crop biomass
+!     bio%database%bp1 - currently not used. normal fraction of p in crop biomass
 !              at emergence
-!     bc0bp2 - currently not used. normal fraction of p in crop biomass
+!     bio%database%bp2 - currently not used. normal fraction of p in crop biomass
 !              at midseason
-!     bc0bp3 - currently not used. normal fraction of p in crop biomass
+!     bio%database%bp3 - currently not used. normal fraction of p in crop biomass
 !              at maturity
-!     bc0growdepth - db input, initial depth of growing point (m)
-!     bc0hue - relative heat unit for emergence (fraction)
-!     bc0shoot - mass from root storage required for each regrowth shoot
+!     bio%database%growdepth - db input, initial depth of growing point (m)
+!     bio%database%hue - relative heat unit for emergence (fraction)
+!     bio%database%shoot - mass from root storage required for each regrowth shoot
 !                (mg/shoot). seed shoots are smaller and adjusted for
 !                available seed mass
-!     bc0sla - currently not used. specific leaf area (cm^2/g)
-!     bc0storeinit - db input, crop storage root mass initialzation (mg/plant)
-!     bcdayam - number of days since crop matured
-!     bcdayap - number of days of growth completed since crop planted
-!     bcdayspring - day of year in which a winter annual releases stored
+!     bio%database%sla - currently not used. specific leaf area (cm^2/g)
+!     bio%database%storeinit - db input, crop storage root mass initialzation (mg/plant)
+!     bio%growth%dayam - number of days since crop matured
+!     bio%growth%dayap - number of days of growth completed since crop planted
+!     bio%growth%dayspring - day of year in which a winter annual releases stored
 !                   growth
-!     bcdmaxshoot - maximum number of shoots possible from each plant
-!     bcdpop - number of plants per unit area (#/m^2)
-!            - note: bcdstm/bcdpop gives the number of stems per plant
-!     bcdstm - number of crop stems per unit area (#/m^2)
-!     bcfliveleaf - fraction of standing plant leaf which is living
+!     bio%database%dmaxshoot - maximum number of shoots possible from each plant
+!     bio%geometry%dpop - number of plants per unit area (#/m^2)
+!            - note: bio%geometry%dstm/bio%geometry%dpop gives the number of stems per plant
+!     bio%geometry%dstm - number of crop stems per unit area (#/m^2)
+!     bio%growth%fliveleaf - fraction of standing plant leaf which is living
 !                   (transpiring)
-!     bcgrainf - internally computed reproductive grain fraction
-!     bcleafareatrend - direction in which leaf area is trending.
+!     bio%geometry%grainf - internally computed reproductive grain fraction
+!     bio%growth%leafareatrend - direction in which leaf area is trending.
 !                       saves trend even if leaf area is static for long
 !                       periods.
-!     bcmbgstemz - crop stem mass below soil surface by soil layer (kg/m^2)
-!     bcmflatleaf - crop flat leaf mass (kg/m^2)
-!     bcmflatstem - crop flat stem mass (kg/m^2)
-!     bcmflatstore - crop flat storage mass (kg/m^2)
-!     bcmrootfiberz - crop root fibrous mass by soil layer (kg/m^2)
-!     bcmrootstorez - crop root storage mass by soil layer (kg/m^2)
+!     bio%mass%stemz - crop stem mass below soil surface by soil layer (kg/m^2)
+!     bio%mass%flatleaf - crop flat leaf mass (kg/m^2)
+!     bio%mass%flatstem - crop flat stem mass (kg/m^2)
+!     bio%mass%flatstore - crop flat storage mass (kg/m^2)
+!     bio%mass%rootfiberz - crop root fibrous mass by soil layer (kg/m^2)
+!     bio%mass%rootstorez - crop root storage mass by soil layer (kg/m^2)
 !                     (tubers (potatoes, carrots), extended leaf (onion),
 !                     seeds (peanuts))
-!     bcmshoot - crop shoot mass grown from root storage (kg/m^2)
+!     bio%growth%mshoot - crop shoot mass grown from root storage (kg/m^2)
 !                this is a "breakout" mass and does not represent a
 !                unique pool since this mass is destributed into below
 !                ground stem and standing stem as each increment of the
 !                shoot is added
-!     bcmstandleaf - crop standing leaf mass (kg/m^2)
-!     bcmstandstem - crop standing stem mass (kg/m^2)
-!     bcmstandstore - crop standing storage mass (kg/m^2)
+!     io%mass%standleaf - crop standing leaf mass (kg/m^2)
+!     bio%mass%standstem - crop standing stem mass (kg/m^2)
+!     bio%mass%standstore - crop standing storage mass (kg/m^2)
 !                     (head with seed, or vegetative head (cabbage,
 !                     pineapple))
-!     bcmtotshoot - total mass of shoot growing from root storage biomass
+!     bio%growth%mtotshoot - total mass of shoot growing from root storage biomass
 !                   (kg/m^2) in the period from beginning to completion
 !                   of emegence heat units
-!     bctchillucum - accumulated chilling units (deg c day)
-!     bctdtm - db input days to maturity
-!     bcthu_shoot_beg - heat unit total for beginning of shoot grow from
+!     bio%growth%tchillucum - accumulated chilling units (deg c day)
+!     bio%database%tdtm - db input days to maturity
+!     bio%growth%thu_shoot_beg - heat unit total for beginning of shoot grow from
 !                       root storage period
-!     bcthu_shoot_end - heat unit total for end of shoot grow from root
+!     bio%growth%thu_shoot_end - heat unit total for end of shoot grow from root
 !                       storage period
-!     bcthucum - crop accumulated heat units
-!     bcthudf - flag 0-grow in days to maturity, 1-grow in heat units
-!     bcthum - db input heat units to maturity
-!     bctopt - optimum temperature (deg. c)
-!     bctrthucum - accumulated root growth heat units (degree-days)
-!     bctwarmdays - number of consecutive days that the temperature
+!     bio%growth%thucum - crop accumulated heat units
+!     bio%database%thudf - flag 0-grow in days to maturity, 1-grow in heat units
+!     bio%database%thum - db input heat units to maturity
+!     bio%database%topt - optimum temperature (deg. c)
+!     bio%growth%trthucum - accumulated root growth heat units (degree-days)
+!     bio%growth%twarmdays - number of consecutive days that the temperature
 !                   has been above the minimum growth temperature
-!     bczgrowpt - depth in the soil of the gowing point (m)
-!     bczht - crop height (m)
-!     bczrtd - crop root depth (m)
-!     bczshoot - length of actively growing shoot from root biomass (m)
+!     bio%growth%zgrowpt - depth in the soil of the gowing point (m)
+!     bio%geometry%zht - crop height (m)
+!     bio%geometry%zrtd - crop root depth (m)
+!     bio%geometry%zshoot - length of actively growing shoot from root biomass (m)
 !     bn4 - currently not used
-!     bnslay - number of soil layers
+!     soils%spp%nslay - number of soil layers
 !     bp4 - currently not used
-!     bs0ph - soil ph
-!     bsdblk - bulk density of a layer (g/cm^3=t/m^3)
-!     bsfcce - calcium carbonate (%)
-!     bsfcec - cation exchange capacity (cmol/kg)
-!     bsfcla - % clay
-!     bsfom - percent organic matter
-!     bsfsmb - sum of bases (cmol/kg)
-!     bsmno3 - fertilizer applied as no3
-!     bszlyd - depth from top of soil to botom of layer, m
-!     bszlyt - soil layer thicknesses for each subregion (mm)
+!     soils%scp%as0ph - soil ph
+!     soils%spp%asdblk - bulk density of a layer (g/cm^3=t/m^3)
+!     soils%scp%asfcce - calcium carbonate (%)
+!     soils%scp%asfcec - cation exchange capacity (cmol/kg)
+!     soils%spp%asfcla - % clay
+!     soils%scp%asfom - percent organic matter
+!     soils%scp%asfsmb - sum of bases (cmol/kg)
+!     soils%scp%asmno3 - fertilizer applied as no3
+!     soils%spp%aszlyd - depth from top of soil to botom of layer, m
+!     soils%spp%aszlyt - soil layer thicknesses for each subregion (mm)
 !     dd - day
 !     mm - month
 !     yy - year
  
 !     + + + local variable definitions + + +
 !     alog -
-!     bc0fd1 - minimum temperature below zero (c) (1st x-coordinate in
+!     bio%database%fd1 - minimum temperature below zero (c) (1st x-coordinate in
 !              the frost damage s-curve)
-!     bc0fd2 - minimum temperature below zero (c) (2nd x-coordinate in
+!     bio%database%fd2 - minimum temperature below zero (c) (2nd x-coordinate in
 !              the frost damage s-curve)
-!     bc0idc - crop type:annual,perennial,etc
-!     bctmin - base temperature (deg. c)
+!     bio%database%idc - crop type:annual,perennial,etc
+!     bio%database%tmin - base temperature (deg. c)
 !     bphu - sphu at planting date
 !     bsa - base saturation (%?)
-!     cc0fd1 - fraction of biomass lost each day due to frost
+!     bio%database%fd1(2) - fraction of biomass lost each day due to frost
 !              (1st y-coordinate in the frost damge s-curve)
-!     cc0fd2 - fraction of biomass lost each day due to frost
+!     bio%database%fd2(2) - fraction of biomass lost each day due to frost
 !              (2nd y-coordinate in the frost damge s-curve)
 !     ch - currently not used. interim variable in calculations of day
 !          length
@@ -237,8 +221,8 @@ integer :: int
 !     dxx -
 !     dy_mon -
 !     ephu - sphu at harvest date
-!     frs1 - same as bc0fd1 (value needed in cfrost.for:11/20/96)
-!     frs2 - same as bc0fd2 (value needed in cfrost.for:11/20/96)
+!     frs1 - same as bio%database%fd1 (value needed in cfrost.for:11/20/96)
+!     frs2 - same as bio%database%fd2 (value needed in cfrost.for:11/20/96)
 !     h - currently not used? interim variable in calculations of day
 !         length
 !     hdate - day of year harvest occurs
@@ -373,7 +357,7 @@ integer :: int
 !     yc - period of cultivation before simualtion starts
  
 !     + + +  newly added arguments definitions + + +
-!     canht -  canopy height of the crop for the current day.
+!     bio%upgm%canht -  canopy height of the crop for the current day.
 !     canhty - yesterday's canopy height value.
 !     co2eff - the effect on the plant of the read-in atmospherice co2 level. 
 !              The adjustment factor.
@@ -417,7 +401,7 @@ integer :: int
 !              real leaf number has incremented.
 !     pdate - day of year planting can occur
 !     rowcntr - a counter for the rows in an array
-!     seedsw - soil water content at seed depth.  it is read in as
+!     bio%upgm%seedsw - soil water content at seed depth.  it is read in as
 !              optimum, medium, dry or planted in dust and converted
 !              to an integer.	 1 = optimum, 2 = medium, 3 = dry and
 !              4 = planted in dust
@@ -456,29 +440,29 @@ mn_air_temp(14) = mn_air_temp(2)
 !     if (dmag.gt.0.)yaf=log(tdmag/0.00001)/log(dmag/0.00001)
 !     write (*,*)'yaf, dmag, tdmag  ' ,yaf,dmag,tdmag
  
-      ! determine number of shoots (for seeds, bc0shoot should be much
-      ! greater than bc0storeinit resulting in one shoot with a mass
-      ! reduced below bc0shoot
+      ! determine number of shoots (for seeds, bio%database%shoot should be much
+      ! greater than bio%database%storeinit resulting in one shoot with a mass
+      ! reduced below bio%database%shoot
       ! units are mg/plant * plant/m^2 / mg/shoot = shoots/m^2
-bcdstm = bc0storeinit*bcdpop/bc0shoot
-if (bcdstm<bcdpop) then
+bio%geometry%dstm = bio%database%storeinit*bio%geometry%dpop/bio%database%shoot
+if (bio%geometry%dstm<bio%geometry%dpop) then
           ! adjust count to reflect limit
-  bcdstm = bcdpop
+  bio%geometry%dstm = bio%geometry%dpop
           ! not enough mass to make a full shoot
           ! adjust shoot mass to reflect storage mass for one shoot per plant
           ! units are mg/plant * kg/mg * plant/m^2 = kg/m^2
-  bcmtotshoot = bc0storeinit*mgtokg*bcdpop
-else if (bcdstm>bcdmaxshoot*bcdpop) then
+  bio%growth%mtotshoot = bio%database%storeinit*mgtokg*bio%geometry%dpop
+else if (bio%geometry%dstm>bio%database%dmaxshoot*bio%geometry%dpop) then
           ! adjust count to reflect limit
-  bcdstm = bcdmaxshoot*bcdpop
+  bio%geometry%dstm = bio%database%dmaxshoot*bio%geometry%dpop
           ! more mass than maximum number of shoots
           ! adjust total shoot mass to reflect maximum number of shoots
           ! units are shoots/m^2 * mg/shoot * kg/mg = kg/m^2
-  bcmtotshoot = bcdstm*bc0shoot*mgtokg
+  bio%growth%mtotshoot = bio%geometry%dstm*bio%database%shoot*mgtokg
 else
           ! mass and shoot number correspond
           ! units are mg/plant * kg/mg * plant/m^2 = kg/m^2
-  bcmtotshoot = bc0storeinit*mgtokg*bcdpop
+  bio%growth%mtotshoot = bio%database%storeinit*mgtokg*bio%geometry%dpop
 end if
  
       ! all types initialized with no stem, leaves or roots, just root storage mass
@@ -486,61 +470,61 @@ end if
 bio%mass%standleaf = 0.0
 bio%mass%standstem = 0.0
 bio%mass%standstore = 0.0
-bcmflatstem = 0.0
-bcmflatleaf = 0.0
-bcmflatstore = 0.0
-bcmshoot = 0.0
+bio%mass%flatstem = 0.0
+bio%mass%flatleaf = 0.0
+bio%mass%flatstore = 0.0
+bio%growth%mshoot = 0.0
  
-do i = 1,bnslay
-  bcmbgstemz(i) = 0.0
-  bcmrootfiberz(i) = 0.0
+do i = 1,soils%spp%nslay
+  bio%mass%stemz(i) = 0.0
+  bio%mass%rootfiberz(i) = 0.0
 end do
  
-bczht = 0.0
-bczshoot = 0.0
+bio%geometry%zht = 0.0
+bio%geometry%zshoot = 0.0
  
-bcdayap = 0
-bcdayam = 0
-bcthucum = 0.0
-bctrthucum = 0.0
-bcgrainf = 0.0
-bczgrowpt = bc0growdepth
-bcfliveleaf = 1.0
-bcleafareatrend = 0.0
+bio%growth%dayap = 0
+bio%growth%dayam = 0
+bio%growth%thucum = 0.0
+bio%growth%trthucum = 0.0
+bio%geometry%grainf = 0.0
+bio%growth%zgrowpt = bio%database%growdepth
+bio%growth%fliveleaf = 1.0
+bio%growth%leafareatrend = 0.0
  
       ! zero out day of year that spring growth is released
-bcdayspring = 0
+bio%growth%dayspring = 0
  
       ! root depth
-bczrtd = bc0growdepth
+bio%geometry%zrtd = bio%database%growdepth
  
       ! initialize the root storage mass into a single layer
-if ((bszlyd(1)*mmtom>bczrtd)) then
+if ((soils%spp%aszlyd(1)*mmtom>bio%geometry%zrtd)) then
           ! mg/plant * #/m^2 * 1kg/1.0e6mg = kg/m^2
-  bcmrootstorez(1) = bc0storeinit*bcdpop*mgtokg
-!          write(*,*) "cinit: stor lay ", 1, bczrtd, bcmrootstorez(1)
+  bio%mass%rootstorez(1) = bio%database%storeinit*bio%geometry%dpop*mgtokg
+!          write(*,*) "cinit: stor lay ", 1, bio%geometry%zrtd, bio%mass%rootstorez(1)
 else
-  bcmrootstorez(1) = 0.0
+  bio%mass%rootstorez(1) = 0.0
 end if
-do i = 2,bnslay
+do i = 2,soils%spp%nslay
 	!Rmarquez 2.14.17 -> changed logic for these conditions to check for
 	!					top of layer <= planting depth
 	!					and
 	!					bottom of layer > planting depth
-  if (((bszlyd(i-1)*mmtom<=bczrtd).and.(bszlyd(i)*mmtom>bczrtd))) then
+  if (((soils%spp%aszlyd(i-1)*mmtom<=bio%geometry%zrtd).and.(soils%spp%aszlyd(i)*mmtom>bio%geometry%zrtd))) then
               ! mg/plant * #/m^2 * 1kg/1.0e6mg = kg/m^2
-     bcmrootstorez(i) = bc0storeinit*bcdpop*mgtokg
-!              write(*,*) "cinit: stor lay ", i, bczrtd, bcmrootstorez(i)
+     bio%mass%rootstorez(i) = bio%database%storeinit*bio%geometry%dpop*mgtokg
+!              write(*,*) "cinit: stor lay ", i, bio%geometry%zrtd, bio%mass%rootstorez(i)
   else
-     bcmrootstorez(i) = 0.0
+     bio%mass%rootstorez(i) = 0.0
   end if
 end do
  
-bctwarmdays = 0.0
-bctchillucum = 0.0
+bio%growth%twarmdays = 0.0
+bio%growth%tchillucum = 0.0
       ! set initial emergence (shoot growth) values
-bcthu_shoot_beg = 0.0
-bcthu_shoot_end = bc0hue
+bio%growth%thu_shoot_beg = 0.0
+bio%growth%thu_shoot_end = bio%database%hue
  
  
 !     set variable in local include file
@@ -583,7 +567,7 @@ do i = 1,365
           ! calculate daily temps. and heat units
   call splint(dy_mon,mx_air_temp,mx_air_temp2,n,jreal,max_air)
   call splint(dy_mon,mn_air_temp,mn_air_temp2,n,jreal,min_air)
-  heat_unit = huc1(max_air,min_air,bctopt,bctmin)
+  heat_unit = huc1(max_air,min_air,bio%database%topt,bio%database%tmin)
   d1(i,1) = i
   d1(i,2) = heat_unit
   d2(i,1) = i
@@ -610,16 +594,16 @@ sphu = 0.
 do j = 1,730
   if (d2(j,1)==pdate) bphu = d2(j,3)
 end do
-if (bcthudf==1) then
+if (bio%database%thudf==1) then
          ! use heat unit calculations to find dtm
-  clidat%phu = bcthum
+  clidat%phu = bio%database%thum
   do j = 1,730
      if (d2(j,3)<=bphu+clidat%phu) dtm = d2(j,1) - pdate
   end do
   hdate = pdate + dtm !hdate = harvest date
 else
          ! calculate average seasonal heat units
-  dtm = bctdtm
+  dtm = bio%database%tdtm
   hdate = pdate + dtm
   if (hdate>d2(730,1)) then
             ! this crop grows longer than one year
@@ -638,31 +622,31 @@ else
 end if
  
       ! print out heat average heat unit and days to maturity
-if (bio%growth%am0cfl>0) write (ctrl%handles%luoinpt,1100) pdate,hdate,bcthudf,dtm,bctdtm,clidat%phu,bcthum
+if (bio%growth%am0cfl>0) write (ctrl%handles%luoinpt,1100) pdate,hdate,bio%database%thudf,dtm,bio%database%tdtm,clidat%phu,bio%database%thum
  
       ! after printing the value, set the global parameter for maximum
       ! heat units to the new calculated value (this database value is
       ! read from management file every time crop is planted, so changing
       ! it here does not corrupt it)
-bcthum = clidat%phu
+bio%database%thum = clidat%phu
  
 !     calculate s-curve parameters
-!call scrv1(bc0fd1,cc0fd1,bc0fd2,cc0fd2,a_fr,b_fr)         ! frost damage
+!call scrv1(bio%database%fd1,bio%database%fd1(2),bio%database%fd2,bio%database%fd2(2),a_fr,b_fr)         ! frost damage
 !      call scrv1(s11x1,s11y1,s11x2,s11y2,a_s11,b_s11)    ! p uptake stress parameters
 !      call scrv1(s8x1,s8y1,s8x2,s8y2,a_s8,b_s8)          ! n and p availability stress
 !      if (am0cfl .gt. 0) write (60,2110)a_co,b_co,a_fr,b_fr
  
-!     calculate bc0bn1,bc0bn2,bc0bn3,bn4,bc0bp1,bc0bp2,bc0bp3,bp4
-!      call nconc (bc0bn1,bc0bn2,bc0bn3,bn4)
-!      call nconc (bc0bp1,bc0bp2,bc0bp3,bp4)
-!      write (33,2115) bc0bn1,bc0bn2,bc0bn3,bn4,bc0bp1,bc0bp2,bc0bp3,bp4
+!     calculate bio%database%bn1,bio%database%bn2,bio%database%bn3,bn4,bio%database%bp1,bio%database%bp2,bio%database%bp3,bp4
+!      call nconc (bio%database%bn1,bio%database%bn2,bio%database%bn3,bn4)
+!      call nconc (bio%database%bp1,bio%database%bp2,bio%database%bp3,bp4)
+!      write (33,2115) bio%database%bn1,bio%database%bn2,bio%database%bn3,bn4,bio%database%bp1,bio%database%bp2,bio%database%bp3,bp4
  
 !     this section estimates soil test data and calculates initial
 !     values of no3, labile p, fresh organic matter, humus, etc in each layer.
  
 !      write (33,2990)
-!      write (33,2992) (bszlyd(i),bsdblk(i),bsfcla(i),wp(i),bs0ph(i),    &
-!     &bsfsmb(i),bsfom(i),bsfcce(i),bsfcec(i),wno3(i),ap(i),rsd(i),      &
+!      write (33,2992) (soils%spp%aszlyd(i),soils%spp%asdblk(i),soils%spp%asfcla(i),wp(i),soils%scp%as0ph(i),    &
+!     &soils%scp%asfsmb(i),soils%scp%asfom(i),soils%scp%asfcce(i),soils%scp%asfcec(i),wno3(i),ap(i),rsd(i),      &
 !     &psp(i),wn(i),i=1,10)
 ctrl%ndat%trsd = 0.0
 ctrl%ndat%tfon = 0.0
@@ -674,17 +658,17 @@ ctrl%ndat%twmn = 0.0
 ctrl%ndat%tp = 0.0
 ctrl%ndat%tap = 0.0
 ctrl%ndat%tno3 = 0.0
-do i = 1,bnslay
-!          x1=bsdblk(i)
-          ! dg=soil layer thickness in mm; xx=bszlyd(i-1); wt(i)=wt of soil(t/ha-mm)
+do i = 1,soils%spp%nslay
+!          x1=soils%spp%asdblk(i)
+          ! dg=soil layer thickness in mm; xx=soils%spp%aszlyd(i-1); wt(i)=wt of soil(t/ha-mm)
           ! (convert to t/ha ??) wt1=convert n, p, etc. conc. from g/t to kg/t
-          ! bsfcla(i)=100.-san(i)-sil(i)
-          ! note:  bszlyd is in "mm" and not "m" - 5/14/99 - lew
+          ! soils%spp%asfcla(i)=100.-san(i)-sil(i)
+          ! note:  soils%spp%aszlyd is in "mm" and not "m" - 5/14/99 - lew
           ! since "dg" is just the layer thickness in "mm", we have set it
           ! to the now included weps global layer thickness variable here.
-          ! dg=1000.*(bszlyd(i)-xx)
-  dg = bszlyt(i)
-  ctrl%ndat%wt(i) = bsdblk(i)*dg*10.
+          ! dg=1000.*(soils%spp%aszlyd(i)-xx)
+  dg = soils%spp%aszlyt(i)
+  ctrl%ndat%wt(i) = soils%spp%asdblk(i)*dg*10.
   wt1 = ctrl%ndat%wt(i)/1000.
           ! estimate initial values of: rsd(residue:t/ha);ap(labile p conc.:g/t);
           ! wno3 (no3 conc.:g/t). dg1=previous value of dg.
@@ -700,15 +684,15 @@ do i = 1,bnslay
   if (i==1) ctrl%ndat%rtn(1) = 0.4*exp(-0.0277*ctrl%ndat%yc) + 0.1
   if (i>1) ctrl%ndat%rtn(i) = ctrl%ndat%rtn(1)*.4
  
-          ! estimate bsfcec, bsa
+          ! estimate soils%scp%asfcec, bsa
           ! there are some very questionable things done here - jt  1/10/94
-          ! xx=bszlyd(i)
-  if (bsfcec(i)>0.) then
-     if (bsfcce(i)>0.) bsfsmb(i) = bsfcec(i)
-     if (bsfsmb(i)>bsfcec(i)) bsfsmb(i) = bsfcec(i)
-     bsa = bsfsmb(i)*100./(bsfcec(i)+1.E-20)
-     bsfcec(i) = bs0ph(i)
-     bsfsmb(i) = bsfcec(i)
+          ! xx=soils%spp%aszlyd(i)
+  if (soils%scp%asfcec(i)>0.) then
+     if (soils%scp%asfcce(i)>0.) soils%scp%asfsmb(i) = soils%scp%asfcec(i)
+     if (soils%scp%asfsmb(i)>soils%scp%asfcec(i)) soils%scp%asfsmb(i) = soils%scp%asfcec(i)
+     bsa = soils%scp%asfsmb(i)*100./(soils%scp%asfcec(i)+1.E-20)
+     soils%scp%asfcec(i) = soils%scp%as0ph(i)
+     soils%scp%asfsmb(i) = soils%scp%asfcec(i)
   end if
  
           ! calculate amounts of n & p (kg/ha) from fresh organic matter(rsd),
@@ -719,7 +703,7 @@ do i = 1,bnslay
   ctrl%ndat%tfop = ctrl%ndat%tfop + ctrl%ndat%fop(i)
  
           ! initial organic(humus) n & p concentrations (g/t) in the soil
-  if (ctrl%ndat%wn(i)==0.) ctrl%ndat%wn(i) = 1000.*bsfom(i)
+  if (ctrl%ndat%wn(i)==0.) ctrl%ndat%wn(i) = 1000.*soils%scp%asfom(i)
   if (ctrl%ndat%wp(i)==0.) ctrl%ndat%wp(i) = 0.125*ctrl%ndat%wn(i)
  
           ! estimate psp(p sorption ratio), which is the fraction of fertilizer p that
@@ -735,15 +719,15 @@ do i = 1,bnslay
   ctrl%ndat%ids = 1
   if (ctrl%ndat%ids==1) then
      ctrl%ndat%psp(i) = 0.5
-     if (bsfcce(i)>0.) ctrl%ndat%psp(i) = 0.58 - 0.0061*bsfcce(i)
+     if (soils%scp%asfcce(i)>0.) ctrl%ndat%psp(i) = 0.58 - 0.0061*soils%scp%asfcce(i)
   end if
   if (ctrl%ndat%ids==2) ctrl%ndat%psp(i) = 0.02 + 0.0104*ctrl%ndat%ap(i)
-  if (ctrl%ndat%ids==3) ctrl%ndat%psp(i) = 0.0054*bsa + 0.116*bs0ph(i) - 0.73
-  if (ctrl%ndat%ids==4) ctrl%ndat%psp(i) = 0.46 - 0.0916*alog(bsfcla(i))
+  if (ctrl%ndat%ids==3) ctrl%ndat%psp(i) = 0.0054*bsa + 0.116*soils%scp%as0ph(i) - 0.73
+  if (ctrl%ndat%ids==4) ctrl%ndat%psp(i) = 0.46 - 0.0916*alog(soils%spp%asfcla(i))
   if (ctrl%ndat%psp(i)<0.05) ctrl%ndat%psp(i) = 0.05
   if (ctrl%ndat%psp(i)>0.75) ctrl%ndat%psp(i) = 0.75
   ctrl%ndat%bk(i) = 0.0076
-  if (bsfcce(i)>0.) ctrl%ndat%bk(i) = exp(-1.77*ctrl%ndat%psp(i)-7.05)
+  if (soils%scp%asfcce(i)>0.) ctrl%ndat%bk(i) = exp(-1.77*ctrl%ndat%psp(i)-7.05)
  
           ! calculate initial amount of active(pmn) and stable(op) mineral p pools
           ! ap=initial amount of labile p(g/t);wt1=conversion factor to kg/ha
@@ -773,13 +757,13 @@ do i = 1,bnslay
  
           ! calculate amount of humus in a layer (t/ha)
           ! moved from original location
-  xz = bsfom(i)*.0172
+  xz = soils%scp%asfom(i)*.0172
   ctrl%ndat%hum(i) = xz*ctrl%ndat%wt(i)
 end do
  
       ! add applied fertilizer to the top layer
-ctrl%ndat%wno3(1) = ctrl%ndat%wno3(1) + bsmno3
-ctrl%ndat%tno3 = ctrl%ndat%tno3 + bsmno3
+ctrl%ndat%wno3(1) = ctrl%ndat%wno3(1) + soils%scp%asmno3
+ctrl%ndat%tno3 = ctrl%ndat%tno3 + soils%scp%asmno3
  
 !debe added initialization of emergence variables
 yr = 0
@@ -1035,19 +1019,19 @@ endphenol = .false. !debe added.
 jan1 = .false.      !debe added to be able to determine if jan 1 has occurred.
 verns = 999         !debe added.
    !canopy height
-canht = 0.0         !debe added both for canopy height
+bio%upgm%canht = 0.0         !debe added both for canopy height
 canhty = 0.0
    !emergence
-!tempsw = seedsw     !debe added to initialize the array index for ggdd and egdd arrays used in emerge 5122011
+!tempsw = bio%upgm%seedsw     !debe added to initialize the array index for ggdd and egdd arrays used in emerge 5122011
  
 !try the following to give tempsw a value that will work with the six element arrays in emerge
-if (seedsw==1) then
+if (bio%upgm%seedsw==1) then
   tempsw = 1
-else if (seedsw==2) then
+else if (bio%upgm%seedsw==2) then
   tempsw = 3
-else if (seedsw==3) then
+else if (bio%upgm%seedsw==3) then
   tempsw = 5
-else if (seedsw==4) then
+else if (bio%upgm%seedsw==4) then
   tempsw = 6
 end if
  

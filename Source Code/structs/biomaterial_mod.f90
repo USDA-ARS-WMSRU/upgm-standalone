@@ -401,7 +401,11 @@ module biomaterial
       real :: trad_lai     ! leaf area index based on whole field area (traditional)
       
 
-  end type crop_upgm    
+  end type crop_upgm   
+  
+  type upgm_state
+      
+  end type upgm_state
   
   type biomatter
      character*(80) :: bname       ! the name of the biomaterial

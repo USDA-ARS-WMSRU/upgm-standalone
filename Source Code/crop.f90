@@ -24,7 +24,7 @@
     type(climate_data), intent(inout) :: clidat
     type(biomatter),    intent(inout) :: bio, prevbio
     type(biototal),     intent(inout) :: biotot
-    type(crop_residue) :: cropres
+    type(crop_residue), intent(inout) ::  cropres
     type(soildata),     intent(inout) :: soils
     integer(int32),     intent(in) :: daysim
     !
@@ -74,7 +74,7 @@
     logical, save :: endphenol,jan1
     !
     ! Local variables
-    !    
+    !
     real(sp) :: huc1
     real(sp) :: a_fr
     real(sp) :: b_fr
@@ -99,13 +99,6 @@
         ctrl%ndat%wp(lay) = 0.0
         ctrl%ndat%wno3(lay) = soils%scp%asftan(lay)
         ctrl%ndat%ap(lay) = soils%scp%asftap(lay)
-        !    residue is now passed from main and converted here from kg/m^2 to
-        !    t/ha residue was previously estimated in subroutine sdst
-        !    the validity of this needs to be checked since type of residue (rsd)
-        !    needed is not clear in crop    - jt  07/21/94
-        !      i think this (rsd) is being used in the nutrient cycling.
-        !      thus, it probably should be the sum of admbgz and admrtz
-        !      (all pools) for each layer.  lew 4/23/99
         ctrl%ndat%rsd(lay) = soils%scp%asfsmb(lay)*10.0
     end do
 
@@ -113,20 +106,10 @@
     !     bio%growth%am0cif is flag to initialize crop at start of planting
 
     if (bio%growth%am0cif) then
-        call cinit(ctrl,clidat,bio,soils%spp%nslay,soils%spp%aszlyt(1),soils%spp%aszlyd(1),soils%spp%asdblk(1),soils%scp%asfcce(1),soils%scp%asfcec(1),soils%scp%asfsmb(1),soils%scp%asfom(1),soils%spp%asfcla(1),     &
-            & soils%scp%as0ph(1),bio%database%bn1,bio%database%bn2,bio%database%bn3,bio%database%bp1,bio%database%bp2,bio%database%bp3,soils%scp%asmno3,bio%database%fd1(1),     &
-            & bio%database%fd2(1),bio%database%topt,bio%database%tmin,bio%database%fd1(2),bio%database%fd2(2),bio%database%sla,bio%database%idc,dd,mm,yy,bio%database%thudf, &
-            & bio%database%tdtm,bio%database%thum,bio%database%hue,bio%database%dmaxshoot,bio%database%shoot,bio%database%growdepth,            &
-            & bio%database%storeinit,bio%mass%standstem,bio%mass%standleaf,bio%mass%standstore,bio%mass%flatstem,  &
-            & bio%mass%flatleaf,bio%mass%flatstore,bio%growth%mshoot,bio%growth%mtotshoot,bio%mass%stemz,          &
-            & bio%mass%rootstorez,bio%mass%rootfiberz,bio%geometry%zht,bio%geometry%zshoot,bio%geometry%dstm,bio%geometry%zrtd,bio%growth%dayap,  &
-            & bio%growth%dayam,bio%growth%thucum,bio%growth%trthucum,bio%geometry%grainf,bio%growth%zgrowpt,bio%growth%fliveleaf,        &
-            & bio%growth%leafareatrend,bio%growth%twarmdays,bio%growth%tchillucum,bio%growth%thu_shoot_beg,          &
-            & bio%growth%thu_shoot_end,bio%geometry%dpop,bio%growth%dayspring,bio%upgm%canht,canhty,daa,dae,dap,dav,   &
+        call cinit(ctrl,clidat,bio,soils, dd,mm,yy,canhty,daa,dae,dap,dav,   &
             & ddae,ddap,ddav,dgdde,dgdds,dgddv,elong,endphenol,gddday,gdda,gdde, &
             & gdds,gddv,gddwsf,jan1,lnarray,lncntr,lnpout,pdate,rowcntr,   &
-            & bio%upgm%seedsw,tempsw,todayln,verns,yestln,yr,ln,co2eff)
-
+            & tempsw,todayln,verns,yestln,yr,ln,co2eff)
         !debe 091208 added the following to be initialized in cinit: ddap, elong,
         ! gddday, yr, leaf number variables, verns, gddwsf to be initialized. later
         ! added bio%upgm%canht for initialization for canopy height.
@@ -149,7 +132,7 @@
         prevbio%geometry%zht = bio%geometry%zht
         prevbio%geometry%zshoot = bio%geometry%zshoot
         prevbio%geometry%dstm = bio%geometry%dstm
-         prevbio%geometry%zrtd = bio%geometry%zrtd
+        prevbio%geometry%zrtd = bio%geometry%zrtd
         prevbio%growth%dayap = bio%growth%dayap
         prevbio%growth%thucum = bio%growth%thucum
         prevbio%growth%trthucum = bio%growth%trthucum
@@ -445,7 +428,7 @@
             ! the following "fix" will also need to reset bio%growth%thu_shoot_end back to
             ! original value once emergence occurs. to avoid the problem where huiy
             ! = bio%growth%thu_shoot_end in the call to shoot_grow, add 0.00001 to huiy below:
-            if (clidat%huiy>=bio%growth%thu_shoot_end) bio%growth%thu_shoot_end = clidat%huiy + 0.00001      !should 'then' be here?
+            if (clidat%huiy>=bio%growth%thu_shoot_end) bio%growth%thu_shoot_end = clidat%huiy + 0.00001      !should 'then' be here? no, then is above
             call shoot_grow(ctrl,clidat, bio, soils%spp%nslay,soils%spp%aszlyd(1),bio%geometry%dpop,bio%database%zmxc,bio%database%zmrt,bio%database%fleafstem,bio%database%fshoot,   &
                 & bio%database%ssa,bio%database%ssb,bio%database%diammax,clidat%hui,clidat%huiy,bio%growth%thu_shoot_beg,         &
                 & bio%growth%thu_shoot_end,bio%mass%standstem,bio%mass%standleaf,bio%mass%standstore,   &
@@ -543,7 +526,7 @@
         prevbio%geometry%zht = bio%geometry%zht
         prevbio%geometry%zshoot = bio%geometry%zshoot
         prevbio%geometry%dstm = bio%geometry%dstm
-         prevbio%geometry%zrtd = bio%geometry%zrtd
+        prevbio%geometry%zrtd = bio%geometry%zrtd
         prevbio%growth%dayap = bio%growth%dayap
         prevbio%growth%thucum = bio%growth%thucum
         prevbio%growth%trthucum = bio%growth%trthucum
