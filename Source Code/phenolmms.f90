@@ -446,15 +446,9 @@ if (bio%upgm%ems(1)/=999) then       ! emergence has occurred
 !printing out information: bio%database%growdepth, bio%upgm%gmethod, bio%upgm%emrgflg, ctrl%sim%cliname
 !debe added bio%upgm%canht to pass to phenol to be written in phenol.out from
 !phenol_cropname. debe added variables for dry beans.
- 
-  call phenol(ctrl, bio%upgm%aepa,bio%upgm%aifs,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%blstrs,bio%upgm%boots,bio%upgm%browns,    &
-            & ctrl%sim%cliname,bio%bname,bio%upgm%cots,daa,dae,dap,dav,daynum,ddae,ddap,ddav,dgdde,   &
-            & dgdds,dgddv,bio%upgm%doughs,bio%upgm%drs,bio%upgm%dummy2,bio%upgm%ears,bio%upgm%emrgflg,bio%upgm%ems,bio%upgm%endlgs,endphenol,  &
-            & bio%upgm%dents,bio%upgm%epods,bio%upgm%eseeds,bio%upgm%first7,bio%upgm%fps,bio%upgm%fullbs,gdda,gdde,gdds,gddv,gddwsf,  &
-            & bio%upgm%gmethod,bio%upgm%gpds,bio%upgm%halfbs,bio%upgm%heads,bio%upgm%hrs,bio%upgm%ies,bio%upgm%ies2,bio%upgm%infls,bio%upgm%joints,bio%upgm%lf1s,bio%upgm%lf12s,   &
-            & bio%upgm%lf2s,bio%upgm%lf3s,bio%upgm%lf4s,bio%upgm%lf8s,lnpout,bio%upgm%mats,bio%upgm%mffls,bio%upgm%milks,bio%upgm%mpods,bio%upgm%mseeds,bio%upgm%opens,   & 
-            & bio%upgm%pchron,pdate,bio%upgm%seedsw, bio%upgm%silks,bio%upgm%soilwat,bio%upgm%srs,bio%upgm%tis,bio%upgm%tsints,bio%upgm%tss,bio%upgm%yelows,yy)
-!
+
+  call phenol(ctrl, bio,daa,dae,dap,dav,daynum,ddae,ddap,ddav,dgdde,dgdds,dgddv,endphenol,gdda,gdde,gdds,gddv,gddwsf,lnpout,pdate,yy)
+  !
 end if
 !
 end subroutine phenolmms
