@@ -449,18 +449,7 @@
         !   print*, 'in crop before call to growth, daysim = ', daysim
 
         !          ! calculate plant growth state variables
-        call growth(ctrl, soils%spp%nslay,bio, soils%spp%aszlyd(1),bio%database%ck,bio%database%grf,bio%database%ehu0,bio%database%zmxc,bio%database%idc,bio%bname,a_fr,b_fr,  &
-            & bio%geometry%xrow,bio%database%diammax,bio%database%zmrt,bio%database%tmin,bio%database%topt,bio%database%bceff,bio%database%alf,bio%database%blf,    &
-            & bio%database%clf,bio%database%dlf,bio%database%arp,bio%database%brp,bio%database%crp,bio%database%drp,bio%database%aht,bio%database%bht,bio%database%ssa,   &
-            & bio%database%ssb,bio%database%sla,bio%database%xstm,soils%spp%ahtsmn,clidat%awtdmx,clidat%awtdmn,clidat%aweirr,ctrl%cropstress%ahfwsf,clidat%hui,clidat%huiy, &
-            & clidat%huirt,clidat%huirty,hu_delay,bio%growth%thu_shoot_end,bio%database%baflg,bio%database%baf,bio%database%yraf,bio%geometry%hyfg,&
-            & bio%database%fleaf2stor,bio%database%fstem2stor,bio%database%fstor2stor,bio%database%yld_coef,bio%database%resid_int,    &
-            & bio%mass%standstem,bio%mass%standleaf,bio%mass%standstore,bio%mass%flatstem,bio%mass%flatleaf,  &
-            & bio%mass%flatstore,bio%mass%rootstorez,bio%mass%rootfiberz,bio%mass%stemz,bio%geometry%zht,bio%geometry%dstm, &
-            & bio%geometry%zrtd,bio%growth%fliveleaf,bio%growth%dayap,bio%geometry%grainf,bio%geometry%dpop,bio%upgm%dayhtinc,daysim,gddday,&
-            & bio%upgm%growth_stress,bio%upgm%canht,canhty,bio%upgm%canopyflg,bio%upgm%antss,bio%upgm%phenolflg,bio%upgm%boots,bio%upgm%heads, &
-            & bio%upgm%joints,bio%upgm%mats,ln,bio%upgm%co2x,bio%upgm%co2y,clidat%co2atmos,co2eff,clidat%ts)
-
+        call growth(ctrl,clidat,bio, soils,a_fr,b_fr,hu_delay,daysim,gddday,canhty,ln,co2eff)
         ! debe added bio%upgm%joints, bio%upgm%heads and bio%upgm%mats to send to growth.
 
         !debe090408 added gddday to print out gdd.

@@ -1,54 +1,34 @@
-    subroutine growth(ctrl,bnslay,bio,bszlyd,bc0ck,bcgrf,bcehu0,bczmxc,bc0idc,bc0nam,a_fr,   &
-        & b_fr,bcxrow,bc0diammax,bczmrt,bctmin,bctopt,cc0be,bc0alf,     &
-        & bc0blf,bc0clf,bc0dlf,bc0arp,bc0brp,bc0crp,bc0drp,bc0aht,      &
-        & bc0bht,bc0ssa,bc0ssb,bc0sla,bcxstm,bhtsmn,bwtdmx,bwtdmn,      &
-        & bweirr,bhfwsf,hui,huiy,huirt,huirty,hu_delay,bcthu_shoot_end, &
-        & bcbaflg,bcbaf,bcyraf,bchyfg,bcfleaf2stor,bcfstem2stor,        &
-        & bcfstor2stor,bcyld_coef,bcresid_int,bcmstandstem,bcmstandleaf,&
-        & bcmstandstore,bcmflatstem,bcmflatleaf,bcmflatstore,           &
-        & bcmrootstorez,bcmrootfiberz,bcmbgstemz,bczht,bcdstm,bczrtd,   &
-        & bcfliveleaf,bcdayap,bcgrainf,bcdpop,dayhtinc,daysim,gddday,   &
-        & growth_stress,canht,canhty,canopyflg,antss,phenolflg,boots,   &
-        & heads,joints,mats,ln,co2x,co2y,co2atmos,co2eff,ts)
-
+    subroutine growth(ctrl,clidat, bio,soils,a_fr,b_fr,hu_delay,daysim,gddday,canhty,ln,co2eff)
     !debe gddday added to print out gdd.
-    !debe added growth_stress because it is now read in.
-    !debe added canopyflg to be used to determine which method of calculating canopy
+    !debe added bio%upgm%growth_stress because it is now read in.
+    !debe added bio%upgm%canopyflg to be used to determine which method of calculating canopy
     !height will be used. 0=weps/upgm method and 1=phenologymms.
-    !debe added dayhtinc to be able to pass the daily increase in height to growth
+    !debe added bio%upgm%dayhtinc to be able to pass the daily increase in height to growth
     ! for the ht_dia_sai subroutine in place of the weps/upgm variable dht when
-    ! canopyflg = 1.
-    !debe added antss to the growth subroutine to limit calculating canopy height after anthesis.
+    ! bio%upgm%canopyflg = 1.
+    !debe added bio%upgm%antss to the growth subroutine to limit calculating canopy height after anthesis.
     !debe added canhty to store yesterday's canopy height value.
-    !debe added phenolflg and boots to begin incorporating phenologymms tie in to upgm.
-    !debe added joints, heads and mats to help with debugging to specific growth stages.
-    !debe added co2x, co2y, co2atmos, co2eff for use in affecting plant growth by co2.
+    !debe added bio%upgm%phenolflg and bio%upgm%boots to begin incorporating phenologymms tie in to upgm.
+    !debe added bio%upgm%joints, bio%upgm%heads and bio%upgm%mats to help with debugging to specific growth stages.
+    !debe added bio%upgm%co2x, bio%upgm%co2y, clidat%co2atmos, co2eff for use in affecting plant growth by co2.
     !
     use constants, only : hatom2, mmtom, max_arg_exp, max_real, pi, mnsz
     use upgm_simdata, only : controls
     use datetime, only : dayear, caldat
+    use climate, only : climate_data
+    use soil, only : soildata
     use biomaterial
     implicit none
     !DE added
     !
     ! Dummy arguments
     !
-    type(controls) :: ctrl
-    type(biomatter) :: bio
-    real :: a_fr,bc0aht,bc0alf,bc0arp,bc0bht,bc0blf,bc0brp,bc0ck,bc0clf,bc0crp,     &
-        & bc0diammax,bc0dlf,bc0drp,bc0sla,bc0ssa,bc0ssb,bcbaf,bcdpop,bcdstm,      &
-        & bcehu0,bcfleaf2stor,bcfliveleaf,bcfstem2stor,bcfstor2stor,bcgrainf,     &
-        & bcgrf,bcmflatleaf,bcmflatstem,bcmflatstore,bcmstandleaf,bcmstandstem,   &
-        & bcmstandstore,bcresid_int,bcthu_shoot_end,bctmin,bctopt,bcxrow,bcxstm,  &
-        & bcyld_coef,bcyraf,bczht,bczmrt,bczmxc,bczrtd,bhfwsf,bweirr,bwtdmn,      &
-        & bwtdmx,b_fr,canht,canhty,cc0be,dayhtinc,gddday,hui,huirt,huirty,huiy,   &
-        & hu_delay,todayln,ln,co2atmos,co2eff,ts
-    integer :: bc0idc,bcbaflg,bcdayap,bchyfg,bnslay,canopyflg,daysim,growth_stress, &
-        & phenolflg
-    integer,dimension(4) :: antss,boots,heads,joints,mats
-    real,dimension(*) :: bcmbgstemz,bcmrootfiberz,bcmrootstorez,bhtsmn,bszlyd
-    character(80) :: bc0nam
-    real,dimension(10) :: co2x,co2y
+    type(controls), intent(inout) :: ctrl
+    type(biomatter), intent(inout) :: bio
+    type(climate_data), intent(inout) :: clidat
+    type(soildata),     intent(inout) :: soils
+    real :: a_fr,b_fr,canhty,gddday,hu_delay,todayln,ln,co2eff
+    integer :: daysim
     !
     ! Local variables
     !
@@ -78,19 +58,19 @@
     real :: strs
     !
     !debe 061009 removed variables that were to be used for canopyht because canopyht
-    !  is now called from crop: antss(4), canht, cropname, dummy2, ems, gdde,
-    !  ies, joints, lf4s, maxht. later canopyht was moved and is called from the
-    !  new subroutine phenolmms. later added back joints, as well as mats for ease in
+    !  is now called from crop: bio%upgm%antss(4), bio%upgm%canht, cropname, dummy2, ems, gdde,
+    !  ies, bio%upgm%joints, lf4s, maxht. later canopyht was moved and is called from the
+    !  new subroutine phenolmms. later added back bio%upgm%joints, as well as bio%upgm%mats for ease in
     !  debugging to a specific growth stage.
     !2/20/15 canopyht is called from PhenolMMS.
-    !debe added growth_stress because it is now read in.
-    !debe added antss to control the end of calculating canopy height when canopyflg = 1
+    !debe added bio%upgm%growth_stress because it is now read in.
+    !debe added bio%upgm%antss to control the end of calculating canopy height when bio%upgm%canopyflg = 1
     ! and anthesis stage has been passed. plant height should not increase after anthesis.
-    !debe added a local variable strsdayhtinc to hold the dayhtinc value after stress has been applied.
+    !debe added a local variable strsdayhtinc to hold the bio%upgm%dayhtinc value after stress has been applied.
     ! debe added canhty to holds yesterday's canopy height to print in canopyht.out.
 
-    !     the following subroutine arguments are not used: bc0idc, bcbaflg,
-    !     bcthu_shoot_end, bcyraf   jcaii  8/08/08
+    !     the following subroutine arguments are not used: bio%database%idc, bio%database%baflg,
+    !     bio%growth%thu_shoot_end, bio%database%yraf   jcaii  8/08/08
     !
     !     author : amare retta
     !     + + + purpose + + +
@@ -103,45 +83,45 @@
     !     + + + argument declarations + + +
 
     !     + + + argument definitions + + +
-    !     bc0aht (ac0aht) - height s-curve parameter
-    !     bc0alf (ac0alf) - leaf partitioning parameter
-    !     bc0arp - rprd partitioning parameter
-    !     bc0bht - height s-curve parameter
-    !     bc0blf - leaf partitioning parameter
-    !     bc0brp - rprd partitioning parameter
-    !     bc0ck  - extinction coeffficient (fraction)
-    !     bc0clf - leaf partitioning parameter
-    !     bc0crp - rprd partitioning parameter
-    !     bc0diammax - crop maximum plant diameter (m)
-    !     bc0dlf - leaf partitioning parameter
-    !     bc0drp - rprd partitioning parameter
-    !     bc0idc - crop type:annual,perennial,etc
-    !     bc0nam - crop name
-    !     bc0sla - specific leaf area (cm^2/g)
-    !     bc0ssa - biomass to stem area conversion coefficient a
-    !     bc0ssb - biomass to stem area conversion coefficient b
-    !     bcbaf  - biomass adjustment factor
-    !     bcbaflg - flag for biomass adjustment action
+    !     bio%database%aht (ac0aht) - height s-curve parameter
+    !     bio%database%alf (ac0alf) - leaf partitioning parameter
+    !     bio%database%arp - rprd partitioning parameter
+    !     bio%database%bht - height s-curve parameter
+    !     bio%database%blf - leaf partitioning parameter
+    !     bio%database%brp - rprd partitioning parameter
+    !     bio%database%ck  - extinction coeffficient (fraction)
+    !     bio%database%clf - leaf partitioning parameter
+    !     bio%database%crp - rprd partitioning parameter
+    !     bio%database%diammax - crop maximum plant diameter (m)
+    !     bio%database%dlf - leaf partitioning parameter
+    !     bio%database%drp - rprd partitioning parameter
+    !     bio%database%idc - crop type:annual,perennial,etc
+    !     bio%bname - crop name
+    !     bio%database%sla - specific leaf area (cm^2/g)
+    !     bio%database%ssa - biomass to stem area conversion coefficient a
+    !     bio%database%ssb - biomass to stem area conversion coefficient b
+    !     bio%database%baf  - biomass adjustment factor
+    !     bio%database%baflg - flag for biomass adjustment action
     !         0     o normal crop growth
     !         1     o find biomass adjustment factor for target yield
     !         2     o use given biomass adjustment factor
-    !     bcdayap - number of days of growth completed since crop planted
-    !     bcdpop - number of plants per unit area (#/m^2)
-    !            - note: bcdstm/bcdpop gives the number of stems per plant
-    !     bcdstm - number of plant stems per unit area (#/m^2)
-    !            - note: bcdstm/bcdpop gives the number of stems per plant
-    !     bcehu0 - relative gdd at start of senescence
-    !     bcfleaf2stor - fraction of assimilate partitioned to leaf that is
+    !     bio%growth%dayap - number of days of growth completed since crop planted
+    !     bio%geometry%dpop - number of plants per unit area (#/m^2)
+    !            - note: bio%geometry%dstm/bio%geometry%dpop gives the number of stems per plant
+    !     bio%geometry%dstm - number of plant stems per unit area (#/m^2)
+    !            - note: bio%geometry%dstm/bio%geometry%dpop gives the number of stems per plant
+    !     bio%database%ehu0 - relative gdd at start of senescence
+    !     bio%database%fleaf2stor - fraction of assimilate partitioned to leaf that is
     !                    diverted to root store
-    !     bcfliveleaf - fraction of standing plant leaf which is living
+    !     bio%growth%fliveleaf - fraction of standing plant leaf which is living
     !                   (transpiring)
-    !     bcfstem2stor - fraction of assimilate partitioned to stem that is
+    !     bio%database%fstem2stor - fraction of assimilate partitioned to stem that is
     !                    diverted to root store
-    !     bcfstor2stor - fraction of assimilate partitioned to standing
+    !     bio%database%fstor2stor - fraction of assimilate partitioned to standing
     !                    storage(reproductive) that is diverted to root store
-    !     bcgrainf - internally computed grain fraction of reproductive mass
-    !     bcgrf  - fraction of reproductive biomass that is yield
-    !     bchyfg - flag indicating the part of plant to apply the "grain
+    !     bio%geometry%grainf - internally computed grain fraction of reproductive mass
+    !     bio%database%grf  - fraction of reproductive biomass that is yield
+    !     bio%geometry%hyfg - flag indicating the part of plant to apply the "grain
     !              fraction", grf, to when removing that plant part for yield
     !         0     grf applied to above ground storage (seeds, reproductive)
     !         1     grf times growth stage factor (see growth.for) applied to
@@ -151,40 +131,40 @@
     !         4     grf applied to stem mass (sugarcane)
     !         5     grf applied to below ground storage mass (potatoes,
     !                   peanuts)
-    !     bcmbgstemz  - crop buried stem mass by layer (kg/m^2)
-    !     bcmflatleaf  - crop flat leaf mass (kg/m^2)
-    !     bcmflatstem  - crop flat stem mass (kg/m^2)
-    !     bcmflatstore - crop flat storage mass (kg/m^2)
-    !     bcmrootfiberz - crop root fibrous mass by soil layer (kg/m^2)
-    !     bcmrootstorez - crop root storage mass by soil layer (kg/m^2)
+    !     bio%mass%stemz  - crop buried stem mass by layer (kg/m^2)
+    !     bio%mass%flatleaf  - crop flat leaf mass (kg/m^2)
+    !     bio%mass%flatstem  - crop flat stem mass (kg/m^2)
+    !     bio%mass%flatstore - crop flat storage mass (kg/m^2)
+    !     bio%mass%rootfiberz - crop root fibrous mass by soil layer (kg/m^2)
+    !     bio%mass%rootstorez - crop root storage mass by soil layer (kg/m^2)
     !                     (tubers (potatoes, carrots), extended leaf (onion),
     !                     seeds (peanuts))
-    !     bcmstandleaf - crop standing leaf mass (kg/m^2)
-    !     bcmstandstem - crop standing stem mass (kg/m^2)
-    !     bcmstandstore - crop standing storage mass (kg/m^2)
+    !     bio%mass%standleaf - crop standing leaf mass (kg/m^2)
+    !     bio%mass%standstem - crop standing stem mass (kg/m^2)
+    !     bio%mass%standstore - crop standing storage mass (kg/m^2)
     !                     (head with seed, or vegetative head (cabbage,
     !                     pineapple))
-    !     bcresid_int - residue intercept (kg/m^2)
-    !       harvest_residue = bcyld_coef(kg/kg) * yield + bcresid_int (kg/m^2)
-    !     bctmin - base temperature (deg. c)
-    !     bctopt - optimum temperature (deg. c)
-    !     bcxrow - crop row spacing (m)
-    !     bcxstm - mature crop stem diameter (m)
-    !     bcyld_coef - yield coefficient (kg/kg)
-    !       harvest_residue = bcyld_coef(kg/kg) * yield + bcresid_int (kg/m^2)
-    !     bcyraf - yield to biomass ratio adjustment factor
-    !     bczht  - crop height (m)
-    !     bczmrt - maximum root depth
-    !     bczmxc - maximum potential plant height (m)
-    !     bczrtd - root depth (m)
-    !     bhfwsf - water stress factor (ratio)
-    !     bhtsmn - daily minimum soil temperature (deg c)
-    !     bnslay - number of soil layers
-    !     bszlyd - depth from top of soil to botom of layer, m
-    !     bweirr - daily global radiation (mj/m^2)
-    !     bwtdmn - daily minimum air temperature (c)
-    !     bwtdmx - daily maximum air temperature (deg c)
-    !     cc0be - biomass conversion efficiency (kg/ha)/(mj/m^2)
+    !     bio%database%resid_int - residue intercept (kg/m^2)
+    !       harvest_residue = bio%database%yld_coef(kg/kg) * yield + bio%database%resid_int (kg/m^2)
+    !     bio%database%tmin - base temperature (deg. c)
+    !     bio%database%topt - optimum temperature (deg. c)
+    !     bio%geometry%xrow - crop row spacing (m)
+    !     bio%database%xstm - mature crop stem diameter (m)
+    !     bio%database%yld_coef - yield coefficient (kg/kg)
+    !       harvest_residue = bio%database%yld_coef(kg/kg) * yield + bio%database%resid_int (kg/m^2)
+    !     bio%database%yraf - yield to biomass ratio adjustment factor
+    !     bio%geometry%zht  - crop height (m)
+    !     bio%database%zmrt, - maximum root depth
+    !     bio%database%zmxc - maximum potential plant height (m)
+    !     bio%geometry%zrtd - root depth (m)
+    !     ctrl%cropstress%ahfwsf - water stress factor (ratio)
+    !     soils%spp%ahtsmn - daily minimum soil temperature (deg c)
+    !     soils%spp%nslay - number of soil layers
+    !     soils%spp%aszlyd - depth from top of soil to botom of layer, m
+    !     clidat%aweirr - daily global radiation (mj/m^2)
+    !     clidat%awtdmn - daily minimum air temperature (c)
+    !     clidat%awtdmx - daily maximum air temperature (deg c)
+    !     bio%database%bceff - biomass conversion efficiency (kg/ha)/(mj/m^2)
     !     hu_delay - fraction of heat units accummulated
     !                based on incomplete vernalization and day length
     !     ln - leaf number
@@ -234,16 +214,16 @@
     !                   stems (remainder goes flat)
     !     strsdayhtinc - today's increase in height after the strs variable has been applied.
     !     temp_fiber - a temporary variable that holds the sum of the crop
-    !                  root fibrous mass by soil layer (bcmrootfiberz)
+    !                  root fibrous mass by soil layer (bio%mass%rootfiberz)
     !                  (debe definition)
     !     temp_sai - a temporary variable for crop stem area index
     !               (debe definition)
     !     temp_stem - a temporary variable for the sum of the crop buried
-    !                 stem mass by layer (bcmbgstemz)  (debe definition)
+    !                 stem mass by layer (bio%mass%stemz)  (debe definition)
     !     temp_stmrep - a temporary variable used in calculating a stem
     !                   representative diameter (debe definition)
     !     temp_store - a temporary variable to hold the sum of the crop root
-    !                  storage mass by soil layer (bcmrootstorez)
+    !                  storage mass by soil layer (bio%mass%rootstorez)
     !                  (debe definition)
     !     trad_lai - leaf area index based on whole field area (traditional)
     !     wcg - root mass distribution function exponent (see reference at
@@ -273,21 +253,21 @@
     !     ddm - stress modified increment in dry matter (kg/m^2)
     !     eff_lai - single plant effective leaf area index (based on maximum
     !               single plant coverage area)
-    !     growth_stress - flag setting which turns on water or temperature
+    !     bio%upgm%growth_stress - flag setting which turns on water or temperature
     !                   stress (or both)
-    !                   growth_stress = 0  ! no stress values applied
-    !                   growth_stress = 1  ! turn on water stress
-    !                   growth_stress = 2  ! turn on temperature stress
-    !                   growth_stress = 3  ! turn on both
+    !                   bio%upgm%growth_stress = 0  ! no stress values applied
+    !                   bio%upgm%growth_stress = 1  ! turn on water stress
+    !                   bio%upgm%growth_stress = 2  ! turn on temperature stress
+    !                   bio%upgm%growth_stress = 3  ! turn on both
     !      debe because it is now being read in, it is commented out in command.inc
     !     hatom2 - parameter - hectare to square meters. to convert
     !                          hectares to square meters, multiply by 10,000.
-    !     hui - heat unit index (ratio of acthucum to acthum)
-    !     huirt - heat unit index for root expansion (ratio of actrthucum to
+    !     clidat%hui - heat unit index (ratio of acthucum to acthum)
+    !     clidat%huirt - heat unit index for root expansion (ratio of actrthucum to
     !             acthum)
-    !     huirty - heat unit index for root expansion (ratio of actrthucum to
+    !     clidat%huirty - heat unit index for root expansion (ratio of actrthucum to
     !              acthum) on day (i-1).
-    !     huiy - heat unit index (ratio of acthucum to acthum) on day (i-1)
+    !     clidat%huiy - heat unit index (ratio of acthucum to acthum) on day (i-1)
     !     max_arg_exp - maximum value allowed for argument to exponential
     !                   function without overflowing.
     !     max_real    - maximum real number allowed.
@@ -299,7 +279,7 @@
     !     prd - potential root depth today
     !     prdy - potential root depth from previous day
     !     strs - stress factor. Includes water temperature stresses only.
-    !     ts - temperature stress factor
+    !     clidat%ts - temperature stress factor
     !     water_stress_max - cap water stress at some maximum value
     !                        (note maximum stress occurs at 0.0 and minimum
     !                        stress at 1.0).
@@ -312,32 +292,32 @@
     !     za(mnsz) - soil layer representative depth
 
     !     + + +  newly added arguments definitions + + +
-    !     antss - start of anthesis growth stage for hay millet, proso millet,
+    !     bio%upgm%antss - start of anthesis growth stage for hay millet, proso millet,
     !             sorghum (first bloom), spring barley, spring wheat,
     !             sunflower, winter barley and winter wheat. also, dry beans
     !             and corn. this array includes daynum, year, month and day
     !             of when this stage was reached.
-    !     boots - start of booting/flag leaf complete growth stage. this array includes
+    !     bio%upgm%boots - start of booting/flag leaf complete growth stage. this array includes
     !             daynum, year, month and day of when this stage was reached.
-    !     canht - holds the final canopy height of the crop calculated with
+    !     bio%upgm%canht - holds the final canopy height of the crop calculated with
     !             the phenologymms way. it comes in as cm and gets converted to m.
     !     canhty - holds yesterday's canopy height value. used in printing to canopyht.out.
     !              this would be the stressed value from yesterday.
-    !     canopyflg - a flag to indicate if the weps/upgm method to calculate
+    !     bio%upgm%canopyflg - a flag to indicate if the weps/upgm method to calculate
     !                 plant height will be used. value will then be 0. if using
     !                 the phenologymms method, the value will be 1.
-    !     co2atmos - the atmospheric level of CO2.
+    !     clidat%co2atmos - the atmospheric level of CO2.
     !     co2eff - the effect of the atmospheric co2 level. Used to affect biomass.
     !              The adjustment factor.
-    !     co2x - the CO2 levels in ppm. The x axis on the relationship curve.
-    !     co2y - the relative effect at different levels of CO2, i.e. co2x.
-    !     dayhtinc - the increase in plant height for today.
+    !     bio%upgm%co2x - the CO2 levels in ppm. The x axis on the relationship curve.
+    !     bio%upgm%co2y - the relative effect at different levels of CO2, i.e. bio%upgm%co2x.
+    !     bio%upgm%dayhtinc - the increase in plant height for today.
     !     gddday - the number of gdd with 0°C base temperature for that day
-    !     heads - the start of heading stage of growth. this array includes daynum,
+    !     bio%upgm%heads - the start of heading stage of growth. this array includes daynum,
     !             year, month and day of when this stage was reached.
-    !     joints - start of jointing stage. this array includes daynum, year, month and day
+    !     bio%upgm%joints - start of jointing stage. this array includes daynum, year, month and day
     !              of when this stage was reached.
-    !     mats - start of maturity stage. this array includes daynum, year, month and day
+    !     bio%upgm%mats - start of maturity stage. this array includes daynum, year, month and day
     !            of when this stage was reached.
 
     !     + + + currently unused variables + + +
@@ -373,11 +353,11 @@
     doy = dayear(day,mo,yr)
 
     !     reduce green leaf mass in freezing weather
-    if (bhtsmn(1)<-2.0) then
-        !          xw=abs(bwtdmn)
+    if (soils%spp%ahtsmn(1)<-2.0) then
+        !          xw=abs(clidat%awtdmn)
         !         use daily minimum soil temperature of first layer to account for
         !         snow cover effects
-        xw = abs(bhtsmn(1))
+        xw = abs(soils%spp%ahtsmn(1))
         ! this was obviously to prevent excessive leaf loss
         ! frst=sqrt((1.-xw/(xw+exp(a_fr-b_fr*xw)))+0.000001)
         ! frst=sqrt(frst)
@@ -387,12 +367,12 @@
 
         ! eliminate these in favor of dead to live ratio
         ! reduce green leaf area due to frost damage (10/1/99)
-        ! dead_mass = bcmstandleaf * bcfliveleaf * frst
-        ! bcmstandleaf = bcmstandleaf - dead_mass
-        ! bcmflatleaf = bcmflatleaf + dead_mass
+        ! dead_mass = bio%mass%standleaf * bio%growth%fliveleaf * frst
+        ! bio%mass%standleaf = bio%mass%standleaf - dead_mass
+        ! bio%mass%flatleaf = bio%mass%flatleaf + dead_mass
 
         ! reduce green leaf area due to frost damage (9/22/2003)
-        bcfliveleaf = bcfliveleaf*(1.0-frst)
+        bio%growth%fliveleaf = bio%growth%fliveleaf*(1.0-frst)
 
         ! these are set here to show up on the output as initialized
         p_rw = 0.0
@@ -404,43 +384,43 @@
     end if
 
     !debe added to set break points for different winter wheat developmental stages:
-    !if(doy .eq. joints(1)) then
+    !if(doy .eq. bio%upgm%joints(1)) then
     ! print *, 'eff_lai = ', eff_lai, 'pddm - ', pddm, 'parea = ', parea
-    !elseif (doy .eq. boots(1)) then
+    !elseif (doy .eq. bio%upgm%boots(1)) then
     !  print *, 'eff_lai = ', eff_lai, 'pddm - ', pddm, 'parea = ', parea
-    !elseif (doy .eq. heads(1)) then
+    !elseif (doy .eq. bio%upgm%heads(1)) then
     !    print *, 'eff_lai = ', eff_lai, 'pddm - ', pddm, 'parea = ', parea
-    !elseif (doy .eq. antss(1)) then
+    !elseif (doy .eq. bio%upgm%antss(1)) then
     !    print *, 'eff_lai = ', eff_lai, 'pddm - ', pddm, 'parea = ', parea
-    !elseif (doy .eq. mats(1)) then
+    !elseif (doy .eq. bio%upgm%mats(1)) then
     !    print *, 'eff_lai = ', eff_lai, 'pddm - ', pddm, 'parea = ', parea
     !endif
     !
 
     !!!!! start single plant calculations !!!!!
     ! calculate single plant effective lai (standing living leaves only)
-    clfwt = bcmstandleaf/bcdpop             ! kg/m^2 / plants/m^2 = kg/plant
-    clfarea = clfwt*bc0sla*bcfliveleaf      ! kg/plant * m^2/kg = m^2/plant
+    clfwt = bio%mass%standleaf/bio%geometry%dpop             ! kg/m^2 / plants/m^2 = kg/plant
+    clfarea = clfwt*bio%database%sla*bio%growth%fliveleaf      ! kg/plant * m^2/kg = m^2/plant
 
     ! limiting plant area to a feasible plant area results in a
     ! leaf area index covering the "plant's area"
     ! 1/(#/m^2) = m^2/plant. plant diameter now used to limit leaf
     ! coverage to present plant diameter.
     ! find present plant diameter (proportional to diam/height ratio)
-    !pdiam = min( 2.0*bczht * max(1.0, bc0diammax/bczmxc), bc0diammax )
+    !pdiam = min( 2.0*bio%geometry%zht * max(1.0, bio%database%diammax/bio%database%zmxc), bio%database%diammax )
     ! this expression above may not give correct effect since it is
     ! difficult to correctly model plant area expansion without additional
     ! plant parameters and process description. presently using leaf area
     ! over total plant maximum area before trying this effect. reducing
     ! effective plant area can only reduce early season growth.
-    pdiam = bc0diammax
+    pdiam = bio%database%diammax
     ! account for row spacing effects
-    if (bcxrow>0.0) then
+    if (bio%geometry%xrow>0.0) then
         ! use row spacing and plants maximum reach
-        parea = min(bcxrow,pdiam)*min(1.0/(bcdpop*bcxrow),pdiam)
+        parea = min(bio%geometry%xrow,pdiam)*min(1.0/(bio%geometry%dpop*bio%geometry%xrow),pdiam)
     else
         ! this is broadcast, so use uniform spacing
-        parea = min(pi*pdiam*pdiam/4.0,1.0/bcdpop)
+        parea = min(pi*pdiam*pdiam/4.0,1.0/bio%geometry%dpop)
     end if
 
     ! check for valid plant area
@@ -451,16 +431,16 @@
     end if
 
     !traditional lai calculation for reporting puposes
-    bio%upgm%trad_lai = clfarea*bcdpop
+    bio%upgm%trad_lai = clfarea*bio%geometry%dpop
 
     !     start biomass calculations
-    !     bweirr is total shortwave radiation and a factor of .5 is assumed
+    !     clidat%aweirr is total shortwave radiation and a factor of .5 is assumed
     !     to get to the photosynthetically active radiation
-    par = 0.5*bweirr                        ! mj/m^2                ! c-4
+    par = 0.5*clidat%aweirr                        ! mj/m^2                ! c-4
 
     !     calculate intercepted par, which is the good stuff less what hits
     !     the ground
-    apar = par*(1.-exp(-bc0ck*eff_lai))                             ! c-4
+    apar = par*(1.-exp(-bio%database%ck*eff_lai))                             ! c-4
 
     !     calculate potential biomass conversion (kg/plant/day) using
     !     biomass conversion efficiency at ambient co2 levels
@@ -473,16 +453,16 @@
     j=0
     k=10
     do 100 j=2,k
-        if(co2atmos .GT. co2x(j)) go to 100
+        if(clidat%co2atmos .GT. bio%upgm%co2x(j)) go to 100
         go to 200
 100 continue
     j = k
-200 co2eff = (co2atmos-co2x(j-1))*(co2y(j)-co2y(j-1))/(co2x(j)-co2x(j-1))   &
-        & +co2y(j-1)
+200 co2eff = (clidat%co2atmos-bio%upgm%co2x(j-1))*(bio%upgm%co2y(j)-bio%upgm%co2y(j-1))/(bio%upgm%co2x(j)-bio%upgm%co2x(j-1))   &
+        & +bio%upgm%co2y(j-1)
 
     !print *, 'co2eff = ', co2eff
 
-    pddm = parea*cc0be*apar/hatom2                                  ! c-4
+    pddm = parea*bio%database%bceff*apar/hatom2                                  ! c-4
     !print *, 'pddm before co2 = ', pddm
 
     !affect dry matter by co2
@@ -492,20 +472,20 @@
     !     biomass adjustment factor applied
     ! apply to both biomass converstion efficiency and water stress
     ! factor, see below
-    pddm = pddm*bcbaf
+    pddm = pddm*bio%database%baf
 
     ! these were attempts at compensating for low yield as a result of
     ! water stress. (ie. this is the cause of unrealistically low yield)
     ! these methods had many side effects and were abandoned
-    ! if( bcbaf .gt. 1.0 ) then
+    ! if( bio%database%baf .gt. 1.0 ) then
     ! first attempt. reduces water stress in the middle stress region
-    !  = bhfwsf ** (1.0/(bcbaf*bcbaf))
+    !  = ctrl%cropstress%ahfwsf ** (1.0/(bio%database%baf*bio%database%baf))
     ! second attempt. reduces extreme water stress (zero values).
-    !  = min( 1.0, max( bhfwsf, bcbaf-1.0 ) )
+    !  = min( 1.0, max( ctrl%cropstress%ahfwsf, bio%database%baf-1.0 ) )
     ! else
-    !  = bhfwsf
+    !  = ctrl%cropstress%ahfwsf
     ! end if
-    bhfwsf_adj = max(ctrl%sim%water_stress_max,bhfwsf)
+    bhfwsf_adj = max(ctrl%sim%water_stress_max,ctrl%cropstress%ahfwsf)
     !bhfwsf_adj = 1 !no water stress
 
     !     begin stress factor section
@@ -522,27 +502,27 @@
     !      call nuts (up1,up2,sp)
 
     !     calculate temperature stress
-    ts = temps(bwtdmx,bwtdmn,bctopt,bctmin)
+    clidat%ts = temps(clidat%awtdmx,clidat%awtdmn,bio%database%topt,bio%database%tmin)
 
     ! select application of stress functions based on command line flag
-    if (growth_stress==0) then
+    if (bio%upgm%growth_stress==0) then
         strs = 1.0
-    else if (growth_stress==1) then
+    else if (bio%upgm%growth_stress==1) then
         strs = bhfwsf_adj
-    else if (growth_stress==2) then
-        strs = ts
-    else if (growth_stress==3) then
-        strs = min(ts,bhfwsf_adj)
+    else if (bio%upgm%growth_stress==2) then
+        strs = clidat%ts
+    else if (bio%upgm%growth_stress==3) then
+        strs = min(clidat%ts,bhfwsf_adj)
     end if
 
     ! until shoot breaks surface, no solar driven growth
     ! call it lack of light stress
-    if (bczht<=0.0) strs = 0.0
+    if (bio%geometry%zht<=0.0) strs = 0.0
 
     ! left here to show some past incantations of stress factors
-    !      strs=min(sn,sp,ts,bhfwsf)
-    !      if (hui.lt.0.25) strs=strs**2
-    !      if (hui.gt.huilx) strs=sqrt(strs)
+    !      strs=min(sn,sp,clidat%ts,ctrl%cropstress%ahfwsf)
+    !      if (clidat%hui.lt.0.25) strs=strs**2
+    !      if (clidat%hui.gt.huilx) strs=sqrt(strs)
 
 
     ! apply stress factor to generated biomass
@@ -551,8 +531,8 @@
 
     ! convert from mass per plant to mass per square meter
     ! + kg/plant * plant/m^2 = kg/m^2
-    ddm = ddm*bcdpop
-    pddm = pddm*bcdpop !de added to convert pddm mass per plant to mass per sq. m
+    ddm = ddm*bio%geometry%dpop
+    pddm = pddm*bio%geometry%dpop !de added to convert pddm mass per plant to mass per sq. m
 
     !!!!! end single plant calculations !!!!!
 
@@ -562,9 +542,9 @@
     ! is not delayed in prevernalization winter annuals. made to
     ! parallel winter annual rooting depth flag as well.
     if (ctrl%sim%winter_ann_root==0) then
-        p_rw = (.4-.2*hui)                                                    ! c-5
+        p_rw = (.4-.2*clidat%hui)                                                    ! c-5
     else
-        p_rw = max(0.05,(.4-.2*huirt))                                        ! c-5
+        p_rw = max(0.05,(.4-.2*clidat%huirt))                                        ! c-5
     end if
     drfwt = ddm*p_rw
     ddm_rem = ddm - drfwt
@@ -572,20 +552,20 @@
     !     find partitioning factors of the remaining biomass
     !      (not fibrous root)
     !     calculate leaf partitioning.
-    !debe try adding phenologymms growth stage variable and phenolflg to affect p_lf
-    arg_exp = -(hui-bc0clf)/bc0dlf
+    !debe try adding phenologymms growth stage variable and bio%upgm%phenolflg to affect p_lf
+    arg_exp = -(clidat%hui-bio%database%clf)/bio%database%dlf
     if (arg_exp>=max_arg_exp) then
-        p_lf = bc0alf + bc0blf/max_real
+        p_lf = bio%database%alf + bio%database%blf/max_real
     else
-        p_lf = bc0alf + bc0blf/(1.+exp(-(hui-bc0clf)/bc0dlf))
+        p_lf = bio%database%alf + bio%database%blf/(1.+exp(-(clidat%hui-bio%database%clf)/bio%database%dlf))
     end if
     p_lf = max(0.0,min(1.0,p_lf))
     !     calculate reproductive partitioning based on partioning curve
-    arg_exp = -(hui-bc0crp)/bc0drp
+    arg_exp = -(clidat%hui-bio%database%crp)/bio%database%drp
     if (arg_exp>=max_arg_exp) then
-        p_rp = bc0arp + bc0brp/max_real
+        p_rp = bio%database%arp + bio%database%brp/max_real
     else
-        p_rp = bc0arp + bc0brp/(1.+exp(-(hui-bc0crp)/bc0drp))
+        p_rp = bio%database%arp + bio%database%brp/(1.+exp(-(clidat%hui-bio%database%crp)/bio%database%drp))
     end if
     p_rp = max(0.0,min(1.0,p_rp))
 
@@ -608,10 +588,10 @@
     drpwt = ddm_rem*p_rp
 
     ! use ratios to divert biomass to root storage
-    drswt = dlfwt*bcfleaf2stor + dstwt*bcfstem2stor + drpwt*bcfstor2stor
-    dlfwt = dlfwt*(1.0-bcfleaf2stor)
-    dstwt = dstwt*(1.0-bcfstem2stor)
-    drpwt = drpwt*(1.0-bcfstor2stor)
+    drswt = dlfwt*bio%database%fleaf2stor + dstwt*bio%database%fstem2stor + drpwt*bio%database%fstor2stor
+    dlfwt = dlfwt*(1.0-bio%database%fleaf2stor)
+    dstwt = dstwt*(1.0-bio%database%fstem2stor)
+    drpwt = drpwt*(1.0-bio%database%fstor2stor)
 
     ! senescence is done on a whole plant mass basis not incremental
     ! mass this starts scencescence before the entered heat unit index
@@ -619,21 +599,21 @@
     ! functions the coefficients draw a curve that approaches 1
     ! around -0.5 but the value at zero, raised to fractional powers
     ! still very small
-    hui0f = bcehu0 - bcehu0*.1
-    if (hui>=hui0f) then
-        hux = hui - bcehu0
-        ff = 1./(1.+exp(-(hux-bc0clf/2.)/bc0dlf))
+    hui0f = bio%database%ehu0 - bio%database%ehu0*.1
+    if (clidat%hui>=hui0f) then
+        hux = clidat%hui - bio%database%ehu0
+        ff = 1./(1.+exp(-(hux-bio%database%clf/2.)/bio%database%dlf))
         ffa = ff**0.125
         ffw = ff**0.0625
         ffr = 0.98
         ! loss from weathering of leaf mass
-        lost_mass = bcmstandleaf*(1.0-ffw)
+        lost_mass = bio%mass%standleaf*(1.0-ffw)
         ! adjust for senescence (done here, not below, so consistent
         !  with lost mass amount)
-        bcmstandleaf = bcmstandleaf*ffw
+        bio%mass%standleaf = bio%mass%standleaf*ffw
         ! change in living mass fraction due scenescence
         ! and accounting for weathering mass loss of dead leaf
-        bcfliveleaf = ffa*bcfliveleaf/(1.0+bcfliveleaf*(ffw-1.0))
+        bio%growth%fliveleaf = ffa*bio%growth%fliveleaf/(1.0+bio%growth%fliveleaf*(ffw-1.0))
     else
         ! set a value to be written out
         ffa = 1.0
@@ -644,11 +624,11 @@
 
     ! yield residue relationship adjustment
 
-    if ((ctrl%sim%cook_yield==1).and.(bcyld_coef>1.0).and.(bcresid_int>=0.0).and.            &
-        & ((bchyfg==0).or.(bchyfg==1).or.(bchyfg==5)))                                &
-        & call cookyield(bchyfg,bnslay,dlfwt,dstwt,drpwt,drswt,bcmstandstem,          &
-        & bcmstandleaf,bcmstandstore,bcmflatstem,bcmflatleaf,bcmflatstore,            &
-        & bcmrootstorez,lost_mass,bcyld_coef,bcresid_int,bcgrf)
+    if ((ctrl%sim%cook_yield==1).and.(bio%database%yld_coef>1.0).and.(bio%database%resid_int>=0.0).and.            &
+        & ((bio%geometry%hyfg==0).or.(bio%geometry%hyfg==1).or.(bio%geometry%hyfg==5)))                                &
+        & call cookyield(bio%geometry%hyfg,soils%spp%nslay,dlfwt,dstwt,drpwt,drswt,bio%mass%standstem,          &
+        & bio%mass%standleaf,bio%mass%standstore,bio%mass%flatstem,bio%mass%flatleaf,bio%mass%flatstore,            &
+        & bio%mass%rootstorez,lost_mass,bio%database%yld_coef,bio%database%resid_int,bio%database%grf)
 
     !     *****plant height*****
     !     added method (different from epic) of calculating plant height
@@ -659,19 +639,19 @@
     !     pdht - daily potential height
     !     pcht - potential plant height for today
     !     pchty - potential plant height from previous day
-    !     bczmxc - maximum potential plant height (m)
+    !     bio%database%zmxc - maximum potential plant height (m)
     !     aczht(am0csr) - cumulated actual height
     !     adht - daily actual height
     !     dht - daily height increment (m)
-    !     bc0aht, bc0bht are height-scurve parameters (formerly lai parameters)
+    !     bio%database%aht, bio%database%bht are height-scurve parameters (formerly lai parameters)
 
     ! previous day
-    hufy = .01 + 1./(1.+exp((huiy-bc0aht)/bc0bht))
+    hufy = .01 + 1./(1.+exp((clidat%huiy-bio%database%aht)/bio%database%bht))
     ! today
-    huf = .01 + 1./(1.+exp((hui-bc0aht)/bc0bht))
+    huf = .01 + 1./(1.+exp((clidat%hui-bio%database%aht)/bio%database%bht))
 
-    pchty = min(bczmxc,bczmxc*hufy)
-    pcht = min(bczmxc,bczmxc*huf)
+    pchty = min(bio%database%zmxc,bio%database%zmxc*hufy)
+    pcht = min(bio%database%zmxc,bio%database%zmxc*huf)
     pdht = pcht - pchty
 
     !debe consolidate code so lines are not repeated. if statements include only
@@ -684,85 +664,85 @@
     ! all leaf mass added to living leaf in standing pool
     if (dlfwt>0.0) then
         ! recalculate fraction of leaf which is living
-        bcfliveleaf = (bcfliveleaf*bcmstandleaf+dlfwt)/(bcmstandleaf+dlfwt)
+        bio%growth%fliveleaf = (bio%growth%fliveleaf*bio%mass%standleaf+dlfwt)/(bio%mass%standleaf+dlfwt)
         ! next add in the additional mass
-        bcmstandleaf = bcmstandleaf + dlfwt
+        bio%mass%standleaf = bio%mass%standleaf + dlfwt
     end if
 
     ! divide between standing and flat stem and storage in proportion
     ! to maximum height and maximum radius ratio
-    stem_propor = min(1.0,2.0*bczmxc/bc0diammax)
-    bcmstandstem = bcmstandstem + dstwt*stem_propor
-    bcmflatstem = bcmflatstem + dstwt*(1.0-stem_propor)
+    stem_propor = min(1.0,2.0*bio%database%zmxc/bio%database%diammax)
+    bio%mass%standstem = bio%mass%standstem + dstwt*stem_propor
+    bio%mass%flatstem = bio%mass%flatstem + dstwt*(1.0-stem_propor)
 
     ! for all but below ground place rp portion in standing storage
-    bcmstandstore = bcmstandstore + drpwt*stem_propor
-    bcmflatstore = bcmflatstore + drpwt*(1.0-stem_propor)
+    bio%mass%standstore = bio%mass%standstore + drpwt*stem_propor
+    bio%mass%flatstore = bio%mass%flatstore + drpwt*(1.0-stem_propor)
 
     ! check for consistency of height, diameter and stem area index.
     ! adjust rate of height increase to keep diameter inside a range.
-    if (canopyflg==0) then
-        call ht_dia_sai(bcdpop,bcmstandstem,bc0ssa,bc0ssb,bcdstm,bcxstm,bczmxc,bczht, &
+    if (bio%upgm%canopyflg==0) then
+        call ht_dia_sai(bio%geometry%dpop,bio%mass%standstem,bio%database%ssa,bio%database%ssb,bio%geometry%dstm,bio%database%xstm,bio%database%zmxc,bio%geometry%zht, &
             & dht,temp_stmrep,temp_sai)
 
         ! increment plant height
-        bczht = bczht + dht !cummulated height plus today's height which has been stressed.
+        bio%geometry%zht = bio%geometry%zht + dht !cummulated height plus today's height which has been stressed.
         strsdayhtinc = 0
-        !  print *, 'bczht =', bczht, 'dht =', dht, 'strs =', strs
-    else if ((canopyflg==1).and.(antss(1)==999)) then         !use canht from phenologymms method
+        !  print *, 'bio%geometry%zht =', bio%geometry%zht, 'dht =', dht, 'strs =', strs
+    else if ((bio%upgm%canopyflg==1).and.(bio%upgm%antss(1)==999)) then         !use bio%upgm%canht from phenologymms method
 
         !debe added the following strs detemininations as above so that stress can be applied within the
         ! canopy height method from phenologymms and not be related to the weps calculated day
-        ! of emergence. otherwise, if upgm shows emergence and canht has a value greater than 0.0 but
-        ! weps has not accomplished emergence yet and bczht is still 0.0, then the strs value is set
-        ! to 0.0. when strs is multiplied by the dayhtinc from the upgm method then the day's height
-        ! increase is set back to 0.0. on the first day of emergence, canht comes in as 0.0 and if
-        ! dayhtinc has been set back to 0.0 there would be no increase in height on the first day of
+        ! of emergence. otherwise, if upgm shows emergence and bio%upgm%canht has a value greater than 0.0 but
+        ! weps has not accomplished emergence yet and bio%geometry%zht is still 0.0, then the strs value is set
+        ! to 0.0. when strs is multiplied by the bio%upgm%dayhtinc from the upgm method then the day's height
+        ! increase is set back to 0.0. on the first day of emergence, bio%upgm%canht comes in as 0.0 and if
+        ! bio%upgm%dayhtinc has been set back to 0.0 there would be no increase in height on the first day of
         ! emergence if weps has not also arrived at emergence.
 
         ! select application of stress functions based on command line flag
-        if (growth_stress==0) then
+        if (bio%upgm%growth_stress==0) then
             strs = 1.0
-        else if (growth_stress==1) then
+        else if (bio%upgm%growth_stress==1) then
             strs = bhfwsf_adj
-        else if (growth_stress==2) then
-            strs = ts
-        else if (growth_stress==3) then
-            strs = min(ts,bhfwsf_adj)
+        else if (bio%upgm%growth_stress==2) then
+            strs = clidat%ts
+        else if (bio%upgm%growth_stress==3) then
+            strs = min(clidat%ts,bhfwsf_adj)
         end if
 
         ! until shoot breaks surface, no solar driven growth
         ! call it lack of light stress
-        if (canht<=0.0) strs = 0.0
+        if (bio%upgm%canht<=0.0) strs = 0.0
 
         !subtract today's height increase from total canopy height. the stress factor
         !(strs) will be applied  to today's height increase. it will then be added back to
-        !canht to get the total canopy height for today with stress applied.
-        canht = canht - dayhtinc
+        !bio%upgm%canht to get the total canopy height for today with stress applied.
+        bio%upgm%canht = bio%upgm%canht - bio%upgm%dayhtinc
 
-        ! apply stress to dayhtinc from canopyht giving strsdayhtinc
-        strsdayhtinc = dayhtinc*strs
-        !print*,'strs =', strs, 'dayhtinc =', dayhtinc,'strsdayhtinc =', strsdayhtinc
+        ! apply stress to bio%upgm%dayhtinc from canopyht giving strsdayhtinc
+        strsdayhtinc = bio%upgm%dayhtinc*strs
+        !print*,'strs =', strs, 'bio%upgm%dayhtinc =', bio%upgm%dayhtinc,'strsdayhtinc =', strsdayhtinc
         !debe - i believe strsdayhtinc is comparable to dht and is what should be passed to ht_dia_sai.
 
         ! check for consistency of height, diameter and stem area index.
         ! adjust rate of height increase to keep diameter inside a range.
-        call ht_dia_sai(bcdpop,bcmstandstem,bc0ssa,bc0ssb,bcdstm,bcxstm,bczmxc,bczht, &
-            & strsdayhtinc,temp_stmrep,temp_sai) !dayhtinc
+        call ht_dia_sai(bio%geometry%dpop,bio%mass%standstem,bio%database%ssa,bio%database%ssb,bio%geometry%dstm,bio%database%xstm,bio%database%zmxc,bio%geometry%zht, &
+            & strsdayhtinc,temp_stmrep,temp_sai) !bio%upgm%dayhtinc
 
 
         !add back in today's height increase to which stress has been applied.
-        canht = canht + strsdayhtinc
-        !    print*, 'canht =', canht
+        bio%upgm%canht = bio%upgm%canht + strsdayhtinc
+        !    print*, 'bio%upgm%canht =', bio%upgm%canht
         !don't let canopy height shrink.
-        if (canht<canhty) canht = canhty
+        if (bio%upgm%canht<canhty) bio%upgm%canht = canhty
 
-        ! increment plant height and store in weps bczht to be used in other areas of upgm.
-        !if emergence has not occurred, i.e. canht = 0.0, don't let bzcht be set equal to 0.0
-        ! bczht = bczht + (canht/100) this gives incredibly tall plants!
-        if (canht>0.0) bczht = canht/100
+        ! increment plant height and store in weps bio%geometry%zht to be used in other areas of upgm.
+        !if emergence has not occurred, i.e. bio%upgm%canht = 0.0, don't let bzcht be set equal to 0.0
+        ! bio%geometry%zht = bio%geometry%zht + (bio%upgm%canht/100) this gives incredibly tall plants!
+        if (bio%upgm%canht>0.0) bio%geometry%zht = bio%upgm%canht/100
 
-        canhty = canht !set yesterday's canopy height value to today's value for use tomorrow.
+        canhty = bio%upgm%canht !set yesterday's canopy height value to today's value for use tomorrow.
     else
         temp_sai = 0.
         temp_stmrep = 0.
@@ -783,15 +763,15 @@
     !     accumulation to allow rapid root depth development by winter
     !     annuals.
     if (ctrl%sim%winter_ann_root==0) then
-        prdy = min(bczmrt,bczmrt*hufy+0.1)
-        prd = min(bczmrt,bczmrt*huf+0.1)
+        prdy = min(bio%database%zmrt,bio%database%zmrt*hufy+0.1)
+        prd = min(bio%database%zmrt,bio%database%zmrt*huf+0.1)
     else
-        prdy = bczmrt*(.01+1.0/(1.0+exp((huirty-bc0aht)/bc0bht)))
-        prd = bczmrt*(.01+1.0/(1.0+exp((huirt-bc0aht)/bc0bht)))
+        prdy = bio%database%zmrt*(.01+1.0/(1.0+exp((clidat%huirty-bio%database%aht)/bio%database%bht)))
+        prd = bio%database%zmrt*(.01+1.0/(1.0+exp((clidat%huirt-bio%database%aht)/bio%database%bht)))
     end if
     pdrd = max(0.0,prd-prdy)
-    bczrtd = min(bczmrt,bczrtd+pdrd)
-    bczrtd = min(bszlyd(bnslay)*mmtom,bczrtd)
+    bio%geometry%zrtd = min(bio%database%zmrt,bio%geometry%zrtd+pdrd)
+    bio%geometry%zrtd = min(soils%spp%aszlyd(soils%spp%nslay)*mmtom,bio%geometry%zrtd)
 
     ! determine bottom layer # where there are roots
     ! and calculate root distribution function
@@ -807,11 +787,11 @@
     ! distribution. the article indicates that it must be greater than
     ! maximum root depth.
     wcg = 2.0
-    wmaxd = max(3.0,bczmrt)
-    do i = 1,bnslay
+    wmaxd = max(3.0,bio%database%zmrt)
+    do i = 1,soils%spp%nslay
         if (i==1) then
             ! calculate depth to the middle of a layer
-            za(i) = (bszlyd(i)/2.0)*mmtom
+            za(i) = (soils%spp%aszlyd(i)/2.0)*mmtom
             ! calculate root distribution function
             if (za(i)<wmaxd) then
                 wfl(i) = (1.0-za(i)/wmaxd)**wcg
@@ -824,19 +804,19 @@
             irfiber = i
         else
             ! calculate depth to the middle of a layer
-            za(i) = (bszlyd(i-1)+(bszlyd(i)-bszlyd(i-1))/2.0)*mmtom
+            za(i) = (soils%spp%aszlyd(i-1)+(soils%spp%aszlyd(i)-soils%spp%aszlyd(i-1))/2.0)*mmtom
             ! calculate root distribution function
             if (za(i)<wmaxd) then
                 wfl(i) = (1.0-za(i)/wmaxd)**wcg
             else
                 wfl(i) = 0.0
             end if
-            if (bczrtd/3.0>za(i)) then
+            if (bio%geometry%zrtd/3.0>za(i)) then
                 wfstore = wfstore + wfl(i)
                 irstore = i
             end if
             ! check if reached bottom of root zone
-            if (bczrtd>za(i)) then
+            if (bio%geometry%zrtd>za(i)) then
                 wffiber = wffiber + wfl(i)
                 irfiber = i
             end if
@@ -845,10 +825,10 @@
 
     ! distribute root weight into each layer
     do i = 1,irfiber
-        if (i<=irstore) bcmrootstorez(i) = bcmrootstorez(i) + (drswt*wfl(i)/wfstore)
-        bcmrootfiberz(i) = bcmrootfiberz(i) + (drfwt*wfl(i)/wffiber)
+        if (i<=irstore) bio%mass%rootstorez(i) = bio%mass%rootstorez(i) + (drswt*wfl(i)/wfstore)
+        bio%mass%rootfiberz(i) = bio%mass%rootfiberz(i) + (drfwt*wfl(i)/wffiber)
         ! root senescence : 02/16/2000 (a. retta)
-        bcmrootfiberz(i) = bcmrootfiberz(i)*ffr
+        bio%mass%rootfiberz(i) = bio%mass%rootfiberz(i)*ffr
     end do
 
     ! this factor prorates the grain reproductive fraction (grf) defined
@@ -856,11 +836,11 @@
     ! development of chaff before grain filling, ie., grain is not
     ! uniformly a fixed fraction of reproductive mass during the entire
     ! reproductive development stage.
-    gif = 1./(1.0+exp(-(hui-0.64)/.05))
-    if (bchyfg==1) then
-        bcgrainf = bcgrf*gif
+    gif = 1./(1.0+exp(-(clidat%hui-0.64)/.05))
+    if (bio%geometry%hyfg==1) then
+        bio%geometry%grainf = bio%database%grf*gif
     else
-        bcgrainf = bcgrf
+        bio%geometry%grainf = bio%database%grf
     end if
 
     !     the following write statements are for 'crop.out'
@@ -871,31 +851,31 @@
 
         temp_fiber = 0.0
         temp_stem = 0.0
-        do i = 1,bnslay
-            temp_store = temp_store + bcmrootstorez(i)
-            temp_fiber = temp_fiber + bcmrootfiberz(i)
-            temp_stem = temp_stem + bcmbgstemz(i)
+        do i = 1,soils%spp%nslay
+            temp_store = temp_store + bio%mass%rootstorez(i)
+            temp_fiber = temp_fiber + bio%mass%rootfiberz(i)
+            temp_stem = temp_stem + bio%mass%stemz(i)
         end do
 
-        write (ctrl%handles%luocrop,1000) daysim,doy,yr,bcdayap,hui,bcmstandstem,bcmstandleaf,     &
-            & bcmstandstore,bcmflatstem,bcmflatleaf,bcmflatstore,      &
+        write (ctrl%handles%luocrop,1000) daysim,doy,yr,bio%growth%dayap,clidat%hui,bio%mass%standstem,bio%mass%standleaf,     &
+            & bio%mass%standstore,bio%mass%flatstem,bio%mass%flatleaf,bio%mass%flatstore,      &
             & temp_store,temp_fiber,temp_stem,                     &
-            & bcmstandleaf + bcmflatleaf,bcmstandstem + bcmflatstem +  &
-            & temp_stem,bczht,bcdstm,bio%upgm%trad_lai,eff_lai,bczrtd,bcgrainf, &
-            & ts,bhfwsf,frst,ffa,ffw,par,apar,pddm,p_rw,p_st,p_lf,p_rp,&
-            & stem_propor,pdiam,parea,pdiam/bc0diammax,parea*bcdpop,   &
-            & hu_delay,temp_sai,temp_stmrep,bc0nam,gddday,ln
+            & bio%mass%standleaf + bio%mass%flatleaf,bio%mass%standstem + bio%mass%flatstem +  &
+            & temp_stem,bio%geometry%zht,bio%geometry%dstm,bio%upgm%trad_lai,eff_lai,bio%geometry%zrtd,bio%geometry%grainf, &
+            & clidat%ts,ctrl%cropstress%ahfwsf,frst,ffa,ffw,par,apar,pddm,p_rw,p_st,p_lf,p_rp,&
+            & stem_propor,pdiam,parea,pdiam/bio%database%diammax,parea*bio%geometry%dpop,   &
+            & hu_delay,temp_sai,temp_stmrep,bio%bname,gddday,ln
 
         !DE moves thes out of the write to luocrop above. They are not used here now:
         !& temp_store,temp_fiber,temp_stem,                         &
 
-        !bcmstandstem + bcmflatstem + temp_stem, &
+        !bio%mass%standstem + bio%mass%flatstem + temp_stem, &
         !used acmshoot in place of temp_stem in the write statement
 
     end if
 
-    write (ctrl%handles%luocanopyht,1100) daysim,doy,day,'/',mo,'/',yr,canopyflg,dht,strs,bczht, &
-        & dayhtinc,strsdayhtinc,canhty,canht,antss(1)
+    write (ctrl%handles%luocanopyht,1100) daysim,doy,day,'/',mo,'/',yr,bio%upgm%canopyflg,dht,strs,bio%geometry%zht, &
+        & bio%upgm%dayhtinc,strsdayhtinc,canhty,bio%upgm%canht,bio%upgm%antss(1)
     !
 1000 format (1x,i5,1x,i3,1x,i4,1x,i4,1x,f6.3,12(1x,f7.4),1x,f7.2,3(1x,f7.4),   &
         & 8(1x,f6.3),1x,e12.3,10(1x,f6.3),2(1x,f8.5),' ',a20,f8.3,3x,f5.2)
