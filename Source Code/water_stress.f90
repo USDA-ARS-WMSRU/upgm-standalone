@@ -16,8 +16,8 @@ implicit none
 !
 real :: adjgdd,bhfwsf
 integer :: i,row
-real,dimension(30) :: dummy2
-real,dimension(15,5) :: gddwsf
+real,dimension(32) :: dummy2
+real,dimension(16,5) :: gddwsf
 !
 ! Local variables
 !
@@ -72,7 +72,7 @@ wsflo = 0.8
 ! initialize counter variables
 j = 0
 m = 0.0
-n = 15
+n = 16
 !
 ! initialize/set local variables
 x = bhfwsf

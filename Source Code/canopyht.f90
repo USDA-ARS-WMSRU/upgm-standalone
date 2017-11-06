@@ -26,7 +26,7 @@ implicit none
 real :: canht,dayhtinc,ecanht,gddday,gdde,maxht
 character(80) :: cname
 integer,dimension(4) :: antss,ems,stemelong
-real,dimension(30) :: dummy2
+real,dimension(32) :: dummy2
 !
 ! Local variables
 !
@@ -81,6 +81,8 @@ else if (cname=='proso millet') then
   gdds1 = (dummy2(3)+dummy2(4)+dummy2(5))
 else if (cname=='sorghum') then
   gdds1 = dummy2(3)
+else if (cname=='soybean') then
+  gdds1 = dummy2(2)+dummy2(3)+dummy2(4)
 else if (cname=='spring barley') then
   gdds1 = (dummy2(3)+dummy2(4)+dummy2(5))
 else if (cname=='spring wheat') then
@@ -130,6 +132,8 @@ else if (stemelong(1)/=999.and.antss(1)==999) then
      gdds2 = (dummy2(6)+dummy2(7)+dummy2(8)) + (dummy2(9))
   else if (cname=='sorghum') then
      gdds2 = (dummy2(5)+dummy2(6)+dummy2(7)-dummy2(3))    ! equals 215
+  else if (cname=='soybean') then
+     gdds2 = (dummy2(5)+dummy2(6)+dummy2(7)+dummy2(8))
   else if (cname=='spring barley') then
      gdds2 = (dummy2(6)+dummy2(7)+dummy2(8)) + (dummy2(9))
   else if (cname=='spring wheat') then

@@ -104,7 +104,7 @@ character(40) :: seedbed
 !     cropname - name of the current crop.
 !     dap - days after planting.
 !     daynum - day number of the year - doy is passed into it from weps.
-!       doy - day of year. calculated in shoot_grow.
+!     doy - day of year. calculated in shoot_grow.
 !     ddap - array holding the number of days after planting for up
 !            to 20 different stages.
 !     dgdds - array holding the number of gdd after seeding for up

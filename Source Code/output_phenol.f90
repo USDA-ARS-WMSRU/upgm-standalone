@@ -1,7 +1,7 @@
-subroutine output_phenol(ctrl, aifs,antes,antss,blstrs,boots,browns,cname,daa,dae,dap,&
+subroutine output_phenol(ctrl, aifs,antes,antss,blstrs,bmats,boots,browns,cname,daa,dae,dap,&
                        & dav,ddae,ddap,ddav,dents,dgdde,dgdds,dgddv,doughs,drs, &
                        & ears,ems,endlgs,fps,fullbs,gdda,gdde,gdds,gddv,gpds,   &
-                       & halfbs,heads,hrs,ies,ies2,infls,joints,lf12s,lf4s,lf8s,&
+                       & halfbs,heads,hrs,ies,ies2,infls,joints,lf12s,lf4s,lf5s,lf8s,&
                        & lnarray,lnpout,mats,milks,opens,outf,pchron,pdate,     & 
                        & pyear,silks,srs,tis,tsints,tss,year,yelows)
 !
@@ -32,9 +32,9 @@ implicit none
 character(22) :: cname,outf
 integer :: daa,dae,dap,dav,pdate,pyear,year
 real :: gdda,gdde,gdds,gddv,pchron 
-integer,dimension(4) :: aifs,antes,antss,blstrs,boots,browns,dents,doughs,drs,  &
-                      & ears,ems,endlgs,fps,fullbs,gpds,halfbs,heads,hrs,ies,   &
-                      & ies2,infls,joints,lf12s,lf4s,lf8s,mats,milks,opens,     &
+integer,dimension(4) :: aifs,antes,antss,blstrs,boots,bmats,browns,dents,doughs,drs, &
+                      & ears,ems,endlgs,fps,fullbs,gpds,halfbs,heads,hrs,ies,        &
+                      & ies2,infls,joints,lf12s,lf4s,lf8s,lf5s,mats,milks,opens,     &
                       & silks,srs,tis,tsints,tss,yelows
 integer,dimension(20) :: ddae,ddap,ddav
 real,dimension(20) :: dgdde,dgdds,dgddv

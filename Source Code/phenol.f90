@@ -42,7 +42,7 @@ integer :: daa,dae,dap,dav,daynum,pdate,year, rowcntr
 logical :: endphenol
 integer,dimension(20) :: ddae,ddap,ddav
 real,dimension(20) :: dgdde,dgdds,dgddv
-real,dimension(15,5) :: gddwsf
+real,dimension(16,5) :: gddwsf
 real,dimension(100,2) :: lnpout
 !
 ! Local variables
@@ -78,14 +78,16 @@ integer :: j
 !             wheat. this array includes daynum, year, month and day of when
 !             this stage was reached.
 !     bio%upgm%antss - start of anthesis growth stage for corn, dry beans, hay millet,
-!             proso millet, sorghum (first bloom), spring barley, spring
-!             wheat, sunflower, winter barley and winter wheat. in dry beans,
+!             proso millet, sorghum (first bloom), soybean (beginning bloom), spring barley, 
+!             spring wheat, sunflower, winter barley and winter wheat. in dry beans,
 !             the start of anthesis growth stage and there is one open
-!             flower per plant =100% bloom. this array includes daynum,
-!             year, month and day of when this stage was reached.
+!             flower per plant =100% bloom. in soybean, tere is one open flower at any 
+!             node. this array includes daynum, year, month and day of when this stage was reached.
 !     ctrl%cropstress%ahfwsf - water stress factor ratio (0-1).  this is read in daily.
 !     bio%upgm%blstrs - blister growth stage in corn. this array includes daynum,
 !              year, month and day of when this stage was reached.
+!     bio%upgm%bmats - in soybean, beginning maturity. There is one pod anywhere with its mature color.
+!             this array includes daynum, year, month and day of when this stage was reached
 !     bio%upgm%boots - booting growth stage for hay millet, proso millet, spring
 !             barley, spring wheat, winter barley and winter wheat. this array
 !             includes daynum, year, month and day of when this stage was
@@ -97,7 +99,7 @@ integer :: j
 !     ctrl%sim%cliname - the name of the location for the climate data.
 !     bio%bname - crop name.
 !     bio%upgm%cots - cotyledonary and unifoliolate leaves are visible in dry
-!            beans. this array includes daynum, year, month and day
+!            beans and soybean. this array includes daynum, year, month and day
 !            of when this stage was reached.
 !     daa - days after anthesis.
 !     dae - days after emergence.
@@ -133,11 +135,13 @@ integer :: j
 !     endphenol - a flag to indicate if this subroutine should be called
 !                 again the next day.
 !     bio%upgm%epods - one pod has reached the maximum length in dry beans.
-!             this array includes daynum, year, month and day of when
-!             this stage was reached.
+!             in soybean, beginning pod, pod is 3/16" long at one of the four 
+!             uppermost nodes. this array includes daynum, year, month and day 
+!             of when this stage was reached.
 !     bio%upgm%eseeds - there is one pod with fully developed seeds in dry
-!              beans. this array includes daynum, year, month and day
-!              of when this stage was reached.
+!              beans. in soybean, beginning seed, seed is 1/8" long in pod 
+!              at one of the four uppermost nodes. this array includes daynum, year, 
+!              month and dayo f when this stage was reached.
 !     bio%upgm%first7 - used to set the value of bio%upgm%aepa the first time the crop's phenol
 !              subroutine is called.
 !     bio%upgm%fps - flower primordium initiation growth stage. this array includes
@@ -174,14 +178,14 @@ integer :: j
 !             barley, spring wheat, winter barley and winter wheat. this
 !             array includes daynum, year, month and day of when this stage
 !             was reached.
-!     bio%upgm%hrs - time to harvest ripe growth stage for corn, dry beans, hay
-!           millet, proso millet, sorghum, spring barley, spring wheat,
+!     bio%upgm%hrs - time to harvest ready growth stage for corn, dry beans, hay
+!           millet, proso millet, sorghum, soybean, spring barley, spring wheat,
 !           sunflower, winter barley and winter wheat. in dry beans, 80%
 !           of pods are at the mature color in dry beans. this array
 !           includes daynum, year, month and day of when this stage was
 !           reached.
 !     bio%upgm%ies - start of internode elongation growth stage for corn, hay millet,
-!           proso millet, sorghum, spring barley, spring wheat, winter barley,
+!           proso millet, sorghum, soybean, spring barley, spring wheat, winter barley,
 !           and winter wheat. for sunflower, this stage occurs when the
 !           internode below the inflorescence elongates 0.5 to 2.0 cm above
 !           the nearest leaf on the stem. this array includes daynum, year,
@@ -212,27 +216,34 @@ integer :: j
 !            stage when the fourth trifoliolate leaf is unfolded in dry
 !            beans. this array includes daynum, year, month and day of
 !            when this stage was reached.
+!     bio%upgm%lf5s - the stage when the fifth trifoliolate leaf is unfolded in 
+!            soybean.  this array includes daynum, year, month and day of
+!            when this stage was reached.
 !     bio%upgm%lf8s - the 8 leaf growth stage for sunflower. this array includes
 !            daynum, year, month and day of when this stage was reached.
 !     lnpout - an array used in writing out daynum and the number of leaves
 !              on that day. the values are written each time a new leaf has
 !              appeared.
 !     bio%upgm%mats - physiological maturity growth stage for corn, dry beans,
-!            hay millet, proso millet, sorghum, spring barley, spring
+!            hay millet, proso millet, sorghum, soybean, spring barley, spring
 !            wheat, sunflower, winter barley and winter wheat. in dry beans,
-!            one pod has changed color/striped. this array includes
+!            one pod has changed color/striped. in soybean, full maturity, 95% 
+!            of the pods have reached their mature color. this array includes
 !            daynum, year, month and day of when this stage was reached.
-!     bio%upgm%mffls - the stage of mid to full flower in dry beans. this array
+!     bio%upgm%mffls - the stage of mid to full flower in dry beans. in soybean, 
+!             full bloom, one open flower at one of the two uppermost nodes. this array
 !             includes daynum, year, month and day of when this stage
 !             was reached.
 !     bio%upgm%milks - the milk growth stage in corn. this array includes daynum, year,
 !             month and day of when this stage was reached.
-!     bio%upgm%mpods - the stage when 50% of the pods are at the maximum length.
+!     bio%upgm%mpods - the stage when 50% of the pods are at the maximum length in dry beans.
+!             in soybean, full pod, pod is 3/4" long at one of the four uppermost nodes. 
 !             this array includes daynum, year, month and day of when
 !             this stage was reached.
 !     bio%upgm%mseeds - the stage when 50% of the pods have fully developed seeds
-!              in dry beans. this array includes daynum, year, month and
-!              day of when this stage was reached.
+!              in dry beans. in soybean, full seed, pod contains a green seed that 
+!              fills the pod cavity at one of the four uppermost nodes. this array 
+!              includes daynum, year, month and day of when this stage was reached.
 !     bio%upgm%opens - the sunflower inflorescence begins to open. this array includes
 !             daynum, year, month and day of when this stage was reached.
 !     bio%upgm%pchron - phyllochron value which is the number of gdd per leaf.
@@ -299,6 +310,13 @@ else if ((bio%bname=='dry beans').and.(endphenol.neqv..true.)) then
   call phenolbn(ctrl,bio%upgm%aepa,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%cots,ctrl%sim%cliname,bio%bname,daa,dae,dap,daynum, &
               & ddae,ddap,dgdde,dgdds,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,endphenol,bio%upgm%epods,bio%upgm%eseeds,&
               & bio%upgm%first7,gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%hrs,bio%upgm%lf1s,bio%upgm%lf2s,bio%upgm%lf3s,bio%upgm%lf4s,   &
+              & lnpout,bio%upgm%mats,bio%upgm%mffls,bio%upgm%mpods,bio%upgm%mseeds,bio%upgm%pchron,pdate,seedbed,year)
+
+  ! if soybean (crop name in cropxml.dat needs to read soybean)
+else if ((bio%bname=='soybean').and.(endphenol.neqv..true.)) then
+  call phenolsy(ctrl,bio%upgm%aepa,bio%upgm%antss,bio%upgm%bmats,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%cots,ctrl%sim%cliname,bio%bname,daa,dae,dap,daynum, &
+              & ddae,ddap,dgdde,dgdds,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,endphenol,bio%upgm%epods,bio%upgm%eseeds,&
+              & bio%upgm%first7,gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%hrs,bio%upgm%lf1s,bio%upgm%lf2s,bio%upgm%lf3s,bio%upgm%lf4s,bio%upgm%lf5s,   &
               & lnpout,bio%upgm%mats,bio%upgm%mffls,bio%upgm%mpods,bio%upgm%mseeds,bio%upgm%pchron,pdate,seedbed,year)
  
 ! if hay millet:

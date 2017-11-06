@@ -99,6 +99,7 @@
 		<File RelativePath="..\Source Code\phenolsf.f90"/>
 		<File RelativePath="..\Source Code\phenolsg.f90"/>
 		<File RelativePath="..\Source Code\phenolsw.f90"/>
+		<File RelativePath="..\Source Code\phenolsy.f90"/>
 		<File RelativePath="..\Source Code\phenolwb.f90"/>
 		<File RelativePath="..\Source Code\phenolww.f90"/>
 		<File RelativePath="..\Source Code\scrv1.f90"/>

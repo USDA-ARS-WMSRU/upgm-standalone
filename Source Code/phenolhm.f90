@@ -36,8 +36,8 @@ integer,dimension(4) :: antes,antss,boots,drs,ems,fps,heads,hrs,ies,joints,mats,
                       & srs,tis,tss
 integer,dimension(20) :: ddae,ddap
 real,dimension(20) :: dgdde,dgdds
-real,dimension(30) :: dummy2
-real,dimension(15,5) :: gddwsf
+real,dimension(32) :: dummy2
+real,dimension(16,5) :: gddwsf
 real,dimension(100,2) :: lnpout
 !
 ! Local variables
@@ -523,7 +523,8 @@ if (hrs(1)/=999) then
                        & gddwsf(13,1),gddwsf(13,2),gddwsf(13,3),gddwsf(13,4),   &
                        & gddwsf(13,5),gddwsf(14,1),gddwsf(14,2),gddwsf(14,3),   &
                        & gddwsf(14,4),gddwsf(14,5),gddwsf(15,1),gddwsf(15,2),   &
-                       & gddwsf(15,3),gddwsf(15,4),gddwsf(15,5)
+                       & gddwsf(15,3),gddwsf(15,4),gddwsf(15,5),gddwsf(16,1),   &
+                       & gddwsf(16,2),gddwsf(16,3),gddwsf(16,4),gddwsf(16,5)
  
   endphenol = .true.
  
@@ -576,6 +577,7 @@ end if
             & f5.1,3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,'physiological maturity',&
             & 9x,f5.1,3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,'harvest ready',18x,  &
             & f5.1,3x,f5.1,3x,f3.1,4x,f3.1,4x,f5.1,/1x,'row 15',25x,f5.1,3x,    &
-            & f5.1,3x,f3.1,4x,f3.1,6x,f3.1,/1x)
+            & f5.1,3x,f3.1,4x,f3.1,6x,f3.1,/1x,'row 16',25x,f5.1,3x,f5.1,3x,    &
+            & f3.1,4x,f3.1,6x,f3.1,/1x)
 !
 end subroutine phenolhm

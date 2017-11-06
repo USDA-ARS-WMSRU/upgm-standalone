@@ -293,7 +293,7 @@
 
     !     + + +  newly added arguments definitions + + +
     !     bio%upgm%antss - start of anthesis growth stage for hay millet, proso millet,
-    !             sorghum (first bloom), spring barley, spring wheat,
+    !             sorghum (first bloom), soybean (beginning bloom) spring barley, spring wheat,
     !             sunflower, winter barley and winter wheat. also, dry beans
     !             and corn. this array includes daynum, year, month and day
     !             of when this stage was reached.
@@ -866,7 +866,7 @@
             & stem_propor,pdiam,parea,pdiam/bio%database%diammax,parea*bio%geometry%dpop,   &
             & hu_delay,temp_sai,temp_stmrep,bio%bname,gddday,ln
 
-        !DE moves thes out of the write to luocrop above. They are not used here now:
+        !DE moved these out of the write to luocrop above. They are not used here now:
         !& temp_store,temp_fiber,temp_stem,                         &
 
         !bio%mass%standstem + bio%mass%flatstem + temp_stem, &

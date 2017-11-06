@@ -52,7 +52,7 @@ integer :: daa,dae,dap,dav,dd,lncntr,mm,pdate,rowcntr,tempsw,verns,yr,yy
 logical :: endphenol,jan1
 integer,dimension(20) :: ddae,ddap,ddav
 real,dimension(20) :: dgdde,dgdds,dgddv
-real,dimension(15,5) :: gddwsf
+real,dimension(16,5) :: gddwsf
 real,dimension(400,2) :: lnarray
 real,dimension(100,2) :: lnpout
 !
@@ -1037,7 +1037,7 @@ end if
  
  
 ! debe 010809 added initilization of gddwsf array
-do i = 1,15
+do i = 1,16
   do j = 1,5
      gddwsf(i,j) = 0.0
   end do

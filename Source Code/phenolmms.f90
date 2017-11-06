@@ -24,7 +24,7 @@ integer :: daa,dae,dap,dav,daynum,dd,lncntr,mm,pdate,    &
 logical :: endphenol,jan1
 integer,dimension(20) :: ddae,ddap,ddav
 real,dimension(20) :: dgdde,dgdds,dgddv
-real,dimension(15,5) :: gddwsf
+real,dimension(16,5) :: gddwsf
 real,dimension(400,2) :: lnarray
 real,dimension(100,2) :: lnpout
 !
@@ -58,11 +58,11 @@ real,dimension(100,2) :: lnpout
 !             wheat. this array includes daynum, year, month and day of when
 !             this stage was reached.
 !     bio%upgm%antss - start of anthesis growth stage for corn, dry beans, hay millet,
-!             proso millet, sorghum (first bloom), spring barley, spring
-!             wheat, sunflower, winter barley and winter wheat. in dry beans,
+!             proso millet, sorghum (first bloom), soybean (beginning bloom), spring barley, 
+!             spring wheat, sunflower, winter barley and winter wheat. in dry beans,
 !             the start of anthesis growth stage and there is one open
-!             flower per plant =100% bloom. this array includes daynum,
-!             year, month and day of when this stage was reached.
+!             flower per plant =100% bloom. in soybean, there is one open flower at any node.
+!             this array includes daynum, year, month and day of when this stage was reached.
 !     bio%upgm%blstrs - blister growth stage in corn. this array includes daynum,
 !              year, month and day of when this stage was reached.
 !     bio%upgm%boots - booting growth stage for hay millet, proso millet, spring
@@ -70,13 +70,16 @@ real,dimension(100,2) :: lnpout
 !             includes daynum, year, month and day of when this stage was
 !             reached.  booting is defined as flag leaf has completed its
 !             growth.
+!     bio%upgm%bmats - beginning maturity growth stage for soybean. one pod anywhere
+!              with its mature color. this array includes daynum, year, month and 
+!             day of when this stage was reached.  
 !     bio%upgm%browns - when the back of the sunflower head is yellow and there may be
 !              some brown spotting. this array includes daynum, year, month
 !              and day of when this stage was reached.
 !     bio%upgm%canht - the cumulative height of the plant canopy.
 !     ctrl%sim%cliname - the name of the location for the climate data.
 !     bio%upgm%cots - cotyledonary and unifoliolate leaves are visible in dry
-!            beans. this array includes daynum, year, month and day
+!            beans and soybean. this array includes daynum, year, month and day
 !            of when this stage was reached.
 !     daa - days after anthesis.
 !     dae - days after emergence.
@@ -117,11 +120,12 @@ real,dimension(100,2) :: lnpout
 !     endphenol - a flag to indicate if this subroutine should be called
 !                 again on the next day.
 !     bio%upgm%epods - one pod has reached the maximum length in dry beans (early
-!             pod set). this array includes daynum,year, month and day of
-!             when this stage was reached.
+!             pod set). in soybean, it is beginning pod stage and a pod is 3/16" long at one of the four uppermost nodes. 
+!             this array includes daynum,year, month and day of when this stage was reached.
 !     bio%upgm%eseeds - there is one pod with fully developed seeds in dry
-!              beans (early seed fill). this array includes daynum, year,
-!              month and day of when this stage was reached.
+!              beans (early seed fill). in soybean, this is beginning seed stage and seed is 1/8" long in pod at one 
+!              of the four uppermost nodes.this array includes daynum, year, month and day of when
+!              this stage was reached.
 !     bio%upgm%first7 - used to set the value of bio%upgm%aepa the first time the crop's phenol
 !              subroutine is called.
 !     bio%upgm%fps - flower primordium initiation growth stage. this array includes
@@ -159,14 +163,14 @@ real,dimension(100,2) :: lnpout
 !             barley, spring wheat, winter barley and winter wheat. this
 !             array includes daynum, year, month and day of when this stage
 !             was reached.
-!     bio%upgm%hrs - time to harvest ripe growth stage for corn, dry beans, hay
-!           millet, proso millet, sorghum, spring barley, spring wheat,
+!     bio%upgm%hrs - time to harvest ready growth stage for corn, dry beans, hay
+!           millet, proso millet, sorghum, soybean, spring barley, spring wheat,
 !           sunflower, winter barley and winter wheat. in dry beans, 80%
-!           of pods are at the mature color in dry beans. this array
+!           of pods are at the mature color. this array
 !           includes daynum, year, month and day of when this stage was
 !           reached.
 !     bio%upgm%ies - start of internode elongation growth stage for corn, hay millet,
-!           proso millet, sorghum, spring barley, spring wheat, winter barley,
+!           proso millet, sorghum, soybean, spring barley, spring wheat, winter barley,
 !           and winter wheat. for sunflower, this stage occurs when the
 !           internode below the inflorescence elongates 0.5 to 2.0 cm above
 !           the nearest leaf on the stem. this array includes daynum, year,
@@ -185,21 +189,24 @@ real,dimension(100,2) :: lnpout
 !              this array includes daynum, year, month and day of when this
 !              stage was reached.
 !     bio%upgm%lf1s - stage when the first trifoliolate leaf is unfolded in dry
-!            beans. this array includes daynum, year, month and day of
+!            beans and soybean. this array includes daynum, year, month and day of
 !            when this stage was reached.
 !     bio%upgm%lf12s - the 12 leaf growth stage for corn and sunflower. this array
 !             includes daynum, year, month and day of when this stage was
 !             reached.
 !     bio%upgm%lf2s - stage when the second trifoliolate leaf is unfolded in dry
-!            beans. this array includes daynum, year, month and day of
+!            beans and soybean. this array includes daynum, year, month and day of
 !            when this stage was reached.
 !     bio%upgm%lf3s - stage when the third trifoliolate leaf is unfolded in dry
-!            beans. this array includes daynum, year, month and day of
+!            beans and soybean. this array includes daynum, year, month and day of
 !            when this stage was reached.
 !     bio%upgm%lf4s - the 4 leaf growth stage for corn and sunflower and the
 !            stage when the fourth trifoliolate leaf is unfolded in dry
-!            beans. this array includes daynum, year, month and day of
+!            beans and soybean. this array includes daynum, year, month and day of
 !            when this stage was reached.
+!     bio%upgm%lf5s - the 5 leaf growth stage for soybean and the stage when the fifth 
+!            trifoliolate leaf is unfolded. this array includes daynum, year, month 
+!            and day of when this stage was reached.
 !     bio%upgm%lf8s - the 8 leaf growth stage for sunflower. this array includes
 !            daynum, year, month and day of when this stage was reached.
 !     lnarray - an array to hold the leaf number calculated for each day
@@ -208,13 +215,15 @@ real,dimension(100,2) :: lnpout
 !              on that day. the values are written each time a new leaf has
 !              appeared.
 !     bio%upgm%mats - physiological maturity growth stage for corn, dry beans,
-!            hay millet, proso millet, sorghum, spring barley, spring
-!            wheat, sunflower, winter barley and winter wheat. in dry beans,
-!            one pod has changed color/striped. this array includes
-!            daynum, year, month and day of when this stage was reached.
+!            hay millet, proso millet, sorghum, soybean (full maturity), spring barley, 
+!            spring wheat, sunflower, winter barley and winter wheat. in dry beans,
+!            one pod has changed color/striped. in soybean, 95% of the pods have 
+!            reached their mature color. this array includes daynum, year, month
+!            and day of when this stage was reached.
 !     bio%upgm%maxht - the maximum height of the plant canopy.
-!     bio%upgm%mffls - the stage of mid to full flower in dry beans. this array
-!             includes daynum, year, month and day of when this stage
+!     bio%upgm%mffls - the stage of mid to full flower in dry beans. in soybean, this
+!             is full bloom there is one open flower at one of the two uppermost nodes. 
+!             this array includes daynum, year, month and day of when this stage
 !             was reached.
 !     bio%upgm%milks - the milk growth stage in corn. this array includes daynum, year,
 !             month and day of when this stage was reached.
@@ -222,7 +231,9 @@ real,dimension(100,2) :: lnpout
 !             this array includes daynum, year, month and day of when
 !             this stage was reached.
 !     bio%upgm%mseeds - the stage when 50% of the pods have fully developed seeds
-!              in dry beans. this array includes daynum, year, month and
+!              in dry beans. in soybean, this stage is full seed and is reached when 
+!              there is a pod containing a green seed that fills the pod cavity at one 
+!              of the four uppermost nodes. this array includes daynum, year, month and
 !              day of when this stage was reached.
 !     bio%upgm%opens - the sunflower inflorescence begins to open. this array includes
 !             daynum, year, month and day of when this stage was reached.
@@ -313,8 +324,9 @@ if (bio%upgm%ems(1)/=999) then       ! emergence has occurred
 ! ***** leafno *****
 !  call the leafno subroutine to calculate the number of leaves once
 !  emergence has occurred for the leaf number output table.
-  call leafno(bio%upgm%antss,bio%upgm%boots,bio%bname,daynum,dgdde,bio%upgm%endlgs,bio%upgm%epods,gdde,ln,lnarray,     &
-             &lncntr,lnpout,bio%upgm%pchron,rowcntr,todayln,yestln)
+! debe added eseeds to be sent to leafno to allow determining leaf number in soybean  
+  call leafno(bio%upgm%antss,bio%upgm%boots,bio%bname,daynum,dgdde,bio%upgm%endlgs,bio%upgm%epods,&
+             &bio%upgm%eseeds,gdde,ln,lnarray,lncntr,lnpout,bio%upgm%pchron,rowcntr,todayln,yestln)
 
   !testing values in lnpout coming back from leafno subroutine
   !print *, 'after call to leafno lnpout leaf num = ', lnpout(lncntr,2)
@@ -400,6 +412,9 @@ if (bio%upgm%ems(1)/=999) then       ! emergence has occurred
         call canopyht(bio%upgm%antss,bio%upgm%canht,bio%bname,bio%upgm%dayhtinc,bio%upgm%dummy2,bio%upgm%ecanht,bio%upgm%ems,gddday,gdde, &
                     & bio%upgm%ies,bio%upgm%maxht)
      else if (bio%bname=='dry beans') then
+        call canopyht(bio%upgm%antss,bio%upgm%canht,bio%bname,bio%upgm%dayhtinc,bio%upgm%dummy2,bio%upgm%ecanht,bio%upgm%ems,gddday,gdde, &
+                    & bio%upgm%cots,bio%upgm%maxht)
+     else if (bio%bname=='soybean') then
         call canopyht(bio%upgm%antss,bio%upgm%canht,bio%bname,bio%upgm%dayhtinc,bio%upgm%dummy2,bio%upgm%ecanht,bio%upgm%ems,gddday,gdde, &
                     & bio%upgm%cots,bio%upgm%maxht)
      else if (bio%bname=='sorghum') then

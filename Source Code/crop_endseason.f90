@@ -201,20 +201,21 @@
     !
     !     + + + newly added variables + + +
     !     antss - start of anthesis growth stage for corn, dry beans, hay millet,
-    !             proso millet, sorghum (first bloom), spring barley, spring
-    !             wheat, sunflower, winter barley and winter wheat. in dry beans,
-    !             the start of anthesis growth stage and there is one open
-    !             flower per plant =100% bloom. this array includes daynum,
-    !             year, month and day of when this stage was reached.
-    !     hrs - time to harvest ripe growth stage for corn, dry beans, hay
-    !           millet, proso millet, sorghum, spring barley, spring wheat,
+    !             proso millet, sorghum (first bloom), soybean (beginning bloom), 
+    !             spring barley, spring wheat, sunflower, winter barley and winter 
+    !             wheat. in dry beans, the start of anthesis growth stage and 
+    !             there is one open flower per plant =100% bloom. in soybean, this is 
+    !             beginning bloom and one open flower at any node. this array includes 
+    !             daynum, year, month and day of when this stage was reached.
+    !     hrs - time to harvest ready growth stage for corn, dry beans, hay
+    !           millet, proso millet, sorghum, soybean, spring barley, spring wheat,
     !           sunflower, winter barley and winter wheat. in dry beans, 80%
     !           of pods are at the mature color in dry beans. this array
     !           includes daynum, year, month and day of when this stage was
     !           reached.
     !     ies - start of internode elongation growth stage for corn, hay millet,
-    !           proso millet, sorghum, spring barley, spring wheat, winter barley,
-    !           and winter wheat. for sunflower, this stage occurs when the
+    !           proso millet, sorghum, soybean, spring barley, spring wheat, winter 
+    !           barley, and winter wheat. for sunflower, this stage occurs when the
     !           internode below the inflorescence elongates 0.5 to 2.0 cm above
     !           the nearest leaf on the stem. this array includes daynum, year,
     !           month and day of when this stage was reached.
@@ -223,10 +224,11 @@
     !              this array includes daynum, year, month and day of when this
     !              stage was reached.
     !     mats - physiological maturity growth stage for corn, dry beans,
-    !            hay millet, proso millet, sorghum, spring barley, spring
+    !            hay millet, proso millet, sorghum, soybean, spring barley, spring
     !            wheat, sunflower, winter barley and winter wheat. in dry beans,
-    !            one pod has changed color/striped. this array includes
-    !            daynum, year, month and day of when this stage was reached.
+    !            one pod has changed color/striped. in soybean, this is full 
+    !            maturity and 95% of the pods have reached their mature color. this 
+    !            array includes daynum, year, month and day of when this stage was reached.
     !     phenolflg - a flag that determines if the upgm/weps method of determining maturity
     !                 will be used (phenolflg =0) or the phenologymms method will be used (phenolflg = 1).
     !     + + + end of specifications + + +

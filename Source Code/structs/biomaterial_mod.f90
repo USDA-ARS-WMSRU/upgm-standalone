@@ -228,7 +228,7 @@ module biomaterial
 
   type crop_upgm
       character(80) :: cropname             ! name of the crop
-      character(5),dimension(30) :: dummy1  ! in determining the next phenological growth stage, this
+      character(5),dimension(32) :: dummy1  ! in determining the next phenological growth stage, this
                                             ! holds whether the condition is gn or gs, that is when gdd
                                             ! values are used to advance to the next growth stage is it
                                             ! done under non-stressed or stressed conditions.
@@ -273,6 +273,8 @@ module biomaterial
       integer,dimension(4) :: boots   ! booting growth stage for hay millet, proso millet, spring barley, spring wheat, winter 
                                       ! barley and winter wheat. this array includes daynum, year, month and day of when this 
                                       ! stage was reached.  booting is defined as flag leaf has completed its growth.
+      integer,dimension(4) :: bmats   ! beginning maturity growth stage for soybean. this array includes daynum, year, month 
+                                      ! and day of when this stage was reached.  
       integer,dimension(4) :: browns  ! when the back of the sunflower head is yellow and there may be some brown spotting. 
                                       ! this array includes daynum, year, month and day of when this stage was reached.    
       integer,dimension(4) :: cots    ! cotyledonary and unifoliolate leaves are visible in dry beans. this array includes
@@ -333,6 +335,9 @@ module biomaterial
                                       ! includes daynum, year, month and day of when this stage was reached.
       integer,dimension(4) :: lf4s    ! the 4 leaf growth stage for corn and sunflower and the stage when the fourth  
                                       ! trifoliolate leaf is unfolded in dry beans. this array includes daynum, year, 
+                                      ! month and day of  when this stage was reached.
+      integer,dimension(4) :: lf5s    ! the 5 leaf growth stage for soybeanand the stage when the fifth
+                                      ! trifoliolate leaf is unfolded. This array includes daynum, year, 
                                       ! month and day of  when this stage was reached.
       integer,dimension(4) :: lf8s    ! the 8 leaf growth stage for sunflower. this array includes
                                       ! daynum, year, month and day of when this stage was reached.
@@ -395,7 +400,7 @@ module biomaterial
       real,dimension(10) :: co2x   ! the CO2 levels in ppm. The x axis on the relationship curve.
       real,dimension(10) :: co2y   ! the relative effect at different levels of CO2, i.e. co2x.
        
-      real,dimension(30) :: dummy2 ! an array to hold the gdd values, both under stressed and non- stressed conditions,
+      real,dimension(32) :: dummy2 ! an array to hold the gdd values, both under stressed and non- stressed conditions,
                                    ! required to reach each growth stage of the current crop.
       
       real :: trad_lai     ! leaf area index based on whole field area (traditional)

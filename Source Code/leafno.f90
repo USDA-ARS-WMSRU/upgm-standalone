@@ -1,4 +1,4 @@
-subroutine leafno(antss,boots,cname,daynum,dgdde,endlgs,epods,gdde,ln,lnarray,lncntr,lnpout,     &
+subroutine leafno(antss,boots,cname,daynum,dgdde,endlgs,epods,eseeds,gdde,ln,lnarray,lncntr,lnpout,     &
                   & pchron,rowcntr,todayln,yestln)
 
 ! the leafno subroutine is taken from phenologymms.  it calculates the
@@ -15,7 +15,7 @@ character(80) :: cname
 integer :: daynum,lncntr,rowcntr
 real :: gdde,pchron,todayln,yestln
 real :: ln
-integer,dimension(4) :: antss,boots,endlgs,epods
+integer,dimension(4) :: antss,boots,endlgs,epods,eseeds
 real,dimension(20) :: dgdde
 real,dimension(400,2) :: lnarray
 real,dimension(100,2) :: lnpout
@@ -41,8 +41,14 @@ integer :: col,nextcol
 !     endlgs - end of leaf growth stage in sorghum. this array includes
 !              daynum, year, month and day of when this stage was reached.
 !     epods - one pod has reached the maximum length in dry beans (early
-!             pod set). this array includes daynum,year, month and day of
-!             when this stage was reached.
+!             pod set). in soybean, beginning pod and is when one pod is 
+!             3/16" long at one of the four uppermost nodes. this array 
+!             includes daynum,year, month and day of when this stage was reached.
+!     eseeds - there is one pod with fully developed seeds in dry
+!              beans (early seed fill). in soybean, beginning seed and seed 
+!              is 1/8" long in the pod at one of the four uppermost nodes.
+!              this array includes daynum, year, month and day of when 
+!              this stage was reached.
 !     gdde - the accumulated growing degree-days since emergence
 !     lnarray - an array to hold the leaf number calculated for each day
 !     lncntr - counter for the leafno subroutine
@@ -102,6 +108,7 @@ yestln = lnarray(lncntr,nextcol)
 !and it is the logical place to look in the future to find the code for printing
 !leaf numbers to the maximum leaf number at the end of leaf growth and then
 !continue printing that same value until the end of simulation.
+!debe added eseeds to allow determining number of leaves for soybean
 
 if ((cname == 'hay millet') .AND. (boots(1) /= 999)) then
     ln = dgdde(9)/pchron
@@ -123,6 +130,9 @@ else if ((cname == 'dry beans') .AND. (epods(1) /= 999)) then
     ln = dgdde(9)/pchron
 else if ((cname == 'sorghum') .AND. (endlgs(1) /= 999)) then
     ln = dgdde(6)/pchron
+else if ((cname == 'soybean') .AND. (eseeds(1) /= 999)) then
+    ln = dgdde(12)/pchron
+
 end if
 
 end subroutine leafno
