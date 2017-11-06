@@ -186,11 +186,15 @@
     !             day of when this stage was reached.
     !     antss - start of anthesis growth stage for hay millet, proso millet,
     !             sorghum (first bloom), spring barley, spring wheat,
-    !             sunflower, winter barley and winter wheat. also, dry beans
-    !             and corn.this array includes daynum, year, month and day
-    !             of when this stage was reached.
+    !             sunflower, winter barley and winter wheat. also, dry beans,
+    !             soybean and corn. in soybean, this is beginning bloom and 
+    !             there is one open flower at any node.this array includes 
+    !             daynum, year, month and day of when this stage was reached.
     !     blstrs - blister growth stage in corn. this array includes daynum,
     !              year, month and day of when this stage was reached.
+    !     bmats - the beginning of maturity in soybean. There is one pod 
+    !             this array includes daynum, year, month and day of when 
+    !             this stage was reached
     !     boots - booting growth stage for hay millet, proso millet, spring
     !             barley, spring wheat, winter barley and winter wheat. this
     !             array includes daynum, year, month and day of when this
@@ -211,7 +215,7 @@
     !     co2x - the CO2 levels in ppm. The x axis on the relationship curve.
     !     co2y - the relative effect at different levels of CO2, i.e. co2x.
     !     cots - cotyledonary and unifoliolate leaves are visible in dry
-    !            beans. this array includes daynum, year, month and day
+    !            beans and soybean. this array includes daynum, year, month and day
     !            of when this stage was reached.
     !     cropname - name of the crop
     !     dayhtinc - the increase in plant height for today.
@@ -246,14 +250,17 @@
     !           daynum, year, month and day of when this event occurred.
     !     endlgs - end of leaf growth stage in sorghum. this array includes
     !              daynum, year, month and day of when this stage was reached.
-    !     epods - one pod has reached the maximum length in dry beans.
-    !             this array includes daynum, year, month and day of when
-    !             this stage was reached.
+    !     epods - one pod has reached the maximum length in dry beans. 
+    !             beginning pod in soybean. a pod is 3/16" long at one of 
+    !             the four uppermost nodes. this array includes daynum, 
+    !             year, month and day of when this stage was reached.
     !     ergdd - an array holding 4 elongation rates in mm per gdd
     !             based on each soil moisture description.
     !     eseeds - there is one pod with fully developed seeds in dry
-    !              beans. this array includes daynum, year, month and day
-    !              of when this stage was reached.
+    !              beans. beginning seed in soybean. seed is 1/8" long 
+    !              in the pod at one of the four uppermost nodes.  
+    !              this array includes daynum, year, month and day of when this
+    !              stage was reached.
     !     first7 - used to set the value of aepa the first time phenolww is
     !              called.
     !     fps - flower primordium initiation growth stage. this array includes
@@ -290,13 +297,13 @@
     !             barley, spring wheat, winter barley and winter wheat. this
     !             array includes daynum, year, month and day of when this
     !             stage was reached.
-    !     hrs - time to harvest ripe growth stage for corn, hay millet, proso
-    !           millet, sorghum, spring barley, spring wheat, sunflower,
+    !     hrs - time to harvest ready growth stage for corn, hay millet, proso
+    !           millet, sorghum, soybean, spring barley, spring wheat, sunflower,
     !           winter barley and winter wheat. 80% of pods are at the mature
     !           color in dry beans. this array includes daynum, year, month
     !           and day of when this stage was reached.
     !     ies - start of internode elongation growth stage for corn, hay
-    !           millet, proso millet, sorghum, spring barley, spring wheat,
+    !           millet, proso millet, soybean, sorghum, spring barley, spring wheat,
     !           winter barley, and winter wheat. for sunflower, this stage
     !           occurs when the internode below the inflorescence elongates
     !           0.5 to 2.0 cm above the nearest leaf on the stem. this array
@@ -332,27 +339,35 @@
     !            stage when the fourth trifoliolate leaf is unfolded in dry
     !            beans. this array includes daynum, year, month and day of
     !            when this stage was reached.
+    !     lf5s - the stage when the fifth trifoliolate leaf is unfolded in 
+    !            soybean.  this array includes daynum, year, month and day of
+    !            when this stage was reached.
     !     lf8s - the 8 leaf growth stage for sunflower. this array includes
     !            daynum, year, month and day of when this stage was reached.
     !     mats - physiological maturity growth stage for corn, hay millet,
     !            proso millet, sorghum, spring barley, spring wheat,
     !            sunflower, winter barley and winter wheat. in dry beans,
-    !            one pod has changed color/striped. this array includes
+    !            one pod has changed color/striped. in soybean, this is 
+    !            when one pod anywhere has its mature color. this array includes
     !            daynum, year, month and day of when this stage was
     !            reached.
     !     maxht - this is the maximum canopy height of the crop.  it is an
     !             input parameter and is read in from upgm_crop.dat.
-    !     mffls - the stage of mid to full flower in dry beans. this array
-    !             includes daynum, year, month and day of when this stage
-    !             was reached.
+    !     mffls - the stage of mid to full flower in dry beans. in soybean, 
+    !             this is full bloom and there is one open flower at one 
+    !             of the two uppermost nodes. this array includes daynum, year, 
+    !             month and day of when this stage was reached.
     !     milks - the milk growth stage in corn. this array includes daynum,
     !             year, month and day of when this stage was reached.
-    !     mpods - the stage when 50% of the pods are at the maximum length.
-    !             this array includes daynum, year, month and day of when
-    !             this stage was reached.
+    !     mpods - in dry beans, the stage when 50% of the pods are at the maximum length.
+    !             in soybean, this is full pod and one pod is 3/4" long at one of the 
+    !             four uppermost modes.this array includes daynum, year, month 
+    !             and day of when this stage was reached.
     !     mseeds - the stage when 50% of the pods have fully developed seeds
-    !              in dry beans. this array includes daynum, year, month and
-    !              day of when this stage was reached.
+    !              in dry beans. in soybean, this is full seed and has 
+    !              a pod containing a green seed that fills the pod cavity 
+    !              at one of the four uppermost nodes. this array includes 
+    !              daynum, year, month and day of when this stage was reached.
     !     opens - the sunflower inflorescence begins to open. this array
     !             includes daynum, year, month and day of when this stage
     !             was reached.
