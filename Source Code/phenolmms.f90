@@ -1,6 +1,6 @@
 subroutine phenolmms(ctrl, clidat, bio,daa,dae,dap,dav,daynum,dd,ddae,ddap,ddav,dgdde,dgdds,dgddv,endphenol,    &
-                  & gdda,gddday,gdde,gdds,gddv,gddwsf,jan1,lnarray,lncntr,lnpout,mm,pdate,rowcntr,      &                               
-                  & todayln, yestln, yy, ln)
+                  & gdda,gddday,gdde,gdds,gddv,gddwsf,jan1,lnarray,lncntr,lnpout,mm,partcoefleaf,partcoefstem,  &                               
+                  & partcoefrepro,pdate,rowcntr,todayln,useupgmpart,yestln,yy,ln)
 
 !debe added this subroutine as a means of keeping the subroutines from
 !phenologymms all together. this subroutine will be called from crop.
@@ -21,18 +21,20 @@ implicit none
 real :: gdda,gddday,gdde,gdds,gddv, todayln,yestln,ln
 integer :: daa,dae,dap,dav,daynum,dd,lncntr,mm,pdate,    &
          & rowcntr,yy
-logical :: endphenol,jan1
+logical :: endphenol,jan1,useupgmpart
 integer,dimension(20) :: ddae,ddap,ddav
 real,dimension(20) :: dgdde,dgdds,dgddv
 real,dimension(16,5) :: gddwsf
 real,dimension(400,2) :: lnarray
 real,dimension(100,2) :: lnpout
+real :: partcoefleaf, partcoefstem, partcoefrepro
 !
 !debe added bio%upgm%dayhtinc to be able to pass the daily increase in height to growth
 ! for the ht_dia_sai subroutine in place of the weps/upgm variable dht when
 ! canopyflg = 1.
 !debe added bio%upgm%ecanht so that it can be read in instead of set in the code for each crop.
-!
+!DE added partitioning variables and flag to use the upgm method of partitioning: partcoefleaf, 
+! partcoefstem, partcoefrepro, useupgmpart. These are passed to phenol.f90 5/15/18
  
 !     + + + argument definitions + + +
 !     bio%database%growdepth - depth of growing point at time of planting (m).
@@ -460,9 +462,10 @@ if (bio%upgm%ems(1)/=999) then       ! emergence has occurred
 !debe added variables to pass to the phenol_cropname subroutines for
 !printing out information: bio%database%growdepth, bio%upgm%gmethod, bio%upgm%emrgflg, ctrl%sim%cliname
 !debe added bio%upgm%canht to pass to phenol to be written in phenol.out from
-!phenol_cropname. debe added variables for dry beans.
+!phenol_cropname. debe added variables for dry beans. DE added variables for partitioning.
 
-  call phenol(ctrl, bio,daa,dae,dap,dav,daynum,ddae,ddap,ddav,dgdde,dgdds,dgddv,endphenol,gdda,gdde,gdds,gddv,gddwsf,lnpout,pdate,yy)
+  call phenol(ctrl,bio,daa,dae,dap,dav,daynum,ddae,ddap,ddav,dgdde,dgdds,dgddv,endphenol,gdda,gdde,gdds,gddv, &
+              & gddwsf,lnpout,partcoefleaf,partcoefstem,partcoefrepro,pdate,useupgmpart,yy)
   !
 end if
 !

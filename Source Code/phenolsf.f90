@@ -1,8 +1,6 @@
-subroutine phenolsf(ctrl, aepa,antes,antss,pdepth,bhfwsf,browns,cliname,cname,daa,dae,&
-                  & dap,daynum,ddae,ddap,dgdde,dgdds,dummy2,emrgflg,ems,        &
-                  & endphenol,first7,gdda,gdde,gdds,gddwsf,gmethod,hrs,ies,ies2,&
-                  & infls,lf12s,lf4s,lf8s,lnpout,mats,opens,pchron,pdate,       &
-                  & seedbed,year,yelows)
+subroutine phenolsf(ctrl, aepa,antes,antss,pdepth,bhfwsf,browns,cliname,cname,daa,dae,dap,daynum,ddae,ddap,dgdde,dgdds,   &
+                  & dummy2,emrgflg,ems,endphenol,first7,gdda,gdde,gdds,gddwsf,gmethod,hrs,ies,ies2,infls,lf12s,lf4s,lf8s, &
+                  & lnpout,mats,opens,partcoefleaf,partcoefstem,partcoefrepro,pchron,pdate,seedbed,useupgmpart,year,yelows)
 !
 !  the phenolsf subroutine ... finish description here.
 !
@@ -36,10 +34,11 @@ implicit none
 !
     type(controls) :: ctrl
 real :: aepa,bhfwsf,gdda,gdde,gdds,pchron,pdepth
+real :: partcoefleaf,partcoefstem,partcoefrepro
 character(80) :: cliname
 character(80) :: cname,seedbed
 integer :: daa,dae,dap,daynum,emrgflg,first7,gmethod,pdate,year
-logical :: endphenol
+logical :: endphenol,useupgmpart
 integer,dimension(4) :: antes,antss,browns,ems,hrs,ies,ies2,infls,lf12s,lf4s,   &
                       & lf8s,mats,opens,yelows
 integer,dimension(20) :: ddae,ddap
@@ -65,6 +64,7 @@ integer,dimension(4) :: pdatearr
  
 !debe added this variable to stop the call to phenol
 !debe added cliname to write the climate location name to phenol.out
+!DE added variables to enable partitioning at growth stages 5/16/18.
 !
 !     + + + argument definitions + + +
 !     adjgdd - the adjusted gdd required to enter the growth stage.
@@ -162,6 +162,8 @@ integer,dimension(4) :: pdatearr
  
 ! initialize local variables
 j = 1
+useupgmpart = .true.   ! flag set to true to use the new partitioning coefficients
+
 !debe initialize planting date array
 do i = 1,4
   pdatearr(i) = 0
@@ -204,6 +206,11 @@ if (lf4s(1)==999) then
      dgdds(2) = gdds
      dgdde(2) = gdde
      print *,'lf4s = ',lf4s
+     if (lf4s(1).ne.999) then
+         partcoefleaf = 0.8
+         partcoefstem = 0.2
+         partcoefrepro = 0.0
+     endif
   end if
  
 ! 8th leaf stage - v8
@@ -220,6 +227,11 @@ else if (lf8s(1)==999) then
      dgdds(3) = gdds
      dgdde(3) = gdde
      print *,'lf8s = ',lf8s
+     if (lf8s(1).ne.999) then
+         partcoefleaf = 0.7
+         partcoefstem = 0.2
+         partcoefrepro = 0.1
+     endif
   end if
  
 ! 12th leaf stage - v12
@@ -236,6 +248,11 @@ else if (lf12s(1)==999) then
      dgdds(4) = gdds
      dgdde(4) = gdde
      print *,'lf12s = ',lf12s
+     if (lf12s(1).ne.999) then
+         partcoefleaf = 0.6
+         partcoefstem = 0.3
+         partcoefrepro = 0.1
+     endif
   end if
  
 !  inflorescence becomes visible - r1
@@ -252,6 +269,11 @@ else if (infls(1)==999) then
      dgdds(5) = gdds
      dgdde(5) = gdde
      print *,'infls = ',infls
+     if (infls(1).ne.999) then
+         partcoefleaf = 0.5
+         partcoefstem = 0.3
+         partcoefrepro = 0.2
+     endif
   end if
  
 !  start of internode elongation directly below the base of the
@@ -269,6 +291,11 @@ else if (ies(1)==999) then
      dgdds(6) = gdds
      dgdde(6) = gdde
      print *,'ies = ',ies
+     if (ies(1).ne.999) then
+         partcoefleaf = 0.4
+         partcoefstem = 0.3
+         partcoefrepro = 0.3
+     endif
   end if
  
 !  internode elongation continues.  the internode below the
@@ -288,6 +315,11 @@ else if (ies2(1)==999) then
      dgdds(7) = gdds
      dgdde(7) = gdde
      print *,'ies2 = ',ies2
+     if (ies2(1).ne.999) then
+         partcoefleaf = 0.3
+         partcoefstem = 0.3
+         partcoefrepro = 0.4
+     endif
   end if
  
 !  the inflorescence begins to open and small ray flowers are visible - r4
@@ -305,6 +337,11 @@ else if (opens(1)==999) then
      dgdds(8) = gdds
      dgdde(8) = gdde
      print *,'opens = ',opens
+     if (opens(1).ne.999) then
+         partcoefleaf = 0.2
+         partcoefstem = 0.3
+         partcoefrepro = 0.5
+     endif
   end if
  
 !  anthesis begins.  the mature ray flowers are fully extended
@@ -323,6 +360,11 @@ else if (antss(1)==999) then
      dgdds(9) = gdds
      dgdde(9) = gdde
      print *,'antss = ',antss
+     if (antss(1).ne.999) then
+         partcoefleaf = 0.0
+         partcoefstem = 0.0
+         partcoefrepro = 1.0
+     endif
   end if
  
 !  anthesis is complete.  the ray flowers are wilting. - r6

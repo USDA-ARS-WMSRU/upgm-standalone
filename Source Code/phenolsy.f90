@@ -1,10 +1,9 @@
-subroutine phenolsy(ctrl,aepa,antss,bmats,pdepth,bhfwsf,cots,cliname,cname,daa,dae,dap,    &
-                  & daynum,ddae,ddap,dgdde,dgdds,dummy2,emrgflg,ems,endphenol,  &
-                  & epods,eseeds,first7,gdda,gdde,gdds,gddwsf,gmethod,hrs,lf1s, &
-                  & lf2s,lf3s,lf4s,lf5s,lnpout,mats,mffls,mpods,mseeds,pchron,pdate, &
-                  & seedbed,year)
+subroutine phenolsy(ctrl,aepa,antss,bmats,pdepth,bhfwsf,cots,cliname,cname,daa,dae,dap,daynum,ddae,ddap,dgdde,&
+                  & dgdds,dummy2,emrgflg,ems,endphenol,epods,eseeds,first7,gdda,gdde,gdds,gddwsf,gmethod,hrs, &
+                  & lf1s,lf2s,lf3s,lf4s,lf5s,lnpout,mats,mffls,mpods,mseeds,partcoefleaf,partcoefstem,        &
+                  & partcoefrepro,pchron,pdate,seedbed,useupgmpart,year) 
 !
-!  the phenolbn subroutine ... finish description here.
+!  the phenolsy subroutine ... finish description here.
 !
 !  inputs: aepasf(r), antes(c,r), antss(c,r), aspasf(r),
 !          boots(c,r), btpasf(r), dae(r), dap(r), dav(r), daynum(r),
@@ -30,10 +29,11 @@ implicit none
     type(controls) :: ctrl
 !    type(biomatter),    intent(inout) :: bio
 real :: aepa,bhfwsf,gdda,gdde,gdds,pchron,pdepth
+real :: partcoefleaf,partcoefstem,partcoefrepro
 character(80) :: cliname
 character(80) :: cname,seedbed
 integer :: daa,dae,dap,daynum,emrgflg,first7,gmethod,pdate,year
-logical :: endphenol
+logical :: endphenol,useupgmpart
 integer,dimension(4) :: antss,bmats,cots,ems,epods,eseeds,hrs,lf1s,lf2s,lf3s,lf4s,lf5s,    &
                       & mats,mffls,mpods,mseeds
 integer,dimension(20) :: ddae,ddap
@@ -60,6 +60,7 @@ integer,dimension(4) :: pdatearr
 !
 !debe added the variable endphenol to stop the call to phenol
 !debe added cliname to write the climate location name to phenol.out
+!DE added variables to enable partitioning at growth stages 5/16/18.
 !
 !     + + + argument definitions + + +
 !     adjgdd - the adjusted gdd required to enter a growth stage.
@@ -174,7 +175,9 @@ if (first7==0) then
                 ! note: need to change this value because dry beans uses method 2.
   first7 = 1
 end if
- 
+
+useupgmpart = .true.   ! flag set to true to use the new partitioning coefficients
+
  !debe initialize planting date array
 do i = 1,4
   pdatearr(i) = 0
@@ -219,6 +222,11 @@ if (cots(1)==999) then
      dgdds(2) = gdds
      dgdde(2) = gdde
      print *,'cots = ',cots
+     if (cots(1).ne.999) then
+         partcoefleaf = 0.8
+         partcoefstem = 0.2
+         partcoefrepro = 0.0
+     endif
   end if
  
 !  1st trifoliolate leaf stage - v1:
@@ -235,6 +243,11 @@ else if (lf1s(1)==999) then
      dgdds(3) = gdds
      dgdde(3) = gdde
      print *,'lf1s = ',lf1s
+     if (lf1s(1).ne.999) then
+         partcoefleaf = 0.7
+         partcoefstem = 0.2
+         partcoefrepro = 0.1
+     endif
   end if
 
  
@@ -304,10 +317,9 @@ else if (lf4s(1)==999) then
      dgdde(7) = gdde
      print *,'lf5s = ',lf5s
   end if
-end if
     
 ! beginning bloom - one open flower at any node - r1
-if (antss(1)==999) then
+else if (antss(1)==999) then
   row = 8
   i = 8
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
@@ -321,11 +333,15 @@ if (antss(1)==999) then
      dgdds(8) = gdds
      dgdde(8) = gdde
      print *,'antss = ',antss
+     if (antss(1).ne.999) then
+         partcoefleaf = 0.5
+         partcoefstem = 0.3
+         partcoefrepro = 0.2
+     endif
   end if
-end if
  
 !  full bloom - one open floer at one of the two uppermost nodes - r2.
-if (mffls(1)==999) then
+else if (mffls(1)==999) then
   row = 9
   i = 9
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
@@ -339,11 +355,15 @@ if (mffls(1)==999) then
      dgdds(9) = gdds
      dgdde(9) = gdde
      print *,'mffls = ',mffls
+     if (mffls(1).ne.999) then
+         partcoefleaf = 0.4
+         partcoefstem = 0.2
+         partcoefrepro = 0.4
+     endif
   end if
-end if
  
 !  beginning pod - pod is 3/16" long at one of the four uppermost nodes - r3
-if (epods(1)==999) then
+else if (epods(1)==999) then
   row = 10
   i = 10
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
@@ -357,11 +377,15 @@ if (epods(1)==999) then
      dgdds(10) = gdds
      dgdde(10) = gdde
      print *,'epods = ',epods
+     if (epods(1).ne.999) then
+         partcoefleaf = 0.3
+         partcoefstem = 0.1
+         partcoefrepro = 0.6
+     endif
   end if
-end if
  
 !  full pod - pod is 3/4" long at one of the four uppermost nodes - r4
-if (mpods(1)==999) then
+elseif (mpods(1)==999) then
   row = 11
   i = 11
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
@@ -375,12 +399,16 @@ if (mpods(1)==999) then
      dgdds(11) = gdds
      dgdde(11) = gdde
      print *,'mpods = ',mpods
+     if (mpods(1).ne.999) then
+         partcoefleaf = 0.2
+         partcoefstem = 0.1
+         partcoefrepro = 0.7
+     endif
   end if
-end if
  
 !  beginning seed - seed is 1/8" long in pod at one of the four uppermost nodes - r5
 !  VN occurs at R5.5 
-if (eseeds(1)==999) then
+else if (eseeds(1)==999) then
   row = 12
   i = 12
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
@@ -394,12 +422,16 @@ if (eseeds(1)==999) then
      dgdds(12) = gdds
      dgdde(12) = gdde
      print *,'eseeds = ',eseeds
+     if (eseeds(1).ne.999) then
+         partcoefleaf = 0.1
+         partcoefstem = 0.1
+         partcoefrepro = 0.8
+     endif
   end if
-end if
  
 !  full seed - pod containing a green seed that fills the pod cavity 
 !  at one of the four uppermost nodes - r6
-if (mseeds(1)==999) then
+else if (mseeds(1)==999) then
   row = 13
   i = 13
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
@@ -414,11 +446,15 @@ if (mseeds(1)==999) then
      dgdds(13) = gdds
      dgdde(13) = gdde
      print *,'mseeds = ',mseeds
+     if (mseeds(1).ne.999) then
+         partcoefleaf = 0.1
+         partcoefstem = 0.0
+         partcoefrepro = 0.9
+     endif
   end if
-end if
  
 ! beginning maturity - one pod anywhere with its mature color - r7
-if (bmats(1)==999) then
+else if (bmats(1)==999) then
   row = 14
   i = 14
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
@@ -433,11 +469,15 @@ if (bmats(1)==999) then
      dgdds(14) = gdds
      dgdde(14) = gdde
      print *,'bmats = ',bmats
+     if (bmats(1).ne.999) then
+         partcoefleaf = 0.0
+         partcoefstem = 0.0
+         partcoefrepro = 1.0
+     endif
   end if
-    end if
     
     ! full maturity - 95% of the pods have reached their mature color - r8
-if (mats(1)==999) then
+else if (mats(1)==999) then
   row = 15
   i = 15
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
@@ -453,10 +493,9 @@ if (mats(1)==999) then
      dgdde(15) = gdde
      print *,'mats = ',mats
   end if
-end if
  
 ! harvest ready - plants have dried to less than 15% moisture - r8
-if (hrs(1)==999) then
+else if (hrs(1)==999) then
   row = 16
   i = 16
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)

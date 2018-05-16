@@ -1,8 +1,8 @@
 subroutine phenolww(ctrl, aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae, &
                   & dap,dav,daynum,ddae,ddap,ddav,dgdde,dgdds,dgddv,dummy2,drs, &
                   & emrgflg,ems,first7,fps,gdda,gdde,gdds,gddv,gddwsf,gmethod,  &
-                  & heads,hrs,ies,joints,lnpout,mats,pchron,pdate,seedbed,srs,  &
-                  & tis,tss,year,endphenol)
+                  & heads,hrs,ies,joints,lnpout,mats,pchron,partcoefleaf,partcoefstem,  &
+                  & partcoefrepro,pdate,seedbed,srs,tis,tss,useupgmpart,year,endphenol)
 !
 !  this subroutine simulates phenological growth stages for winter wheat.
 !
@@ -35,10 +35,13 @@ implicit none
 !
     type(controls) :: ctrl
 real :: aepa,bhfwsf,gdda,gdde,gdds,gddv,pchron,pdepth
+real :: partcoefleaf
+real :: partcoefstem
+real :: partcoefrepro
 character(80) :: cliname
 character(80) :: cname,seedbed
 integer :: daa,dae,dap,dav,daynum,emrgflg,first7,gmethod,pdate,year
-logical :: endphenol
+logical :: endphenol,useupgmpart
 integer,dimension(4) :: antes,antss,boots,drs,ems,fps,heads,hrs,ies,joints,mats,&
                       & srs,tis,tss
 integer,dimension(20) :: ddae,ddap,ddav
@@ -71,7 +74,7 @@ integer,dimension(4) :: pdatearr
 ! it is used to check if enough gdd from emergence or vernalization have
 ! been acculumated to allow the next growth stage to be entered.
 !debe added cliname to write the climate location name to phenol.out
- 
+!DE added variables to enable partitioning at growth stages 5/16/18.
  
 !debe added this variable to stop the call to phenol
  
@@ -177,6 +180,7 @@ integer,dimension(4) :: pdatearr
  
 ! initialize local variables
 j = 1
+useupgmpart = .true.   ! flag set to true to use the new partitioning coefficients
  
  !     print *, 'year in phenolww =', year
 !debe initialize planting date array
@@ -226,6 +230,11 @@ if (tis(1)==999) then           ! tillering has not been reached.
      dgdde(2) = gdde
      dgddv(2) = gddv
      print *,'tis = ',tis
+     if (tis(1).ne.999) then
+         partcoefleaf = 0.6
+         partcoefstem = 0.4
+         partcoefrepro = 0.0
+     endif
   end if
  
 !  single ridge growth stage:
@@ -271,26 +280,13 @@ else if (drs(1)==999) then
      dgdde(4) = gdde
      dgddv(4) = gddv
      print *,'drs = ',drs
+     if (drs(1).ne.999) then
+         partcoefleaf = 0.4
+         partcoefstem = 0.4
+         partcoefrepro = 0.2
+     endif
   end if
- 
-!  flower primordium initiation:
-!  flower primordium initiation begins 0.3 phyllochrons after
-!  double ridge.
- 
-else if (fps(1)==999) then
-  if (gddv>=(gddwsf(3,5)+gddwsf(4,5)+(0.3*pchron))) then
-     fps(1) = daynum
-     fps(2) = year
-     call date1(fps)
-     ddap(7) = dap
-     ddae(7) = dae
-     ddav(7) = dav
-     dgdds(7) = gdds
-     dgdde(7) = gdde
-     dgddv(7) = gddv
-     print *,'fps = ',fps
-  end if
- 
+  
 !  terminal spikelet stage:
  
 !debe 011509 combine tss and ies stages because they happen on about
@@ -313,6 +309,11 @@ else if ((tss(1)==999).and.(ies(1)==999)) then
      dgdde(5) = gdde
      dgddv(5) = gddv
      print *,'tss = ',tss
+     if (tss(1).ne.999) then
+         partcoefleaf = 0.3
+         partcoefstem = 0.4
+         partcoefrepro = 0.3
+     endif
   end if
  
 ! start of internode elongation:
@@ -373,6 +374,11 @@ else if (boots(1)==999) then
      dgdde(9) = gdde
      dgddv(9) = gddv
      print *,'boots = ',boots
+     if (boots(1).ne.999) then
+         partcoefleaf = 0.0
+         partcoefstem = 0.3
+         partcoefrepro = 0.7
+     endif
   end if
  
 !  heading growth stage:
@@ -395,6 +401,11 @@ else if (heads(1)==999) then
      dgdde(10) = gdde
      dgddv(10) = gddv
      print *,'heads = ',heads
+     if (heads(1).ne.999) then
+         partcoefleaf = 0.0
+         partcoefstem = 0.2
+         partcoefrepro = 0.8
+     endif
   end if
  
 !  beginning of anthesis:
@@ -416,27 +427,13 @@ else if (antss(1)==999) then
      dgdde(11) = gdde
      dgddv(11) = gddv
      print *,'antss = ',antss
+     if (antss(1).ne.999) then
+         partcoefleaf = 0.0
+         partcoefstem = 0.0
+         partcoefrepro = 1.0
+     endif
   end if
  
-!  end of anthesis:
- 
-else if (antes(1)==999) then
-! don't need to call water_stress subroutine because antes uses the same
-!  gddwsf array locations as antss. to signal antes stage aepa is added to
-!  the sum. aepa = anthesis end parameter
-  if (gddv>=(gddwsf(3,5)+gddwsf(4,5)+gddwsf(6,5)+gddwsf(8,5)+gddwsf(9,5)        &
-    & +gddwsf(10,5)+gddwsf(11,5)+aepa)) then
-     antes(1) = daynum
-     antes(2) = year
-     call date1(antes)
-     ddap(12) = dap
-     ddae(12) = dae
-     ddav(12) = dav
-     dgdds(12) = gdds
-     dgdde(12) = gdde
-     dgddv(12) = gddv
-     print *,'antes = ',antes
-  end if
  
 !  physiological maturity:
  
@@ -477,7 +474,47 @@ else if (hrs(1)==999) then
      print *,'hrs = ',hrs
   end if
 end if
+
+!  flower primordium initiation:
+!  flower primordium initiation begins 0.3 phyllochrons after
+!  double ridge.
  
+if ((drs(1)/=999) .and. (fps(1)==999)) then
+  if (gddv>=(gddwsf(3,5)+gddwsf(4,5)+(0.3*pchron))) then
+     fps(1) = daynum
+     fps(2) = year
+     call date1(fps)
+     ddap(7) = dap
+     ddae(7) = dae
+     ddav(7) = dav
+     dgdds(7) = gdds
+     dgdde(7) = gdde
+     dgddv(7) = gddv
+     print *,'fps = ',fps
+  end if
+end if
+
+!  end of anthesis:
+ 
+if ((antss(1)/=.999) .and. (antes(1)==999)) then
+! don't need to call water_stress subroutine because antes uses the same
+!  gddwsf array locations as antss. to signal antes stage aepa is added to
+!  the sum. aepa = anthesis end parameter
+  if (gddv>=(gddwsf(3,5)+gddwsf(4,5)+gddwsf(6,5)+gddwsf(8,5)+gddwsf(9,5)        &
+    & +gddwsf(10,5)+gddwsf(11,5)+aepa)) then
+     antes(1) = daynum
+     antes(2) = year
+     call date1(antes)
+     ddap(12) = dap
+     ddae(12) = dae
+     ddav(12) = dav
+     dgdds(12) = gdds
+     dgdde(12) = gdde
+     dgddv(12) = gddv
+     print *,'antes = ',antes
+  end if
+end if
+
 !
 ! *******   output data   *******
 ! output information from each crop's phenol subroutine.

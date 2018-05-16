@@ -1,8 +1,9 @@
-subroutine phenolcn(ctrl,aepa,antss,pdepth,bhfwsf,blstrs,cliname,cname,daa,dae,dap,  &
-                  & daynum,ddae,ddap,dents,dgdde,dgdds,doughs,dummy2,ears,      &
-                  & emrgflg,ems,first7,gdda,gdde,gdds,gddwsf,gmethod,hrs,ies,   &
-                  & lf12s,lf4s,lnpout,mats,milks,pchron,pdate,seedbed,silks,    &
-                  & tsints,year,endphenol)
+subroutine phenolcn(ctrl,aepa,antss,pdepth,bhfwsf,blstrs,cliname,cname,daa,dae,dap,daynum,ddae,  &
+                  & ddap,dents,dgdde,dgdds,doughs,dummy2,ears,emrgflg,ems,first7,gdda,gdde,      &
+                  & gdds,gddwsf,gmethod,hrs,ies,lf12s,lf4s,lnpout,mats,milks,partcoefleaf,       &
+                  & partcoefstem,partcoefrepro,pchron,pdate,seedbed,silks,tsints,useupgmpart,    &
+                  & year,endphenol)
+
 !
 !  the phenolcn subroutine ... finish description here.
 !
@@ -27,10 +28,13 @@ implicit none
 !
     type(controls) :: ctrl
 real :: aepa,bhfwsf,gdda,gdde,gdds,pchron,pdepth
+real :: partcoefleaf
+real :: partcoefstem
+real :: partcoefrepro
 character(80) :: cliname
 character(80) :: cname,seedbed
 integer :: daa,dae,dap,daynum,emrgflg,first7,gmethod,pdate,year
-logical :: endphenol
+logical :: endphenol,useupgmpart
 integer,dimension(4) :: antss,blstrs,dents,doughs,ears,ems,hrs,ies,lf12s,lf4s,  &
                       & mats,milks,silks,tsints
 integer,dimension(20) :: ddae,ddap
@@ -57,7 +61,8 @@ integer,dimension(4) :: pdatearr
 !
 !debe added this variable to stop the call to phenol
 !debe added cliname to write the climate location name to phenol.out
- 
+!DE added variables to enable partitioning at growth stages 5/16/18.
+
 !   local variables
 !
 !     + + + argument definitions + + +
@@ -168,7 +173,8 @@ if (year>=1) then           !debe try to make upgm work with years gt 2
   pdatearr(2) = year
   call date1(pdatearr)
 end if
- 
+
+useupgmpart = .true.   ! flag set to true to use the new partitioning coefficients
  
 ! emergence has occurred so fill the first row in the gddwsf array (only
 ! print for the first period from e to 4th leaf stage):
@@ -205,63 +211,15 @@ if (lf4s(1)==999) then
      dgdds(2) = gdds
      dgdde(2) = gdde
      print *,'lf4s = ',lf4s
+     if (lf4s(1).ne.999) then
+         partcoefleaf = 0.4
+         partcoefstem = 0.4
+         partcoefrepro = 0.2
+     endif
   end if
- 
-!  tassel initiation growth stage:
-else if (tsints(1)==999) then
-  row = 3
-  i = 3
-  call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
-  if (gdde>=(gddwsf(2,5)+gddwsf(3,5))) then
-     tsints(1) = daynum
-     tsints(2) = year
-     call date1(tsints)
-     ddap(3) = dap
-     ddae(3) = dae
-     dgdds(3) = gdds
-     dgdde(3) = gdde
-     print *,'tsints = ',tsints
-  end if
-end if
- 
-! ear formation stage
-if (ears(1)==999) then
-  row = 4
-  i = 4
-  call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
-  if (gdde>=(gddwsf(2,5)+gddwsf(4,5))) then
-     ears(1) = daynum
-     ears(2) = year
-     call date1(ears)
-     ddap(4) = dap
-     ddae(4) = dae
-     dgdds(4) = gdds
-     dgdde(4) = gdde
-     print *,'ears = ',ears
-  end if
-end if
- 
-!  start of internode elongation:
-if (ies(1)==999) then
-  row = 5
-  i = 5
-!  print*, 'in phenolcn before call to water_stress in ies, dummy2(5) = ', &
- ! & dummy2(5)
-  call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
-  if ((gdde>=gddwsf(2,5)+gddwsf(5,5))) then
-     ies(1) = daynum
-     ies(2) = year
-     call date1(ies)
-     ddap(5) = dap
-     ddae(5) = dae
-     dgdds(5) = gdds
-     dgdde(5) = gdde
-     print *,'ies = ',ies
-  end if
-end if
- 
+  
 !  12th leaf stage v12
-if (lf12s(1)==999) then
+else if (lf12s(1)==999) then
   row = 6
   i = 6
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
@@ -274,30 +232,16 @@ if (lf12s(1)==999) then
      dgdds(6) = gdds
      dgdde(6) = gdde
      print *,'lf12s = ',lf12s
+     if (lf4s(1).ne.999) then
+         partcoefleaf = 0.4
+         partcoefstem = 0.4
+         partcoefrepro = 0.2
+     endif
   end if
  
-!  tasseling stage and silking stages occur about the same day.
-!
-!debe use elseif because this stage is dependent upon the completion of
-! the previous stage.
-else if (antss(1)==999) then
-  row = 7
-  i = 7
-  call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
-  if (gdde>=(gddwsf(2,5)+gddwsf(6,5)+gddwsf(7,5))) then
-     antss(1) = daynum
-     antss(2) = year
-     call date1(antss)
-     ddap(7) = dap
-     ddae(7) = dae
-     dgdds(7) = gdds
-     dgdde(7) = gdde
-     print *,'antss = ',antss
-  end if
-end if
  
 !  silking growth stage.  this is the first reproductive stage r1.
-if (silks(1)==999) then
+else if (silks(1)==999) then
   row = 8
   i = 8
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
@@ -310,6 +254,11 @@ if (silks(1)==999) then
      dgdds(8) = gdds
      dgdde(8) = gdde
      print *,'silks = ',silks
+     if (lf4s(1).ne.999) then
+         partcoefleaf = 0.0
+         partcoefstem = 0.0
+         partcoefrepro = 1.0
+     endif
   end if
  
 !  blister growth stage - r2
@@ -412,7 +361,76 @@ else if (hrs(1)==999) then
      print *,'hrs = ',hrs
   end if
 end if
+
+!  tassel initiation growth stage:
+if ((lf4s(1)/=999) .and. (tsints(1)==999)) then
+  row = 3
+  i = 3
+  call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  if (gdde>=(gddwsf(2,5)+gddwsf(3,5))) then
+     tsints(1) = daynum
+     tsints(2) = year
+     call date1(tsints)
+     ddap(3) = dap
+     ddae(3) = dae
+     dgdds(3) = gdds
+     dgdde(3) = gdde
+     print *,'tsints = ',tsints
+  end if
+end if
  
+! ear formation stage
+if ((lf4s(1)/=999) .and. (ears(1)==999)) then
+  row = 4
+  i = 4
+  call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  if (gdde>=(gddwsf(2,5)+gddwsf(4,5))) then
+     ears(1) = daynum
+     ears(2) = year
+     call date1(ears)
+     ddap(4) = dap
+     ddae(4) = dae
+     dgdds(4) = gdds
+     dgdde(4) = gdde
+     print *,'ears = ',ears
+  end if
+end if
+ 
+!  start of internode elongation:
+if ((lf4s(1)/=999) .and. (ies(1)==999)) then
+  row = 5
+  i = 5
+  call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  if ((gdde>=gddwsf(2,5)+gddwsf(5,5))) then
+     ies(1) = daynum
+     ies(2) = year
+     call date1(ies)
+     ddap(5) = dap
+     ddae(5) = dae
+     dgdds(5) = gdds
+     dgdde(5) = gdde
+     print *,'ies = ',ies
+  end if
+end if
+
+!  tasseling stage and silking stages occur about the same day.
+!
+if ((lf12s(1)/=999) .and. (antss(1)==999)) then
+  row = 7
+  i = 7
+  call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  if (gdde>=(gddwsf(2,5)+gddwsf(6,5)+gddwsf(7,5))) then
+     antss(1) = daynum
+     antss(2) = year
+     call date1(antss)
+     ddap(7) = dap
+     ddae(7) = dae
+     dgdds(7) = gdds
+     dgdde(7) = gdde
+     print *,'antss = ',antss
+  end if
+end if
+
 ! *******   output data   *******
 ! output information from each crop's phenol subroutine.
 ! print to the screen:

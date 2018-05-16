@@ -1,8 +1,7 @@
-subroutine phenolpm(ctrl, aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae, &
-                  & dap,daynum,ddae,ddap,dgdde,dgdds,drs,dummy2,emrgflg,ems,    &
-                  & endphenol,first7,fps,gdda,gdde,gdds,gddwsf,gmethod,heads,   &
-                  & hrs,ies,joints,lnpout,mats,pchron,pdate,seedbed,srs,tis,tss,&
-                  & year)
+subroutine phenolpm(ctrl, aepa,antes,antss,pdepth,bhfwsf,boots,cliname,cname,daa,dae,dap,daynum,ddae,ddap, &
+                  & dgdde,dgdds,drs,dummy2,emrgflg,ems,endphenol,first7,fps,gdda,gdde,gdds,gddwsf,gmethod, &
+                  & heads,hrs,ies,joints,lnpout,mats,partcoefleaf,partcoefstem,partcoefrepro,pchron,pdate, &
+                  & seedbed,srs,tis,tss,useupgmpart,year)
 !
 !  the phenolpm subroutine ... finish description here.
  
@@ -27,10 +26,11 @@ implicit none
 !
     type(controls) :: ctrl
 real :: aepa,bhfwsf,gdda,gdde,gdds,pchron,pdepth
+real :: partcoefleaf,partcoefstem,partcoefrepro
 character(80) :: cliname
 character(80) :: cname,seedbed
 integer :: daa,dae,dap,daynum,emrgflg,first7,gmethod,pdate,year
-logical :: endphenol
+logical :: endphenol,useupgmpart
 integer,dimension(4) :: antes,antss,boots,drs,ems,fps,heads,hrs,ies,joints,mats,&
                       & srs,tis,tss
 integer,dimension(20) :: ddae,ddap
@@ -57,6 +57,7 @@ real :: real
 !
 !debe added this variable to stop the call to phenol
 !debe added cliname to write the climate location name to phenol.out
+!DE added variables to enable partitioning at growth stages 5/16/18.
 !
 !     + + + argument definitions + + +
 !     adjgdd - the adjusted gdd required to enter the growth stage.
@@ -151,6 +152,8 @@ real :: real
  
 ! initialize local variables
 j = 1
+useupgmpart = .true.   ! flag set to true to use the new partitioning coefficients
+
 !debe initialize planting date array
 do i = 1,4
   pdatearr(i) = 0
@@ -191,13 +194,17 @@ if (tis(1)==999) then
      dgdds(2) = gdds
      dgdde(2) = gdde
      print *,'tis = ',tis
+     if (tis(1).ne.999) then
+         partcoefleaf = 0.8
+         partcoefstem = 0.2
+         partcoefrepro = 0.0
+     endif
   end if
-end if
  
 !  single ridge growth stage:
 !  single ridge occurs dummy2(3) gdd after emergence.
 !debe accumulate gdd simultaneously with that accumulated for tis stage.
-if (srs(1)==999) then
+else if (srs(1)==999) then
   row = 3
   i = 3
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
@@ -210,6 +217,11 @@ if (srs(1)==999) then
      dgdds(3) = gdds
      dgdde(3) = gdde
      print *,'srs = ',srs
+     if (srs(1).ne.999) then
+         partcoefleaf = 0.7
+         partcoefstem = 0.3
+         partcoefrepro = 0.0
+     endif
   end if
  
 !  double ridge growth stage:
@@ -229,23 +241,13 @@ else if (drs(1)==999) then
      dgdds(4) = gdds
      dgdde(4) = gdde
      print *,'drs = ',drs
+     if (drs(1).ne.999) then
+         partcoefleaf = 0.5
+         partcoefstem = 0.3
+         partcoefrepro = 0.2
+     endif
   end if
  
-!  flower primordium initiation:
-!  flower primordium initiation begins 0.3 phyllochrons after
-!  double ridge.
-else if (fps(1)==999) then
-! debe skip writing to row 5 in gddwsf array so that 0's will show
-  if (gdde>=(gddwsf(3,5)+gddwsf(4,5)+(0.3*pchron))) then
-     fps(1) = daynum
-     fps(2) = year
-     call date1(fps)
-     ddap(7) = dap
-     ddae(7) = dae
-     dgdds(7) = gdds
-     dgdde(7) = gdde
-     print *,'fps = ',fps
-  end if
  
 !  terminal spikelet stage:
 else if ((tss(1)==999).and.(ies(1)==999)) then
@@ -285,6 +287,11 @@ else if ((tss(1)==999).and.(ies(1)==999)) then
      dgdds(6) = gdds
      dgdde(6) = gdde
      print *,'ies = ',ies
+     if ((tss(1).ne.999).and.(ies(1).ne.999)) then ! is this the right place for this if block?
+         partcoefleaf = 0.4
+         partcoefstem = 0.3
+         partcoefrepro = 0.4
+     endif
   end if
  
 !  jointing growth stage prediction:
@@ -324,6 +331,11 @@ else if (boots(1)==999) then
      dgdds(9) = gdds
      dgdde(9) = gdde
      print *,'boots = ',boots
+     if (boots(1).ne.999) then 
+         partcoefleaf = 0.0
+         partcoefstem = 0.4
+         partcoefrepro = 0.6
+     endif
   end if
  
 !  heading growth stage:
@@ -347,6 +359,11 @@ else if (heads(1)==999) then
      dgdds(10) = gdds
      dgdde(10) = gdde
      print *,'heads = ',heads
+     if (heads(1).ne.999) then 
+         partcoefleaf = 0.0
+         partcoefstem = 0.3
+         partcoefrepro = 0.7
+     endif
   end if
  
 !  beginning of anthesis:
@@ -370,23 +387,11 @@ else if (antss(1)==999) then
      dgdds(11) = gdds
      dgdde(11) = gdde
      print *,'antss = ',antss
-  end if
- 
-!  end of anthesis:
-else if (antes(1)==999) then
-!debe changed following code to add the correct rows in gddwsf array as
-! noted above.  anthesis ends is the same additions as anthesis starts with
-! the additional value of the aepa parameter.
-  if (gdde>=(gddwsf(3,5)+gddwsf(4,5)+gddwsf(7,5)+gddwsf(8,5)+gddwsf(9,5)        &
-    & +gddwsf(10,5)+gddwsf(11,5)+aepa)) then
-     antes(1) = daynum
-     antes(2) = year
-     call date1(antes)
-     ddap(12) = dap
-     ddae(12) = dae
-     dgdds(12) = gdds
-     dgdde(12) = gdde
-     print *,'antes = ',antes
+     if (antss(1).ne.999) then 
+         partcoefleaf = 0.0
+         partcoefstem = 0.0
+         partcoefrepro = 1.0
+     endif
   end if
  
 !  physiological maturity:
@@ -434,7 +439,42 @@ else if (hrs(1)==999) then
      print *,'hrs = ',hrs
   end if
 end if
- 
+
+!  flower primordium initiation:
+!  flower primordium initiation begins 0.3 phyllochrons after
+!  double ridge.
+if ((drs(1)/=999) .and. (fps(1)==999)) then
+! debe skip writing to row 5 in gddwsf array so that 0's will show
+  if (gdde>=(gddwsf(3,5)+gddwsf(4,5)+(0.3*pchron))) then
+     fps(1) = daynum
+     fps(2) = year
+     call date1(fps)
+     ddap(7) = dap
+     ddae(7) = dae
+     dgdds(7) = gdds
+     dgdde(7) = gdde
+     print *,'fps = ',fps
+  end if
+end if
+
+!  end of anthesis:
+if ((antss(1)/=999) .and. (antes(1)==999)) then
+!debe changed following code to add the correct rows in gddwsf array as
+! noted above.  anthesis ends is the same additions as anthesis starts with
+! the additional value of the aepa parameter.
+  if (gdde>=(gddwsf(3,5)+gddwsf(4,5)+gddwsf(7,5)+gddwsf(8,5)+gddwsf(9,5)        &
+    & +gddwsf(10,5)+gddwsf(11,5)+aepa)) then
+     antes(1) = daynum
+     antes(2) = year
+     call date1(antes)
+     ddap(12) = dap
+     ddae(12) = dae
+     dgdds(12) = gdds
+     dgdde(12) = gdde
+     print *,'antes = ',antes
+  end if
+end if
+
 !
 ! *******   output data   *******
 ! output information from each crop's phenol subroutine.

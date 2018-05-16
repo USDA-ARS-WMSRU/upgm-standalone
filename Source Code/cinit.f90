@@ -1,8 +1,8 @@
-subroutine cinit(ctrl,clidat,bio,soils,dd,mm,yy,                                 &
+subroutine cinit(ctrl,clidat,bio,soils,dd,mm,yy,                                &
                & canhty,daa,dae,dap,dav,ddae,ddap,ddav,dgdde,dgdds,dgddv,elong, &
                & endphenol,gddday,gdda,gdde,gdds,gddv,gddwsf,jan1,lnarray,      &
-               & lncntr,lnpout,pdate,rowcntr, tempsw,todayln,verns,              &
-               & yestln,yr,ln,co2eff)
+               & lncntr,lnpout,partcoefleaf,partcoefstem,partcoefrepro,pdate,   &
+               & rowcntr,tempsw,todayln,useupgmpart,verns,yestln,yr,ln,co2eff)
 !
 !debe added to the subroutine arguments coming into cinit as follows:
 ! ***** emergence *****
@@ -63,10 +63,14 @@ real :: bphu,bsa,dg,dg1,ephu,heat_unit,jreal,max_air,min_air,sphu,wt1,xz,yp1,ypn
 real,dimension(365,3) :: d1
 real,dimension(730,3) :: d2
 real :: huc1
+real :: partcoefleaf
+real :: partcoefstem
+real :: partcoefrepro
 integer :: dxx,hdate,i,j,m,n,sdmn,sdmx
 real,dimension(14) :: dy_mon,mn_air_temp,mn_air_temp2,mx_air_temp,mx_air_temp2
 integer :: int
     integer :: dtm
+logical :: useupgmpart
 !
 ! subroutine arguments
 !
@@ -76,7 +80,8 @@ integer :: int
 !
 !***** newly added variables *****
 !debe added declarations for emergence, phenol, leaf number, anthesis, and
-! vernalization variables.
+! vernalization variables. 5/15/18 DE added partitioning coefficients and flag:
+! partcoefleaf,partcoefstem,partcoefrepro,useupgmpart
 !
 ! local variables for phenol.
 !debe added endphenol to end the simulation once the end of growth
@@ -1045,6 +1050,12 @@ end do
 
 !debe added the initialization of co2eff variable.
 co2eff = 1.0
+
+!DE added initialization of partitioning coefficients and flag
+partcoefleaf = 0.0
+partcoefstem = 0.0
+partcoefrepro = 0.0 
+useupgmpart = .false.
 
 !
 !     + + + subroutines called + + +

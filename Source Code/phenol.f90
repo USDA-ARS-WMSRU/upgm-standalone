@@ -1,4 +1,5 @@
-subroutine phenol(ctrl, bio,daa,dae,dap,dav,daynum,ddae,ddap,ddav,dgdde,dgdds,dgddv,endphenol,gdda,gdde,gdds,gddv,gddwsf,lnpout,pdate, year)
+subroutine phenol(ctrl,bio,daa,dae,dap,dav,daynum,ddae,ddap,ddav,dgdde,dgdds,dgddv,endphenol,gdda,gdde,gdds,gddv,gddwsf, &
+                 & lnpout,partcoefleaf,partcoefstem,partcoefrepro,pdate,useupgmpart,year)
 !
 !  the phenol subroutine calls subroutines to calculate the phenology of
 !  a specific crop.
@@ -39,7 +40,8 @@ implicit none
     type(biomatter),    intent(inout) :: bio
 real :: gdda,gdde,gdds,gddv
 integer :: daa,dae,dap,dav,daynum,pdate,year, rowcntr
-logical :: endphenol
+logical :: endphenol,useupgmpart
+real :: partcoefleaf,partcoefstem,partcoefrepro
 integer,dimension(20) :: ddae,ddap,ddav
 real,dimension(20) :: dgdde,dgdds,dgddv
 real,dimension(16,5) :: gddwsf
@@ -299,84 +301,81 @@ end if
 ! be adjusted to read only 'corn'.
 if ((bio%bname=='corn').and.(endphenol.neqv..true.)) then
 !print*, 'in call to phenolcn in phenol. bio%upgm%dummy2(5) = ', bio%upgm%dummy2(5)
-  call phenolcn(ctrl,bio%upgm%aepa,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%blstrs,ctrl%sim%cliname,bio%bname,daa,dae,dap,      &
-              & daynum,ddae,ddap,bio%upgm%dents,dgdde,dgdds,bio%upgm%doughs,bio%upgm%dummy2,bio%upgm%ears,bio%upgm%emrgflg,  &
-              & bio%upgm%ems,bio%upgm%first7,gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%hrs,bio%upgm%ies,bio%upgm%lf12s,bio%upgm%lf4s,    &
-              & lnpout,bio%upgm%mats,bio%upgm%milks,bio%upgm%pchron,pdate,seedbed,bio%upgm%silks,bio%upgm%tsints,year,       &
-              & endphenol)
+  call phenolcn(ctrl,bio%upgm%aepa,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%blstrs,ctrl%sim%cliname,bio%bname,daa,dae,dap, &
+              & daynum,ddae,ddap,bio%upgm%dents,dgdde,dgdds,bio%upgm%doughs,bio%upgm%dummy2,bio%upgm%ears,bio%upgm%emrgflg,bio%upgm%ems,bio%upgm%first7,&
+              & gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%hrs,bio%upgm%ies,bio%upgm%lf12s,bio%upgm%lf4s,lnpout,bio%upgm%mats,bio%upgm%milks,      &
+              & partcoefleaf,partcoefstem,partcoefrepro,bio%upgm%pchron,pdate,seedbed,bio%upgm%silks,bio%upgm%tsints,useupgmpart,year,endphenol)
  
 ! if dry beans (crop name in cropxml.dat needs to read drybeans)
 else if ((bio%bname=='dry beans').and.(endphenol.neqv..true.)) then
   call phenolbn(ctrl,bio%upgm%aepa,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%cots,ctrl%sim%cliname,bio%bname,daa,dae,dap,daynum, &
-              & ddae,ddap,dgdde,dgdds,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,endphenol,bio%upgm%epods,bio%upgm%eseeds,&
-              & bio%upgm%first7,gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%hrs,bio%upgm%lf1s,bio%upgm%lf2s,bio%upgm%lf3s,bio%upgm%lf4s,   &
-              & lnpout,bio%upgm%mats,bio%upgm%mffls,bio%upgm%mpods,bio%upgm%mseeds,bio%upgm%pchron,pdate,seedbed,year)
+              & ddae,ddap,dgdde,dgdds,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,endphenol,bio%upgm%epods,bio%upgm%eseeds,bio%upgm%first7,gdda,gdde,gdds, &
+              & gddwsf,bio%upgm%gmethod,bio%upgm%hrs,bio%upgm%lf1s,bio%upgm%lf2s,bio%upgm%lf3s,bio%upgm%lf4s,lnpout,bio%upgm%mats,bio%upgm%mffls,            &
+              & bio%upgm%mpods,bio%upgm%mseeds,partcoefleaf,partcoefstem,partcoefrepro,bio%upgm%pchron,pdate,seedbed,useupgmpart,year) 
 
   ! if soybean (crop name in cropxml.dat needs to read soybean)
 else if ((bio%bname=='soybean').and.(endphenol.neqv..true.)) then
-  call phenolsy(ctrl,bio%upgm%aepa,bio%upgm%antss,bio%upgm%bmats,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%cots,ctrl%sim%cliname,bio%bname,daa,dae,dap,daynum, &
-              & ddae,ddap,dgdde,dgdds,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,endphenol,bio%upgm%epods,bio%upgm%eseeds,&
-              & bio%upgm%first7,gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%hrs,bio%upgm%lf1s,bio%upgm%lf2s,bio%upgm%lf3s,bio%upgm%lf4s,bio%upgm%lf5s,   &
-              & lnpout,bio%upgm%mats,bio%upgm%mffls,bio%upgm%mpods,bio%upgm%mseeds,bio%upgm%pchron,pdate,seedbed,year)
+  call phenolsy(ctrl,bio%upgm%aepa,bio%upgm%antss,bio%upgm%bmats,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%cots,ctrl%sim%cliname,bio%bname,daa, &
+              & dae,dap,daynum,ddae,ddap,dgdde,dgdds,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,endphenol,bio%upgm%epods,bio%upgm%eseeds,bio%upgm%first7, &
+              & gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%hrs,bio%upgm%lf1s,bio%upgm%lf2s,bio%upgm%lf3s,bio%upgm%lf4s,bio%upgm%lf5s,lnpout,            &
+              & bio%upgm%mats,bio%upgm%mffls,bio%upgm%mpods,bio%upgm%mseeds,partcoefleaf,partcoefstem,partcoefrepro,bio%upgm%pchron,pdate,seedbed,           &
+              & useupgmpart,year)
  
 ! if hay millet:
 else if ((bio%bname=='hay millet').and.(endphenol.neqv..true.)) then
-  call phenolhm(ctrl,bio%upgm%aepa,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%boots,ctrl%sim%cliname,bio%bname,daa,dae,dap, &
-              & daynum,ddae,ddap,dgdde,dgdds,bio%upgm%drs,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,endphenol,  &
-              & bio%upgm%first7,bio%upgm%fps,gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%heads,bio%upgm%hrs,bio%upgm%ies,bio%upgm%joints,  &
-              & lnpout,bio%upgm%mats,bio%upgm%pchron,pdate,seedbed,bio%upgm%srs,bio%upgm%tis,bio%upgm%tss,year)
+  call phenolhm(ctrl,bio%upgm%aepa,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%boots,ctrl%sim%cliname,bio%bname,  &
+              & daa,dae,dap,daynum,ddae,ddap,dgdde,dgdds,bio%upgm%drs,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,endphenol,bio%upgm%first7,bio%upgm%fps,&
+              & gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%heads,bio%upgm%hrs,bio%upgm%ies,bio%upgm%joints,lnpout,bio%upgm%mats,partcoefleaf,         &
+              & partcoefstem,partcoefrepro,bio%upgm%pchron,pdate,seedbed,bio%upgm%srs,bio%upgm%tis,bio%upgm%tss,useupgmpart,year)
  
 ! if proso millet:
 else if ((bio%bname=='proso millet').and.(endphenol.neqv..true.)) then
-  call phenolpm(ctrl,bio%upgm%aepa,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%boots,ctrl%sim%cliname,bio%bname,daa,dae,dap, &
-              & daynum,ddae,ddap,dgdde,dgdds,bio%upgm%drs,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,endphenol,  &
-              & bio%upgm%first7,bio%upgm%fps,gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%heads,bio%upgm%hrs,bio%upgm%ies,bio%upgm%joints,  &
-              & lnpout,bio%upgm%mats,bio%upgm%pchron,pdate,seedbed,bio%upgm%srs,bio%upgm%tis,bio%upgm%tss,year)
+  call phenolpm(ctrl,bio%upgm%aepa,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%boots,ctrl%sim%cliname,bio%bname,  &
+              & daa,dae,dap,daynum,ddae,ddap,dgdde,dgdds,bio%upgm%drs,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,endphenol,bio%upgm%first7,bio%upgm%fps,&
+              & gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%heads,bio%upgm%hrs,bio%upgm%ies,bio%upgm%joints,lnpout,bio%upgm%mats,partcoefleaf,         &
+              & partcoefstem,partcoefrepro,bio%upgm%pchron,pdate,seedbed,bio%upgm%srs,bio%upgm%tis,bio%upgm%tss,useupgmpart,year)
  
 ! if sorghum:
 else if ((bio%bname=='sorghum').and.(endphenol.neqv..true.)) then
   call phenolsg(ctrl,bio%upgm%aepa,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,ctrl%sim%cliname,bio%bname,daa,dae,dap,   &
-                  & daynum,ddae,ddap,dgdde,dgdds,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,bio%upgm%endlgs,     &
-                  & endphenol,bio%upgm%first7,bio%upgm%fullbs,gdda,gdde,gdds,gddwsf,bio%upgm%gpds,bio%upgm%gmethod, &
-                  & bio%upgm%halfbs,bio%upgm%hrs,bio%upgm%ies,bio%upgm%joints,lnpout,bio%upgm%mats,bio%upgm%pchron,pdate,seedbed,bio%upgm%tis, &
-                  & year)
+                  & daynum,ddae,ddap,dgdde,dgdds,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,bio%upgm%endlgs,endphenol,bio%upgm%first7,bio%upgm%fullbs,&
+                  & gdda,gdde,gdds,gddwsf,bio%upgm%gpds,bio%upgm%gmethod,bio%upgm%halfbs,bio%upgm%hrs,bio%upgm%ies,bio%upgm%joints,lnpout,bio%upgm%mats, &
+                  & partcoefleaf,partcoefstem,partcoefrepro,bio%upgm%pchron,pdate,seedbed,bio%upgm%tis,useupgmpart,year)
 
 ! if spring barley:
 else if ((bio%bname=='spring barley').and.(endphenol.neqv..true.)) then
-  call phenolsb(ctrl,bio%upgm%aepa,bio%upgm%aifs,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%boots,ctrl%sim%cliname,bio%bname,daa,dae,&
-              & dap,daynum,ddae,ddap,dgdde,dgdds,bio%upgm%drs,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,        &
-              & endphenol,bio%upgm%first7,bio%upgm%fps,gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%heads,bio%upgm%hrs,   &
-              & bio%upgm%ies,bio%upgm%joints,lnpout,bio%upgm%mats,bio%upgm%pchron,pdate,seedbed,bio%upgm%srs,bio%upgm%tis,year)
+  call phenolsb(ctrl,bio%upgm%aepa,bio%upgm%aifs,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%boots,            &
+              & ctrl%sim%cliname,bio%bname,daa,dae,dap,daynum,ddae,ddap,dgdde,dgdds,bio%upgm%drs,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,         &
+              & endphenol,bio%upgm%first7,bio%upgm%fps,gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%heads,bio%upgm%hrs,bio%upgm%ies,bio%upgm%joints, &
+              & lnpout,bio%upgm%mats,partcoefleaf,partcoefstem,partcoefrepro,bio%upgm%pchron,pdate,seedbed,bio%upgm%srs,bio%upgm%tis,useupgmpart,year)
  
 ! if spring wheat:
 else if ((bio%bname=='spring wheat').and.(endphenol.neqv..true.)) then
-  call phenolsw(ctrl,bio%upgm%aepa,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%boots,ctrl%sim%cliname,bio%bname,daa,dae,dap, &
-              & daynum,ddae,ddap,dgdde,dgdds,bio%upgm%drs,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,endphenol,  &
-              & bio%upgm%first7,bio%upgm%fps,gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%heads,bio%upgm%hrs,bio%upgm%ies,bio%upgm%joints,  &
-              & lnpout,bio%upgm%mats,bio%upgm%pchron,pdate,seedbed,bio%upgm%srs,bio%upgm%tis,bio%upgm%tss,year)
+  call phenolsw(ctrl,bio%upgm%aepa,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%boots,ctrl%sim%cliname,bio%bname,    &
+              & daa,dae,dap,daynum,ddae,ddap,dgdde,dgdds,bio%upgm%drs,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,endphenol,bio%upgm%first7,bio%upgm%fps,  &
+              & gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%heads,bio%upgm%hrs,bio%upgm%ies,bio%upgm%joints,lnpout,bio%upgm%mats,partcoefleaf,           &
+              & partcoefstem,partcoefrepro,bio%upgm%pchron,pdate,seedbed,bio%upgm%srs,bio%upgm%tis,bio%upgm%tss,useupgmpart,year)
  !
 ! if sunflower:
 else if ((bio%bname=='sunflower').and.(endphenol.neqv..true.)) then
-  call phenolsf(ctrl,bio%upgm%aepa,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%browns,ctrl%sim%cliname,bio%bname,daa,dae,dap,&
-              & daynum,ddae,ddap,dgdde,dgdds,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,endphenol,      &
-              & bio%upgm%first7,gdda,gdde,gdds,gddwsf,bio%upgm%gmethod,bio%upgm%hrs,bio%upgm%ies,bio%upgm%ies2,bio%upgm%infls,bio%upgm%lf12s,  &
-              & bio%upgm%lf4s,bio%upgm%lf8s,lnpout,bio%upgm%mats,bio%upgm%opens,bio%upgm%pchron,pdate,seedbed,year,bio%upgm%yelows)
+  call phenolsf(ctrl,bio%upgm%aepa,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%browns,ctrl%sim%cliname,bio%bname, &
+              & daa,dae,dap,daynum,ddae,ddap,dgdde,dgdds,bio%upgm%dummy2,bio%upgm%emrgflg,bio%upgm%ems,endphenol,bio%upgm%first7,gdda,gdde,gdds,gddwsf,    &
+              & bio%upgm%gmethod,bio%upgm%hrs,bio%upgm%ies,bio%upgm%ies2,bio%upgm%infls,bio%upgm%lf12s,bio%upgm%lf4s,bio%upgm%lf8s,lnpout,bio%upgm%mats,   &
+              & bio%upgm%opens,partcoefleaf,partcoefstem,partcoefrepro,bio%upgm%pchron,pdate,seedbed,useupgmpart,year,bio%upgm%yelows)
  
 ! if winter barley:
 else if ((bio%bname=='winter barley').and.(endphenol.neqv..true.)) then
-  call phenolwb(ctrl,bio%upgm%aepa,bio%upgm%aifs,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%boots,ctrl%sim%cliname,bio%bname,daa,dae,&
-              & dap,dav,daynum,ddae,ddap,ddav,dgdde,dgdds,dgddv,bio%upgm%drs,bio%upgm%dummy2,bio%upgm%ems, &
-              & bio%upgm%emrgflg,endphenol,bio%upgm%first7,bio%upgm%fps,gdda,gdde,gdds,gddv,gddwsf,bio%upgm%gmethod,&
-              & bio%upgm%heads,bio%upgm%hrs,bio%upgm%ies,bio%upgm%joints,lnpout,bio%upgm%mats,bio%upgm%pchron,pdate,seedbed,bio%upgm%srs,bio%upgm%tis,  &
-              & year)
+  call phenolwb(ctrl,bio%upgm%aepa,bio%upgm%aifs,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%boots,ctrl%sim%cliname,&
+              & bio%bname,daa,dae,dap,dav,daynum,ddae,ddap,ddav,dgdde,dgdds,dgddv,bio%upgm%drs,bio%upgm%dummy2,bio%upgm%ems,bio%upgm%emrgflg,endphenol,      &
+              & bio%upgm%first7,bio%upgm%fps,gdda,gdde,gdds,gddv,gddwsf,bio%upgm%gmethod,bio%upgm%heads,bio%upgm%hrs,bio%upgm%ies,bio%upgm%joints,lnpout,    &
+              & bio%upgm%mats,partcoefleaf,partcoefstem,partcoefrepro,bio%upgm%pchron,pdate,seedbed,bio%upgm%srs,bio%upgm%tis,useupgmpart,year)
  
 ! if winter wheat:
 else if ((bio%bname=='winter wheat').and.(endphenol.neqv..true.)) then
-  call phenolww(ctrl,bio%upgm%aepa,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%boots,ctrl%sim%cliname,bio%bname,daa,dae,dap, &
-              & dav,daynum,ddae,ddap,ddav,dgdde,dgdds,dgddv,bio%upgm%dummy2,bio%upgm%drs,bio%upgm%emrgflg, &
-              & bio%upgm%ems,bio%upgm%first7,bio%upgm%fps,gdda,gdde,gdds,gddv,gddwsf,bio%upgm%gmethod,bio%upgm%heads,bio%upgm%hrs,bio%upgm%ies,&
-              & bio%upgm%joints,lnpout,bio%upgm%mats,bio%upgm%pchron,pdate,seedbed,bio%upgm%srs,bio%upgm%tis,bio%upgm%tss,year,       &
-              & endphenol)
+  call phenolww(ctrl,bio%upgm%aepa,bio%upgm%antes,bio%upgm%antss,bio%database%growdepth,ctrl%cropstress%ahfwsf,bio%upgm%boots,ctrl%sim%cliname,bio%bname, &
+              & daa,dae,dap,dav,daynum,ddae,ddap,ddav,dgdde,dgdds,dgddv,bio%upgm%dummy2,bio%upgm%drs,bio%upgm%emrgflg,bio%upgm%ems,bio%upgm%first7,       &
+              & bio%upgm%fps,gdda,gdde,gdds,gddv,gddwsf,bio%upgm%gmethod,bio%upgm%heads,bio%upgm%hrs,bio%upgm%ies,bio%upgm%joints,lnpout,bio%upgm%mats,   &
+              & bio%upgm%pchron,partcoefleaf,partcoefstem,partcoefrepro,pdate,seedbed,bio%upgm%srs,bio%upgm%tis,bio%upgm%tss,useupgmpart,year,endphenol)
  
 !
 end if

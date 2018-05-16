@@ -1,4 +1,4 @@
-    subroutine growth(ctrl,clidat, bio,soils,a_fr,b_fr,hu_delay,daysim,gddday,canhty,ln,co2eff)
+    subroutine growth(ctrl,clidat, bio,soils,a_fr,b_fr,hu_delay,daysim,gddday,canhty,ln,co2eff,partcoefleaf,partcoefstem,partcoefrepro,useupgmpart)
     !debe gddday added to print out gdd.
     !debe added bio%upgm%growth_stress because it is now read in.
     !debe added bio%upgm%canopyflg to be used to determine which method of calculating canopy
@@ -27,7 +27,8 @@
     type(biomatter), intent(inout) :: bio
     type(climate_data), intent(inout) :: clidat
     type(soildata),     intent(inout) :: soils
-    real :: a_fr,b_fr,canhty,gddday,hu_delay,todayln,ln,co2eff
+    real :: a_fr,b_fr,canhty,gddday,hu_delay,todayln,ln,co2eff,partcoefleaf,partcoefstem,partcoefrepro
+    logical :: useupgmpart
     integer :: daysim
     !
     ! Local variables
@@ -36,7 +37,7 @@
         & eff_lai,ff,ffa,ffr,ffw,frst,gif,huf,hufy,hui0f,hux,lost_mass,par,pdht,  &
         & pdiam,pdrd,p_lf,p_lf_rp,p_rp,p_rw,p_st,stem_propor,strsdayhtinc,        &
         & temp_sai,temp_stmrep,wcg,wffiber,wfstore,wmaxd,xw,temp_fiber,           &
-        & temp_stem,temp_store
+        & temp_stem,temp_store, uself,usest,userp
     !      trad_lai,pddm, DE moved these out of the real declaration above.
 
     !these are in the common block cgrow.inc, that is now included so DE moved
@@ -580,6 +581,17 @@
     else
         ! set stem partitioning parameter.
         p_st = 1.0 - p_lf_rp
+    end if
+
+! use new partitioning method using partitioning coefficients for leaves, stems and reproductive parts
+    if(useupgmpart == .true.) then
+        uself = partcoefleaf
+        usest = partcoefstem
+        userp = partcoefrepro
+    else
+        uself = p_lf
+        usest = p_st
+        userp = p_rp
     end if
 
     ! calculate assimate mass increments (kg/m^2)

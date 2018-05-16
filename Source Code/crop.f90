@@ -71,7 +71,7 @@
     integer(int32), dimension(20), save :: ddae
     integer(int32), dimension(20), save :: ddap
     integer(int32), dimension(20), save :: ddav
-    logical, save :: endphenol,jan1
+    logical, save :: endphenol,jan1,useupgmpart
     !
     ! Local variables
     !
@@ -79,6 +79,9 @@
     real(sp) :: a_fr
     real(sp) :: b_fr
     real(sp), dimension(400,2) :: lnarray
+    real(sp), save :: partcoefleaf
+    real(sp), save :: partcoefstem
+    real(sp), save :: partcoefrepro
     integer(int32) :: jd
     !
     ! Start of crop.f90
@@ -108,13 +111,15 @@
     if (bio%growth%am0cif) then
         call cinit(ctrl,clidat,bio,soils, dd,mm,yy,canhty,daa,dae,dap,dav,   &
             & ddae,ddap,ddav,dgdde,dgdds,dgddv,elong,endphenol,gddday,gdda,gdde, &
-            & gdds,gddv,gddwsf,jan1,lnarray,lncntr,lnpout,pdate,rowcntr,   &
-            & tempsw,todayln,verns,yestln,yr,ln,co2eff)
+            & gdds,gddv,gddwsf,jan1,lnarray,lncntr,lnpout,partcoefleaf,partcoefstem, &
+            & partcoefrepro,pdate,rowcntr,tempsw,todayln,useupgmpart,verns,yestln,yr,ln,co2eff)
         !debe 091208 added the following to be initialized in cinit: ddap, elong,
         ! gddday, yr, leaf number variables, verns, gddwsf to be initialized. later
         ! added bio%upgm%canht for initialization for canopy height.
         ! added tempsw to be initialized in cinit and used in emerge. passed bio%upgm%seedsw to
         ! cinit to initialize tempsw with the value in bio%upgm%seedsw. 5122011
+        ! DE added partitioning variables to be initialized in cinit: partcoefleaf, 
+        !partcoefstem and partcoefrepro and the partitioing flag: useupgmpart. 5/15/18
 
         ! set previous values to initial values
         prevbio%mass%standstem = bio%mass%standstem
@@ -173,7 +178,11 @@
     call phenolmms(ctrl, clidat, bio, daa,dae,  &
         & dap,dav,daynum,dd,ddae,ddap,ddav,dgdde,dgdds,     &
         & dgddv,endphenol, gdda,gddday,gdde,gdds,gddv,gddwsf,jan1,   &
-        & lnarray,lncntr,lnpout,mm,pdate,rowcntr,todayln,yestln,yy,ln)
+        & lnarray,lncntr,lnpout,mm,partcoefleaf,partcoefstem,        &
+        & partcoefrepro,pdate,rowcntr,todayln,useupgmpart,yestln,yy,ln)
+     
+        print *, 'partcoefleaf = ', partcoefleaf, 'partcoefstem = ', partcoefstem, &
+            & 'partcoefrepro = ', partcoefrepro 
 
     !debe added bio%upgm%dayhtinc to be able to pass the daily increase in height to growth
     ! for the ht_dia_sai subroutine in place of the weps/upgm variable dht when
@@ -449,7 +458,7 @@
         !   print*, 'in crop before call to growth, daysim = ', daysim
 
         !          ! calculate plant growth state variables
-        call growth(ctrl,clidat,bio, soils,a_fr,b_fr,hu_delay,daysim,gddday,canhty,ln,co2eff)
+        call growth(ctrl,clidat,bio, soils,a_fr,b_fr,hu_delay,daysim,gddday,canhty,ln,co2eff,partcoefleaf,partcoefstem,partcoefrepro,useupgmpart)
         ! debe added bio%upgm%joints, bio%upgm%heads and bio%upgm%mats to send to growth.
 
         !debe090408 added gddday to print out gdd.

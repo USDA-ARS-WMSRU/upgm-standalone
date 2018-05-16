@@ -1,8 +1,7 @@
-subroutine phenolsg(ctrl, aepa,antes,antss,pdepth,bhfwsf,cliname,cname,daa,dae,dap,   &
-                  & daynum,ddae,ddap,dgdde,dgdds,dummy2,emrgflg,ems,endlgs,     &
-                  & endphenol,first7,fullbs,gdda,gdde,gdds,gddwsf,gpds,gmethod, &
-                  & halfbs,hrs,ies,joints,lnpout,mats,pchron,pdate,seedbed,tis, &
-                  & year)
+subroutine phenolsg(ctrl, aepa,antes,antss,pdepth,bhfwsf,cliname,cname,daa,dae,dap,daynum,ddae,ddap,dgdde,dgdds, &
+                  & dummy2,emrgflg,ems,endlgs,endphenol,first7,fullbs,gdda,gdde,gdds,gddwsf,gpds,gmethod,halfbs, &
+                  & hrs,ies,joints,lnpout,mats,partcoefleaf,partcoefstem,partcoefrepro,pchron,pdate,seedbed,tis, &
+                  & useupgmpart,year)
 !
 !  the phenolsg subroutine ... finish description here.
  
@@ -27,10 +26,11 @@ implicit none
 !
     type(controls) :: ctrl
 real :: aepa,bhfwsf,gdda,gdde,gdds,pchron,pdepth
+real :: partcoefleaf,partcoefstem,partcoefrepro
 character(80) :: cliname
 character(80) :: cname,seedbed
 integer :: daa,dae,dap,daynum,emrgflg,first7,gmethod,pdate,year
-logical :: endphenol
+logical :: endphenol,useupgmpart
 integer,dimension(4) :: antes,antss,ems,endlgs,fullbs,gpds,halfbs,hrs,ies,      &
                       & joints,mats,tis
 integer,dimension(20) :: ddae,ddap
@@ -54,6 +54,7 @@ integer,dimension(4) :: pdatearr
 !debe added bhfwsf to the call to each crop's phenol subroutine to
 ! implement daily water stress effect on time of reaching a growth stage
 !debe added initialized gddwsf array
+!DE added variables to enable partitioning at growth stages 5/16/18.
  
 !debe added cliname to write the climate location name to phenol.out
 !
@@ -147,6 +148,8 @@ integer,dimension(4) :: pdatearr
  
 ! initialize local variables
 j = 1
+useupgmpart = .true.   ! flag set to true to use the new partitioning coefficients
+
 !debe initialize planting date array
 do i = 1,4
   pdatearr(i) = 0
@@ -172,56 +175,6 @@ end if
 !
 ! *******   fill growth stage arrays   *******
  
-!  start of tillering:
-if (tis(1)==999) then
-  row = 2
-  i = 2
-  call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
-  if (gdde>=gddwsf(2,5)) then
-     tis(1) = daynum
-     tis(2) = year
-     call date1(tis)
-     ddap(2) = dap
-     ddae(2) = dae
-     dgdds(2) = gdds
-     dgdde(2) = gdde
-     print *,'tis = ',tis
-  end if
-end if
- 
-!  start of internode elongation:
-!  internode elongation begins dummy2(3) gdd after start of tillering
-if (ies(1)==999) then
-  row = 3
-  i = 3
-  call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
-  if (gdde>=gddwsf(3,5)) then
-     ies(1) = daynum
-     ies(2) = year
-     call date1(ies)
-     ddap(3) = dap
-     ddae(3) = dae
-     dgdds(3) = gdds
-     dgdde(3) = gdde
-     print *,'ies = ',ies
-  end if
- 
-  !  jointing growth stage prediction:
-else if (joints(1)==999) then
-  row = 4
-  i = 4
-  call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
-  if (gdde>=(gddwsf(3,5)+gddwsf(4,5))) then
-     joints(1) = daynum
-     joints(2) = year
-     call date1(joints)
-     ddap(4) = dap
-     ddae(4) = dae
-     dgdds(4) = gdds
-     dgdde(4) = gdde
-     print *,'joints = ',joints
-  end if
-end if
  
 !  growing point differentiation:
 if (gpds(1)==999) then
@@ -237,6 +190,11 @@ if (gpds(1)==999) then
      dgdds(5) = gdds
      dgdde(5) = gdde
      print *,'gpds = ',gpds
+     if (gpds(1).ne.999) then
+         partcoefleaf = 0.4
+         partcoefstem = 0.4
+         partcoefrepro = 0.2
+     endif
   end if
  
 !  end of leaf growth:
@@ -253,6 +211,11 @@ else if (endlgs(1)==999) then
      dgdds(6) = gdds
      dgdde(6) = gdde
      print *,'endlgs = ',endlgs
+     if (endlgs(1).ne.999) then
+         partcoefleaf = 0.0
+         partcoefstem = 0.0
+         partcoefrepro = 1.0
+     endif
   end if
  
 !  beginning of anthesis:
@@ -272,31 +235,16 @@ else if (antss(1)==999) then
      dgdde(7) = gdde
      print *,'antss = ',antss
   end if
-end if
- 
-!  end of anthesis:
-if (antes(1)==999) then
-  if (gdde>=(gddwsf(5,5)+gddwsf(6,5)+gddwsf(7,5)+aepa)) then
-     antes(1) = daynum
-     antes(2) = year
-     call date1(antes)
-     ddap(12) = dap
-     ddae(12) = dae
-     dgdds(12) = gdds
-     dgdde(12) = gdde
-     print *,'antes = ',antes
-  end if
-end if
  
 !  half bloom growth stage:
-if ((antss(1)/=999).and.(halfbs(1)==999)) then
+else if (halfbs(1)==999) then
   row = 9
   i = 8
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
 !  if (gdde>=(gddwsf(5,5)+gddwsf(6,5)+gddwsf(7,5)+gddwsf(8,5))) then   !(9,5))) then debe corrected this and subsequent stages. 
 !9/24/15 debe changed back to gddwsf(9,5) because (8,5) in the gddwsf table is for anthesis ends (antes). In the growth stage parameters as seen in the Growth stages screen in PhenologyMMS 1.3 there is no row for anthesis ends.
-if (gdde>=(gddwsf(5,5)+gddwsf(6,5)+gddwsf(7,5)+gddwsf(9,5))) then
-      halfbs(1) = daynum
+  if (gdde>=(gddwsf(5,5)+gddwsf(6,5)+gddwsf(7,5)+gddwsf(9,5))) then
+     halfbs(1) = daynum
      halfbs(2) = year
      call date1(halfbs)
      ddap(8) = dap
@@ -307,7 +255,7 @@ if (gdde>=(gddwsf(5,5)+gddwsf(6,5)+gddwsf(7,5)+gddwsf(9,5))) then
   end if
  
 !  full bloom growth stage:
-else if ((halfbs(1)/=999).and.(fullbs(1)==999)) then
+else if (fullbs(1)==999) then
   row = 10
   i = 9
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
@@ -324,7 +272,7 @@ else if ((halfbs(1)/=999).and.(fullbs(1)==999)) then
   end if
  
 !  physiological maturity:
-else if ((fullbs(1)/=999).and.(mats(1)==999)) then
+else if (mats(1)==999) then
   row = 11
   i = 10
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
@@ -345,7 +293,7 @@ else if ((fullbs(1)/=999).and.(mats(1)==999)) then
   end if
  
 ! time to harvest ready:
-else if ((mats(1)/=999).and.(hrs(1)==999)) then
+else if (hrs(1)==999) then
   row = 12
   i = 11
   call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
@@ -361,7 +309,73 @@ else if ((mats(1)/=999).and.(hrs(1)==999)) then
      print *,'hrs = ',hrs
   end if
 end if
+
+!  start of tillering:
+if ((ems(1)/=999) .and. (tis(1)==999)) then
+  row = 2
+  i = 2
+  call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  if (gdde>=gddwsf(2,5)) then
+     tis(1) = daynum
+     tis(2) = year
+     call date1(tis)
+     ddap(2) = dap
+     ddae(2) = dae
+     dgdds(2) = gdds
+     dgdde(2) = gdde
+     print *,'tis = ',tis
+  end if
+end if
  
+!  start of internode elongation:
+!  internode elongation begins dummy2(3) gdd after start of tillering
+if ((ems(1)/=999) .and. (ies(1)==999)) then
+  row = 3
+  i = 3
+  call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  if (gdde>=gddwsf(3,5)) then
+     ies(1) = daynum
+     ies(2) = year
+     call date1(ies)
+     ddap(3) = dap
+     ddae(3) = dae
+     dgdds(3) = gdds
+     dgdde(3) = gdde
+     print *,'ies = ',ies
+  end if
+end if
+ 
+  !  jointing growth stage prediction:
+if ((ems(1)/=999) .and. (joints(1)==999)) then
+  row = 4
+  i = 4
+  call water_stress(adjgdd,bhfwsf,dummy2,gddwsf,row,i)
+  if (gdde>=(gddwsf(3,5)+gddwsf(4,5))) then
+     joints(1) = daynum
+     joints(2) = year
+     call date1(joints)
+     ddap(4) = dap
+     ddae(4) = dae
+     dgdds(4) = gdds
+     dgdde(4) = gdde
+     print *,'joints = ',joints
+  end if
+end if
+
+!  end of anthesis:
+if ((antss(1)/=999) .and. (antes(1)==999)) then
+  if (gdde>=(gddwsf(5,5)+gddwsf(6,5)+gddwsf(7,5)+aepa)) then
+     antes(1) = daynum
+     antes(2) = year
+     call date1(antes)
+     ddap(12) = dap
+     ddae(12) = dae
+     dgdds(12) = gdds
+     dgdde(12) = gdde
+     print *,'antes = ',antes
+  end if
+end if
+
 !
 ! *******   output data   *******
 ! output information from each crop's phenol subroutine.
