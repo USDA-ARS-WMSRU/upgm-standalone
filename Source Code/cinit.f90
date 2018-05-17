@@ -404,6 +404,9 @@ logical :: useupgmpart
 !              leaves on that day. the values are written each time a new
 !              leaf has appeared, i.e. when the integer version of the
 !              real leaf number has incremented.
+!     partcoefleaf - the partitioning coefficient for leaves
+!     partcoefrepro - the partitioning coefficient for reproductive parts
+!     partcoefstem - the partitioning coefficient for stems
 !     pdate - day of year planting can occur
 !     rowcntr - a counter for the rows in an array
 !     bio%upgm%seedsw - soil water content at seed depth.  it is read in as
@@ -411,6 +414,7 @@ logical :: useupgmpart
 !              to an integer.	 1 = optimum, 2 = medium, 3 = dry and
 !              4 = planted in dust
 !     todayln - the value of the current day's leaf number.
+!     uesupgmpart - flag when TRUE tells model to use the partitioning coefficients.
 !     verns - sum of gdd after vernalization. currently not used.
 !     yestln - the value of yesterday's leaf number
 !     yr - year
