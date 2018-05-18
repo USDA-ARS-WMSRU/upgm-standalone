@@ -212,7 +212,7 @@ bio%bname = trim(bio%bname)
 
         print *,'seedbed = ',seedbed
         print *,'canopyflg = ',bio%upgm%canopyflg,'emrgflg = ',bio%upgm%emrgflg,'phenolflg = ',bio%upgm%phenolflg
-        !, 'seedsw = ', seedsw
+        !, 'seedsw = ', seedsw        
         !
         ! put these values into 5 one dimensional arrays.
         do i = 1,row
@@ -256,6 +256,53 @@ bio%bname = trim(bio%bname)
             if (bio%upgm%dummy1(i)=='ln'.or.bio%upgm%dummy1(i)=='ls') bio%upgm%dummy2(i) = bio%upgm%dummy2(i)*bio%upgm%pchron
         end do
     end if
+
+        !DE 5/18/18 add calculation of thum to be used when upgmflg = 1
+    if (upgmflg==1) then
+        if (bio%bname=='corn') then
+            bio%database%thum = bio%upgm%dummy2(2)+bio%upgm%dummy2(6)+bio%upgm%dummy2(8)+bio%upgm%dummy2(9)+bio%upgm%dummy2(10)  &
+                  & +bio%upgm%dummy2(11)+bio%upgm%dummy2(12)+bio%upgm%dummy2(13)
+        else if (bio%bname=='dry beans') then
+            bio%database%thum = bio%upgm%dummy2(2)+bio%upgm%dummy2(3)+bio%upgm%dummy2(4)+bio%upgm%dummy2(5)+bio%upgm%dummy2(6)  &
+                  & +bio%upgm%dummy2(7)+bio%upgm%dummy2(8)+bio%upgm%dummy2(9)+bio%upgm%dummy2(10)+bio%upgm%dummy2(11)           &
+                  & +bio%upgm%dummy2(12)+bio%upgm%dummy2(13)
+        !debe added the following for hay millet.  the crop parameters are for
+        ! pearl millet, forage.  this is the only forage millet in the crop
+        ! parameters file.
+        else if (bio%bname=='hay millet') then
+            bio%database%thum = bio%upgm%dummy2(3)+bio%upgm%dummy2(4)+bio%upgm%dummy2(5)+bio%upgm%dummy2(6)  &
+                  & +bio%upgm%dummy2(7)+bio%upgm%dummy2(8)+bio%upgm%dummy2(9)+bio%upgm%dummy2(10)
+        else if (bio%bname=='hay millet') then
+            bio%database%thum = bio%upgm%dummy2(3)+bio%upgm%dummy2(4)+bio%upgm%dummy2(5)+bio%upgm%dummy2(6)  &
+                  & +bio%upgm%dummy2(7)+bio%upgm%dummy2(8)+bio%upgm%dummy2(9)+bio%upgm%dummy2(10)
+        else if (bio%bname=='proso millet') then
+            bio%database%thum = bio%upgm%dummy2(3)+bio%upgm%dummy2(4)+bio%upgm%dummy2(5)+bio%upgm%dummy2(6)  &
+                  & +bio%upgm%dummy2(7)+bio%upgm%dummy2(8)+bio%upgm%dummy2(9)+bio%upgm%dummy2(10)
+        else if (bio%bname=='sorghum') then
+            bio%database%thum = bio%upgm%dummy2(5)+bio%upgm%dummy2(6)+bio%upgm%dummy2(7)+bio%upgm%dummy2(10)
+        else if (bio%bname=='soybean') then
+            bio%database%thum = bio%upgm%dummy2(2)+bio%upgm%dummy2(3)+bio%upgm%dummy2(4)+bio%upgm%dummy2(5)+bio%upgm%dummy2(6)  &
+                  & +bio%upgm%dummy2(7)+bio%upgm%dummy2(8)+bio%upgm%dummy2(9)+bio%upgm%dummy2(10)+bio%upgm%dummy2(11)           &
+                  & +bio%upgm%dummy2(12)+bio%upgm%dummy2(13)+bio%upgm%dummy2(14)+bio%upgm%dummy2(15)
+        else if (bio%bname=='spring barley') then
+            bio%database%thum = bio%upgm%dummy2(3)+bio%upgm%dummy2(4)+bio%upgm%dummy2(5)+bio%upgm%dummy2(6)  &
+                  & +bio%upgm%dummy2(7)+bio%upgm%dummy2(8)+bio%upgm%dummy2(9)+bio%upgm%dummy2(10)
+        else if (bio%bname=='spring wheat') then
+            bio%database%thum = bio%upgm%dummy2(3)+bio%upgm%dummy2(4)+bio%upgm%dummy2(5)+bio%upgm%dummy2(6)  &
+                  & +bio%upgm%dummy2(7)+bio%upgm%dummy2(8)+bio%upgm%dummy2(9)+bio%upgm%dummy2(10)
+        else if (bio%bname=='sunflower') then
+            bio%database%thum = bio%upgm%dummy2(2)+bio%upgm%dummy2(3)+bio%upgm%dummy2(4)+bio%upgm%dummy2(5)+bio%upgm%dummy2(6)  &
+                  & +bio%upgm%dummy2(7)+bio%upgm%dummy2(8)+bio%upgm%dummy2(9)+bio%upgm%dummy2(10)+bio%upgm%dummy2(11)           &
+                  & +bio%upgm%dummy2(12)+bio%upgm%dummy2(13)
+        else if (bio%bname=='winter barley') then
+            bio%database%thum = bio%upgm%dummy2(2)+bio%upgm%dummy2(3)+bio%upgm%dummy2(4)+bio%upgm%dummy2(5)+bio%upgm%dummy2(6)  &
+                  & +bio%upgm%dummy2(7)+bio%upgm%dummy2(8)+bio%upgm%dummy2(9)+bio%upgm%dummy2(10)
+        else if (bio%bname=='winter wheat') then
+            bio%database%thum = bio%upgm%dummy2(2)+bio%upgm%dummy2(3)+bio%upgm%dummy2(4)+bio%upgm%dummy2(5)+bio%upgm%dummy2(6)  &
+                  & +bio%upgm%dummy2(7)+bio%upgm%dummy2(8)+bio%upgm%dummy2(9)+bio%upgm%dummy2(10)
+        end if
+    end if
+    print *, 'cropname = ', bio%bname, 'thum = ', bio%database%thum
 
     !debe added for CO2 table
     do i = 1, 10
