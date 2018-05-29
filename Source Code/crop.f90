@@ -1206,6 +1206,9 @@
     !     bio%upgm%opens - the sunflower inflorescence begins to open. this array
     !             includes daynum, year, month and day of when this stage
     !             was reached.
+    !     partcoefleaf - the partitioning coefficient for leaves
+    !     partcoefrepro - the partitioning coefficient for reproductive parts
+    !     partcoefstem - the partitioning coefficient for stems
     !     bio%upgm%pchron - phyllochron value which is the number of gdd per leaf.
     !     ctrl%mngt%pd - planting day
     !     pdate - day of year planting can occur
@@ -1244,6 +1247,7 @@
     !           stage was reached.
     !     bio%upgm%tupper - upper/maximum temperature for plant growth (deg.c).
     !              no growth with temperatures above this point.
+    !     uesupgmpart - flag when TRUE tells model to use the partitioning coefficients.
     !     verns - sum of gdd after vernalization. currently not used.
     !     bio%upgm%wfpslo - an array holding the low values for each soil moisture
     !              condition.

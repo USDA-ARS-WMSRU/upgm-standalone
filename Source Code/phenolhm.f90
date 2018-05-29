@@ -131,6 +131,9 @@ integer,dimension(4) :: pdatearr
 !              appeared.
 !     mats - physiological maturity growth stage. this array includes daynum,
 !            year, month and day of when this stage was reached.
+!     partcoefleaf - the partitioning coefficient for leaves
+!     partcoefrepro - the partitioning coefficient for reproductive parts
+!     partcoefstem - the partitioning coefficient for stems
 !     pchron - phyllochron value which is the number of gdd per leaf.
 !     pdate - planting date.
 !     pdepth - depth of growing point at time of planting (m).
@@ -142,6 +145,7 @@ integer,dimension(4) :: pdatearr
 !           month and day of when this stage was reached.
 !     tss - terminal spikelet growth stage. this array includes daynum, year,
 !           month and day of when this stage was reached.
+!     uesupgmpart - flag when TRUE tells model to use the partitioning coefficients.
 !     year - year.
  
 !     + + + local variable definitions + + +

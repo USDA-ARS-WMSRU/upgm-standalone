@@ -142,11 +142,15 @@ integer,dimension(4) :: pdatearr
 !            year, month and day of when this stage was reached.
 !     opens - the sunflower inflorescence begins to open. this array includes
 !             daynum, year, month and day of when this stage was reached.
+!     partcoefleaf - the partitioning coefficient for leaves
+!     partcoefrepro - the partitioning coefficient for reproductive parts
+!     partcoefstem - the partitioning coefficient for stems
 !     pchron - phyllochron value which is the number of gdd per leaf.
 !     pdate - planting date.
 !     pdepth - depth of growing point at time of planting (m).
 !              bc0growdepth is assed into pdepth.
 !     seedbed - contains the soil moisture condition of the seedbed.
+!     uesupgmpart - flag when TRUE tells model to use the partitioning coefficients.
 !     year - year.
 !     yelows - back of the sunflower head is a light yellow. this array
 !              includes daynum, year, month and day of when this stage was

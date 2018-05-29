@@ -169,6 +169,11 @@
     !     hu_delay - fraction of heat units accummulated
     !                based on incomplete vernalization and day length
     !     ln - leaf number
+    !     partcoefleaf - the partitioning coefficient for leaves
+    !     partcoefrepro - the partitioning coefficient for reproductive parts
+    !     partcoefstem - the partitioning coefficient for stems
+    !     uesupgmpart - flag when TRUE tells model to use the partitioning coefficients.
+
 
     !     + + + local variable definitions + + +
     !     bhfwsf_adj - water stress factor adjusted by biomass adjustment
@@ -227,6 +232,16 @@
     !                  storage mass by soil layer (bio%mass%rootstorez)
     !                  (debe definition)
     !     trad_lai - leaf area index based on whole field area (traditional)
+    !     uself - holds the value of the partitioning coefficent for leaves if the 
+    !             useupgmpart flag is TRUE or the WEPS value for leaves if the useupgmpart 
+    !             flag is FALSE to affect partitioning to leaves.
+    !     usest - holds the value of the partitioning coefficent for stems if the 
+    !             useupgmpart flag is TRUE or the WEPS value for stems if the useupgmpart 
+    !             flag is FALSE to affect partitioning to stems.
+    !     userp - holds the value of the partitioning coefficent for reproductive parts  
+    !             if the useupgmpart flag is TRUE or the WEPS value for reproductive 
+    !             parts if the useupgmpart flag is FALSE to affect partitioning to 
+    !             reproductive parts.
     !     wcg - root mass distribution function exponent (see reference at
     !           equation)
     !     wffiber - total of weight fractions for fibrous roots

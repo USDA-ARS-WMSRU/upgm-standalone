@@ -239,6 +239,9 @@ real :: partcoefleaf, partcoefstem, partcoefrepro
 !              day of when this stage was reached.
 !     bio%upgm%opens - the sunflower inflorescence begins to open. this array includes
 !             daynum, year, month and day of when this stage was reached.
+!     partcoefleaf - the partitioning coefficient for leaves
+!     partcoefrepro - the partitioning coefficient for reproductive parts
+!     partcoefstem - the partitioning coefficient for stems
 !     bio%upgm%pchron - phyllochron value which is the number of gdd per leaf.
 !     pdate - planting date.
 !     rowcntr - a counter for the rows in an array
@@ -271,6 +274,7 @@ real :: partcoefleaf, partcoefstem, partcoefrepro
 !           reached.
 !     bio%upgm%tupper - upper/maximum temperature for plant growth (deg.c).
 !              no growth with temperatures above this point.
+!     uesupgmpart - flag when TRUE tells model to use the partitioning coefficients.
 !     bio%upgm%yelows - back of the sunflower head is a light yellow. this array
 !              includes daynum, year, month and day of when this stage was
 !              reached.
