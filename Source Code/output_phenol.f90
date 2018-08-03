@@ -85,7 +85,7 @@ call date1(pdatearr)
 ! round canopy height to an integer
    !   icanht = nint(canht)
  
-! de took out vernaliztion from the output for the spring crops that
+! de took out vernalization from the output for the spring crops that
 ! still displayed it in the output. 7/16/07
  
 ! determine number of leaves for each day.  fill leafno array.
