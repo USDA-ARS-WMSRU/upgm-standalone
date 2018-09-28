@@ -198,6 +198,19 @@ precip = clidat%awzdpt       !awzdpt comes from the common block w1clig.inc
 if ((precip>=7).and.(tempsw<6)) tempsw = tempsw - 1
                                           !move up to next level if not planted in dust and precip > 7
  
+! Seeds Planted in Dust will not begin accumulating GDD's for emergence 
+! until the soil moisture level moves up to at least Dry. When a precip  
+! event or an irrigation event occurs, the soil moisture condition may 
+! be adjusted depending on the amount of the water received/applied. 
+! If moisture is received greater than or equal to 7mm but less than  
+! 12 mm, the soil moisture condition will move up to Dry. 
+! If the amount of moisture received is 12 mm but less than 20 mm, 
+! the soil moisture condition will move up to Medium  and if more 
+! than 20 mm are received the soil moisture condition will move up 
+! to Optimum. Once, the soil moisture condition improves beyond
+! Planted in Dust, the process of emergence can begin by 
+! accumulating GDD's.
+
 if (tempsw==6) then   !if planted in dust move to next levels based on amount of precip
   if ((precip>=7.0).and.(precip<12.0)) then
      tempsw = tempsw - 1 !dry

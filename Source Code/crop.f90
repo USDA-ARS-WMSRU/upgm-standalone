@@ -181,8 +181,8 @@
         & lnarray,lncntr,lnpout,mm,partcoefleaf,partcoefstem,        &
         & partcoefrepro,pdate,rowcntr,todayln,useupgmpart,yestln,yy,ln)
      
-        print *, 'partcoefleaf = ', partcoefleaf, 'partcoefstem = ', partcoefstem, &
-            & 'partcoefrepro = ', partcoefrepro 
+    !    print *, 'partcoefleaf = ', partcoefleaf, 'partcoefstem = ', partcoefstem, &
+    !        & 'partcoefrepro = ', partcoefrepro 
 
     !debe added bio%upgm%dayhtinc to be able to pass the daily increase in height to growth
     ! for the ht_dia_sai subroutine in place of the weps/upgm variable dht when
